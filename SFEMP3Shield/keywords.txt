@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map SFEMP3Shield
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SFEMP3Shield	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+stopTrack	KEYWORD2
+playTrack	KEYWORD2
+playMP3	KEYWORD2
+SetVolume	KEYWORD2
+Mp3WriteRegister	KEYWORD2
+Mp3ReadRegister	KEYWORD2
+MP3player	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+

@@ -1,5 +1,5 @@
 /******************************************************************
-*  Sparkfun Electronics MP3 Shield Library v0.1
+*  Sparkfun Electronics MP3 Shield Library v0.2
 *		details and example sketch: 
 *			http://www.billporter.info/?p=1270
 *
@@ -13,7 +13,8 @@
 *
 *  Lib version history
 *    0.1 made into library, external interrupt driven.
-
+*    0.2 included pre-modified SDFat Library	
+*	
 *
 *
 *This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
@@ -26,7 +27,7 @@ GNU General Public License for more details.
 ******************************************************************/
 
 
-To install, unzip and place 'SFEMP3Shield' folder into your 'C:\Users\{user name}\Documents\Arduino\libraries' folder or '{Arduino IDE path}\hardware\libraries" or {Arduino IDE path}\libraries" directory. 
+To install, unzip and place 'SFEMP3Shield' and 'SdFat' folder into your 'C:\Users\{user name}\Documents\Arduino\libraries' folder or '{Arduino IDE path}\hardware\libraries" or {Arduino IDE path}\libraries" directory. 
 Restart the Arduino IDE, and open up the example sketch. 
 
 Most of the uses of the library are in the example sketch. 

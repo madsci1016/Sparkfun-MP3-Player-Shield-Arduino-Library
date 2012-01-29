@@ -101,6 +101,9 @@ uint8_t playMP3(char*);
 void stopTrack();
 uint8_t isPlaying();
 
+void pauseDataStream();
+void resumeDataStream();
+
 private:
 
 };

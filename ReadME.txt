@@ -1,5 +1,5 @@
 /******************************************************************
-*  Sparkfun Electronics MP3 Shield Library v0.3
+*  Sparkfun Electronics MP3 Shield Library v0.4
 *		details and example sketch: 
 *			http://www.billporter.info/?p=1270
 *
@@ -14,7 +14,9 @@
 *  Lib version history
 *    0.1 made into library, external interrupt driven.
 *    0.2 included pre-modified SDFat Library
-*    0.3 added isPlaying function to query shield status	
+*    0.3 added isPlaying function to query shield status
+*	 0.4 added functions to cancel and resume external interrupt
+*			in case something else is on the SPI bus	
 *	
 *
 *
@@ -60,13 +62,24 @@ byte isPlaying()  Return 1 if something is currently being played. 0 if nothing 
 
 *****************Advanced Functions**********************
 
+*****If you want to use the SPI bus for something else as well****
+****** You need to wrap your SPI code in these functios:***********
+
+void pauseDataStream();
+ //Your code for accessing something else on the SPI bus
+void resumeDataStream();
+ 
+This avoid collisions that might occur if the MP3 chip triggers the interrupt while you are doing somethign else
+on the SPI bus. If you take too long, the decoder will run out of data and stop. 
+
+***********Static Advanced Functions********************
+
 Write and read to direct MP3 decoder registers like this:
 
-void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyt)
+static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyt)
 
 static uint16_t Mp3ReadRegister (unsigned char addressbyte);
 
-Enjoy. 
 
 ****************Error Codes*****************************
 

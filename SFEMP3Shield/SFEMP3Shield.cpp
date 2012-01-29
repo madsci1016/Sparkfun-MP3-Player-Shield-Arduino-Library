@@ -71,7 +71,7 @@ uint8_t SFEMP3Shield::begin(){
   return 0;
 }
 
-//Sends out struct in binary, with header, length info and checksum
+
 void SFEMP3Shield::SetVolume(unsigned char leftchannel, unsigned char rightchannel){
   Mp3WriteRegister(SCI_VOL, leftchannel, rightchannel);
 }
@@ -137,6 +137,25 @@ uint8_t SFEMP3Shield::isPlaying(){
 		return 0;
 	else
 		return 1;
+}
+
+//cancels interrupt feeding MP3 decoder
+void SFEMP3Shield::pauseDataStream(){
+
+	//cancel external interrupt
+	detachInterrupt(0);
+
+}
+
+//resumes interrupt feeding MP3 decoder
+void SFEMP3Shield::resumeDataStream(){
+
+	//see if it is already ready for more
+	refill();
+
+	//attach refill interrupt off DREQ line, pin 2
+	attachInterrupt(0, refill, RISING);
+
 }
 
 static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){

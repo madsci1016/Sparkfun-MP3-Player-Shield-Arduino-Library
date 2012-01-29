@@ -143,18 +143,21 @@ uint8_t SFEMP3Shield::isPlaying(){
 void SFEMP3Shield::pauseDataStream(){
 
 	//cancel external interrupt
-	detachInterrupt(0);
+	if(playing)
+		detachInterrupt(0);
 
 }
 
 //resumes interrupt feeding MP3 decoder
 void SFEMP3Shield::resumeDataStream(){
 
-	//see if it is already ready for more
-	refill();
+	if(playing)	{
+		//see if it is already ready for more
+		refill();
 
-	//attach refill interrupt off DREQ line, pin 2
-	attachInterrupt(0, refill, RISING);
+		//attach refill interrupt off DREQ line, pin 2
+		attachInterrupt(0, refill, RISING);
+	}
 
 }
 

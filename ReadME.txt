@@ -13,7 +13,8 @@
 *
 *  Lib version history
 *    0.1 made into library, external interrupt driven.
-*    0.2 included pre-modified SDFat Library	
+*    0.2 included pre-modified SDFat Library
+*	 0.3 added isPlaying function to query shiled status	
 *	
 *
 *
@@ -50,6 +51,8 @@ byte playTrack(byte TrackNumber)  Starts playback of an MP3 file named 'trackx.m
 byte playMP3(char*)   Starts playback of a track with a name you pass in. Must follow 8.1 format. Returns an error if there's trouble. 
 
 void stopTrack()  Stops the current track that's playing, if there is one.
+
+byte isPlaying()  Return 1 if something is currently being played. 0 if nothing is playing. 
 
 *****************Advanced Functions**********************
 

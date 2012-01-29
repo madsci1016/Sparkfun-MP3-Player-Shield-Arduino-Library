@@ -15,6 +15,7 @@ stopTrack	KEYWORD2
 playTrack	KEYWORD2
 playMP3	KEYWORD2
 SetVolume	KEYWORD2
+isPlaying   KEYWORD2
 Mp3WriteRegister	KEYWORD2
 Mp3ReadRegister	KEYWORD2
 MP3player	KEYWORD2

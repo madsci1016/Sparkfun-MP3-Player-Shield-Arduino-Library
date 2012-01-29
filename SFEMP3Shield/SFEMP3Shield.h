@@ -99,6 +99,7 @@ void SetVolume(uint8_t, uint8_t);
 uint8_t playTrack(uint8_t);
 uint8_t playMP3(char*);
 void stopTrack();
+uint8_t isPlaying();
 
 private:
 

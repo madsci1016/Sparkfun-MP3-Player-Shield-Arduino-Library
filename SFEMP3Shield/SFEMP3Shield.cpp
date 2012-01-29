@@ -130,6 +130,15 @@ void SFEMP3Shield::stopTrack(){
   
 }
 
+//is there a song playing?
+uint8_t SFEMP3Shield::isPlaying(){
+  
+	if(playing == FALSE)
+		return 0;
+	else
+		return 1;
+}
+
 static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){
 	
 	//Wait for DREQ to go high indicating IC is available

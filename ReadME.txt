@@ -1,5 +1,5 @@
 /******************************************************************
-*  Sparkfun Electronics MP3 Shield Library v0.2
+*  Sparkfun Electronics MP3 Shield Library v0.3
 *		details and example sketch: 
 *			http://www.billporter.info/?p=1270
 *
@@ -14,7 +14,7 @@
 *  Lib version history
 *    0.1 made into library, external interrupt driven.
 *    0.2 included pre-modified SDFat Library
-*	 0.3 added isPlaying function to query shiled status	
+*    0.3 added isPlaying function to query shield status	
 *	
 *
 *

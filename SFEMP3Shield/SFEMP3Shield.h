@@ -46,7 +46,6 @@ static void refill();
 static void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
 static uint16_t Mp3ReadRegister (uint8_t);
 
-
 //Create the variables to be used by SdFat Library
 static Sd2Card card;
 static SdVolume volume;
@@ -100,12 +99,17 @@ uint8_t playTrack(uint8_t);
 uint8_t playMP3(char*);
 void stopTrack();
 uint8_t isPlaying();
-
+bool skipTo(uint32_t);
+uint32_t currentPosition();
+void setBitRate(uint16_t);
 void pauseDataStream();
 void resumeDataStream();
 
 private:
-
+uint8_t bitrate;
+uint32_t start_of_music;
+uint8_t VolL;
+uint8_t VolR;
 };
 
 

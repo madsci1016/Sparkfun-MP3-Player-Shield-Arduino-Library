@@ -2,7 +2,21 @@
 // inslude the SPI library:
 #include "SPI.h"
 
-
+//bitrate lookup table      V1,L1  V1,L2   V1,L3   V2,L1  V2,L2+L3
+uint16_t bitrate_table[14][6] = { {0,0,0,0,0,0},
+							   {32,32,32,32,8,8}, //0001
+							   {64,48,40,48,16,16}, //0010
+							   {96,56,48,56,24,24}, //0011
+							   {128,64,56,64,32,32}, //0100
+							   {160,80,64,80,40,40}, //0101
+							   {192,96,80,96,48,48}, //0110
+							   {224,112,96,112,56,56}, //0111
+							   {256,128,112,128,64,64}, //1000
+							   {288,160,128,144,80,80}, //1001
+							   {320,192,160,160,96,69}, //1010
+							   {352,224,192,176,112,112}, //1011
+							   {384,256,224,192,128,128}, //1100
+							   {416,320,256,224,144,144} };//1101
 
 //Inits everything
 uint8_t SFEMP3Shield::begin(){
@@ -38,6 +52,8 @@ uint8_t SFEMP3Shield::begin(){
   digitalWrite(MP3_RESET, HIGH); //Bring up VS1053
   
   SFEMP3Shield::SetVolume(40, 40);
+  VolL = 40;
+  VolR = 40;
   
    //Let's check the status of the VS1053
   int MP3Mode = Mp3ReadRegister(SCI_MODE);
@@ -73,7 +89,11 @@ uint8_t SFEMP3Shield::begin(){
 
 
 void SFEMP3Shield::SetVolume(unsigned char leftchannel, unsigned char rightchannel){
-  Mp3WriteRegister(SCI_VOL, leftchannel, rightchannel);
+	
+	VolL = leftchannel;
+	VolR = rightchannel;
+
+    Mp3WriteRegister(SCI_VOL, leftchannel, rightchannel);
 }
 
 
@@ -100,6 +120,58 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 	if (!track.open(&root, fileName, O_READ)) return 2;
 	   
 	playing = TRUE;
+	
+	//look for first MP3 frame (11 1's)
+	bitrate = 0;
+	uint8_t temp = 0;
+	uint8_t row_num =0;
+	
+	
+	for(uint16_t i = 0; i<65535; i++){
+	//for(;;){
+		if(track.read() == 0xFF) {
+			
+			temp = track.read();
+			
+			if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
+
+				//found the 11 1's
+				//parse version, layer and bitrate out and save bitrate
+				if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
+					row_num = 3;
+			    if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
+					row_num += 1;
+				else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1	
+					row_num += 2;
+				
+				//parse bitrate code from next byte
+				temp = track.read();
+				temp = temp>>4;
+				
+				//lookup bitrate
+				bitrate = bitrate_table[temp][row_num];
+				
+				//convert kbps to Bytes per mS
+				bitrate /= 8;
+				
+				//record file position
+				track.seekCur(-3);
+				start_of_music = track.curPosition();
+				
+				//Serial.print("POS: ");
+				//Serial.println(start_of_music);
+				
+				//Serial.print("Bitrate: ");
+				//Serial.println(bitrate);
+				
+				//break out of for loop
+				break;
+			
+			}
+		    
+		}
+	}
+	
 	  
 	//gotta start feeding that hungry mp3 chip
 	refill();
@@ -159,6 +231,59 @@ void SFEMP3Shield::resumeDataStream(){
 		attachInterrupt(0, refill, RISING);
 	}
 
+}
+
+//skips to a certain point in th track
+bool SFEMP3Shield::skipTo(uint32_t timecode){
+
+	if(playing) {
+	
+		//stop interupt for now
+		detachInterrupt(0);
+		
+		//seek to new position in file
+		if(!track.seekSet((timecode * bitrate) + start_of_music))
+			return 2;
+			
+		Mp3WriteRegister(SCI_VOL, 0xFE, 0xFE);
+		//seeked successfully
+		
+		//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
+	    //easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
+	    Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+		
+		//gotta start feeding that hungry mp3 chip
+		refill();
+		
+		//again, I'm being bad and not following the spec sheet.
+		//I already turned the volume down, so when the MP3 chip gets upset at me
+		//for just slammin in new bits of the file, you won't hear it. 
+		//so we'll wait a bit, and restore the volume to previous level
+		delay(50);
+		
+		//one of these days I'll come back and try to do it the right way.
+		SFEMP3Shield::SetVolume(VolL,VolR);
+		  
+		//attach refill interrupt off DREQ line, pin 2
+		attachInterrupt(0, refill, RISING);
+		
+		return 0;
+	}
+	
+	return 1;
+}
+
+//returns current timecode in ms. Not very accurate/detministic 
+uint32_t SFEMP3Shield::currentPosition(){
+
+	return((track.curPosition() - start_of_music) / bitrate );
+}
+
+//force bit rate, useful if auto-detect failed
+void SFEMP3Shield::setBitRate(uint16_t bitr){
+
+	bitrate = bitr;
+	return;
 }
 
 static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){

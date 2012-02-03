@@ -21,6 +21,9 @@ Mp3ReadRegister	KEYWORD2
 MP3player	KEYWORD2
 pauseDataStream	KEYWORD2
 resumeDataStream	KEYWORD2
+skipTo	KEYWORD2
+currentPosition	KEYWORD2
+setBitRate	KEYWORD2
 
 
 #######################################

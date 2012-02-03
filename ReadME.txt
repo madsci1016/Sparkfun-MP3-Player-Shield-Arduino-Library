@@ -15,8 +15,9 @@
 *    0.1 made into library, external interrupt driven.
 *    0.2 included pre-modified SDFat Library
 *    0.3 added isPlaying function to query shield status
-*	 0.4 added functions to cancel and resume external interrupt
-*			in case something else is on the SPI bus	
+*    0.4 added functions to cancel and resume external interrupt
+*        in case something else is on the SPI bus	
+*    0.5 added skipTo() and related functions to skip around in track
 *	
 *
 *
@@ -60,6 +61,15 @@ void stopTrack()  Stops the current track that's playing, if there is one.
 
 byte isPlaying()  Return 1 if something is currently being played. 0 if nothing is playing. 
 
+void skipTo(unsigned long timecode_in_ms)   Skips playback to certain time in ms in MP3 file. Not 100% accurate,
+but decent. If it's way off, it means autodetect of bitrate failed and you need set it manually with setBitRate()
+
+unsigned long currentPosition()    returns current timecode in ms of playing track. Not 100% accurate,
+but decent. If it's way off, it means autodetect of bitrate failed and you need set it manually with setBitRate()
+
+void setBitRate(unsigned int bitrate)    forces bitrate when autodetect failed. Call right after a play function, 
+but before any function related to timecode. 
+
 *****************Advanced Functions**********************
 
 *****If you want to use the SPI bus for something else as well****
@@ -97,3 +107,9 @@ From the 'playTrack' or 'playMP3' function:
 0 OK
 1 Already playing track
 2 File not found
+
+From the 'skipTo' function
+
+0 OK
+1 Not Playing track
+2 Failed to skip to new file location

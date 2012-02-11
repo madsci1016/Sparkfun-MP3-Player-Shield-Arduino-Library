@@ -1,5 +1,5 @@
 /******************************************************************
-*  Sparkfun Electronics MP3 Shield Library v0.4
+*  Sparkfun Electronics MP3 Shield Library v0.6
 *		details and example sketch: 
 *			http://www.billporter.info/?p=1270
 *
@@ -9,7 +9,7 @@
 *
 *	 Contributers:
 *		Most code from SFE head guru Nathan
-*			But for making this pretty I think he owes me a beer now. 
+*		But for making this pretty I think he owes me a beer now. 
 *
 *  Lib version history
 *    0.1 made into library, external interrupt driven.
@@ -18,6 +18,8 @@
 *    0.4 added functions to cancel and resume external interrupt
 *        in case something else is on the SPI bus	
 *    0.5 added skipTo() and related functions to skip around in track
+*    0.6 fixed for Arduino Mega use by calling SDfatlib properly. 
+*           Blame Nathan for bad implentation of SDFatlib
 *	
 *
 *

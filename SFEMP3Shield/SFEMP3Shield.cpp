@@ -32,9 +32,10 @@ uint8_t SFEMP3Shield::begin(){
   
   //Setup SD card interface
   //Pin 10 must be set as an output for the SD communication to work.
-  pinMode(10, OUTPUT);       
+  //pinMode(10, OUTPUT);
+  //pinMode(53, OUTPUT);      
   //Initialize the SD card and configure the I/O pins.
-  if (!card.init(SPI_FULL_SPEED)) return 1; // Serial.println("Error: Card init"); 
+  if (!card.init(SPI_FULL_SPEED, SD_SEL)) return 1; // Serial.println("Error: Card init"); 
   //Initialize a volume on the SD card.
   if (!volume.init(&card)) return 2; //Serial.println("Error: Volume ini"); 
   //Open the root directory in the volume.

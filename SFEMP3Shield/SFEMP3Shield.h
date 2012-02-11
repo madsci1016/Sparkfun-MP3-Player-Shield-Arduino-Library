@@ -61,7 +61,7 @@ static uint8_t mp3DataBuffer[32];
 #define MP3_XDCS 7 //Data Chip Select / BSYNC Pin
 #define MP3_DREQ 2 //Data Request Pin: Player asks for more data
 #define MP3_RESET 8 //Reset is active low
-#define SD_SEL 10 //select pin for SD card
+#define SD_SEL 9 //select pin for SD card
 
 //VS10xx SCI Registers
 #define SCI_MODE 0x00

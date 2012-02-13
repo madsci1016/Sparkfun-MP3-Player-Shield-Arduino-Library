@@ -31,6 +31,11 @@ SFEMP3Shield MP3player;
 byte temp;
 byte result;
 
+char title[30];
+char artist[30];
+char album[30];
+
+
 void setup() {
 
   Serial.begin(115200);
@@ -46,6 +51,7 @@ void setup() {
 
   Serial.println("Hello");
   Serial.println("Send a number 1-9 to play a track or s to stop playing");
+  
 }
 
 void loop() {
@@ -58,8 +64,9 @@ void loop() {
     Serial.println(" ");
     
     //if s, stop the current track
-    if (temp == 's')
+    if (temp == 's') {
       MP3player.stopTrack();
+    }
       
     else if (temp >= '1' && temp <= '9'){
       //convert ascii numbers to real numbers
@@ -74,6 +81,25 @@ void loop() {
         Serial.print(result);
         Serial.println(" when trying to play track");
         }
+      
+      Serial.println("Playing:");
+      
+      //we can get track info by using the following functions and arguments
+      //the functions will extract the requested information, and put it in the array we pass in  
+      MP3player.trackTitle((char*)&title);
+      MP3player.trackArtist((char*)&artist);
+      MP3player.trackAlbum((char*)&album);
+      
+      //print out the arrays of track information
+      Serial.write((byte*)&title, 30);
+      Serial.println();
+      Serial.print("by:  ");
+      Serial.write((byte*)&artist, 30);
+      Serial.println();
+      Serial.print("Album:  ");
+      Serial.write((byte*)&album, 30);
+      Serial.println();
+      
       }
     
     /* Alterativly, you could call a track by it's file name by using playMP3(filename); 

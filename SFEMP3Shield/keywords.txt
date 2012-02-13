@@ -24,6 +24,9 @@ resumeDataStream	KEYWORD2
 skipTo	KEYWORD2
 currentPosition	KEYWORD2
 setBitRate	KEYWORD2
+trackTitle	KEYWORD2
+trackArtist	KEYWORD2
+trackAlbum	KEYWORD2
 
 
 #######################################

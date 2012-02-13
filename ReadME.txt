@@ -1,5 +1,5 @@
 /******************************************************************
-*  Sparkfun Electronics MP3 Shield Library v0.6
+*  Sparkfun Electronics MP3 Shield Library v0.7
 *		details and example sketch: 
 *			http://www.billporter.info/?p=1270
 *
@@ -20,6 +20,8 @@
 *    0.5 added skipTo() and related functions to skip around in track
 *    0.6 fixed for Arduino Mega use by calling SDfatlib properly. 
 *           Blame Nathan for bad implentation of SDFatlib
+*    0.7 added functions to read track title,artist,album
+*         fixed silly use of static where it shouldn't have been
 *	
 *
 *
@@ -72,6 +74,11 @@ but decent. If it's way off, it means autodetect of bitrate failed and you need 
 void setBitRate(unsigned int bitrate)    forces bitrate when autodetect failed. Call right after a play function, 
 but before any function related to timecode. 
 
+void trackTitle(char* buffer); 
+void trackArtist(char* buffer);
+void trackAlbum(char* buffer);       These functions read the MP3 track info from file and save it in buffer.
+									See example. 
+
 *****************Advanced Functions**********************
 
 *****If you want to use the SPI bus for something else as well****
@@ -84,13 +91,13 @@ void resumeDataStream();
 This avoid collisions that might occur if the MP3 chip triggers the interrupt while you are doing somethign else
 on the SPI bus. If you take too long, the decoder will run out of data and stop. 
 
-***********Static Advanced Functions********************
+***********Advanced Functions********************
 
 Write and read to direct MP3 decoder registers like this:
 
-static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyt)
+void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyt)
 
-static uint16_t Mp3ReadRegister (unsigned char addressbyte);
+uint16_t Mp3ReadRegister (unsigned char addressbyte);
 
 
 ****************Error Codes*****************************

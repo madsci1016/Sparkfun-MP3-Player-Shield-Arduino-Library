@@ -212,6 +212,41 @@ uint8_t SFEMP3Shield::isPlaying(){
 		return 1;
 }
 
+void SFEMP3Shield::trackArtist(char* infobuffer){
+	getTrackInfo(TRACK_ARTIST, infobuffer);
+}
+
+void SFEMP3Shield::trackTitle(char* infobuffer){
+	getTrackInfo(TRACK_TITLE, infobuffer);
+}
+
+void SFEMP3Shield::trackAlbum(char* infobuffer){
+	getTrackInfo(TRACK_ALBUM, infobuffer);
+}
+
+//reads and returns the track tag information
+void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
+
+	//disable interupts
+	pauseDataStream();
+	
+	//record current file position
+	uint32_t currentPos = track.curPosition();
+	
+	//skip to end
+	track.seekEnd((-128 + offset));
+	
+	//read 30 bytes of tag informat at -128 + offset
+	track.read(infobuffer, 30);
+	
+	//seek back to saved file position
+	track.seekSet(currentPos);
+	
+	//renable interupt
+	resumeDataStream();
+	
+}
+
 //cancels interrupt feeding MP3 decoder
 void SFEMP3Shield::pauseDataStream(){
 
@@ -287,7 +322,7 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
 	return;
 }
 
-static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){
+void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){
 	
 	//Wait for DREQ to go high indicating IC is available
 	while(!digitalRead(MP3_DREQ)) ; 
@@ -304,7 +339,7 @@ static void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, 
 }
 
 //Read the 16-bit value of a VS10xx register
-static unsigned int Mp3ReadRegister (unsigned char addressbyte){
+unsigned int Mp3ReadRegister (unsigned char addressbyte){
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
   digitalWrite(MP3_XCS, LOW); //Select control
 
@@ -319,7 +354,7 @@ static unsigned int Mp3ReadRegister (unsigned char addressbyte){
 
   digitalWrite(MP3_XCS, HIGH); //Deselect Control
 
-  int resultvalue = response1 << 8;
+  unsigned int resultvalue = response1 << 8;
   resultvalue |= response2;
   return resultvalue;
 }

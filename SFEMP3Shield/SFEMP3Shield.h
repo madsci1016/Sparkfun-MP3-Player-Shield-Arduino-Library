@@ -43,8 +43,9 @@ GNU General Public License for more details.
 
 
 static void refill();
-static void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
-static uint16_t Mp3ReadRegister (uint8_t);
+
+void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
+uint16_t Mp3ReadRegister (uint8_t);
 
 //Create the variables to be used by SdFat Library
 static Sd2Card card;
@@ -88,7 +89,10 @@ static uint8_t mp3DataBuffer[32];
 #define TRUE  1
 #define FALSE  0
 
-
+//tag location offsets
+#define TRACK_TITLE 3
+#define TRACK_ARTIST 33
+#define TRACK_ALBUM 63
 
 
 class SFEMP3Shield {
@@ -97,6 +101,9 @@ uint8_t begin();
 void SetVolume(uint8_t, uint8_t);
 uint8_t playTrack(uint8_t);
 uint8_t playMP3(char*);
+void trackTitle(char*);
+void trackArtist(char*);
+void trackAlbum(char*);
 void stopTrack();
 uint8_t isPlaying();
 bool skipTo(uint32_t);
@@ -106,6 +113,7 @@ void pauseDataStream();
 void resumeDataStream();
 
 private:
+void getTrackInfo(uint8_t, char*);
 uint8_t bitrate;
 uint32_t start_of_music;
 uint8_t VolL;

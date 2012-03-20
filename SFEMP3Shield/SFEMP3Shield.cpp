@@ -323,6 +323,10 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
 }
 
 void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){
+
+	//cancel interrupt if playing
+	if(playing)
+		detachInterrupt(0);
 	
 	//Wait for DREQ to go high indicating IC is available
 	while(!digitalRead(MP3_DREQ)) ; 
@@ -336,27 +340,51 @@ void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigne
 	SPI.transfer(lowbyte);
 	while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
 	digitalWrite(MP3_XCS, HIGH); //Deselect Control
+	
+	//resume interrupt if playing. 
+	if(playing)	{
+		//see if it is already ready for more
+		refill();
+
+		//attach refill interrupt off DREQ line, pin 2
+		attachInterrupt(0, refill, RISING);
+	}
+	
 }
 
 //Read the 16-bit value of a VS10xx register
 unsigned int Mp3ReadRegister (unsigned char addressbyte){
-  while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
-  digitalWrite(MP3_XCS, LOW); //Select control
+  
+	//cancel interrupt if playing
+	if(playing)
+		detachInterrupt(0);
+	  
+	while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
+	digitalWrite(MP3_XCS, LOW); //Select control
 
-  //SCI consists of instruction byte, address byte, and 16-bit data word.
-  SPI.transfer(0x03);  //Read instruction
-  SPI.transfer(addressbyte);
+	//SCI consists of instruction byte, address byte, and 16-bit data word.
+	SPI.transfer(0x03);  //Read instruction
+	SPI.transfer(addressbyte);
 
-  char response1 = SPI.transfer(0xFF); //Read the first byte
-  while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
-  char response2 = SPI.transfer(0xFF); //Read the second byte
-  while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
+	char response1 = SPI.transfer(0xFF); //Read the first byte
+	while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
+	char response2 = SPI.transfer(0xFF); //Read the second byte
+	while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
 
-  digitalWrite(MP3_XCS, HIGH); //Deselect Control
+	digitalWrite(MP3_XCS, HIGH); //Deselect Control
 
-  unsigned int resultvalue = response1 << 8;
-  resultvalue |= response2;
-  return resultvalue;
+	unsigned int resultvalue = response1 << 8;
+	resultvalue |= response2;
+	return resultvalue;
+  
+	//resume interrupt if playing. 
+	if(playing)	{
+		//see if it is already ready for more
+		refill();
+
+		//attach refill interrupt off DREQ line, pin 2
+		attachInterrupt(0, refill, RISING);
+	}
 }
 
 //refill VS10xx buffer with new data

@@ -191,13 +191,14 @@ void SFEMP3Shield::stopTrack(){
   
 	//cancel external interrupt
 	detachInterrupt(0);
+	playing=FALSE;
 
 	//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 	//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
 	Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
 	  
 	track.close(); //Close out this track
-	playing=FALSE;
+	
 	  
 	//Serial.println("Track is done!");
   
@@ -276,6 +277,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 	
 		//stop interupt for now
 		detachInterrupt(0);
+		playing=FALSE;
 		
 		//seek to new position in file
 		if(!track.seekSet((timecode * bitrate) + start_of_music))
@@ -302,6 +304,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 		  
 		//attach refill interrupt off DREQ line, pin 2
 		attachInterrupt(0, refill, RISING);
+		playing=TRUE;
 		
 		return 0;
 	}

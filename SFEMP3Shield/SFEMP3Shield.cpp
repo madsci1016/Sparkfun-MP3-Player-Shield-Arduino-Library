@@ -1,22 +1,25 @@
 #include "SFEMP3Shield.h"
 // inslude the SPI library:
 #include "SPI.h"
+//avr pgmspace library for storing the LUT in program flash instead of sram
+#include <avr/pgmspace.h>
 
 //bitrate lookup table      V1,L1  V1,L2   V1,L3   V2,L1  V2,L2+L3
-uint16_t bitrate_table[14][6] = { {0,0,0,0,0,0},
-							   {32,32,32,32,8,8}, //0001
-							   {64,48,40,48,16,16}, //0010
-							   {96,56,48,56,24,24}, //0011
-							   {128,64,56,64,32,32}, //0100
-							   {160,80,64,80,40,40}, //0101
-							   {192,96,80,96,48,48}, //0110
-							   {224,112,96,112,56,56}, //0111
-							   {256,128,112,128,64,64}, //1000
-							   {288,160,128,144,80,80}, //1001
-							   {320,192,160,160,96,69}, //1010
-							   {352,224,192,176,112,112}, //1011
-							   {384,256,224,192,128,128}, //1100
-							   {416,320,256,224,144,144} };//1101
+//168 bytes(!!); better to store in progmem or eeprom
+PROGMEM prog_uint16_t bitrate_table[14][6] = { {0,0,0,0,0,0},
+					       {32,32,32,32,8,8}, //0001
+					       {64,48,40,48,16,16}, //0010
+					       {96,56,48,56,24,24}, //0011
+					       {128,64,56,64,32,32}, //0100
+					       {160,80,64,80,40,40}, //0101
+					       {192,96,80,96,48,48}, //0110
+					       {224,112,96,112,56,56}, //0111
+					       {256,128,112,128,64,64}, //1000
+					       {288,160,128,144,80,80}, //1001
+					       {320,192,160,160,96,69}, //1010
+					       {352,224,192,176,112,112}, //1011
+					       {384,256,224,192,128,128}, //1100
+					       {416,320,256,224,144,144} };//1101
 
 //Inits everything
 uint8_t SFEMP3Shield::begin(){
@@ -103,7 +106,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
 	
 	//a storage place for track names
 	char trackName[] = "track001.mp3";
-	int trackNumber = 1;
+	uint8_t trackNumber = 1;
 	
 	//tack the number onto the rest of the filename
 	sprintf(trackName, "track%03d.mp3", trackNo);
@@ -150,7 +153,8 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 				temp = temp>>4;
 				
 				//lookup bitrate
-				bitrate = bitrate_table[temp][row_num];
+				bitrate = pgm_read_word_near ( temp*5 + row_num );
+				//							      bitrate_table[temp][row_num];
 				
 				//convert kbps to Bytes per mS
 				bitrate /= 8;

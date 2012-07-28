@@ -264,6 +264,9 @@ void SFEMP3Shield::pauseDataStream(){
 //resumes interrupt feeding MP3 decoder
 void SFEMP3Shield::resumeDataStream(){
 
+	//make sure SPI is right speed
+	SPI.setDataMode(SPI_MODE0);
+
 	if(playing)	{
 		//see if it is already ready for more
 		refill();

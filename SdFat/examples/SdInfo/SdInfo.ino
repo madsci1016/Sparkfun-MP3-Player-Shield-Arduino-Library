@@ -10,7 +10,7 @@
  * Adafruit SD shields and modules, pin 10.
  * Default SD chip select is the SPI SS pin.
  */
-const uint8_t SdChipSelect = SS_PIN;
+const uint8_t SdChipSelect = SS;
 
 Sd2Card card;
 SdVolume vol;

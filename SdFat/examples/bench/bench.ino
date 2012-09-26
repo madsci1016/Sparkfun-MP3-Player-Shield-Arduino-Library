@@ -5,7 +5,7 @@
 #include <SdFatUtil.h>
 
 // SD chip select pin
-const uint8_t chipSelect = SS_PIN;
+const uint8_t chipSelect = SS;
 
 #define FILE_SIZE_MB 5
 #define FILE_SIZE (1000000UL*FILE_SIZE_MB)
@@ -27,6 +27,7 @@ ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 void setup() {
   uint32_t maxLatency;
+  uint32_t minLatency;
   uint32_t totalLatency;
   Serial.begin(9600);
 
@@ -38,7 +39,7 @@ void setup() {
 
   // initialize the SD card at SPI_FULL_SPEED for best performance.
   // try SPI_HALF_SPEED if bus errors occur.
-  if (!sd.init(SPI_FULL_SPEED, chipSelect)) sd.initErrorHalt();
+  if (!sd.begin(chipSelect, SPI_FULL_SPEED)) sd.initErrorHalt();
 
   cout << pstr("Type is FAT") << int(sd.vol()->fatType()) << endl;
 
@@ -55,12 +56,13 @@ void setup() {
   buf[BUF_SIZE-1] = '\n';
 
   cout << pstr("File size ") << FILE_SIZE_MB << pstr("MB\n");
-
+  cout << pstr("Buffer size ") << BUF_SIZE << pstr(" bytes\n");
   cout << pstr("Starting write test.  Please wait up to a minute\n");
 
   // do write test
   uint32_t n = FILE_SIZE/sizeof(buf);
   maxLatency = 0;
+  minLatency = 999999;
   totalLatency = 0;
   uint32_t t = millis();
   for (uint32_t i = 0; i < n; i++) {
@@ -70,6 +72,7 @@ void setup() {
     }
     m = micros() - m;
     if (maxLatency < m) maxLatency = m;
+    if (minLatency > m) minLatency = m;
     totalLatency += m;
   }
   file.sync();
@@ -77,11 +80,13 @@ void setup() {
   double s = file.fileSize();
   cout << pstr("Write ") << s/t << pstr(" KB/sec\n");
   cout << pstr("Maximum latency: ") << maxLatency;
-  cout  << pstr(" usec, Avg Latency: ") << totalLatency/n << pstr(" usec\n\n");
+  cout << pstr(" usec, Minimum Latency: ") << minLatency;
+  cout << pstr(" usec, Avg Latency: ") << totalLatency/n << pstr(" usec\n\n");
   cout << pstr("Starting read test.  Please wait up to a minute\n");
   // do read test
   file.rewind();
   maxLatency = 0;
+  minLatency = 99999;
   totalLatency = 0;
   t = millis();
   for (uint32_t i = 0; i < n; i++) {
@@ -91,12 +96,14 @@ void setup() {
     }
     m = micros() - m;
     if (maxLatency < m) maxLatency = m;
+    if (minLatency > m) minLatency = m;
     totalLatency += m;
   }
   t = millis() - t;
   cout << pstr("Read ") << s/t << pstr(" KB/sec\n");
   cout << pstr("Maximum latency: ") << maxLatency;
-  cout  << pstr(" usec, Avg Latency: ") << totalLatency/n << pstr(" usec\n\n");
+  cout << pstr(" usec, Minimum Latency: ") << minLatency;
+  cout << pstr(" usec, Avg Latency: ") << totalLatency/n << pstr(" usec\n\n");
   cout << pstr("Done\n");
 }
 //------------------------------------------------------------------------------

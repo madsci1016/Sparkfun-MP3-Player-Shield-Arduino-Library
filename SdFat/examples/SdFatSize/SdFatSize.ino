@@ -11,7 +11,7 @@ SdFile file;
 void setup() {
   Serial.begin(9600);
 
-  if (!sd.init()) {
+  if (!sd.begin()) {
     Serial.println("init failed");
     return;
   }

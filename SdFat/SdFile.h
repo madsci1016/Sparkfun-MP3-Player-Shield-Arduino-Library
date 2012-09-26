@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -33,13 +33,12 @@ class SdFile : public SdBaseFile, public Print {
  public:
   SdFile() {}
   SdFile(const char* name, uint8_t oflag);
-#if ARDUINO < 100
-  void write(uint8_t b);
-  void write(const char* str);
-#else  // ARDUINO < 100
+  /** \return value of writeError */
+  bool getWriteError() {return SdBaseFile::getWriteError();}
+  /** Set writeError to zero */
+  void clearWriteError() {SdBaseFile::clearWriteError();}
   size_t write(uint8_t b);
   int16_t write(const char* str);
-#endif  // ARDUINO < 100
   int16_t write(const void* buf, uint16_t nbyte);
   void write_P(PGM_P str);
   void writeln_P(PGM_P str);

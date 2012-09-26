@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2011 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *  
  * This file is part of the Arduino SdFat Library
  *  
@@ -20,7 +20,7 @@
 
 /**
 \mainpage Arduino %SdFat Library
-<CENTER>Copyright &copy; 2011 by William Greiman
+<CENTER>Copyright &copy; 2012 by William Greiman
 </CENTER>
 
 \section Intro Introduction
@@ -134,9 +134,8 @@ at a time writes so it was necessary to use a \link SdFile::sync() sync() \endli
 function to control when data is written to the SD card.
 
 \par
-An application which writes to a file using \link Print::print() print()\endlink,
-\link Print::println() println() \endlink
-or \link SdFile::write write() \endlink must call \link SdFile::sync() sync() \endlink
+An application which writes to a file using print(), println() or
+\link SdFile::write write() \endlink must call \link SdFile::sync() sync() \endlink
 at the appropriate time to force data and directory information to be written
 to the SD Card.  Data and directory information are also written to the SD card
 when \link SdFile::close() close() \endlink is called.

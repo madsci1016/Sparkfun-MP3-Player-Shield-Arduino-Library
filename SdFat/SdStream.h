@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -31,8 +31,6 @@
  * \brief Base class for SD streams
  */
 class SdStreamBase : protected SdBaseFile, virtual public ios {
- public:
-
  protected:
   /// @cond SHOW_PROTECTED
   int16_t getch();
@@ -127,6 +125,10 @@ class fstream : public iostream, SdStreamBase {
    */
   void putch(char c) {SdStreamBase::putch(c);}
   /** Internal - do not use
+   * \param[in] str
+   */
+  void putstr(const char *str) {SdStreamBase::putstr(str);}
+  /** Internal - do not use
    * \param[in] pos
    */
   bool seekoff(off_type off, seekdir way) {
@@ -170,6 +172,7 @@ class ifstream : public istream, SdStreamBase {
   void open(const char* path, openmode mode = in) {
     SdStreamBase::open(path, mode | in);
   }
+
  protected:
   /// @cond SHOW_PROTECTED
   /** Internal - do not use
@@ -229,6 +232,7 @@ class ofstream : public ostream, SdStreamBase {
   }
   /** \return True if stream is open else false. */
   bool is_open() {return SdBaseFile::isOpen();}
+
  protected:
   /// @cond SHOW_PROTECTED
   /**

@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2008 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -17,6 +17,7 @@
  * along with the Arduino SdFat Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
+#include <SdFat.h>
 #include <SdFatUtil.h>
 //------------------------------------------------------------------------------
 /** Amount of free RAM
@@ -62,7 +63,7 @@ void SdFatUtil::println_P(Print* pr, PGM_P str) {
  * \param[in] str Pointer to string stored in flash memory.
  */
 void SdFatUtil::SerialPrint_P(PGM_P str) {
-  print_P(&Serial, str);
+  print_P(SdFat::stdOut(), str);
 }
 //------------------------------------------------------------------------------
 /** %Print a string in flash memory to Serial followed by a CR/LF.
@@ -70,5 +71,5 @@ void SdFatUtil::SerialPrint_P(PGM_P str) {
  * \param[in] str Pointer to string stored in flash memory.
  */
 void SdFatUtil::SerialPrintln_P(PGM_P str) {
-  println_P(&Serial, str);
+  println_P(SdFat::stdOut(), str);
 }

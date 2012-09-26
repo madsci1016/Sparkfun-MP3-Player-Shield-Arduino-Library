@@ -30,7 +30,7 @@ void setup() {
   // Initialize SdFat or print a detailed error message and halt
   // Use half speed like the native library.
   // change to SPI_FULL_SPEED for more performance.
-  if (!sd.init(SPI_HALF_SPEED, chipSelect)) sd.initErrorHalt();
+  if (!sd.begin(chipSelect, SPI_HALF_SPEED)) sd.initErrorHalt();
 
   // open the file for write at end like the Native SD library
   if (!myFile.open("test.txt", O_RDWR | O_CREAT | O_AT_END)) {

@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -50,6 +50,7 @@ class ibufstream : public istream {
     pos_ = 0;
     clear();
   }
+
  protected:
   /// @cond SHOW_PROTECTED
   int16_t getch() {
@@ -110,6 +111,7 @@ class obufstream : public ostream {
   char* buf() {return buf_;}
   /** \return the length of the formatted string */
   uint16_t length() {return in_;}
+
  protected:
   /// @cond SHOW_PROTECTED
   void putch(char c) {
@@ -119,6 +121,9 @@ class obufstream : public ostream {
     }
     buf_[in_++] = c;
     buf_[in_]= '\0';
+  }
+  void putstr(const char *str) {
+    while (*str) putch(*str++);
   }
   bool seekoff(off_type off, seekdir way) {return false;}
   bool seekpos(pos_type pos) {

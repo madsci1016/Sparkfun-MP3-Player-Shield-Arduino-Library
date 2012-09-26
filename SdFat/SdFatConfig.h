@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -26,6 +26,15 @@
 #include <stdint.h>
 //------------------------------------------------------------------------------
 /**
+ * To enable SD card CRC checking set USE_SD_CRC nonzero.
+ *
+ * Set USE_SD_CRC to 1 to use a smaller slower CRC-CCITT function.
+ *
+ * Set USE_SD_CRC to 2 to used a larger faster table driven CRC-CCITT function.
+ */
+#define USE_SD_CRC 0
+//------------------------------------------------------------------------------
+/**
  * To use multiple SD cards set USE_MULTIPLE_CARDS nonzero.
  *
  * Using multiple cards costs 400 - 500  bytes of flash.
@@ -33,6 +42,19 @@
  * Each card requires about 550 bytes of SRAM so use of a Mega is recommended.
  */
 #define USE_MULTIPLE_CARDS 0
+//------------------------------------------------------------------------------
+/**
+ * Set nonzero to use Serial (the HardwareSerial class) for error messages
+ * and output from print functions like ls().
+ *
+ * If USE_SERIAL_FOR_STD_OUT is zero, a small non-interrupt driven class
+ * is used to output messages to serial port zero.  This allows an alternate
+ * Serial library like SerialPort to be used with SdFat.
+ *
+ * You can redirect stdOut with SdFat::setStdOut(Print* stream) and
+ * get the current stream with SdFat::stdOut().
+ */
+#define USE_SERIAL_FOR_STD_OUT 0
 //------------------------------------------------------------------------------
 /**
  * Call flush for endl if ENDL_CALLS_FLUSH is nonzero
@@ -78,7 +100,8 @@
 //------------------------------------------------------------------------------
 /**
  * Define MEGA_SOFT_SPI nonzero to use software SPI on Mega Arduinos.
- * Pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
+ * Default pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
+ * Edit Software Spi pins to change pin numbers.
  *
  * MEGA_SOFT_SPI allows an unmodified Adafruit GPS Shield to be used
  * on Mega Arduinos.  Software SPI works well with GPS Shield V1.1
@@ -87,11 +110,22 @@
 #define MEGA_SOFT_SPI 0
 //------------------------------------------------------------------------------
 /**
+ * Define LEONARDO_SOFT_SPI nonzero to use software SPI on Leonardo Arduinos.
+ * Derfault pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
+ * Edit Software Spi pins to change pin numbers.
+ *
+ * LEONARDO_SOFT_SPI allows an unmodified Adafruit GPS Shield to be used
+ * on Leonardo Arduinos.  Software SPI works well with GPS Shield V1.1
+ * but many SD cards will fail with GPS Shield V1.0.
+ */
+#define LEONARDO_SOFT_SPI 0
+//------------------------------------------------------------------------------
+/**
  * Set USE_SOFTWARE_SPI nonzero to always use software SPI.
  */
 #define USE_SOFTWARE_SPI 0
 // define software SPI pins so Mega can use unmodified 168/328 shields
-/** Software SPI chip select pin for the SD */
+/** Default Software SPI chip select pin */
 uint8_t const SOFT_SPI_CS_PIN = 10;
 /** Software SPI Master Out Slave In pin */
 uint8_t const SOFT_SPI_MOSI_PIN = 11;
@@ -99,10 +133,4 @@ uint8_t const SOFT_SPI_MOSI_PIN = 11;
 uint8_t const SOFT_SPI_MISO_PIN = 12;
 /** Software SPI Clock pin */
 uint8_t const SOFT_SPI_SCK_PIN = 13;
-//------------------------------------------------------------------------------
-/**
- * The __cxa_pure_virtual function is an error handler that is invoked when
- * a pure virtual function is called.
- */
-#define USE_CXA_PURE_VIRTUAL 1
 #endif  // SdFatConfig_h

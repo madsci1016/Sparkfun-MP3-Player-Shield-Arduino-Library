@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -20,7 +20,7 @@
 #include <ostream.h>
 //------------------------------------------------------------------------------
 void ostream::do_fill(unsigned len) {
-  for (;len < width(); len++) putch(fill());
+  for (; len < width(); len++) putch(fill());
   width(0);
 }
 //------------------------------------------------------------------------------
@@ -44,11 +44,9 @@ char* ostream::fmtNum(uint32_t n, char *ptr, uint8_t base) {
 void ostream::putBool(bool b) {
   if (flags() & boolalpha) {
     if (b) {
-      pgm t(PSTR("true"));
-      putPgm(t);
+      putPgm(PSTR("true"));
     } else {
-      pgm f(PSTR("false"));
-      putPgm(f);
+      putPgm(PSTR("false"));
     }
   } else {
     putChar(b ? '1' : '0');
@@ -80,8 +78,7 @@ void ostream::putDouble(double n) {
   }
   // check for larger than uint32_t
   if (n > 4.0E9) {
-    pgm err(PSTR("BIG FLT"));
-    putPgm(err);
+    putPgm(PSTR("BIG FLT"));
     return;
   }
   // round up and separate in and fraction parts
@@ -158,8 +155,7 @@ void ostream::putNum(uint32_t n, bool neg) {
   do_fill(len);
 }
 //------------------------------------------------------------------------------
-void ostream::putPgm(const pgm &arg) {
-  char *str = arg.ptr;
+void ostream::putPgm(const char* str) {
   int n = strlen_P(str);
   fill_not_left(n);
   for (uint8_t c; (c = pgm_read_byte(str)); str++) {

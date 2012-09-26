@@ -3,7 +3,7 @@
 #include <SdFat.h>
 #include <SdFatUtil.h>  // define FreeRam()
 
-#define CHIP_SELECT SS_PIN  // SD chip select pin
+#define CHIP_SELECT     SS  // SD chip select pin
 #define USE_DS1307       0  // set nonzero to use DS1307 RTC
 #define LOG_INTERVAL  1000  // mills between entries
 #define SENSOR_COUNT     3  // number of analog pins to log
@@ -85,9 +85,7 @@ void setup() {
 #endif  // USE_DS1307
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
-  // breadboards.  use SPI_FULL_SPEED for better performance.
-  // if SD chip select is not SS, the second argument to init is CS pin number
-  if (!sd.init(SPI_HALF_SPEED, CHIP_SELECT)) sd.initErrorHalt();
+  if (!sd.begin(CHIP_SELECT, SPI_HALF_SPEED)) sd.initErrorHalt();
 
   // create a new file in root, the current working directory
   char name[] = "LOGGER00.CSV";

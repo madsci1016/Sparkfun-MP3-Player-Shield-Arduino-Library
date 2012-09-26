@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -64,6 +64,7 @@ class ArduinoInStream : public ibufstream {
   done:
     init(line_);
   }
+
  protected:
   /** Internal - do not use.
    * \param[in] off
@@ -76,6 +77,7 @@ class ArduinoInStream : public ibufstream {
   * \return true/false.
   */
   bool seekpos(pos_type pos) {return false;}
+
  private:
   char *line_;
   uint16_t size_;
@@ -93,6 +95,7 @@ class ArduinoOutStream : public ostream {
    * \param[in] pr Print object for this ArduinoOutStream.
    */
   explicit ArduinoOutStream(Print& pr) : pr_(&pr) {}
+
  protected:
   /// @cond SHOW_PROTECTED
   /**
@@ -103,6 +106,7 @@ class ArduinoOutStream : public ostream {
     if (c == '\n') pr_->write('\r');
     pr_->write(c);
   }
+  void putstr(const char* str) {pr_->write(str);}
   bool seekoff(off_type off, seekdir way) {return false;}
   bool seekpos(pos_type pos) {return false;}
   bool sync() {return true;}

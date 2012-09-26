@@ -1,6 +1,5 @@
 // Quick hardware test
 #include <SdFat.h>
-
 // Test with reduced SPI speed for breadboards.
 // Change spiSpeed to SPI_FULL_SPEED for better performance
 // Use SPI_QUARTER_SPEED for even slower SPI bus speed
@@ -19,12 +18,8 @@ ArduinoOutStream cout(Serial);
 char cinBuf[40];
 ArduinoInStream cin(Serial, cinBuf, sizeof(cinBuf));
 
-// Change the value of chipSelect if your hardware does
-// not use the default value, SS_PIN.  Common values are:
-// Arduino Ethernet shield: pin 4
-// Sparkfun SD shield: pin 8
-// Adafruit SD shields and modules: pin 10
-int chipSelect = SS_PIN;
+// SD card chip select
+int chipSelect;
 
 void cardOrSpeed() {
   cout << pstr(
@@ -45,23 +40,21 @@ void reformatMsg() {
 void setup() {
   Serial.begin(9600);
   cout << pstr(
-    "SD chip select is the key hardware option.\n"
+    "\nSD chip select is the key hardware option.\n"
     "Common values are:\n"
     "Arduino Ethernet shield, pin 4\n"
     "Sparkfun SD shield, pin 8\n"
-    "Adafruit SD shields and modules, pin 10\n"
-    "The default chip select pin number is pin ");
-  cout << int(SS_PIN) << endl;
+    "Adafruit SD shields and modules, pin 10\n");
 }
 
 bool firstTry = true;
 void loop() {
   // read any existing Serial data
   while (Serial.read() >= 0) {}
-  
+
   if (!firstTry) cout << pstr("\nRestarting\n");
   firstTry = false;
-  
+
   cout << pstr("\nEnter the chip select pin number: ");
   cin.readline();
   if (cin >> chipSelect) {

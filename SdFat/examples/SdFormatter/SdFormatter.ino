@@ -19,11 +19,11 @@
 #endif  // DEBUG_PRINT
 //
 // Change the value of chipSelect if your hardware does
-// not use the default value, SS_PIN.  Common values are:
+// not use the default value, SS.  Common values are:
 // Arduino Ethernet shield: pin 4
 // Sparkfun SD shield: pin 8
 // Adafruit SD shields and modules: pin 10
-const uint8_t chipSelect = SS_PIN;
+const uint8_t chipSelect = SS;
 
 // Change spiSpeed to SPI_FULL_SPEED for better performance
 // Use SPI_QUARTER_SPEED for even slower SPI bus speed
@@ -114,8 +114,11 @@ void initSizes() {
     sectorsPerCluster = 16;
   } else if (cardCapacityMB <= 1024) {
     sectorsPerCluster = 32;
-  } else {
+  } else if (cardCapacityMB <= 32768) {
     sectorsPerCluster = 64;
+  } else {
+    // SDXC cards
+    sectorsPerCluster = 128;
   }
 
   cout << pstr("Blocks/Cluster: ") << int(sectorsPerCluster) << endl;

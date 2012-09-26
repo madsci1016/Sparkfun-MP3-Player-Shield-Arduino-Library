@@ -1,5 +1,5 @@
 /* Arduino Sd2Card Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino Sd2Card Library
  *
@@ -63,6 +63,8 @@ uint8_t const CMD38 = 0X26;
 uint8_t const CMD55 = 0X37;
 /** READ_OCR - read the OCR register of a card */
 uint8_t const CMD58 = 0X3A;
+/** CRC_ON_OFF - enable or disable CRC checking */
+uint8_t const CMD59 = 0X3B;
 /** SET_WR_BLK_ERASE_COUNT - Set the number of write blocks to be
      pre-erased before writing */
 uint8_t const ACMD23 = 0X17;
@@ -215,10 +217,10 @@ typedef struct CSDV2 {
   /** fixed to 0 - no partial read */
   unsigned char read_bl_partial : 1;
   // byte 7
-  /** not used */
-  unsigned char reserved3 : 2;
   /** high part of card size */
   unsigned char c_size_high : 6;
+  /** not used */
+  unsigned char reserved3 : 2;
   // byte 8
   /** middle part of card size */
   unsigned char c_size_mid;

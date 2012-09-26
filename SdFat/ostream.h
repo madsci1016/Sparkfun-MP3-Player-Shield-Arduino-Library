@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -170,12 +170,20 @@ class ostream : public virtual ios {
     putNum(reinterpret_cast<uint32_t>(arg));
     return *this;
   }
-  /** Output a string from flash
+  /** Output a string from flash using the pstr() macro
    * \param[in] arg pgm struct pointing to string
    * \return the stream
    */
   ostream &operator<< (pgm arg) {
-    putPgm(arg);
+    putPgm(arg.ptr);
+    return *this;
+  }
+  /** Output a string from flash using the Arduino F() macro.
+   * \param[in] arg pointing to flash string
+   * \return the stream
+   */
+  ostream &operator<< (const __FlashStringHelper *arg) {
+    putPgm(reinterpret_cast<const char*>(arg));
     return *this;
   }
   /**
@@ -226,15 +234,14 @@ class ostream : public virtual ios {
     if (!seekoff(off, way)) setstate(failbit);
     return *this;
   }
+
  protected:
   /// @cond SHOW_PROTECTED
   /** Put character with binary/text conversion
    * \param[in] ch character to write
    */
   virtual void putch(char ch) = 0;
-  virtual void putstr(const char *str) {
-    while (*str) putch(*str++);
-  }
+  virtual void putstr(const char *str) = 0;
   virtual bool seekoff(off_type pos, seekdir way) = 0;
   virtual bool seekpos(pos_type pos) = 0;
   virtual bool sync() = 0;
@@ -250,7 +257,7 @@ class ostream : public virtual ios {
   void putDouble(double n);
   void putNum(uint32_t n, bool neg = false);
   void putNum(int32_t n);
-  void putPgm(const pgm& arg);
+  void putPgm(const char* str);
   void putStr(const char* str);
 };
 #endif  // ostream_h

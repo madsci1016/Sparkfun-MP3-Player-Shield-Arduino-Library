@@ -8,7 +8,7 @@
 #include <SdFat.h>
 
 // SD chip select pin
-const uint8_t chipSelect = SS_PIN;
+const uint8_t chipSelect = SS;
 
 // file system object
 SdFat sd;
@@ -31,7 +31,7 @@ void setup() {
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
-  if (!sd.init(SPI_HALF_SPEED, chipSelect)) sd.initErrorHalt();
+  if (!sd.begin(chipSelect, SPI_HALF_SPEED)) sd.initErrorHalt();
 
   cout << pstr("Appending to: ") << name;
 

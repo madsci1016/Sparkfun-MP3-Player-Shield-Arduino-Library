@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -19,13 +19,7 @@
  */
 
 #include <SdFat.h>
-// catch pure virtual errors
-#if USE_CXA_PURE_VIRTUAL
-extern "C" void __cxa_pure_virtual() {
-  Serial.println("VIRTUAL");
-  exit(1);
-}
-#endif  // USE_CXA_PURE_VIRTUAL
+
 //==============================================================================
   /// @cond SHOW_PROTECTED
 int16_t SdStreamBase::getch() {

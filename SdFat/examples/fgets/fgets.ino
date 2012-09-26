@@ -55,7 +55,7 @@ void setup(void) {
   while (Serial.read() < 0) {}
   
   // initialize the file system
-  if (!sd.init()) sd.initErrorHalt();
+  if (!sd.begin()) sd.initErrorHalt();
   
   makeTestFile();
   

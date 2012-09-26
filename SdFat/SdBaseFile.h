@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -24,11 +24,7 @@
  * \brief SdBaseFile class
  */
 #include <avr/pgmspace.h>
-#if ARDUINO < 100
-#include <WProgram.h>
-#else  // ARDUINO
 #include <Arduino.h>
-#endif  // ARDUINO
 #include <SdFatConfig.h>
 #include <SdVolume.h>
 //------------------------------------------------------------------------------
@@ -193,6 +189,10 @@ class SdBaseFile {
    * for true after calls to print() and/or write().
    */
   bool writeError;
+  /** \return value of writeError */
+  bool getWriteError() {return writeError;}
+  /** Set writeError to zero */
+  void clearWriteError() {writeError = 0;}
   //----------------------------------------------------------------------------
   // helpers for stream classes
   /** get position for streams
@@ -281,11 +281,14 @@ class SdBaseFile {
   bool openNext(SdBaseFile* dirFile, uint8_t oflag);
   bool openRoot(SdVolume* vol);
   int peek();
+  bool printCreateDateTime(Print* pr);
   static void printFatDate(uint16_t fatDate);
   static void printFatDate(Print* pr, uint16_t fatDate);
   static void printFatTime(uint16_t fatTime);
   static void printFatTime(Print* pr, uint16_t fatTime);
+  bool printModifyDateTime(Print* pr);
   bool printName();
+  bool printName(Print* pr);
   int16_t read();
   int16_t read(void* buf, uint16_t nbyte);
   int8_t readDir(dir_t* dir);
@@ -372,6 +375,7 @@ class SdBaseFile {
 //------------------------------------------------------------------------------
 // Deprecated functions  - suppress cpplint warnings with NOLINT comment
 #if ALLOW_DEPRECATED_FUNCTIONS && !defined(DOXYGEN)
+
  public:
   /** \deprecated Use:
    * bool contiguousRange(uint32_t* bgnBlock, uint32_t* endBlock);

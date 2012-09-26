@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2008 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -23,12 +23,8 @@
  * \file
  * \brief Useful utility functions.
  */
-#include <avr/pgmspace.h>
-#if ARDUINO < 100
-#include <WProgram.h>
-#else  // ARDUINO
 #include <Arduino.h>
-#endif  // ARDUINO
+#include <avr/pgmspace.h>
 /** Store and print a string in flash memory.*/
 #define PgmPrint(x) SerialPrint_P(PSTR(x))
 /** Store and print a string in flash memory followed by a CR/LF.*/

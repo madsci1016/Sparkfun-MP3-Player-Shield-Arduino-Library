@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -155,8 +155,6 @@ class SdVolume {
           return (position >> 9) & (blocksPerCluster_ - 1);}
   uint32_t clusterStartBlock(uint32_t cluster) const {
            return dataStartBlock_ + ((cluster - 2) << clusterSizeShift_);}
-  uint32_t blockNumber(uint32_t cluster, uint32_t position) const {
-           return clusterStartBlock(cluster) + blockOfCluster(position);}
   cache_t *cache() {return &cacheBuffer_;}
   uint32_t cacheBlockNumber() {return cacheBlockNumber_;}
 #if USE_MULTIPLE_CARDS
@@ -192,6 +190,7 @@ class SdVolume {
 //------------------------------------------------------------------------------
   // Deprecated functions  - suppress cpplint warnings with NOLINT comment
 #if ALLOW_DEPRECATED_FUNCTIONS && !defined(DOXYGEN)
+
  public:
   /** \deprecated Use: bool SdVolume::init(Sd2Card* dev);
    * \param[in] dev The SD card where the volume is located.

@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -18,7 +18,33 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <SdFat.h>
-#include <SdFatUtil.h>
+//------------------------------------------------------------------------------
+#if USE_SERIAL_FOR_STD_OUT || !defined(UDR0)
+Print* SdFat::stdOut_ = &Serial;
+#else  // USE_SERIAL_FOR_STD_OUT
+class DefaultSerial : public Print {
+ public:
+  size_t write(uint8_t b);
+};
+size_t DefaultSerial::write(uint8_t b) {
+  while (((1 << UDRIE0) & UCSR0B) || !(UCSR0A & (1 << UDRE0))) {}
+  UDR0 = b;
+  return 1;
+}
+//------------------------------------------------------------------------------
+static DefaultSerial defaultStdOut;
+
+Print* SdFat::stdOut_ = &defaultStdOut;
+#endif  // USE_SERIAL_FOR_STD_OUT
+//------------------------------------------------------------------------------
+static void pstrPrint(PGM_P str) {
+  for (uint8_t c; (c = pgm_read_byte(str)); str++) SdFat::stdOut()->write(c);
+}
+//------------------------------------------------------------------------------
+static void pstrPrintln(PGM_P str) {
+  pstrPrint(str);
+  SdFat::stdOut()->println();
+}
 //------------------------------------------------------------------------------
 /** Change a volume's working directory to root
  *
@@ -34,7 +60,7 @@
  */
 bool SdFat::chdir(bool set_cwd) {
   if (set_cwd) SdBaseFile::cwd_ = &vwd_;
-  vwd_.close();
+  if (vwd_.isOpen()) vwd_.close();
   return vwd_.openRoot(&vol_);
 }
 //------------------------------------------------------------------------------
@@ -110,8 +136,8 @@ void SdFat::errorHalt_P(PGM_P msg) {
 /** %Print any SD error code. */
 void SdFat::errorPrint() {
   if (!card_.errorCode()) return;
-  PgmPrint("SD errorCode: 0X");
-  Serial.println(card_.errorCode(), HEX);
+  pstrPrint(PSTR("SD errorCode: 0X"));
+  stdOut_->println(card_.errorCode(), HEX);
 }
 //------------------------------------------------------------------------------
 /** %Print msg, any SD error code.
@@ -119,8 +145,8 @@ void SdFat::errorPrint() {
  * \param[in] msg Message to print.
  */
 void SdFat::errorPrint(char const* msg) {
-  PgmPrint("error: ");
-  Serial.println(msg);
+  pstrPrint(PSTR("error: "));
+  stdOut_->println(msg);
   errorPrint();
 }
 //------------------------------------------------------------------------------
@@ -129,8 +155,8 @@ void SdFat::errorPrint(char const* msg) {
  * \param[in] msg Message in program space (flash memory) to print.
  */
 void SdFat::errorPrint_P(PGM_P msg) {
-  PgmPrint("error: ");
-  SerialPrintln_P(msg);
+  pstrPrint(PSTR("error: "));
+  pstrPrintln(msg);
   errorPrint();
 }
 //------------------------------------------------------------------------------
@@ -171,7 +197,7 @@ void SdFat::initErrorHalt() {
  * \param[in] msg Message to print.
  */
 void SdFat::initErrorHalt(char const *msg) {
-  Serial.println(msg);
+  stdOut_->println(msg);
   initErrorHalt();
 }
 //------------------------------------------------------------------------------
@@ -180,24 +206,24 @@ void SdFat::initErrorHalt(char const *msg) {
  * \param[in] msg Message in program space (flash memory) to print.
  */
 void SdFat::initErrorHalt_P(PGM_P msg) {
-  SerialPrintln_P(msg);
+  pstrPrintln(msg);
   initErrorHalt();
 }
 //------------------------------------------------------------------------------
 /** Print error details after SdFat::init() fails. */
 void SdFat::initErrorPrint() {
   if (card_.errorCode()) {
-    PgmPrintln("Can't access SD card. Do not reformat.");
+    pstrPrintln(PSTR("Can't access SD card. Do not reformat."));
     if (card_.errorCode() == SD_CARD_ERROR_CMD0) {
-      PgmPrintln("No card, wrong chip select pin, or SPI problem?");
+      pstrPrintln(PSTR("No card, wrong chip select pin, or SPI problem?"));
     }
     errorPrint();
   } else if (vol_.fatType() == 0) {
-    PgmPrintln("Invalid format, reformat SD.");
+    pstrPrintln(PSTR("Invalid format, reformat SD."));
   } else if (!vwd_.isOpen()) {
-    PgmPrintln("Can't open root directory.");
+    pstrPrintln(PSTR("Can't open root directory."));
   } else {
-    PgmPrintln("No error found.");
+    pstrPrintln(PSTR("No error found."));
   }
 }
 //------------------------------------------------------------------------------
@@ -206,7 +232,7 @@ void SdFat::initErrorPrint() {
  * \param[in] msg Message to print.
  */
 void SdFat::initErrorPrint(char const *msg) {
-  Serial.println(msg);
+  stdOut_->println(msg);
   initErrorPrint();
 }
 //------------------------------------------------------------------------------
@@ -215,11 +241,11 @@ void SdFat::initErrorPrint(char const *msg) {
  * \param[in] msg Message in program space (flash memory) to print.
  */
 void SdFat::initErrorPrint_P(PGM_P msg) {
-  SerialPrintln_P(msg);
+  pstrPrintln(msg);
   initErrorHalt();
 }
 //------------------------------------------------------------------------------
-/** List the directory contents of the volume working directory to Serial.
+/** List the directory contents of the volume working directory to stdOut.
  *
  * \param[in] flags The inclusive OR of
  *
@@ -230,10 +256,10 @@ void SdFat::initErrorPrint_P(PGM_P msg) {
  * LS_R - Recursive list of subdirectories.
  */
 void SdFat::ls(uint8_t flags) {
-  vwd_.ls(&Serial, flags);
+  vwd_.ls(stdOut_, flags);
 }
 //------------------------------------------------------------------------------
-/** List the directory contents of the volume working directory to Serial.
+/** List the directory contents of the volume working directory.
  *
  * \param[in] pr Print stream for list.
  *

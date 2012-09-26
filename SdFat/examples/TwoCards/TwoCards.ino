@@ -40,7 +40,7 @@ void setup() {
   digitalWrite(SD2_CS, HIGH);
   
   // initialize the first card
-  if (!sd1.init(SPI_FULL_SPEED, SD1_CS)) {
+  if (!sd1.begin(SD1_CS)) {
     sd1.initError("sd1:");
   }
   // create DIR1 on sd1 if it does not exist
@@ -48,7 +48,7 @@ void setup() {
     if (!sd1.mkdir("/DIR1")) sd1.errorExit("sd1.mkdir");
   }
   // initialize the second card
-  if (!sd2.init(SPI_FULL_SPEED, SD2_CS)) {
+  if (!sd2.begin(SD2_CS)) {
     sd2.initError("sd2:");
   }
  // create DIR2 on sd2 if it does not exist

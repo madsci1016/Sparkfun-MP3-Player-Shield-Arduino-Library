@@ -1,5 +1,5 @@
 /* Arduino SdFat Library
- * Copyright (C) 2009 by William Greiman
+ * Copyright (C) 2012 by William Greiman
  *
  * This file is part of the Arduino SdFat Library
  *
@@ -186,12 +186,14 @@ class ios_base {
     width_ = n;
     return r;
   }
+
  protected:
   /** \return current number base */
   uint8_t flagsToBase() {
     uint8_t f = flags() & basefield;
     return f == oct ? 8 : f != hex ? 10 : 16;
   }
+
  private:
   char fill_;
   fmtflags fmtflags_;
@@ -385,6 +387,7 @@ class ios : public ios_base {
    * \param[in] state Bitts to set.
    **/
   void setstate(iostate state) {iostate_ |= state;}
+
  private:
   iostate iostate_;
 };

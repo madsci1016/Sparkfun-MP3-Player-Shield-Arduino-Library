@@ -88,6 +88,8 @@ uint8_t SFEMP3Shield::begin(){
   int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
   if(MP3Clock != 0x6000) return 5;
   
+  if (VSLoadUserCode("patches.053")) Serial.println("Warning: patch file not found, skipping.");
+  
   return 0;
 }
 
@@ -439,6 +441,7 @@ static void refill() {
   }
 }
 
+// chomp non printable characters out of string.
 char* strip_nonalpha_inplace(char *s) {
   for ( ; *s && !isalpha(*s); ++s)
     ; // skip leading non-alpha chars
@@ -453,4 +456,42 @@ char* strip_nonalpha_inplace(char *s) {
   *++tail = '\0'; // truncate after the last alpha
 
   return s;
+}
+
+// load VS1xxx with patch or plugin from file on SDcard.
+uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
+
+	union twobyte val;
+	union twobyte addr;
+	union twobyte n;
+	
+	if (playing) return 1;
+
+	//Open the file in read mode.
+	if (!track.open(&root, fileName, O_READ)) return 2;
+//	playing = TRUE;
+//  while (i<size_of_Plugin/sizeof(Plugin[0])) {
+  while (1) {
+    //addr = Plugin[i++];
+    if (!track.read(addr.byte, 2)) break;
+    //n = Plugin[i++];
+    if (!track.read(n.byte, 2)) break;
+    if (n.word & 0x8000U) { /* RLE run, replicate n samples */
+      n.word &= 0x7FFF;
+      //val = Plugin[i++];
+	    if (!track.read(val.byte, 2)) break;
+      while (n.word--) {
+        Mp3WriteRegister(addr.word, val.word >> 8, val.word & 0xFF);
+      }
+    } else {           /* Copy run, copy n samples */
+      while (n.word--) {
+        //val = Plugin[i++];
+				if (!track.read(val.byte, 2)) 	break;
+       Mp3WriteRegister(addr.word, val.word >> 8, val.word & 0xFF);
+      }
+    }
+  }
+	track.close(); //Close out this track
+//	playing=FALSE;
+	return 0;
 }

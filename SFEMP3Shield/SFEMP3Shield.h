@@ -119,9 +119,14 @@ uint8_t bitrate;
 uint32_t start_of_music;
 uint8_t VolL;
 uint8_t VolR;
+uint8_t VSLoadUserCode(char*);
 };
 
 char* strip_nonalpha_inplace(char *s);
 
+typedef	union twobyte {
+	uint16_t word;
+	uint8_t  byte[2];
+} ;	
 
 #endif

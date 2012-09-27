@@ -22,6 +22,7 @@
 *           Blame Nathan for bad implentation of SDFatlib
 *    0.7 added functions to read track title,artist,album
 *         fixed silly use of static where it shouldn't have been
+*    0.7.1 chomp'd non ASCII characters from file names.
 *	
 *
 *

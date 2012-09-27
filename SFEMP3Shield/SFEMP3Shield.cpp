@@ -243,6 +243,7 @@ void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
 	
 	//read 30 bytes of tag informat at -128 + offset
 	track.read(infobuffer, 30);
+	infobuffer = strip_nonalpha_inplace(infobuffer);
 	
 	//seek back to saved file position
 	track.seekSet(currentPos);
@@ -433,41 +434,18 @@ static void refill() {
   }
 }
 
+char* strip_nonalpha_inplace(char *s) {
+  for ( ; *s && !isalpha(*s); ++s)
+    ; // skip leading non-alpha chars
+  if (*s == '\0')
+    return s; // there are no alpha characters
 
+//  assert(isalpha(*s));
+  char *tail = s + strlen(s);
+  for ( ; !isalpha(*tail); --tail)
+    ; // skip trailing non-alpha chars
+//  assert(isalpha(*tail));
+  *++tail = '\0'; // truncate after the last alpha
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  return s;
+}

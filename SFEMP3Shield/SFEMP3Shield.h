@@ -121,6 +121,7 @@ uint8_t VolL;
 uint8_t VolR;
 };
 
+char* strip_nonalpha_inplace(char *s);
 
 
 #endif

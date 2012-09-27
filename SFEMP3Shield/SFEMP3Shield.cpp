@@ -130,50 +130,55 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 	uint8_t temp = 0;
 	uint8_t row_num =0;
 	
+	// find length of arrary at pointer
+	int fileNamefileName_length = 0;
+	while(*(fileName + fileNamefileName_length))
+		fileNamefileName_length++;
 	
-	for(uint16_t i = 0; i<65535; i++){
-	//for(;;){
-		if(track.read() == 0xFF) {
-			
-			temp = track.read();
-			
-			if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
-
-				//found the 11 1's
-				//parse version, layer and bitrate out and save bitrate
-				if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
-					row_num = 3;
-			    if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
-					row_num += 1;
-				else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1	
-					row_num += 2;
+	if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
+		for(uint16_t i = 0; i<65535; i++){
+		//for(;;){
+			if(track.read() == 0xFF) {
 				
-				//parse bitrate code from next byte
 				temp = track.read();
-				temp = temp>>4;
 				
-				//lookup bitrate
-				bitrate = pgm_read_word_near ( temp*5 + row_num );
-				//							      bitrate_table[temp][row_num];
+				if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
+	
+					//found the 11 1's
+					//parse version, layer and bitrate out and save bitrate
+					if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
+						row_num = 3;
+				    if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
+						row_num += 1;
+					else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1	
+						row_num += 2;
+					
+					//parse bitrate code from next byte
+					temp = track.read();
+					temp = temp>>4;
+					
+					//lookup bitrate
+					bitrate = pgm_read_word_near ( temp*5 + row_num );
+					//							      bitrate_table[temp][row_num];
+					
+					//convert kbps to Bytes per mS
+					bitrate /= 8;
+					
+					//record file position
+					track.seekCur(-3);
+					start_of_music = track.curPosition();
+					
+					//Serial.print("POS: ");
+					//Serial.println(start_of_music);
+					
+					//Serial.print("Bitrate: ");
+					//Serial.println(bitrate);
+					
+					//break out of for loop
+					break;
 				
-				//convert kbps to Bytes per mS
-				bitrate /= 8;
-				
-				//record file position
-				track.seekCur(-3);
-				start_of_music = track.curPosition();
-				
-				//Serial.print("POS: ");
-				//Serial.println(start_of_music);
-				
-				//Serial.print("Bitrate: ");
-				//Serial.println(bitrate);
-				
-				//break out of for loop
-				break;
-			
+				}	    
 			}
-		    
 		}
 	}
 	

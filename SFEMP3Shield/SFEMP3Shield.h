@@ -61,6 +61,7 @@ static uint8_t mp3DataBuffer[32];
 #define MP3_XCS 6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
 #define MP3_XDCS 7 //Data Chip Select / BSYNC Pin
 #define MP3_DREQ 2 //Data Request Pin: Player asks for more data
+#define MP3_DREQINT          0      //Corresponding INTx for DREQ pin
 #define MP3_RESET 8 //Reset is active low
 #define SD_SEL 9 //select pin for SD card
 

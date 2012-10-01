@@ -340,7 +340,13 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
 	return;
 }
 
-void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){
+void Mp3WriteRegister(uint8_t addressbyte, uint16_t data) {
+	union twobyte val;
+	val.word = data;
+	Mp3WriteRegister(addressbyte, val.byte[1], val.byte[0]);
+}
+
+void Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8_t lowbyte) {
 
 	//cancel interrupt if playing
 	if(playing)
@@ -481,13 +487,13 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
       //val = Plugin[i++];
 	    if (!track.read(val.byte, 2)) break;
       while (n.word--) {
-        Mp3WriteRegister(addr.word, val.word >> 8, val.word & 0xFF);
+        Mp3WriteRegister(addr.word, val.word);
       }
     } else {           /* Copy run, copy n samples */
       while (n.word--) {
         //val = Plugin[i++];
 				if (!track.read(val.byte, 2)) 	break;
-       Mp3WriteRegister(addr.word, val.word >> 8, val.word & 0xFF);
+        Mp3WriteRegister(addr.word, val.word);
       }
     }
   }

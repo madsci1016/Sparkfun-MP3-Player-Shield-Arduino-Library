@@ -45,6 +45,7 @@ GNU General Public License for more details.
 static void refill();
 
 void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
+void Mp3WriteRegister(uint8_t, uint16_t);
 uint16_t Mp3ReadRegister (uint8_t);
 
 //Create the variables to be used by SdFat Library
@@ -61,6 +62,7 @@ static uint8_t mp3DataBuffer[32];
 #define MP3_XCS 6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
 #define MP3_XDCS 7 //Data Chip Select / BSYNC Pin
 #define MP3_DREQ 2 //Data Request Pin: Player asks for more data
+#define MP3_DREQINT 0 //Corresponding INTx for DREQ pin
 #define MP3_RESET 8 //Reset is active low
 #define SD_SEL 9 //select pin for SD card
 
@@ -83,8 +85,22 @@ static uint8_t mp3DataBuffer[32];
 #define SCI_AICTRL3 0x0F
 
 //VS10xx SCI_MODE bitmasks
-#define SM_RESET 0x04
-#define SM_CANCEL 0x08
+#define SM_DIFF           0x0001
+#define SM_LAYER12        0x0002
+#define SM_RESET          0x0004
+#define SM_CANCEL         0x0008
+#define SM_EARSPEAKER_LO  0x0010
+#define SM_TESTS          0x0020
+#define SM_STREAM         0x0040
+#define SM_EARSPEAKER_HI  0x0080
+#define SM_DACT           0x0100
+#define SM_SDIORD         0x0200
+#define SM_SDISHARE       0x0400
+#define SM_SDINEW         0x0800
+#define SM_ADPCM          0x1000
+//#define Not Defined     0x2000
+#define SM_LINE1          0x4000
+#define SM_CLK_RANGE      0x8000
 
 #define TRUE  1
 #define FALSE  0
@@ -118,8 +134,14 @@ uint8_t bitrate;
 uint32_t start_of_music;
 uint8_t VolL;
 uint8_t VolR;
+uint8_t VSLoadUserCode(char*);
 };
 
+char* strip_nonalpha_inplace(char *s);
 
+union twobyte {
+	uint16_t word;
+	uint8_t  byte[2];
+} ;	
 
 #endif

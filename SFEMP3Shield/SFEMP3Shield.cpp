@@ -73,11 +73,11 @@ uint8_t SFEMP3Shield::begin(){
   Serial.println(MP3Clock, HEX);
   */
   
-  if(MP3Mode != 0x4800) return 4;
+  if(MP3Mode != (SM_LINE1 | SM_SDINEW)) return 4;
   
   
   //Now that we have the VS1053 up and running, increase the internal clock multiplier and up our SPI rate
-  Mp3WriteRegister(SCI_CLOCKF, 0x60, 0x00); //Set multiplier to 3.0x
+  Mp3WriteRegister(SCI_CLOCKF, 0x6000); //Set multiplier to 3.0x
   
   //From page 12 of datasheet, max SCI reads are CLKI/7. Input clock is 12.288MHz. 
   //Internal clock multiplier is now 3x.
@@ -87,6 +87,8 @@ uint8_t SFEMP3Shield::begin(){
   //test reading after data rate change
   int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
   if(MP3Clock != 0x6000) return 5;
+  
+  if (VSLoadUserCode("patches.053")) Serial.println("Warning: patch file not found, skipping.");
   
   return 0;
 }
@@ -130,50 +132,55 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 	uint8_t temp = 0;
 	uint8_t row_num =0;
 	
+	// find length of arrary at pointer
+	int fileNamefileName_length = 0;
+	while(*(fileName + fileNamefileName_length))
+		fileNamefileName_length++;
 	
-	for(uint16_t i = 0; i<65535; i++){
-	//for(;;){
-		if(track.read() == 0xFF) {
-			
-			temp = track.read();
-			
-			if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
-
-				//found the 11 1's
-				//parse version, layer and bitrate out and save bitrate
-				if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
-					row_num = 3;
-			    if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
-					row_num += 1;
-				else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1	
-					row_num += 2;
+	if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
+		for(uint16_t i = 0; i<65535; i++){
+		//for(;;){
+			if(track.read() == 0xFF) {
 				
-				//parse bitrate code from next byte
 				temp = track.read();
-				temp = temp>>4;
 				
-				//lookup bitrate
-				bitrate = pgm_read_word_near ( temp*5 + row_num );
-				//							      bitrate_table[temp][row_num];
+				if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
+	
+					//found the 11 1's
+					//parse version, layer and bitrate out and save bitrate
+					if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
+						row_num = 3;
+				    if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
+						row_num += 1;
+					else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1	
+						row_num += 2;
+					
+					//parse bitrate code from next byte
+					temp = track.read();
+					temp = temp>>4;
+					
+					//lookup bitrate
+					bitrate = pgm_read_word_near ( temp*5 + row_num );
+					//							      bitrate_table[temp][row_num];
+					
+					//convert kbps to Bytes per mS
+					bitrate /= 8;
+					
+					//record file position
+					track.seekCur(-3);
+					start_of_music = track.curPosition();
+					
+					//Serial.print("POS: ");
+					//Serial.println(start_of_music);
+					
+					//Serial.print("Bitrate: ");
+					//Serial.println(bitrate);
+					
+					//break out of for loop
+					break;
 				
-				//convert kbps to Bytes per mS
-				bitrate /= 8;
-				
-				//record file position
-				track.seekCur(-3);
-				start_of_music = track.curPosition();
-				
-				//Serial.print("POS: ");
-				//Serial.println(start_of_music);
-				
-				//Serial.print("Bitrate: ");
-				//Serial.println(bitrate);
-				
-				//break out of for loop
-				break;
-			
+				}	    
 			}
-		    
 		}
 	}
 	
@@ -182,7 +189,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 	refill();
 	  
 	//attach refill interrupt off DREQ line, pin 2
-	attachInterrupt(0, refill, RISING);
+	attachInterrupt(MP3_DREQINT, refill, RISING);
 	  
 	return 0;
 }
@@ -194,12 +201,12 @@ void SFEMP3Shield::stopTrack(){
 		return;
   
 	//cancel external interrupt
-	detachInterrupt(0);
+	detachInterrupt(MP3_DREQINT);
 	playing=FALSE;
 
 	//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 	//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-	Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+	Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
 	  
 	track.close(); //Close out this track
 	
@@ -243,6 +250,7 @@ void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
 	
 	//read 30 bytes of tag informat at -128 + offset
 	track.read(infobuffer, 30);
+	infobuffer = strip_nonalpha_inplace(infobuffer);
 	
 	//seek back to saved file position
 	track.seekSet(currentPos);
@@ -257,7 +265,7 @@ void SFEMP3Shield::pauseDataStream(){
 
 	//cancel external interrupt
 	if(playing)
-		detachInterrupt(0);
+		detachInterrupt(MP3_DREQINT);
 
 }
 
@@ -272,7 +280,7 @@ void SFEMP3Shield::resumeDataStream(){
 		refill();
 
 		//attach refill interrupt off DREQ line, pin 2
-		attachInterrupt(0, refill, RISING);
+		attachInterrupt(MP3_DREQINT, refill, RISING);
 	}
 
 }
@@ -283,7 +291,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 	if(playing) {
 	
 		//stop interupt for now
-		detachInterrupt(0);
+		detachInterrupt(MP3_DREQINT);
 		playing=FALSE;
 		
 		//seek to new position in file
@@ -295,7 +303,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 		
 		//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 	    //easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-	    Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+	    Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
 		
 		//gotta start feeding that hungry mp3 chip
 		refill();
@@ -310,7 +318,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 		SFEMP3Shield::SetVolume(VolL,VolR);
 		  
 		//attach refill interrupt off DREQ line, pin 2
-		attachInterrupt(0, refill, RISING);
+		attachInterrupt(MP3_DREQINT, refill, RISING);
 		playing=TRUE;
 		
 		return 0;
@@ -332,11 +340,17 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
 	return;
 }
 
-void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigned char lowbyte){
+void Mp3WriteRegister(uint8_t addressbyte, uint16_t data) {
+	union twobyte val;
+	val.word = data;
+	Mp3WriteRegister(addressbyte, val.byte[1], val.byte[0]);
+}
+
+void Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8_t lowbyte) {
 
 	//cancel interrupt if playing
 	if(playing)
-		detachInterrupt(0);
+		detachInterrupt(MP3_DREQINT);
 	
 	//Wait for DREQ to go high indicating IC is available
 	while(!digitalRead(MP3_DREQ)) ; 
@@ -357,7 +371,7 @@ void Mp3WriteRegister(unsigned char addressbyte, unsigned char highbyte, unsigne
 		refill();
 
 		//attach refill interrupt off DREQ line, pin 2
-		attachInterrupt(0, refill, RISING);
+		attachInterrupt(MP3_DREQINT, refill, RISING);
 	}
 	
 }
@@ -367,7 +381,7 @@ unsigned int Mp3ReadRegister (unsigned char addressbyte){
   
 	//cancel interrupt if playing
 	if(playing)
-		detachInterrupt(0);
+		detachInterrupt(MP3_DREQINT);
 	  
 	while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
 	digitalWrite(MP3_XCS, LOW); //Select control
@@ -393,7 +407,7 @@ unsigned int Mp3ReadRegister (unsigned char addressbyte){
 		refill();
 
 		//attach refill interrupt off DREQ line, pin 2
-		attachInterrupt(0, refill, RISING);
+		attachInterrupt(MP3_DREQINT, refill, RISING);
 	}
 }
 
@@ -410,11 +424,11 @@ static void refill() {
 			playing=FALSE;
 			
 			//cancel external interrupt
-			detachInterrupt(0);
+			detachInterrupt(MP3_DREQINT);
 			
 			//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 			//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-			Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+			Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
 
            //Oh no! There is no data left to read!
           //Time to exit
@@ -433,41 +447,57 @@ static void refill() {
   }
 }
 
+// chomp non printable characters out of string.
+char* strip_nonalpha_inplace(char *s) {
+  for ( ; *s && !isalpha(*s); ++s)
+    ; // skip leading non-alpha chars
+  if (*s == '\0')
+    return s; // there are no alpha characters
 
+//  assert(isalpha(*s));
+  char *tail = s + strlen(s);
+  for ( ; !isalpha(*tail); --tail)
+    ; // skip trailing non-alpha chars
+//  assert(isalpha(*tail));
+  *++tail = '\0'; // truncate after the last alpha
 
+  return s;
+}
 
+// load VS1xxx with patch or plugin from file on SDcard.
+uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
 
+	union twobyte val;
+	union twobyte addr;
+	union twobyte n;
+	
+	if (playing) return 1;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	//Open the file in read mode.
+	if (!track.open(&root, fileName, O_READ)) return 2;
+//	playing = TRUE;
+//  while (i<size_of_Plugin/sizeof(Plugin[0])) {
+  while (1) {
+    //addr = Plugin[i++];
+    if (!track.read(addr.byte, 2)) break;
+    //n = Plugin[i++];
+    if (!track.read(n.byte, 2)) break;
+    if (n.word & 0x8000U) { /* RLE run, replicate n samples */
+      n.word &= 0x7FFF;
+      //val = Plugin[i++];
+	    if (!track.read(val.byte, 2)) break;
+      while (n.word--) {
+        Mp3WriteRegister(addr.word, val.word);
+      }
+    } else {           /* Copy run, copy n samples */
+      while (n.word--) {
+        //val = Plugin[i++];
+				if (!track.read(val.byte, 2)) 	break;
+        Mp3WriteRegister(addr.word, val.word);
+      }
+    }
+  }
+	track.close(); //Close out this track
+//	playing=FALSE;
+	return 0;
+}

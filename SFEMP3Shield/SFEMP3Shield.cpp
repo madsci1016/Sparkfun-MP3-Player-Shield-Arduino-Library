@@ -73,11 +73,11 @@ uint8_t SFEMP3Shield::begin(){
   Serial.println(MP3Clock, HEX);
   */
   
-  if(MP3Mode != 0x4800) return 4;
+  if(MP3Mode != (SM_LINE1 | SM_SDINEW)) return 4;
   
   
   //Now that we have the VS1053 up and running, increase the internal clock multiplier and up our SPI rate
-  Mp3WriteRegister(SCI_CLOCKF, 0x60, 0x00); //Set multiplier to 3.0x
+  Mp3WriteRegister(SCI_CLOCKF, 0x6000); //Set multiplier to 3.0x
   
   //From page 12 of datasheet, max SCI reads are CLKI/7. Input clock is 12.288MHz. 
   //Internal clock multiplier is now 3x.
@@ -206,7 +206,7 @@ void SFEMP3Shield::stopTrack(){
 
 	//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 	//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-	Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+	Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
 	  
 	track.close(); //Close out this track
 	
@@ -303,7 +303,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 		
 		//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 	    //easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-	    Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+	    Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
 		
 		//gotta start feeding that hungry mp3 chip
 		refill();
@@ -428,7 +428,7 @@ static void refill() {
 			
 			//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
 			//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-			Mp3WriteRegister(SCI_MODE, 0x48, SM_RESET);
+			Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
 
            //Oh no! There is no data left to read!
           //Time to exit

@@ -8,8 +8,11 @@
 *              www.billporter.info
 *
 *	 Contributers:
-*		Most code from SFE head guru Nathan
-*		But for making this pretty I think he owes me a beer now. 
+*		Some original code from SFE head guru Nathan
+*			But for making this pretty I think he owes me a beer now. 
+*		Michael Flaga, doing most to the new dev work now. A better programer then I.
+*		ddz
+*		Wade Brainerd
 *
 *  Lib version history
 *    0.1 made into library, external interrupt driven.

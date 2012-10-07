@@ -21,6 +21,15 @@ PROGMEM prog_uint16_t bitrate_table[14][6] = { {0,0,0,0,0,0},
 					       {384,256,224,192,128,128}, //1100
 					       {416,320,256,224,144,144} };//1101
 
+Sd2Card card;
+SdVolume volume;
+SdFile root;
+SdFile track;
+uint8_t playing;
+
+//buffer for music
+uint8_t mp3DataBuffer[32];
+
 //Inits everything
 uint8_t SFEMP3Shield::begin(){
 

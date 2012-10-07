@@ -48,14 +48,14 @@ void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
 uint16_t Mp3ReadRegister (uint8_t);
 
 //Create the variables to be used by SdFat Library
-static Sd2Card card;
-static SdVolume volume;
-static SdFile root;
-static SdFile track;
-static uint8_t playing;
+extern Sd2Card card;
+extern SdVolume volume;
+extern SdFile root;
+extern SdFile track;
+extern uint8_t playing;
 
 //buffer for music
-static uint8_t mp3DataBuffer[32];
+extern uint8_t mp3DataBuffer[32];
 
 //MP3 Player Shield pin mapping. See the schematic
 #define MP3_XCS 6 //Control Chip Select Pin (for accessing SPI Control/Status registers)

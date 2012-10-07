@@ -22,6 +22,9 @@
 *           Blame Nathan for bad implentation of SDFatlib
 *    0.7 added functions to read track title,artist,album
 *         fixed silly use of static where it shouldn't have been
+*    0.7.1 chomp'd non ASCII characters from file names.
+*    0.7.2 Added quick check if trackname is mp3 extension.
+*    0.7.3 Added apply patch/plugins from SdCard file to VS1xxx.
 *	
 *
 *
@@ -122,3 +125,25 @@ From the 'skipTo' function
 0 OK
 1 Not Playing track
 2 Failed to skip to new file location
+
+
+
+****************Plug Ins*****************************
+.\vs_plg_to_bin.pl is a perl script that will read the below plg files
+and convert them to raw binary to be read by VSLoadUserCode().
+This allows the larger accumilated patch to be loaded, without consuming AVR resources
+
+Below are pre-compiled binarys of corresponding provided VSLI patches/plugins. 
+The filenames are kept short as SdCard only support 8.3.
+
+.\pcm.053       vs1053-pcm110\vs1053pcm.plg                 
+.\admxleft.053  vs1053b-admix130\admix-left.plg             
+.\admxmono.053  vs1053b-admix130\admix-mono.plg             
+.\admxrght.053  vs1053b-admix130\admix-right.plg            
+.\admxster.053  vs1053b-admix130\admix-stereo.plg           
+.\admxswap.053  vs1053b-admix130\admix-swap.plg             
+.\patchesf.053  vs1053b-patches195\vs1053b-patches-flac.plg 
+.\patches.053   vs1053b-patches195\vs1053b-patches.plg      
+.\rtmidi.053    vs1053b-rtmidistart\rtmidistart.plg         
+.\eq5.053       vs1053b-eq5-090\vs1053b-eq5.plg             
+

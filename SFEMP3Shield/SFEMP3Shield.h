@@ -43,10 +43,13 @@ GNU General Public License for more details.
 
 
 static void refill();
+enum flush_m {post, pre, both, none};
+static void	flush_cancel(flush_m);
 
 void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
 void Mp3WriteRegister(uint8_t, uint16_t);
 uint16_t Mp3ReadRegister (uint8_t);
+uint16_t Mp3ReadWRAM (uint16_t);
 
 //Create the variables to be used by SdFat Library
 extern Sd2Card card;
@@ -102,6 +105,18 @@ extern uint8_t mp3DataBuffer[32];
 #define SM_LINE1          0x4000
 #define SM_CLK_RANGE      0x8000
 
+// Extra Parameter in X memory (refer to p.58 of the datasheet)
+#define para_chipID_0                               0x1E00
+#define para_chipID_1                               0x1E01
+#define para_version                                0x1E02
+#define para_config1                                0x1E03
+#define para_playSpeed                              0x1E04
+#define para_byteRate                               0x1E05
+#define para_endFillByte                            0x1E06
+//
+#define para_positionMsec_0                         0x1E27
+#define para_positionMsec_1                         0x1E28
+#define para_resync                                 0x1E29
 #define TRUE  1
 #define FALSE  0
 

@@ -6,7 +6,7 @@
 
 //bitrate lookup table      V1,L1  V1,L2   V1,L3   V2,L1  V2,L2+L3
 //168 bytes(!!); better to store in progmem or eeprom
-PROGMEM prog_uint16_t bitrate_table[14][6] = { {0,0,0,0,0,0},
+uint16_t bitrate_table[14][6] PROGMEM = { {0,0,0,0,0,0},
 					       {32,32,32,32,8,8}, //0001
 					       {64,48,40,48,16,16}, //0010
 					       {96,56,48,56,24,24}, //0011
@@ -169,8 +169,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 					temp = temp>>4;
 					
 					//lookup bitrate
-					bitrate = pgm_read_word_near ( temp*5 + row_num );
-					//							      bitrate_table[temp][row_num];
+					bitrate = pgm_read_word_near ( &(bitrate_table[temp][row_num]) );
 					
 					//convert kbps to Bytes per mS
 					bitrate /= 8;
@@ -213,12 +212,9 @@ void SFEMP3Shield::stopTrack(){
 	detachInterrupt(MP3_DREQINT);
 	playing=FALSE;
 
-	//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
-	//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-	Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
-	  
 	track.close(); //Close out this track
-	
+
+	flush_cancel(pre); //possible mode of "none" for faster response.
 	  
 	//Serial.println("Track is done!");
   
@@ -310,9 +306,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 		Mp3WriteRegister(SCI_VOL, 0xFE, 0xFE);
 		//seeked successfully
 		
-		//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
-	    //easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-	    Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
+		flush_cancel(pre); //possible mode of "none" for faster response.
 		
 		//gotta start feeding that hungry mp3 chip
 		refill();
@@ -420,6 +414,29 @@ unsigned int Mp3ReadRegister (unsigned char addressbyte){
 	}
 }
 
+//Read the 16-bit value of a VS10xx WRAM location
+uint16_t Mp3ReadWRAM (uint16_t addressbyte){
+
+	unsigned short int tmp1,tmp2;
+
+	Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
+	tmp1 = Mp3ReadRegister(SCI_WRAM);
+
+	Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
+	tmp2 = Mp3ReadRegister(SCI_WRAM);
+
+	if (tmp1==tmp2) return tmp1;
+	Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
+	tmp2 = Mp3ReadRegister(SCI_WRAM);
+
+	if (tmp1==tmp2) return tmp1;
+	Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
+	tmp2 = Mp3ReadRegister(SCI_WRAM);
+
+	if (tmp1==tmp2) return tmp1;
+	return tmp1;
+}
+
 //refill VS10xx buffer with new data
 static void refill() {
   
@@ -435,9 +452,7 @@ static void refill() {
 			//cancel external interrupt
 			detachInterrupt(MP3_DREQINT);
 			
-			//tell MP3 chip to do a soft reset. Fixes garbles at end, and clears its buffer. 
-			//easier then the way your SUPPOSE to do it by the manual, same result as much as I can tell.
-			Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
+			flush_cancel(post); //possible mode of "none" for faster response.
 
            //Oh no! There is no data left to read!
           //Time to exit
@@ -454,6 +469,54 @@ static void refill() {
       digitalWrite(MP3_XDCS, HIGH); //Deselect Data
        //We've just dumped 32 bytes into VS1053 so our SD read buffer is empty. go get more data
   }
+}
+
+//flush the buffer and cancel
+// post - will flush vx10xx's 2K buffer after cancelled, typically with stopping a file, to have immediate affect.
+// pre  - will flush buffer prior to issuing cancel, typically to allow completion of file
+// both - will flush before and after issuing cancel
+// none - will just issue cancel. Not sure if this should be used. Such as in skipto.
+// note if cancel fails the vs10xx will be reset and initialized to current values.
+void flush_cancel(flush_m mode) {
+	int8_t endFillByte = (int8_t) (Mp3ReadWRAM(para_endFillByte) & 0xFF);
+	
+	if ((mode == post) || (mode == both)) {
+		digitalWrite(MP3_XDCS, LOW); //Select Data
+		for(int y = 0 ; y < 2052 ; y++) {
+			while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
+			SPI.transfer(endFillByte); // Send SPI byte
+		}
+		digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+	}
+
+	for (int n = 0; n < 64 ; n++)
+	{
+		Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_CANCEL);
+		digitalWrite(MP3_XDCS, LOW); //Select Data
+		for(int y = 0 ; y < 32 ; y++) {
+			while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
+			SPI.transfer(endFillByte); // Send SPI byte
+		}
+		digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+		
+		int cancel = Mp3ReadRegister(SCI_MODE) & SM_CANCEL;
+		if (cancel == 0) {
+			// Cancel has succeeded.
+			if ((mode == pre) || (mode == both)) {
+				digitalWrite(MP3_XDCS, LOW); //Select Data
+				for(int y = 0 ; y < 2052 ; y++) {
+					while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
+					SPI.transfer(endFillByte); // Send SPI byte
+				}
+				digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+			}
+			return;
+		}
+	}	
+	// Cancel has not succeeded.
+	//Serial.println("Warning: VS10XX chip did not cancel, reseting chip!"); 
+	Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
+	//begin(); // however, SFEMP3Shield::begin() is member function that does not exist statically.
 }
 
 // chomp non printable characters out of string.

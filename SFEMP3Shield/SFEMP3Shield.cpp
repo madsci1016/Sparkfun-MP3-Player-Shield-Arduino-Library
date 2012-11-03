@@ -6,7 +6,7 @@
 
 //bitrate lookup table      V1,L1  V1,L2   V1,L3   V2,L1  V2,L2+L3
 //168 bytes(!!); better to store in progmem or eeprom
-PROGMEM prog_uint16_t bitrate_table[14][6] = { {0,0,0,0,0,0},
+uint16_t bitrate_table[14][6] PROGMEM = { {0,0,0,0,0,0},
 					       {32,32,32,32,8,8}, //0001
 					       {64,48,40,48,16,16}, //0010
 					       {96,56,48,56,24,24}, //0011
@@ -169,8 +169,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 					temp = temp>>4;
 					
 					//lookup bitrate
-					bitrate = pgm_read_word_near ( temp*5 + row_num );
-					//							      bitrate_table[temp][row_num];
+					bitrate = pgm_read_word_near ( &(bitrate_table[temp][row_num]) );
 					
 					//convert kbps to Bytes per mS
 					bitrate /= 8;

@@ -28,6 +28,14 @@
 *    0.7.1 chomp'd non ASCII characters from file names.
 *    0.7.2 Added quick check if trackname is mp3 extension.
 *    0.7.3 Added apply patch/plugins from SdCard file to VS1xxx.
+*    0.8 moved MP3 functions into class and cleaned up syntax
+*         finished bitrate_table[] table with last row, that was missed.
+*         added "d" command to print directory of SdCard
+*         added "+/-" command to change volume by 1.0 dB
+*         added print of FreeRam() to show amount of static RAM available.
+*         save 220 bytes by using F() function to put strings into Flash and not use RAM: 
+*           i.e. Serial.Print(F("Hello)");
+*         note: FreeRam() is supplied with SdFatUtil.h
 *	
 *
 *

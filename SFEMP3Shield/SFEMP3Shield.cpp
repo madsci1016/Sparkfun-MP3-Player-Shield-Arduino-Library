@@ -5,9 +5,9 @@
 #include <avr/pgmspace.h>
 
 //bitrate lookup table      V1,L1  V1,L2   V1,L3   V2,L1  V2,L2+L3
-//168 bytes(!!); better to store in progmem or eeprom
-uint16_t bitrate_table[15][6] PROGMEM = { 
-	               { 0,   0,  0,  0,  0,  0}, //0000
+//190 bytes(!!); better to store in progmem or eeprom
+uint16_t bitrate_table[15][6] PROGMEM = {
+                 { 0,   0,  0,  0,  0,  0}, //0000
                  { 32, 32, 32, 32,  8,  8}, //0001
                  { 64, 48, 40, 48, 16, 16}, //0010
                  { 96, 56, 48, 56, 24, 24}, //0011
@@ -30,6 +30,10 @@ SdVolume SFEMP3Shield::volume;
 SdFile   SFEMP3Shield::root;
 SdFile   SFEMP3Shield::track;
 uint8_t  SFEMP3Shield::playing;
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  SimpleTimer timer;
+  int timerId_mp3;
+#endif
 
 //buffer for music
 uint8_t  SFEMP3Shield::mp3DataBuffer[32];
@@ -99,6 +103,13 @@ uint8_t  SFEMP3Shield::begin(){
   if(MP3Clock != 0x6000) return 5;
 
   if (VSLoadUserCode("patches.053")) Serial.println(F("Warning: patch file not found, skipping."));
+
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
+  Timer1.initialize(MP3_REFILL_PERIOD);
+#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  timerId_mp3 = timer.setInterval(MP3_REFILL_PERIOD, refill);
+  timer.disable(timerId_mp3);
+#endif
 
   return 0;
 }
@@ -197,9 +208,29 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
   refill();
 
   //attach refill interrupt off DREQ line, pin 2
-  attachInterrupt(MP3_DREQINT, refill, RISING);
+  enableRefill();
 
   return 0;
+}
+
+void SFEMP3Shield::enableRefill() {
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
+  Timer1.attachInterrupt( refill );
+#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  timer.enable(timerId_mp3);
+#elif !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+  attachInterrupt(MP3_DREQINT, refill, RISING);
+#endif
+}
+
+void SFEMP3Shield::disableRefill() {
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
+  Timer1.detachInterrupt();
+#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  timer.disable(timerId_mp3);
+#elif !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+  detachInterrupt(MP3_DREQINT);
+#endif
 }
 
 //close track gracefully, cancel intterupt
@@ -209,7 +240,7 @@ void SFEMP3Shield::stopTrack(){
     return;
 
   //cancel external interrupt
-  detachInterrupt(MP3_DREQINT);
+  disableRefill();
   playing=FALSE;
 
   track.close(); //Close out this track
@@ -270,7 +301,7 @@ void SFEMP3Shield::pauseDataStream(){
 
   //cancel external interrupt
   if(playing)
-    detachInterrupt(MP3_DREQINT);
+    disableRefill();
 
 }
 
@@ -285,7 +316,7 @@ void SFEMP3Shield::resumeDataStream(){
     refill();
 
     //attach refill interrupt off DREQ line, pin 2
-    attachInterrupt(MP3_DREQINT, refill, RISING);
+    enableRefill();
   }
 
 }
@@ -296,7 +327,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
   if(playing) {
 
     //stop interupt for now
-    detachInterrupt(MP3_DREQINT);
+    disableRefill();
     playing=FALSE;
 
     //seek to new position in file
@@ -321,7 +352,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
     SetVolume(VolL,VolR);
 
     //attach refill interrupt off DREQ line, pin 2
-    attachInterrupt(MP3_DREQINT, refill, RISING);
+    enableRefill();
     playing=TRUE;
 
     return 0;
@@ -353,7 +384,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
 
   //cancel interrupt if playing
   if(playing)
-    detachInterrupt(MP3_DREQINT);
+    disableRefill();
 
   //Wait for DREQ to go high indicating IC is available
   while(!digitalRead(MP3_DREQ)) ;
@@ -374,7 +405,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
     refill();
 
     //attach refill interrupt off DREQ line, pin 2
-    attachInterrupt(MP3_DREQINT, refill, RISING);
+    enableRefill();
   }
 
 }
@@ -384,7 +415,7 @@ unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
 
   //cancel interrupt if playing
   if(playing)
-    detachInterrupt(MP3_DREQINT);
+    disableRefill();
 
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
   digitalWrite(MP3_XCS, LOW); //Select control
@@ -410,7 +441,7 @@ unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
     refill();
 
     //attach refill interrupt off DREQ line, pin 2
-    attachInterrupt(MP3_DREQINT, refill, RISING);
+    enableRefill();
   }
 }
 
@@ -437,6 +468,16 @@ uint16_t SFEMP3Shield::Mp3ReadWRAM (uint16_t addressbyte){
   return tmp1;
 }
 
+// public interface of refill.
+//This is will allow future helpers of
+void SFEMP3Shield::available() {
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  timer.run();
+#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Polled
+  refill();
+#endif
+}
+
 //refill VS10xx buffer with new data
 void SFEMP3Shield::refill() {
 
@@ -445,30 +486,30 @@ void SFEMP3Shield::refill() {
 
   while(digitalRead(MP3_DREQ)){
 
-		if(!track.read(mp3DataBuffer, sizeof(mp3DataBuffer))) { //Go out to SD card and try reading 32 new bytes of the song
-			track.close(); //Close out this track
-			playing=FALSE;
-			
-			//cancel external interrupt
-			detachInterrupt(MP3_DREQINT);
-			
-			flush_cancel(post); //possible mode of "none" for faster response.
-			
-			//Oh no! There is no data left to read!
-			//Time to exit
-			break;
-		}
-		
-		
-		//Once DREQ is released (high) we now feed 32 bytes of data to the VS1053 from our SD read buffer
-		digitalWrite(MP3_XDCS, LOW); //Select Data
-		for(int y = 0 ; y < sizeof(mp3DataBuffer) ; y++) {
-			//while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high // turns out it is not needed.
-			SPI.transfer(mp3DataBuffer[y]); // Send SPI byte
-		}
-		
-		digitalWrite(MP3_XDCS, HIGH); //Deselect Data
-		//We've just dumped 32 bytes into VS1053 so our SD read buffer is empty. go get more data
+    if(!track.read(mp3DataBuffer, sizeof(mp3DataBuffer))) { //Go out to SD card and try reading 32 new bytes of the song
+      track.close(); //Close out this track
+      playing=FALSE;
+
+      //cancel external interrupt
+      disableRefill();
+
+      flush_cancel(post); //possible mode of "none" for faster response.
+
+      //Oh no! There is no data left to read!
+      //Time to exit
+      break;
+    }
+
+
+    //Once DREQ is released (high) we now feed 32 bytes of data to the VS1053 from our SD read buffer
+    digitalWrite(MP3_XDCS, LOW); //Select Data
+    for(int y = 0 ; y < sizeof(mp3DataBuffer) ; y++) {
+      //while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high // turns out it is not needed.
+      SPI.transfer(mp3DataBuffer[y]); // Send SPI byte
+    }
+
+    digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+    //We've just dumped 32 bytes into VS1053 so our SD read buffer is empty. go get more data
   }
 }
 

@@ -24,10 +24,9 @@ GNU General Public License for more details.
 #ifndef SFEMP3Shield_h
 #define SFEMP3Shield_h
 
-// inslude the SPI library:
+// include libraries:
+#include "SFEMP3ShieldConfig.h"
 #include "SPI.h"
-
-
 
 //Not neccessary, but just in case.
 #if ARDUINO > 22
@@ -39,19 +38,12 @@ GNU General Public License for more details.
 //Add the SdFat Libraries
 #include <SdFat.h>
 #include <SdFatUtil.h>
+
 enum flush_m {post, pre, both, none};
 extern Sd2Card card;
 extern SdVolume volume;
 extern SdFile root;
 extern SdFile track;
-
-//MP3 Player Shield pin mapping. See the schematic
-#define MP3_XCS                  6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
-#define MP3_XDCS                 7 //Data Chip Select / BSYNC Pin
-#define MP3_DREQ                 2 //Data Request Pin: Player asks for more data
-#define MP3_DREQINT              0 //Corresponding INTx for DREQ pin
-#define MP3_RESET                8 //Reset is active low
-#define SD_SEL                   9 //select pin for SD card
 
 //VS10xx SCI Registers
 #define SCI_MODE              0x00
@@ -129,8 +121,9 @@ class SFEMP3Shield {
     static Sd2Card card;
     static SdVolume volume;
     static SdFile root;
-  private:
+    static void available();
 
+  private:
     static SdFile track;
     static void refill();
     static void flush_cancel(flush_m);
@@ -139,6 +132,8 @@ class SFEMP3Shield {
     static uint16_t Mp3ReadRegister (uint8_t);
     static uint16_t Mp3ReadWRAM (uint16_t);
     void getTrackInfo(uint8_t, char*);
+    static void enableRefill();
+    static void disableRefill();
 
     //Create the variables to be used by SdFat Library
     static uint8_t playing;

@@ -19,10 +19,10 @@
 *    0.2 included pre-modified SDFat Library
 *    0.3 added isPlaying function to query shield status
 *    0.4 added functions to cancel and resume external interrupt
-*        in case something else is on the SPI bus	
+*         in case something else is on the SPI bus	
 *    0.5 added skipTo() and related functions to skip around in track
 *    0.6 fixed for Arduino Mega use by calling SDfatlib properly. 
-*           Blame Nathan for bad implentation of SDFatlib
+*         Blame Nathan for bad implentation of SDFatlib
 *    0.7 added functions to read track title,artist,album
 *         fixed silly use of static where it shouldn't have been
 *    0.7.1 chomp'd non ASCII characters from file names.
@@ -36,6 +36,8 @@
 *         save 220 bytes by using F() function to put strings into Flash and not use RAM: 
 *           i.e. Serial.Print(F("Hello)");
 *         note: FreeRam() is supplied with SdFatUtil.h
+*    0.9 Added SFEMP3ShieldConfig.h to support alternate hardware for none INT0 DREQ based
+*         cards and or Shields. By using Timers, or software pollings, such as with Mega and Seediunos.
 *	
 *
 *

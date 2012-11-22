@@ -30,6 +30,7 @@ SdVolume SFEMP3Shield::volume;
 SdFile   SFEMP3Shield::root;
 SdFile   SFEMP3Shield::track;
 uint8_t  SFEMP3Shield::playing;
+uint16_t SFEMP3Shield::spiRate;
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
   SimpleTimer timer;
   int timerId_mp3;
@@ -46,8 +47,8 @@ uint8_t  SFEMP3Shield::begin(){
   pinMode(MP3_XDCS, OUTPUT);
   pinMode(MP3_RESET, OUTPUT);
 
-  digitalWrite(MP3_XCS, HIGH); //Deselect Control
-  digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+  cs_high();  //MP3_XCS, Init Control Select to deselected
+  dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
 
   //Setup SD card interface
@@ -58,20 +59,24 @@ uint8_t  SFEMP3Shield::begin(){
   //Open the root directory in the volume.
   if (!root.openRoot(&volume)) return 3; //Serial.println(F("Error: Opening root")); //Open the root directory in the volume.
 
-  //We have no need to setup SPI for VS1053 because this has already been done by the SDfatlib
+  //From section 7.6 of datasheet, max SCI reads are CLKI/7. 
+  //Assuming CLKI = 12.288MgHz for Shield and 16.0MgHz for Arduino
+  //The VS1053's internal clock multiplier SCI_CLOCKF:SC_MULT is 1.0x after power up.
+  //For a maximum SPI rate of 1.8MgHz = (CLKI/7) = (12.288/7) the VS1053's default.
+  
+  //Warning: 
+  //Note that spi transfers interleave between SdCard and VS10xx.
+  //Where Sd2Card.cpp sets SPCR & SPSR each and every transfer
 
-  //From page 12 of datasheet, max SCI reads are CLKI/7. Input clock is 12.288MHz.
-  //Internal clock multiplier is 1.0x after power up.
-  //Therefore, max SPI speed is 1.75MHz. We will use 1MHz to be safe.
-  SPI.setClockDivider(SPI_CLOCK_DIV16); //Set SPI bus speed to 1MHz (16MHz / 16 = 1MHz)
-  SPI.transfer(0xFF); //Throw a dummy byte at the bus
+  //The SDfatlib using SPI_FULL_SPEED results in an 8MHz spi clock rate, 
+  //faster than initial allowed spi rate of 1.8MgHz. 
+  
+  // set initial mp3's spi to safe rate
+  spiRate = SPI_CLOCK_DIV16; // initial contact with VS10xx at slow rate
+
   //Initialize VS1053 chip
   delay(10);
   digitalWrite(MP3_RESET, HIGH); //Bring up VS1053
-
-  SetVolume(40, 40);
-  VolL = 40;
-  VolR = 40;
 
    //Let's check the status of the VS1053
   int MP3Mode = Mp3ReadRegister(SCI_MODE);
@@ -89,20 +94,20 @@ uint8_t  SFEMP3Shield::begin(){
 
   if(MP3Mode != (SM_LINE1 | SM_SDINEW)) return 4;
 
-
   //Now that we have the VS1053 up and running, increase the internal clock multiplier and up our SPI rate
   Mp3WriteRegister(SCI_CLOCKF, 0x6000); //Set multiplier to 3.0x
-
-  //From page 12 of datasheet, max SCI reads are CLKI/7. Input clock is 12.288MHz.
   //Internal clock multiplier is now 3x.
-  //Therefore, max SPI speed is 5MHz. 4MHz will be safe.
-  SPI.setClockDivider(SPI_CLOCK_DIV4); //Set SPI bus speed to 4MHz (16MHz / 4 = 4MHz)
+  //Therefore, max SPI speed is 52MgHz.
+  spiRate = SPI_CLOCK_DIV4; //use safe SPI rate of (16MHz / 4 = 4MHz)
+  delay(10); // settle time
 
   //test reading after data rate change
   int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
   if(MP3Clock != 0x6000) return 5;
 
   if (VSLoadUserCode("patches.053")) Serial.println(F("Warning: patch file not found, skipping."));
+
+  SetVolume(40, 40);
 
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
   Timer1.initialize(MP3_REFILL_PERIOD);
@@ -114,7 +119,7 @@ uint8_t  SFEMP3Shield::begin(){
   return 0;
 }
 
-
+//Store and Push member volume to VS10xx chip
 void SFEMP3Shield::SetVolume(unsigned char leftchannel, unsigned char rightchannel){
 
   VolL = leftchannel;
@@ -157,51 +162,51 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
   while(*(fileName + fileNamefileName_length))
     fileNamefileName_length++;
 
-  if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
-    for(uint16_t i = 0; i<65535; i++){
-    //for(;;){
-      if(track.read() == 0xFF) {
-
-        temp = track.read();
-
-        if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
-
-          //found the 11 1's
-          //parse version, layer and bitrate out and save bitrate
-          if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
-            row_num = 3;
-            if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
-            row_num += 1;
-          else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1
-            row_num += 2;
-
-          //parse bitrate code from next byte
-          temp = track.read();
-          temp = temp>>4;
-
-          //lookup bitrate
-          bitrate = pgm_read_word_near ( &(bitrate_table[temp][row_num]) );
-
-          //convert kbps to Bytes per mS
-          bitrate /= 8;
-
-          //record file position
-          track.seekCur(-3);
-          start_of_music = track.curPosition();
-
-          //Serial.print(F("POS: "));
-          //Serial.println(start_of_music);
-
-          //Serial.print(F("Bitrate: "));
-          //Serial.println(bitrate);
-
-          //break out of for loop
-          break;
-
-        }
-      }
-    }
-  }
+//  if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
+//    for(uint16_t i = 0; i<65535; i++){
+//    //for(;;){
+//      if(track.read() == 0xFF) {
+//
+//        temp = track.read();
+//
+//        if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
+//
+//          //found the 11 1's
+//          //parse version, layer and bitrate out and save bitrate
+//          if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
+//            row_num = 3;
+//            if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
+//            row_num += 1;
+//          else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1
+//            row_num += 2;
+//
+//          //parse bitrate code from next byte
+//          temp = track.read();
+//          temp = temp>>4;
+//
+//          //lookup bitrate
+//          bitrate = pgm_read_word_near ( &(bitrate_table[temp][row_num]) );
+//
+//          //convert kbps to Bytes per mS
+//          bitrate /= 8;
+//
+//          //record file position
+//          track.seekCur(-3);
+//          start_of_music = track.curPosition();
+//
+//          //Serial.print(F("POS: "));
+//          //Serial.println(start_of_music);
+//
+//          //Serial.print(F("Bitrate: "));
+//          //Serial.println(bitrate);
+//
+//          //break out of for loop
+//          break;
+//
+//        }
+//      }
+//    }
+//  }
 
 
   //gotta start feeding that hungry mp3 chip
@@ -296,6 +301,51 @@ void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
 
 }
 
+//reads and returns the track tag information
+void SFEMP3Shield::getAudioInfo() {
+
+  //disable interupts
+  pauseDataStream();
+
+  uint16_t MP3HDAT1 = Mp3ReadRegister(SCI_HDAT1);
+  Serial.print(F("SCI_HDAT1 (?) = 0x"));
+  Serial.print(MP3HDAT1, HEX);
+  
+  uint16_t MP3HDAT0 = Mp3ReadRegister(SCI_HDAT0);
+  Serial.print(F(" SCI_HDAT0 (?) = 0x"));
+  Serial.print(MP3HDAT0, HEX);
+  
+  uint16_t MP3Mode = Mp3ReadRegister(SCI_MODE);
+  Serial.print(F(" SCI_Mode (0x4800) = 0x"));
+  Serial.print(MP3Mode, HEX);
+  
+  uint16_t MP3Status = Mp3ReadRegister(SCI_STATUS);
+  Serial.print(F(" SCI_Status (0x48) = 0x"));
+  Serial.print(MP3Status, HEX);
+  
+  uint16_t MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
+  Serial.print(F(" SCI_ClockF = 0x"));
+  Serial.print(MP3Clock, HEX);
+  
+  uint16_t MP3para_version = Mp3ReadWRAM(para_version);
+  Serial.print(F(" para_version = 0x"));
+  Serial.print(MP3para_version, HEX);
+  
+  uint16_t MP3ByteRate = Mp3ReadWRAM(para_byteRate);
+  Serial.print(F(" para_byteRate = 0x"));
+  Serial.print(MP3ByteRate, HEX);
+  
+  uint16_t MP3SCI_DECODE_TIME = Mp3ReadRegister(SCI_DECODE_TIME);
+  Serial.print(F(" SCI_DECODE_TIME(s) = "));
+  Serial.print(MP3SCI_DECODE_TIME, DEC);
+  
+  Serial.println();
+
+  //renable interupt
+  resumeDataStream();
+
+}
+
 //cancels interrupt feeding MP3 decoder
 void SFEMP3Shield::pauseDataStream(){
 
@@ -374,6 +424,26 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
   return;
 }
 
+void SFEMP3Shield::cs_low() {
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setClockDivider(spiRate); //Set SPI bus speed to 1MHz (16MHz / 16 = 1MHz)
+  digitalWrite(MP3_XCS, LOW);
+}
+
+void SFEMP3Shield::cs_high() {
+  digitalWrite(MP3_XCS, HIGH);
+}
+
+void SFEMP3Shield::dcs_low() {
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setClockDivider(spiRate); //Set SPI bus speed to 1MHz (16MHz / 16 = 1MHz)
+  digitalWrite(MP3_XDCS, LOW);
+}
+
+void SFEMP3Shield::dcs_high() {
+  digitalWrite(MP3_XDCS, HIGH);
+}
+
 void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint16_t data) {
   union twobyte val;
   val.word = data;
@@ -389,7 +459,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
   //Wait for DREQ to go high indicating IC is available
   while(!digitalRead(MP3_DREQ)) ;
   //Select control
-  digitalWrite(MP3_XCS, LOW);
+  cs_low();
 
   //SCI consists of instruction byte, address byte, and 16-bit data word.
   SPI.transfer(0x02); //Write instruction
@@ -397,7 +467,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
   SPI.transfer(highbyte);
   SPI.transfer(lowbyte);
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
-  digitalWrite(MP3_XCS, HIGH); //Deselect Control
+  cs_high(); //Deselect Control
 
   //resume interrupt if playing.
   if(playing) {
@@ -418,7 +488,7 @@ unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
     disableRefill();
 
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
-  digitalWrite(MP3_XCS, LOW); //Select control
+  cs_low(); //Select control
 
   //SCI consists of instruction byte, address byte, and 16-bit data word.
   SPI.transfer(0x03);  //Read instruction
@@ -429,7 +499,7 @@ unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
   char response2 = SPI.transfer(0xFF); //Read the second byte
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
 
-  digitalWrite(MP3_XCS, HIGH); //Deselect Control
+  cs_high(); //Deselect Control
 
   unsigned int resultvalue = response1 << 8;
   resultvalue |= response2;
@@ -502,13 +572,13 @@ void SFEMP3Shield::refill() {
 
 
     //Once DREQ is released (high) we now feed 32 bytes of data to the VS1053 from our SD read buffer
-    digitalWrite(MP3_XDCS, LOW); //Select Data
+    dcs_low(); //Select Data
     for(int y = 0 ; y < sizeof(mp3DataBuffer) ; y++) {
       //while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high // turns out it is not needed.
       SPI.transfer(mp3DataBuffer[y]); // Send SPI byte
     }
 
-    digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+    dcs_high(); //Deselect Data
     //We've just dumped 32 bytes into VS1053 so our SD read buffer is empty. go get more data
   }
 }
@@ -523,34 +593,34 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
   int8_t endFillByte = (int8_t) (Mp3ReadWRAM(para_endFillByte) & 0xFF);
 
   if ((mode == post) || (mode == both)) {
-    digitalWrite(MP3_XDCS, LOW); //Select Data
+    dcs_low(); //Select Data
     for(int y = 0 ; y < 2052 ; y++) {
       while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
       SPI.transfer(endFillByte); // Send SPI byte
     }
-    digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+    dcs_high(); //Deselect Data
   }
 
   for (int n = 0; n < 64 ; n++)
   {
     Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_CANCEL);
-    digitalWrite(MP3_XDCS, LOW); //Select Data
+    dcs_low(); //Select Data
     for(int y = 0 ; y < 32 ; y++) {
       while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
       SPI.transfer(endFillByte); // Send SPI byte
     }
-    digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+    dcs_high(); //Deselect Data
 
     int cancel = Mp3ReadRegister(SCI_MODE) & SM_CANCEL;
     if (cancel == 0) {
       // Cancel has succeeded.
       if ((mode == pre) || (mode == both)) {
-        digitalWrite(MP3_XDCS, LOW); //Select Data
+        dcs_low(); //Select Data
         for(int y = 0 ; y < 2052 ; y++) {
           while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
           SPI.transfer(endFillByte); // Send SPI byte
         }
-        digitalWrite(MP3_XDCS, HIGH); //Deselect Data
+        dcs_high(); //Deselect Data
       }
       return;
     }

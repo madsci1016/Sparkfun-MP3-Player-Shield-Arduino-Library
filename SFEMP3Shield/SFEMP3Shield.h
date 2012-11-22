@@ -122,11 +122,17 @@ class SFEMP3Shield {
     static SdVolume volume;
     static SdFile root;
     static void available();
+// mpf Work in Progress
+    void getAudioInfo();
 
   private:
     static SdFile track;
     static void refill();
     static void flush_cancel(flush_m);
+    static void cs_low();
+    static void cs_high();
+    static void dcs_low();
+    static void dcs_high();
     static void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
     static void Mp3WriteRegister(uint8_t, uint16_t);
     static uint16_t Mp3ReadRegister (uint8_t);
@@ -137,6 +143,7 @@ class SFEMP3Shield {
 
     //Create the variables to be used by SdFat Library
     static uint8_t playing;
+    static uint16_t spiRate;
     //buffer for music
     static uint8_t mp3DataBuffer[32];
     uint8_t bitrate;
@@ -153,4 +160,4 @@ union twobyte {
   uint8_t  byte[2];
 } ;
 
-#endif
+#endif // SFEMP3Shield_h

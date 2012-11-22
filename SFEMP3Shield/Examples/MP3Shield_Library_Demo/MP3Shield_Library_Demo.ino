@@ -142,10 +142,9 @@ void loop() {
     } else if (temp == 'f') {
       //create a string with the filename
       char trackName[] = "track001.mp3";
-
+      
       //tell the MP3 Shield to play that file
       result = MP3player.playMP3(trackName);
-
       //check result, see readme for error codes.
       if(result != 0) {
         Serial.print(F("Error code: "));
@@ -164,7 +163,12 @@ void loop() {
       } else {
         Serial.println(F("Busy Playing Files, try again later."));
       }
+
+    /* Get and Display the Audio Information */
+    } else if (temp == 'g') {
+    	MP3player.getAudioInfo();
     }
+
     // print prompt after key stroke has been processed.
     Serial.println(F("Enter 1-9,s,d,+,- :"));
   }

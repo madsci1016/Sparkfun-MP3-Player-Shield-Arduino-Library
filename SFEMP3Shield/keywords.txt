@@ -11,14 +11,13 @@ SFEMP3Shield	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
+begin	KEYWORD2
+available	KEYWORD2
 stopTrack	KEYWORD2
 playTrack	KEYWORD2
 playMP3	KEYWORD2
 SetVolume	KEYWORD2
 isPlaying   KEYWORD2
-Mp3WriteRegister	KEYWORD2
-Mp3ReadRegister	KEYWORD2
-MP3player	KEYWORD2
 pauseDataStream	KEYWORD2
 resumeDataStream	KEYWORD2
 skipTo	KEYWORD2
@@ -28,8 +27,12 @@ trackTitle	KEYWORD2
 trackArtist	KEYWORD2
 trackAlbum	KEYWORD2
 
-
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+#######################################
+# Instances (KEYWORD3)
+#######################################
+MP3player	KEYWORD3
 

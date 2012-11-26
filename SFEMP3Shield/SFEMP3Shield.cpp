@@ -120,6 +120,12 @@ uint8_t  SFEMP3Shield::begin(){
 }
 
 //Store and Push member volume to VS10xx chip
+void SFEMP3Shield::SetVolume(uint16_t data) {
+  union twobyte val;
+  val.word = data;
+  SetVolume(val.byte[1], val.byte[0]);
+}
+
 void SFEMP3Shield::SetVolume(unsigned char leftchannel, unsigned char rightchannel){
 
   VolL = leftchannel;
@@ -127,6 +133,85 @@ void SFEMP3Shield::SetVolume(unsigned char leftchannel, unsigned char rightchann
   Mp3WriteRegister(SCI_VOL, leftchannel, rightchannel);
 }
 
+//get Volume from the VS10xx directly.
+uint16_t SFEMP3Shield::GetVolume() {
+  uint16_t MP3SCI_VOL = Mp3ReadRegister(SCI_VOL);
+  return MP3SCI_VOL;
+}
+
+uint16_t SFEMP3Shield::GetPlaySpeed() {
+  uint16_t MP3playspeed = Mp3ReadWRAM(para_playSpeed);
+  return MP3playspeed;
+}
+
+void SFEMP3Shield::SetPlaySpeed(uint16_t data) {
+	Mp3WriteWRAM(para_playSpeed, data);
+}
+
+uint8_t SFEMP3Shield::GetEarSpeaker() {
+//  Serial.println(F("------------------------------"));
+  uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+//  Serial.print(F("MP3SCI_MODE = 0x"));
+//  Serial.print(MP3SCI_MODE, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(MP3SCI_MODE, BIN);
+  
+  uint8_t EarSpeaker = ((MP3SCI_MODE >> 4) & 1);
+  EarSpeaker |= ((MP3SCI_MODE >> 6) & 0x2);
+  
+//  Serial.print(F("EarSpeaker = 0x"));
+//  Serial.print(EarSpeaker, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(EarSpeaker, BIN);
+
+  return EarSpeaker;
+}
+
+void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
+	int16_t Mask = 0x0;
+
+//  Serial.println(F("---------------"));
+//  Serial.print(F("EarSpeaker = 0x"));
+//  Serial.print(EarSpeaker, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(EarSpeaker, BIN);
+
+	uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+//  Serial.print(F("Current MP3SCI_MODE = 0x"));
+//  Serial.print(MP3SCI_MODE, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(MP3SCI_MODE, BIN);
+
+	MP3SCI_MODE &= 0b1111111101101111; // clear out SM_EARSPEAKER_LO and SM_EARSPEAKER_HI
+//  Serial.print(F("Cleared MP3SCI_MODE = 0x"));
+//  Serial.print(MP3SCI_MODE, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(MP3SCI_MODE, BIN);
+
+	Mask = ((EarSpeaker << 4) & 0b0000000000010000);
+
+	Mask |= ((EarSpeaker << 6) & 0b0000000010000000);
+//  Serial.print(F("Mask = 0x"));
+//  Serial.print(Mask, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(Mask, BIN);
+  
+	MP3SCI_MODE |= Mask;
+//  Serial.print(F("final MP3SCI_MODE = 0x"));
+//  Serial.print(MP3SCI_MODE, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(MP3SCI_MODE, BIN);
+
+  Mp3WriteRegister(SCI_MODE, ((MP3SCI_MODE >> 8) & 0xFF), (MP3SCI_MODE & 0xFF) );
+  Mp3WriteRegister(SCI_MODE, MP3SCI_MODE);
+  
+//	MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+//  Serial.print(F("readback MP3SCI_MODE = 0x"));
+//  Serial.print(MP3SCI_MODE, HEX);
+//  Serial.print(F(" = 0b"));
+//  Serial.println(MP3SCI_MODE, BIN);
+  
+}
 
 //call on a mp3 just with a number
 uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
@@ -305,44 +390,70 @@ void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
 void SFEMP3Shield::getAudioInfo() {
 
   //disable interupts
-  pauseDataStream();
+  // already disabled in Mp3ReadRegister function
+  //pauseDataStream();
+
+  Serial.print(F("HDAT1"));
+  Serial.print(F("\tHDAT0"));
+  Serial.print(F("\tVOL"));
+  Serial.print(F("\tMode"));
+  Serial.print(F("\tStatus"));
+  Serial.print(F("\tClockF"));
+  Serial.print(F("\tpversion"));
+  Serial.print(F("\tpbyteRate"));
+  Serial.print(F("\tBitRate[K]"));
+  Serial.print(F("\tPlaySpeed"));
+  Serial.print(F("\tDECODE_TIME"));
+  Serial.println();
+
 
   uint16_t MP3HDAT1 = Mp3ReadRegister(SCI_HDAT1);
-  Serial.print(F("SCI_HDAT1 (?) = 0x"));
+  Serial.print(F("0x"));
   Serial.print(MP3HDAT1, HEX);
   
   uint16_t MP3HDAT0 = Mp3ReadRegister(SCI_HDAT0);
-  Serial.print(F(" SCI_HDAT0 (?) = 0x"));
+  Serial.print(F("\t0x"));
   Serial.print(MP3HDAT0, HEX);
   
+  uint16_t MP3SCI_VOL = Mp3ReadRegister(SCI_VOL);
+  Serial.print(F("\t0x"));
+  Serial.print(MP3SCI_VOL, HEX);
+  
   uint16_t MP3Mode = Mp3ReadRegister(SCI_MODE);
-  Serial.print(F(" SCI_Mode (0x4800) = 0x"));
+  Serial.print(F("\t0x"));
   Serial.print(MP3Mode, HEX);
   
   uint16_t MP3Status = Mp3ReadRegister(SCI_STATUS);
-  Serial.print(F(" SCI_Status (0x48) = 0x"));
+  Serial.print(F("\t0x"));
   Serial.print(MP3Status, HEX);
   
   uint16_t MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
-  Serial.print(F(" SCI_ClockF = 0x"));
+  Serial.print(F("\t0x"));
   Serial.print(MP3Clock, HEX);
   
   uint16_t MP3para_version = Mp3ReadWRAM(para_version);
-  Serial.print(F(" para_version = 0x"));
+  Serial.print(F("\t0x"));
   Serial.print(MP3para_version, HEX);
   
   uint16_t MP3ByteRate = Mp3ReadWRAM(para_byteRate);
-  Serial.print(F(" para_byteRate = 0x"));
+  Serial.print(F("\t\t"));
   Serial.print(MP3ByteRate, HEX);
   
+  Serial.print(F("\t\t"));
+  Serial.print((MP3ByteRate>>7), DEC);
+  
+  uint16_t MP3playSpeed = Mp3ReadWRAM(para_playSpeed);
+  Serial.print(F("\t\t"));
+  Serial.print(MP3playSpeed, HEX);
+  
   uint16_t MP3SCI_DECODE_TIME = Mp3ReadRegister(SCI_DECODE_TIME);
-  Serial.print(F(" SCI_DECODE_TIME(s) = "));
+  Serial.print(F("\t\t"));
   Serial.print(MP3SCI_DECODE_TIME, DEC);
   
   Serial.println();
 
   //renable interupt
-  resumeDataStream();
+//  resumeDataStream();
 
 }
 
@@ -481,7 +592,9 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
 }
 
 //Read the 16-bit value of a VS10xx register
-unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
+unsigned int SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
+	
+	union twobyte resultvalue;
 
   //cancel interrupt if playing
   if(playing)
@@ -494,16 +607,12 @@ unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
   SPI.transfer(0x03);  //Read instruction
   SPI.transfer(addressbyte);
 
-  char response1 = SPI.transfer(0xFF); //Read the first byte
+  resultvalue.byte[1] = SPI.transfer(0xFF); //Read the first byte
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
-  char response2 = SPI.transfer(0xFF); //Read the second byte
+  resultvalue.byte[0] = SPI.transfer(0xFF); //Read the second byte
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
 
   cs_high(); //Deselect Control
-
-  unsigned int resultvalue = response1 << 8;
-  resultvalue |= response2;
-  return resultvalue;
 
   //resume interrupt if playing.
   if(playing) {
@@ -513,6 +622,7 @@ unsigned int SFEMP3Shield::Mp3ReadRegister (unsigned char addressbyte){
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
   }
+  return resultvalue.word;
 }
 
 //Read the 16-bit value of a VS10xx WRAM location
@@ -536,6 +646,13 @@ uint16_t SFEMP3Shield::Mp3ReadWRAM (uint16_t addressbyte){
 
   if (tmp1==tmp2) return tmp1;
   return tmp1;
+}
+
+//Write the 16-bit value of a VS10xx WRAM location
+void SFEMP3Shield::Mp3WriteWRAM(uint16_t addressbyte, uint16_t data){
+
+  Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
+  Mp3WriteRegister(SCI_WRAM, data);
 }
 
 // public interface of refill.

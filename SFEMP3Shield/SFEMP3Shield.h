@@ -106,6 +106,12 @@ class SFEMP3Shield {
   public:
     uint8_t begin();
     void SetVolume(uint8_t, uint8_t);
+    void SetVolume(uint16_t);
+    void SetPlaySpeed(uint16_t);
+    uint16_t GetPlaySpeed();
+    uint16_t GetVolume();
+    uint8_t GetEarSpeaker();
+    void SetEarSpeaker(uint16_t);
     uint8_t playTrack(uint8_t);
     uint8_t playMP3(char*);
     void trackTitle(char*);
@@ -136,7 +142,8 @@ class SFEMP3Shield {
     static void Mp3WriteRegister(uint8_t, uint8_t, uint8_t);
     static void Mp3WriteRegister(uint8_t, uint16_t);
     static uint16_t Mp3ReadRegister (uint8_t);
-    static uint16_t Mp3ReadWRAM (uint16_t);
+    static uint16_t Mp3ReadWRAM(uint16_t);
+    static void Mp3WriteWRAM(uint16_t, uint16_t);
     void getTrackInfo(uint8_t, char*);
     static void enableRefill();
     static void disableRefill();

@@ -71,14 +71,14 @@ void loop() {
 #endif
 
   if(Serial.available()) {
-    parse_menu(Serial.read()); // get command from serial input 
+    parse_menu(Serial.read()); // get command from serial input
   }
 
   delay(100);
 }
 
 void parse_menu(byte key_command) {
-	
+
   Serial.print(F("Received command: "));
   Serial.write(key_command);
   Serial.println(F(" "));
@@ -122,11 +122,11 @@ void parse_menu(byte key_command) {
 
   //if +/- to change volume
   } else if ((key_command == '-') || (key_command == '+')) {
-  	union twobyte mp3_vol; // create key_command existing variable that can be both word and double byte of left and right.
+    union twobyte mp3_vol; // create key_command existing variable that can be both word and double byte of left and right.
     mp3_vol.word = MP3player.GetVolume(); // returns a double uint8_t of Left and Right packed into int16_t
-    
+
     if (key_command == '-') { // note dB is negative
-    	// assume equal balance and use byte[1] for math
+      // assume equal balance and use byte[1] for math
       if (mp3_vol.byte[1] >= 254) { // range check
         mp3_vol.byte[1] = 254;
       } else {
@@ -147,10 +147,10 @@ void parse_menu(byte key_command) {
 
   //if < or > to change Play Speed
   } else if ((key_command == '>') || (key_command == '<')) {
-  	uint16_t playspeed = MP3player.GetPlaySpeed(); // create key_command existing variable
+    uint16_t playspeed = MP3player.GetPlaySpeed(); // create key_command existing variable
     // note playspeed of Zero is equal to ONE, normal speed.
     if (key_command == '>') { // note dB is negative
-    	// assume equal balance and use byte[1] for math
+      // assume equal balance and use byte[1] for math
       if (playspeed >= 254) { // range check
         playspeed = 5;
       } else {
@@ -172,7 +172,7 @@ void parse_menu(byte key_command) {
   } else if (key_command == 'f') {
     //create a string with the filename
     char trackName[] = "track001.mp3";
-    
+
     //tell the MP3 Shield to play that file
     result = MP3player.playMP3(trackName);
     //check result, see readme for error codes.
@@ -196,25 +196,44 @@ void parse_menu(byte key_command) {
 
   /* Get and Display the Audio Information */
   } else if (key_command == 'i') {
-  	MP3player.getAudioInfo();
+    MP3player.getAudioInfo();
+
+  } else if (key_command == 'p') {
+      MP3player.pauseDataStream();
+      Serial.println(F("Pausing"));
+
+  } else if (key_command == 'r') {
+      MP3player.resumeDataStream();
+      Serial.println(F("Resuming"));
+
+  } else if (key_command == 't') {
+      int8_t teststate = MP3player.enableTestSineWave(126);
+    if (teststate == 1) {
+        Serial.println(F("Enabling Test Sine Wave"));
+    } else if (teststate == 2) {
+      teststate = MP3player.disableTestSineWave();
+      Serial.println(F("Disabling Test Sine Wave"));
+    } else if (teststate == -1) {
+      Serial.println(F("Un-Available while playing music."));
+    }
 
   } else if (key_command == 'e') {
-  	uint8_t earspeaker = MP3player.GetEarSpeaker();
-  	if (earspeaker >= 3){
-  		earspeaker = 0;
-  	} else {
-  		earspeaker++;
-  	}
-  	MP3player.SetEarSpeaker(earspeaker); // commit new earspeaker
+    uint8_t earspeaker = MP3player.GetEarSpeaker();
+    if (earspeaker >= 3){
+      earspeaker = 0;
+    } else {
+      earspeaker++;
+    }
+    MP3player.SetEarSpeaker(earspeaker); // commit new earspeaker
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
 
   } else if (key_command == 'h') {
-  	help();
+    help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i>,< :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i>,<,p,r,t :"));
 }
 
 void help() {
@@ -227,5 +246,8 @@ void help() {
   Serial.println(F(" [> or <] to increament or decreament playspeed by 1 factor"));
   Serial.println(F(" [i] retreieve current audio information (partial list)"));
   Serial.println(F(" [e] increament Spatial EarSpeaker, default is 0, wraps after 4"));
+  Serial.println(F(" [p] to pause."));
+  Serial.println(F(" [r] to resume."));
+  Serial.println(F(" [t] to toggle sine wave test"));
   Serial.println(F(" [h] this help"));
 }

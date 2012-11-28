@@ -77,7 +77,7 @@ extern SdFile track;
 #define SM_SDISHARE         0x0400
 #define SM_SDINEW           0x0800
 #define SM_ADPCM            0x1000
-//#define Not Defined       0x2000
+#define SM_PAUSE            0x2000  // note: Only availble with patch. This only quickly pauses the VS's internal buffer, when canceling quickly. It won't unpause.
 #define SM_LINE1            0x4000
 #define SM_CLK_RANGE        0x8000
 
@@ -130,6 +130,8 @@ class SFEMP3Shield {
     static void available();
 // mpf Work in Progress
     void getAudioInfo();
+    uint8_t enableTestSineWave(uint8_t);
+    uint8_t disableTestSineWave();
 
   private:
     static SdFile track;

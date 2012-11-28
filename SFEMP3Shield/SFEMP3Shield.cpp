@@ -153,6 +153,46 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
   return 1;
 }
 
+uint16_t SFEMP3Shield::memoryTest() {
+
+  if(playing) {
+    Serial.println(F("Warning Tests are not available while playing."));
+    return -1;
+  }
+
+  uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+  if (MP3SCI_MODE & SM_TESTS) {
+    return 2;
+  }
+
+  Mp3WriteRegister(SCI_MODE, MP3SCI_MODE | SM_TESTS);
+
+//  for(int y = 0 ; y <= 1 ; y++) { // need to do it twice if it was already done once before
+    //Wait for DREQ to go high indicating IC is available
+    while(!digitalRead(MP3_DREQ)) ;
+    //Select control
+    dcs_low();
+    //SCI consists of instruction byte, address byte, and 16-bit data word.
+    SPI.transfer(0x4D);
+    SPI.transfer(0xEA);
+    SPI.transfer(0x6D);
+    SPI.transfer(0x54);
+    SPI.transfer(0x00);
+    SPI.transfer(0x00);
+    SPI.transfer(0x00);
+    SPI.transfer(0x00);
+    while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
+    dcs_high(); //Deselect Control
+//  }
+  delay(250);
+
+  uint16_t MP3SCI_HDAT0 = Mp3ReadRegister(SCI_HDAT0);
+
+  Mp3WriteRegister(SCI_MODE, Mp3ReadRegister(SCI_MODE) & ~SM_TESTS);
+
+  return MP3SCI_HDAT0;
+}
+
 
 
 uint8_t SFEMP3Shield::disableTestSineWave() {

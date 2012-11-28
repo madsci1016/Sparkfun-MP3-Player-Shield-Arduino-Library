@@ -132,6 +132,7 @@ class SFEMP3Shield {
     void getAudioInfo();
     uint8_t enableTestSineWave(uint8_t);
     uint8_t disableTestSineWave();
+    uint16_t memoryTest();
 
   private:
     static SdFile track;

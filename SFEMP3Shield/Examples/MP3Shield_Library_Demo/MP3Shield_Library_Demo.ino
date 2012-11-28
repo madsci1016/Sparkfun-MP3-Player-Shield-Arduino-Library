@@ -208,13 +208,27 @@ void parse_menu(byte key_command) {
 
   } else if (key_command == 't') {
       int8_t teststate = MP3player.enableTestSineWave(126);
-    if (teststate == 1) {
-        Serial.println(F("Enabling Test Sine Wave"));
+    if (teststate == -1) {
+      Serial.println(F("Un-Available while playing music."));
+    } else if (teststate == 1) {
+      Serial.println(F("Enabling Test Sine Wave"));
+    } else if (teststate == 2) {
+      MP3player.disableTestSineWave();
+      Serial.println(F("Disabling Test Sine Wave"));
+    }
+
+  } else if (key_command == 'm') {
+      uint16_t teststate = MP3player.memoryTest();
+    if (teststate == -1) {
+      Serial.println(F("Un-Available while playing music."));
     } else if (teststate == 2) {
       teststate = MP3player.disableTestSineWave();
-      Serial.println(F("Disabling Test Sine Wave"));
-    } else if (teststate == -1) {
-      Serial.println(F("Un-Available while playing music."));
+      Serial.println(F("Un-Available while Sine Wave Test"));
+    } else {
+      Serial.print(F("Memory Test Results = "));
+      Serial.println(teststate, HEX);
+      Serial.println(F("Result should be 0x83FF."));
+      Serial.println(F("Reset is needed to recover to normal operation"));
     }
 
   } else if (key_command == 'e') {
@@ -233,7 +247,7 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i>,<,p,r,t :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i>,<,p,r,t,m :"));
 }
 
 void help() {
@@ -249,5 +263,6 @@ void help() {
   Serial.println(F(" [p] to pause."));
   Serial.println(F(" [r] to resume."));
   Serial.println(F(" [t] to toggle sine wave test"));
+  Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
   Serial.println(F(" [h] this help"));
 }

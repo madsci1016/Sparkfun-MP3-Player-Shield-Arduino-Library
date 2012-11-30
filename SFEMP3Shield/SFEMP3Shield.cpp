@@ -316,6 +316,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
   if (!track.open(&root, fileName, O_READ)) return 2;
 
   playing = TRUE;
+  Mp3WriteRegister(SCI_DECODE_TIME, 0); // Reset the Decode and bitrate from previous play back.
 
   //look for first MP3 frame (11 1's)
   bitrate = 0;
@@ -327,51 +328,53 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
   while(*(fileName + fileNamefileName_length))
     fileNamefileName_length++;
 
-//  if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
-//    for(uint16_t i = 0; i<65535; i++){
-//    //for(;;){
-//      if(track.read() == 0xFF) {
-//
-//        temp = track.read();
-//
-//        if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
-//
-//          //found the 11 1's
-//          //parse version, layer and bitrate out and save bitrate
-//          if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
-//            row_num = 3;
-//            if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
-//            row_num += 1;
-//          else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1
-//            row_num += 2;
-//
-//          //parse bitrate code from next byte
-//          temp = track.read();
-//          temp = temp>>4;
-//
-//          //lookup bitrate
-//          bitrate = pgm_read_word_near ( &(bitrate_table[temp][row_num]) );
-//
-//          //convert kbps to Bytes per mS
-//          bitrate /= 8;
-//
-//          //record file position
-//          track.seekCur(-3);
-//          start_of_music = track.curPosition();
-//
-//          //Serial.print(F("POS: "));
-//          //Serial.println(start_of_music);
-//
-//          //Serial.print(F("Bitrate: "));
-//          //Serial.println(bitrate);
-//
-//          //break out of for loop
-//          break;
-//
-//        }
-//      }
-//    }
-//  }
+  // this will extract the bit rate for MP3 files. 
+  // Note the bitrate will be updated, as read back from the VS10xx when needed.
+  if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
+    for(uint16_t i = 0; i<65535; i++){
+    //for(;;){
+      if(track.read() == 0xFF) {
+
+        temp = track.read();
+
+        if(((temp & 0b11100000) == 0b11100000) && ((temp & 0b00000110) != 0b00000000)) {
+
+          //found the 11 1's
+          //parse version, layer and bitrate out and save bitrate
+          if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
+            row_num = 3;
+            if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
+            row_num += 1;
+          else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1
+            row_num += 2;
+
+          //parse bitrate code from next byte
+          temp = track.read();
+          temp = temp>>4;
+
+          //lookup bitrate
+          bitrate = pgm_read_word_near ( &(bitrate_table[temp][row_num]) );
+
+          //convert kbps to Bytes per mS
+          bitrate /= 8;
+
+          //record file position
+          track.seekCur(-3);
+          start_of_music = track.curPosition();
+
+          Serial.print(F("POS: "));
+          Serial.println(start_of_music);
+
+          Serial.print(F("Bitrate: "));
+          Serial.println(bitrate);
+
+          //break out of for loop
+          break;
+
+        }
+      }
+    }
+  }
 
 
   //gotta start feeding that hungry mp3 chip
@@ -484,6 +487,7 @@ void SFEMP3Shield::getAudioInfo() {
   Serial.print(F("\tBitRate[K]"));
   Serial.print(F("\tPlaySpeed"));
   Serial.print(F("\tDECODE_TIME"));
+  Serial.print(F("\tCurrentPos"));
   Serial.println();
 
 
@@ -529,6 +533,11 @@ void SFEMP3Shield::getAudioInfo() {
   uint16_t MP3SCI_DECODE_TIME = Mp3ReadRegister(SCI_DECODE_TIME);
   Serial.print(F("\t\t"));
   Serial.print(MP3SCI_DECODE_TIME, DEC);
+  
+  Serial.print(F("\t\t"));
+  Serial.print(currentPosition(), DEC);
+  
+  
 
   Serial.println();
 
@@ -569,6 +578,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
     playing=FALSE;
 
     //seek to new position in file
+    bitrate = (Mp3ReadWRAM(para_byteRate) << 10); // multiply by 1024 to convert from K.
     if(!track.seekSet((timecode * bitrate) + start_of_music))
       return 2;
 
@@ -602,7 +612,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 //returns current timecode in ms. Not very accurate/detministic
 uint32_t SFEMP3Shield::currentPosition(){
 
-  return((track.curPosition() - start_of_music) / bitrate );
+  return(Mp3ReadRegister(SCI_DECODE_TIME) << 10); // multiply by 1024 to convert to milliseconds.
 }
 
 //force bit rate, useful if auto-detect failed

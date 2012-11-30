@@ -206,6 +206,11 @@ void parse_menu(byte key_command) {
       MP3player.resumeDataStream();
       Serial.println(F("Resuming"));
 
+  } else if (key_command == 'R') {
+      MP3player.stopTrack();
+      MP3player.vs_init();
+      Serial.println(F("Reseting VS10xx chip"));
+
   } else if (key_command == 't') {
       int8_t teststate = MP3player.enableTestSineWave(126);
     if (teststate == -1) {
@@ -247,7 +252,7 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i>,<,p,r,t,m :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i>,<,p,r,R,t,m :"));
 }
 
 void help() {
@@ -262,7 +267,10 @@ void help() {
   Serial.println(F(" [e] increament Spatial EarSpeaker, default is 0, wraps after 4"));
   Serial.println(F(" [p] to pause."));
   Serial.println(F(" [r] to resume."));
+  Serial.println(F(" [r] Resets and initializes VS10xx chip."));
   Serial.println(F(" [t] to toggle sine wave test"));
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
   Serial.println(F(" [h] this help"));
 }
+
+

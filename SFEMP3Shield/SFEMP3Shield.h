@@ -105,6 +105,7 @@ extern SdFile track;
 class SFEMP3Shield {
   public:
     uint8_t begin();
+    uint8_t vs_init();
     void SetVolume(uint8_t, uint8_t);
     void SetVolume(uint16_t);
     void SetPlaySpeed(uint16_t);

@@ -50,7 +50,7 @@ uint8_t  SFEMP3Shield::begin(){
   cs_high();  //MP3_XCS, Init Control Select to deselected
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
-
+  
   //Setup SD card interface
   //Initialize the SD card and configure the I/O pins.
   if (!card.init(SPI_FULL_SPEED, SD_SEL)) return 1; // Serial.println(F("Error: Card init"));
@@ -58,6 +58,33 @@ uint8_t  SFEMP3Shield::begin(){
   if (!volume.init(&card)) return 2; //Serial.println(F("Error: Volume ini"));
   //Open the root directory in the volume.
   if (!root.openRoot(&volume)) return 3; //Serial.println(F("Error: Opening root")); //Open the root directory in the volume.
+
+  uint8_t result = vs_init();
+  if (result) {
+  	return result;
+  }
+
+#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
+  Timer1.initialize(MP3_REFILL_PERIOD);
+#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+  timerId_mp3 = timer.setInterval(MP3_REFILL_PERIOD, refill);
+  timer.disable(timerId_mp3);
+#endif
+
+  return 0;
+}
+
+uint8_t SFEMP3Shield::vs_init() {
+	
+  //Initialize VS1053 chip
+  
+  //Reset if not already
+  delay(100); // keep clear of anything prior
+  digitalWrite(MP3_RESET, LOW); //Shut down VS1053
+  delay(100);
+
+  //Bring out of reset
+  digitalWrite(MP3_RESET, HIGH); //Bring up VS1053
 
   //From section 7.6 of datasheet, max SCI reads are CLKI/7.
   //Assuming CLKI = 12.288MgHz for Shield and 16.0MgHz for Arduino
@@ -73,21 +100,20 @@ uint8_t  SFEMP3Shield::begin(){
 
   // set initial mp3's spi to safe rate
   spiRate = SPI_CLOCK_DIV16; // initial contact with VS10xx at slow rate
-
-  //Initialize VS1053 chip
   delay(10);
-  digitalWrite(MP3_RESET, HIGH); //Bring up VS1053
 
    //Let's check the status of the VS1053
   int MP3Mode = Mp3ReadRegister(SCI_MODE);
-  //int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
+
 /*
   Serial.print(F("SCI_Mode (0x4800) = 0x"));
   Serial.println(MP3Mode, HEX);
 
+  int MP3Status = Mp3ReadRegister(SCI_Status);
   Serial.print(F("SCI_Status (0x48) = 0x"));
   Serial.println(MP3Status, HEX);
 
+  int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
   Serial.print(F("SCI_ClockF = 0x"));
   Serial.println(MP3Clock, HEX);
   */
@@ -108,15 +134,7 @@ uint8_t  SFEMP3Shield::begin(){
   if (VSLoadUserCode("patches.053")) Serial.println(F("Warning: patch file not found, skipping."));
 
   SetVolume(40, 40);
-
-#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
-  Timer1.initialize(MP3_REFILL_PERIOD);
-#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
-  timerId_mp3 = timer.setInterval(MP3_REFILL_PERIOD, refill);
-  timer.disable(timerId_mp3);
-#endif
-
-  return 0;
+  delay(100); // keep clear of anything prior
 }
 
 uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
@@ -125,7 +143,7 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
     Serial.println(F("Warning Tests are not available while playing."));
     return -1;
   }
-
+  
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
   if (MP3SCI_MODE & SM_TESTS) {
     return 2;
@@ -150,7 +168,45 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
     while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
     dcs_high(); //Deselect Control
   }
+
+
   return 1;
+}
+
+uint8_t SFEMP3Shield::disableTestSineWave() {
+
+  if(playing) {
+    Serial.println(F("Warning Tests are not available while playing."));
+    return -1;
+  }
+  
+  uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+  if (!(MP3SCI_MODE & SM_TESTS)) {
+    return 0;
+  }
+
+  //Wait for DREQ to go high indicating IC is available
+  while(!digitalRead(MP3_DREQ)) ;
+  //Select control
+  dcs_low();
+
+  //SDI consists of instruction byte, address byte, and 16-bit data word.
+  SPI.transfer(0x45);
+  SPI.transfer(0x78);
+  SPI.transfer(0x69);
+  SPI.transfer(0x74);
+  SPI.transfer(0x00);
+  SPI.transfer(0x00);
+  SPI.transfer(0x00);
+  SPI.transfer(0x00);
+  while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
+
+  dcs_high(); //Deselect Control
+
+  // turn test mode bit off
+  Mp3WriteRegister(SCI_MODE, Mp3ReadRegister(SCI_MODE) & ~SM_TESTS);
+
+  return 0;
 }
 
 uint16_t SFEMP3Shield::memoryTest() {
@@ -159,6 +215,8 @@ uint16_t SFEMP3Shield::memoryTest() {
     Serial.println(F("Warning Tests are not available while playing."));
     return -1;
   }
+
+  vs_init();
 
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
   if (MP3SCI_MODE & SM_TESTS) {
@@ -190,45 +248,9 @@ uint16_t SFEMP3Shield::memoryTest() {
 
   Mp3WriteRegister(SCI_MODE, Mp3ReadRegister(SCI_MODE) & ~SM_TESTS);
 
+  vs_init();
+
   return MP3SCI_HDAT0;
-}
-
-
-
-uint8_t SFEMP3Shield::disableTestSineWave() {
-
-  if(playing) {
-    Serial.println(F("Warning Tests are not available while playing."));
-    return -1;
-  }
-
-  uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
-  if (!(MP3SCI_MODE & SM_TESTS)) {
-    return 0;
-  }
-
-  //Wait for DREQ to go high indicating IC is available
-  while(!digitalRead(MP3_DREQ)) ;
-  //Select control
-  dcs_low();
-
-  //SDI consists of instruction byte, address byte, and 16-bit data word.
-  SPI.transfer(0x45);
-  SPI.transfer(0x78);
-  SPI.transfer(0x69);
-  SPI.transfer(0x74);
-  SPI.transfer(0x00);
-  SPI.transfer(0x00);
-  SPI.transfer(0x00);
-  SPI.transfer(0x00);
-  while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
-
-  dcs_high(); //Deselect Control
-
-  // turn test mode bit off
-  Mp3WriteRegister(SCI_MODE, Mp3ReadRegister(SCI_MODE) & ~SM_TESTS);
-//  Mp3Writ1eRegister(SCI_MODE,e Mp3ReadRegister(SCI_MODE) | SM_CANCEL);
-  return 0;
 }
 
 //Store and Push member volume to VS10xx chip
@@ -317,6 +339,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName){
 
   playing = TRUE;
   Mp3WriteRegister(SCI_DECODE_TIME, 0); // Reset the Decode and bitrate from previous play back.
+  delay(100); // experimentally found that we need to let this settle before sending data.
 
   //look for first MP3 frame (11 1's)
   bitrate = 0;

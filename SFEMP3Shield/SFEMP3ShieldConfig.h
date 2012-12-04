@@ -9,7 +9,7 @@ various supported different base Arduino boards and shield's using the
 VS10xx chip. It is possible this may support other VS10xx chips. But are
 unverified at this time.
 
-As the name SFEMP3Shield implies this driver was originally developed for 
+As the name SFEMP3Shield implies this driver was originally developed from 
 Sparkfun's MP3 Player Shield. Whereas it can and has been easily adapted 
 to other hardware, both base Arduino's and shield's using the VS10xx.
 
@@ -31,6 +31,7 @@ INT0 to D2 as to support USE_MP3_INTx, as is. Like the Uno.
 Sd2Card.cpp and a 2nd time with SFEMP3Shield.cpp.
 
 \sa see also www.sparkfun.com
+\xrefitem MPF "MPF" "MPF List" 
  */
 
 #ifndef SFEMP3ShieldConfig_h

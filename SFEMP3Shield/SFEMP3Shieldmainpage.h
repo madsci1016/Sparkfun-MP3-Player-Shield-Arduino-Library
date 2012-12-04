@@ -4,7 +4,7 @@
 \brief Main Page of MarkDown Documentation
 \remarks implemented with Doxygen Markdown format
 
-\mainpage Arduino %SFEMP3Shield Library
+\mainpage Arduino SFEMP3Shield Library
 
 \tableofcontents
 
@@ -12,7 +12,7 @@
 </CENTER>
 
 \section Intro Introduction
-The Arduino %SFEMP3Shield Library is a driver for VSLI's VS10xx, 
+The Arduino SFEMP3Shield Library is a driver for VSLI's VS10xx, 
 implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats,
 across the SPI bus of the Arduino. 
 Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's
@@ -22,7 +22,7 @@ Where additional support has been provided for Seeduino MP3 Player Shield
 and documention is provied as to how to implement on a Arduino Mega. 
 Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.
 
-The main classes in %SFEMP3Shield is SFEMP3Shield.
+The main classes in SFEMP3Shield is SFEMP3Shield.
 
 \section  Contributers Contributers
 \author  Nathan Seidle, www.sparkfun.com
@@ -43,8 +43,8 @@ The Sd2Card class can be used for raw access to the SD card.
 \todo
 speed up digitalwrites by using SdFat's atomwrite
 
-An example is provided in the %SFEMP3Shield/examples folder.  Which is 
-developed to test %SFEMP3Shield and illustrate its various common uses.
+An example is provided in the SFEMP3Shield/examples folder.  Which is 
+developed to test SFEMP3Shield and illustrate its various common uses.
 
 \todo
 %SdFat was developed for high speed data recording.  %SdFat was used to
@@ -71,7 +71,7 @@ limited RAM.
 
 \section Hardware Hardware Configuration
 
-%SFEMP3Shield was developed using an
+SFEMP3Shield was developed using an
 <A HREF = "http://www.sparkfun.com/"> Sparkfun Electonics</A> 
 <A HREF = "https://www.sparkfun.com/products/10628"> MP3 Player Shield DEV-10628</A>.
 
@@ -154,33 +154,6 @@ be corrupted if data is written to the file by more than one instance of SdFile.
 <A HREF = "http://www.arduino.cc/"> The Arduino site</A>.
 
 <A HREF = "http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf"> The ATmega328 datasheet</A>.
-
-\section  history history
-<pre>
-0.1 made into library, external interrupt driven.
-0.2 included pre-modified SDFat Library
-0.3 added isPlaying function to query shield status
-0.4 added functions to cancel and resume external interrupt
-     in case something else is on the SPI bus	
-0.5 added skipTo() and related functions to skip around in track
-0.6 fixed for Arduino Mega use by calling SDfatlib properly. 
-     Blame Nathan for bad implentation of SDFatlib
-0.7 added functions to read track title,artist,album
-     fixed silly use of static where it shouldn't have been
-0.7.1 chomp'd non ASCII characters from file names.
-0.7.2 Added quick check if trackname is mp3 extension.
-0.7.3 Added apply patch/plugins from SdCard file to VS1xxx.
-0.8 moved MP3 functions into class and cleaned up syntax
-     finished bitrate_table[] table with last row, that was missed.
-     added "d" command to print directory of SdCard
-     added "+/-" command to change volume by 1.0 dB
-     added print of FreeRam() to show amount of static RAM available.
-     save 220 bytes by using F() function to put strings into Flash and not use RAM: 
-       i.e. Serial.Print(F("Hello)");
-     note: FreeRam() is supplied with SdFatUtil.h
-0.9 Added SFEMP3ShieldConfig.h to support alternate hardware for none INT0 DREQ based
-     cards and or Shields. By using Timers, or software pollings, such as with Mega and Seediunos.
-</pre>
 
 \section  Installation Installation
 To install, unzip and place 'SFEMP3Shield', 'SdFat' and 'plugins' folder into your 'C:\Users\{user name}\Documents\Arduino\libraries' folder or '{Arduino IDE path}\hardware\libraries" or {Arduino IDE path}\libraries" directory. 

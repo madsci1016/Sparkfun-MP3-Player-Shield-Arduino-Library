@@ -1060,11 +1060,11 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
           track.seekCur(-3);
           start_of_music = track.curPosition();
 
-          Serial.print(F("POS: "));
-          Serial.println(start_of_music);
+//          Serial.print(F("POS: "));
+//          Serial.println(start_of_music);
 
-          Serial.print(F("Bitrate: "));
-          Serial.println(bitrate);
+//          Serial.print(F("Bitrate: "));
+//          Serial.println(bitrate);
 
           //break out of for loop
           break;

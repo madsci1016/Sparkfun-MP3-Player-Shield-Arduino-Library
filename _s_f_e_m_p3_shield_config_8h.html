@@ -281,7 +281,7 @@ implemented with Doxygen Markdown format</dd></dl>
 
 <p>defacto Interrupt on INTx, from DREQ </p>
 <p>A macro of the enumerated value used to select hard interrupt INTx as the means to refill the VS10xx</p>
-<p>Where the Interrupt Service Routine attached to INTx as per attachInterrupt(MP3_DREQINT, refill, RISING) causes execution of SFEMP3Shield::refill() as per the VS10xx need per DREQ.</p>
+<p>Where the Interrupt Service Routine attached to INTx as per attachInterrupt(MP3_DREQINT, refill, RISING) causes execution of <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a> as per the VS10xx need per DREQ.</p>
 <dl class="section note"><dt>Note</dt><dd>MP3_DREQINT corresponds the interrupt vector associated with the pin assigned to MP3_DREQ.</dd>
 <dd>
 INT(x) may not be available on some base systems depending upon design. Where SFE MP3 Player can use USE_MP3_INTx as DREQ is connected to D2 or INT0. Noting that MP3_DREQINT vector is defined above, in pin assignments. </dd></dl>
@@ -300,7 +300,7 @@ INT(x) may not be available on some base systems depending upon design. Where SF
 
 <p>A macro of the enumerated value used to select Software polling as the means to refill the VS10xx. </p>
 <p>Where Main loop uses <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill.">SFEMP3Shield::available()</a> to check if DREQ needs refilling on a periodic basis.</p>
-<dl class="section note"><dt>Note</dt><dd>In this means <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill.">SFEMP3Shield::available()</a> is simply SFEMP3Shield::refill() and MP3_REFILL_PERIOD is <em>NOT</em> used with this means. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>In this means <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill.">SFEMP3Shield::available()</a> is simply <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a> and MP3_REFILL_PERIOD is <em>NOT</em> used with this means. </dd></dl>
 
 </div>
 </div>
@@ -338,7 +338,7 @@ INT(x) may not be available on some base systems depending upon design. Where SF
 
 <p>A macro of the enumerated value used to select Soft SimpleTimer period as the means to refill the VS10xx. </p>
 <p>Where Main loop uses <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill.">SFEMP3Shield::available()</a> to check if DREQ needs refilling on a periodic basis.</p>
-<dl class="section note"><dt>Note</dt><dd>In this means <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill.">SFEMP3Shield::available()</a> is gating the excecution of SFEMP3Shield::refill() based on MP3_REFILL_PERIOD. Where MP3_REFILL_PERIOD is required when using this means.</dd>
+<dl class="section note"><dt>Note</dt><dd>In this means <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill.">SFEMP3Shield::available()</a> is gating the excecution of <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a> based on MP3_REFILL_PERIOD. Where MP3_REFILL_PERIOD is required when using this means.</dd>
 <dd>
 The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more bytes.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd>The use of <a class="el" href="_s_f_e_m_p3_shield_config_8h.html#af051296056aad0d0c1c11eb173f42d63" title="A macro of the enumerated value used to select Soft SimpleTimer period as the means to refill the VS1...">USE_MP3_SimpleTimer</a> interrupt requires the TimerOne.h library can be downloaded from <a href="http://www.arduino.cc/playground/Code/SimpleTimer#GetTheCode">http://www.arduino.cc/playground/Code/SimpleTimer#GetTheCode</a> for library. </dd></dl>
@@ -356,7 +356,7 @@ The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more b
 </div><div class="memdoc">
 
 <p>A macro of the enumerated value used to select Timer1's interrupt as the means to refill the VS10xx. </p>
-<p>Where the Interrupt Service Route attached to Timer1 cause periodic execution of SFEMP3Shield::refill()</p>
+<p>Where the Interrupt Service Route attached to Timer1 cause periodic execution of <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a></p>
 <dl class="section note"><dt>Note</dt><dd>MP3_REFILL_PERIOD is required when using this means.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd>The use of <a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a95aa08c3b9f0124c89535b4fa0e0b502" title="A macro of the enumerated value used to select Timer1&#39;s interrupt as the means to refill the VS10xx...">USE_MP3_Timer1</a> interrupt requires the TimerOne.h library can be downloaded from <a href="http://code.google.com/p/arduino-timerone/">http://code.google.com/p/arduino-timerone/</a> for library. </dd></dl>
 
@@ -365,7 +365,7 @@ The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more b
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 3 2012 22:51:19 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 3 2012 23:42:04 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

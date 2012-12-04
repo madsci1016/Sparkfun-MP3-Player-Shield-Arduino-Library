@@ -44,6 +44,8 @@ var searchData=
   ['sm_5fsdishare',['SM_SDISHARE',['../_s_f_e_m_p3_shield_8h.html#a01b38b83fe90ea24b711b056d41df804',1,'SFEMP3Shield.h']]],
   ['sm_5fstream',['SM_STREAM',['../_s_f_e_m_p3_shield_8h.html#a7c8d7e7fae74462ec55d9418b90b762e',1,'SFEMP3Shield.h']]],
   ['sm_5ftests',['SM_TESTS',['../_s_f_e_m_p3_shield_8h.html#ad0971535cc6abaa3f7e4500a4ce76cc7',1,'SFEMP3Shield.h']]],
+  ['spirate',['spiRate',['../class_s_f_e_m_p3_shield.html#ab4d11ba93dae4cb612cdbcb8ea2299d7',1,'SFEMP3Shield']]],
+  ['start_5fof_5fmusic',['start_of_music',['../class_s_f_e_m_p3_shield.html#adc1a33320694fabada9acd263373d9a9',1,'SFEMP3Shield']]],
   ['stoptrack',['stopTrack',['../class_s_f_e_m_p3_shield.html#a7e7418545b611db637b11019ec22f32c',1,'SFEMP3Shield']]],
   ['strip_5fnonalpha_5finplace',['strip_nonalpha_inplace',['../_s_f_e_m_p3_shield_8cpp.html#a9ff77b026d5d353ff902b4787e8589aa',1,'strip_nonalpha_inplace(char *s):&#160;SFEMP3Shield.cpp'],['../_s_f_e_m_p3_shield_8h.html#a9ff77b026d5d353ff902b4787e8589aa',1,'strip_nonalpha_inplace(char *s):&#160;SFEMP3Shield.cpp']]]
 ];

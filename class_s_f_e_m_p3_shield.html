@@ -86,6 +86,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_s_f_e_m_p3_shield-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">SFEMP3Shield Class Reference</div>  </div>
@@ -185,6 +189,84 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:aa038e734378ecd3a7d418b6c3a41e17b"><td class="memItemLeft" align="right" valign="top">static SdFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#aa038e734378ecd3a7d418b6c3a41e17b">root</a></td></tr>
 <tr class="memdesc:aa038e734378ecd3a7d418b6c3a41e17b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializer for the instance of the SdCard's static member.  <a href="#aa038e734378ecd3a7d418b6c3a41e17b"></a><br/></td></tr>
 <tr class="separator:aa038e734378ecd3a7d418b6c3a41e17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a265916fb004e8bf98d14eaa415cc28a5"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a265916fb004e8bf98d14eaa415cc28a5">VSLoadUserCode</a> (char *)</td></tr>
+<tr class="memdesc:a265916fb004e8bf98d14eaa415cc28a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">load VS1xxx with patch or plugin from file on SDcard.  <a href="#a265916fb004e8bf98d14eaa415cc28a5"></a><br/></td></tr>
+<tr class="separator:a265916fb004e8bf98d14eaa415cc28a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:adcb213e29ec8504303fa7299ac93005b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b">refill</a> ()</td></tr>
+<tr class="memdesc:adcb213e29ec8504303fa7299ac93005b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Refill the VS10xx buffer with new data.  <a href="#adcb213e29ec8504303fa7299ac93005b"></a><br/></td></tr>
+<tr class="separator:adcb213e29ec8504303fa7299ac93005b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a294e274b4b02f41b5bb635400455ec29"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a294e274b4b02f41b5bb635400455ec29">flush_cancel</a> (<a class="el" href="_s_f_e_m_p3_shield_8h.html#ad701087b7fa2b683f9da6cdb04c9ecbf">flush_m</a>)</td></tr>
+<tr class="memdesc:a294e274b4b02f41b5bb635400455ec29"><td class="mdescLeft">&#160;</td><td class="mdescRight">flush the VSdsp buffer and cancel  <a href="#a294e274b4b02f41b5bb635400455ec29"></a><br/></td></tr>
+<tr class="separator:a294e274b4b02f41b5bb635400455ec29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ad3f8eca2f1b2ac1d3bef3ae82af717"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a1ad3f8eca2f1b2ac1d3bef3ae82af717">cs_low</a> ()</td></tr>
+<tr class="memdesc:a1ad3f8eca2f1b2ac1d3bef3ae82af717"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select Control Channel.  <a href="#a1ad3f8eca2f1b2ac1d3bef3ae82af717"></a><br/></td></tr>
+<tr class="separator:a1ad3f8eca2f1b2ac1d3bef3ae82af717"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6eec4ec619b219d4b30b8b8cdc266c0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ae6eec4ec619b219d4b30b8b8cdc266c0">cs_high</a> ()</td></tr>
+<tr class="memdesc:ae6eec4ec619b219d4b30b8b8cdc266c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deselect Control Channel.  <a href="#ae6eec4ec619b219d4b30b8b8cdc266c0"></a><br/></td></tr>
+<tr class="separator:ae6eec4ec619b219d4b30b8b8cdc266c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10b12749d39c8d04cf01cd3ba7be23ac"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a10b12749d39c8d04cf01cd3ba7be23ac">dcs_low</a> ()</td></tr>
+<tr class="memdesc:a10b12749d39c8d04cf01cd3ba7be23ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select Data Channel.  <a href="#a10b12749d39c8d04cf01cd3ba7be23ac"></a><br/></td></tr>
+<tr class="separator:a10b12749d39c8d04cf01cd3ba7be23ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7be25b72f0bb66792922ef4a6016f2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a1d7be25b72f0bb66792922ef4a6016f2">dcs_high</a> ()</td></tr>
+<tr class="memdesc:a1d7be25b72f0bb66792922ef4a6016f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deselect Data Channel.  <a href="#a1d7be25b72f0bb66792922ef4a6016f2"></a><br/></td></tr>
+<tr class="separator:a1d7be25b72f0bb66792922ef4a6016f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa46b6c89ce48ddbb038fa5c47446e583"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#aa46b6c89ce48ddbb038fa5c47446e583">Mp3WriteRegister</a> (uint8_t, uint8_t, uint8_t)</td></tr>
+<tr class="memdesc:aa46b6c89ce48ddbb038fa5c47446e583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a value a VSDsp's register.  <a href="#aa46b6c89ce48ddbb038fa5c47446e583"></a><br/></td></tr>
+<tr class="separator:aa46b6c89ce48ddbb038fa5c47446e583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb475ad5eeac52d0c148190bcba74922"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#adb475ad5eeac52d0c148190bcba74922">Mp3WriteRegister</a> (uint8_t, uint16_t)</td></tr>
+<tr class="memdesc:adb475ad5eeac52d0c148190bcba74922"><td class="mdescLeft">&#160;</td><td class="mdescRight">uint16_t Overload of <a class="el" href="class_s_f_e_m_p3_shield.html#aa46b6c89ce48ddbb038fa5c47446e583" title="Write a value a VSDsp&#39;s register.">SFEMP3Shield::Mp3WriteRegister</a>  <a href="#adb475ad5eeac52d0c148190bcba74922"></a><br/></td></tr>
+<tr class="separator:adb475ad5eeac52d0c148190bcba74922"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63496f15a18d3f39a49c58699111078c"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a63496f15a18d3f39a49c58699111078c">Mp3ReadRegister</a> (uint8_t)</td></tr>
+<tr class="memdesc:a63496f15a18d3f39a49c58699111078c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a VS10xx register.  <a href="#a63496f15a18d3f39a49c58699111078c"></a><br/></td></tr>
+<tr class="separator:a63496f15a18d3f39a49c58699111078c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21524d33ede24fd0cea7f0cbe108d59"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ae21524d33ede24fd0cea7f0cbe108d59">Mp3ReadWRAM</a> (uint16_t)</td></tr>
+<tr class="memdesc:ae21524d33ede24fd0cea7f0cbe108d59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a VS10xx WRAM Location.  <a href="#ae21524d33ede24fd0cea7f0cbe108d59"></a><br/></td></tr>
+<tr class="separator:ae21524d33ede24fd0cea7f0cbe108d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf3f848ea1a55850af504198a65c80d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#accf3f848ea1a55850af504198a65c80d">Mp3WriteWRAM</a> (uint16_t, uint16_t)</td></tr>
+<tr class="memdesc:accf3f848ea1a55850af504198a65c80d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a VS10xx WRAM Location.  <a href="#accf3f848ea1a55850af504198a65c80d"></a><br/></td></tr>
+<tr class="separator:accf3f848ea1a55850af504198a65c80d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abade08481dcb154690acbc62869013a9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#abade08481dcb154690acbc62869013a9">enableRefill</a> ()</td></tr>
+<tr class="memdesc:abade08481dcb154690acbc62869013a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the Interrupts for refill.  <a href="#abade08481dcb154690acbc62869013a9"></a><br/></td></tr>
+<tr class="separator:abade08481dcb154690acbc62869013a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9434b81a621d100d86f4c6308d24f1c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ad9434b81a621d100d86f4c6308d24f1c">disableRefill</a> ()</td></tr>
+<tr class="memdesc:ad9434b81a621d100d86f4c6308d24f1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable the Interrupts for refill.  <a href="#ad9434b81a621d100d86f4c6308d24f1c"></a><br/></td></tr>
+<tr class="separator:ad9434b81a621d100d86f4c6308d24f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a9756e8739e4757834117f25ca589b440"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a9756e8739e4757834117f25ca589b440">bitrate</a></td></tr>
+<tr class="memdesc:a9756e8739e4757834117f25ca589b440"><td class="mdescLeft">&#160;</td><td class="mdescRight">contains a local value of the beleived current bit-rate.  <a href="#a9756e8739e4757834117f25ca589b440"></a><br/></td></tr>
+<tr class="separator:a9756e8739e4757834117f25ca589b440"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc1a33320694fabada9acd263373d9a9"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#adc1a33320694fabada9acd263373d9a9">start_of_music</a></td></tr>
+<tr class="memdesc:adc1a33320694fabada9acd263373d9a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">contains a filehandles offset to the begining of the current file.  <a href="#adc1a33320694fabada9acd263373d9a9"></a><br/></td></tr>
+<tr class="separator:adc1a33320694fabada9acd263373d9a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a76f4da0bbe019da1be2d4fb9319335"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a6a76f4da0bbe019da1be2d4fb9319335">VolL</a></td></tr>
+<tr class="memdesc:a6a76f4da0bbe019da1be2d4fb9319335"><td class="mdescLeft">&#160;</td><td class="mdescRight">contains a local value of the VSdsp's master volume left channels  <a href="#a6a76f4da0bbe019da1be2d4fb9319335"></a><br/></td></tr>
+<tr class="separator:a6a76f4da0bbe019da1be2d4fb9319335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0791411182ff8da3892af7b1a61d573"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ad0791411182ff8da3892af7b1a61d573">VolR</a></td></tr>
+<tr class="memdesc:ad0791411182ff8da3892af7b1a61d573"><td class="mdescLeft">&#160;</td><td class="mdescRight">contains a local value of the VSdsp's master volume Right channels  <a href="#ad0791411182ff8da3892af7b1a61d573"></a><br/></td></tr>
+<tr class="separator:ad0791411182ff8da3892af7b1a61d573"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a2daefd00dbfbf26943ea997bfeed30a3"><td class="memItemLeft" align="right" valign="top">static SdFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a2daefd00dbfbf26943ea997bfeed30a3">track</a></td></tr>
+<tr class="memdesc:a2daefd00dbfbf26943ea997bfeed30a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializer for the instance of the SdCard's static member.  <a href="#a2daefd00dbfbf26943ea997bfeed30a3"></a><br/></td></tr>
+<tr class="separator:a2daefd00dbfbf26943ea997bfeed30a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50390baf6badc8f93fb3342a93a71804"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a50390baf6badc8f93fb3342a93a71804">playing</a></td></tr>
+<tr class="memdesc:a50390baf6badc8f93fb3342a93a71804"><td class="mdescLeft">&#160;</td><td class="mdescRight">Boolean flag indicating if filehandle is streaming.  <a href="#a50390baf6badc8f93fb3342a93a71804"></a><br/></td></tr>
+<tr class="separator:a50390baf6badc8f93fb3342a93a71804"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4d11ba93dae4cb612cdbcb8ea2299d7"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ab4d11ba93dae4cb612cdbcb8ea2299d7">spiRate</a></td></tr>
+<tr class="memdesc:ab4d11ba93dae4cb612cdbcb8ea2299d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rate of the SPI to be used with communicating to the VSdsp.  <a href="#ab4d11ba93dae4cb612cdbcb8ea2299d7"></a><br/></td></tr>
+<tr class="separator:ab4d11ba93dae4cb612cdbcb8ea2299d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1027c13d5feef5d3b928f4d53e1f602"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ab1027c13d5feef5d3b928f4d53e1f602">mp3DataBuffer</a> [32]</td></tr>
+<tr class="memdesc:ab1027c13d5feef5d3b928f4d53e1f602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffer for moving data between Filehandle and VSdsp.  <a href="#ab1027c13d5feef5d3b928f4d53e1f602"></a><br/></td></tr>
+<tr class="separator:ab1027c13d5feef5d3b928f4d53e1f602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30002ff09fd45a5dfdf0b0df6b4fffb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a30002ff09fd45a5dfdf0b0df6b4fffb9">trackTitle</a> (char *)</td></tr>
 <tr class="memdesc:a30002ff09fd45a5dfdf0b0df6b4fffb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Track's Title.  <a href="#a30002ff09fd45a5dfdf0b0df6b4fffb9"></a><br/></td></tr>
 <tr class="separator:a30002ff09fd45a5dfdf0b0df6b4fffb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +279,12 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a4bb1a4e18536965bd321dcfd244d9b66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a4bb1a4e18536965bd321dcfd244d9b66">getAudioInfo</a> ()</td></tr>
 <tr class="memdesc:a4bb1a4e18536965bd321dcfd244d9b66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display various Audio information from the VSdsp.  <a href="#a4bb1a4e18536965bd321dcfd244d9b66"></a><br/></td></tr>
 <tr class="separator:a4bb1a4e18536965bd321dcfd244d9b66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a4b776e45e151a7c330d91a9e88fb78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a6a4b776e45e151a7c330d91a9e88fb78">getTrackInfo</a> (uint8_t, char *)</td></tr>
+<tr class="memdesc:a6a4b776e45e151a7c330d91a9e88fb78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch ID3 Tag information.  <a href="#a6a4b776e45e151a7c330d91a9e88fb78"></a><br/></td></tr>
+<tr class="separator:a6a4b776e45e151a7c330d91a9e88fb78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a759d7872b7d5f399fe556d38913416ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a759d7872b7d5f399fe556d38913416ed">getBitRateFromMP3File</a> (char *)</td></tr>
+<tr class="memdesc:a759d7872b7d5f399fe556d38913416ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the Bit-Rate from the current track's filehandle.  <a href="#a759d7872b7d5f399fe556d38913416ed"></a><br/></td></tr>
+<tr class="separator:a759d7872b7d5f399fe556d38913416ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Interface Driver to the VS10xx chip on the SPI. </p>
@@ -223,7 +311,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Public interface of refill. </p>
-<p>Serves as a helper as to correspondingly run either the timer service or run the refill() direclty, depending upon the configured means for refilling. </p>
+<p>Serves as a helper as to correspondingly run either the timer service or run the <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">refill()</a> direclty, depending upon the configured means for refilling. </p>
 
 </div>
 </div>
@@ -243,8 +331,60 @@ Static Public Attributes</h2></td></tr>
 <p>Initialize the MP3 Player shield. </p>
 <p>Execute this function before anything else, typically during setup(). It will create an instance of SdFat's card, volume and root. and initialize the VS10xx with <a class="el" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a" title="Initialize the VS10xx Audio Decoder Chip.">vs_init()</a></p>
 <dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes</dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a></dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>it may have problems with other instances of SdFat handles, if used at the same time. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae6eec4ec619b219d4b30b8b8cdc266c0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::cs_high </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deselect Control Channel. </p>
+<p>Primative function to Deselect the VS10xx's Control Chip Select as per defined by MP3_XCS. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1ad3f8eca2f1b2ac1d3bef3ae82af717"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::cs_low </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Select Control Channel. </p>
+<p>Primative function to configure the SPI's Mode and rate control to that of the current VX10xx. Then select the VS10xx's Control Chip Select as per defined by MP3_XCS. </p>
 
 </div>
 </div>
@@ -269,6 +409,84 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1d7be25b72f0bb66792922ef4a6016f2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::dcs_high </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deselect Data Channel. </p>
+<p>Primative function to Deselect the VS10xx's Control Data Select as per defined by MP3_XDCS. </p>
+
+</div>
+</div>
+<a class="anchor" id="a10b12749d39c8d04cf01cd3ba7be23ac"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::dcs_low </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Select Data Channel. </p>
+<p>Primative function to configure the SPI's Mode and rate control to that of the current VX10xx. Then select the VS10xx's Data Chip Select as per defined by MP3_XDCS. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad9434b81a621d100d86f4c6308d24f1c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::disableRefill </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Disable the Interrupts for refill. </p>
+<p>Depending upon the means selected to request refill of the VSdsp's data stream buffer, this routine will disable the corresponding service. </p>
+
+</div>
+</div>
 <a class="anchor" id="a69b0eebbcc12c21dfadb5390c10df260"></a>
 <div class="memitem">
 <div class="memproto">
@@ -290,7 +508,33 @@ Static Public Attributes</h2></td></tr>
 <li>1 indicates that test was disabled.</li>
 </ul>
 </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abade08481dcb154690acbc62869013a9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::enableRefill </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable the Interrupts for refill. </p>
+<p>Depending upon the means selected to request refill of the VSdsp's data stream buffer, this routine will enable the corresponding service. </p>
 
 </div>
 </div>
@@ -322,8 +566,48 @@ Static Public Attributes</h2></td></tr>
 <li>2 indicates that test is already in progress.</li>
 </ul>
 </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>9.12.5 New Sine and Sweep Tests was not implemented. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a294e274b4b02f41b5bb635400455ec29"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::flush_cancel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_s_f_e_m_p3_shield_8h.html#ad701087b7fa2b683f9da6cdb04c9ecbf">flush_m</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>flush the VSdsp buffer and cancel </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mode</td><td>is an enumerated value of flush_m</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Typically called after a filehandlers' stream has been stopped, as to gracefully flush any buffer contents still playing. Along with issueing a SM_CANCEL to the VSdsp's SCI_MODE register.</p>
+<ul>
+<li>post - will flush vx10xx's 2K buffer after cancelled, typically with stopping a file, to have immediate affect.</li>
+<li>pre - will flush buffer prior to issuing cancel, typically to allow completion of file</li>
+<li>both - will flush before and after issuing cancel</li>
+<li>none - will just issue cancel. Not sure if this should be used. Such as in skipto.</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>if cancel fails the vs10xx will be reset and initialized to current values. </dd></dl>
 
 </div>
 </div>
@@ -344,6 +628,42 @@ Static Public Attributes</h2></td></tr>
 <p>Read numerous attributes from the VSdsp's registers about either the currently or prior played stream and display in a column format for easy reviewing.</p>
 <p>This may be called while playing a current stream.</p>
 <dl class="section note"><dt>Note</dt><dd>this suspends currently playing streams and returns afterwards. Restoring the file position to where it left off, before resuming. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a759d7872b7d5f399fe556d38913416ed"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::getBitRateFromMP3File </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read the Bit-Rate from the current track's filehandle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>locate the MP3 header in the current file and from there determine the Bit-Rate, using bitrate_table located in flash. And return the position to the prior location.</p>
+<dl class="section note"><dt>Note</dt><dd>the bitrate will be updated, as read back from the VS10xx when needed.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>This feature only works on MP3 files. It will <b>LOCK-UP</b> on other file formats, looking for the MP3 header. </dd></dl>
+<p>true if Version 1, !false version 2 and 2.5 </p>
 
 </div>
 </div>
@@ -383,6 +703,51 @@ Static Public Attributes</h2></td></tr>
 <p>Read the VS10xx extra parameter memory for playSpeed register and return its results. As specified by Data Sheet Section 9.11.1</p>
 <dl class="section return"><dt>Returns</dt><dd>multipler of current playspeed versus normal speed. Where 0 and/or 1 are normal 1x speed. e.g. 4 to playSpeed will play the song four times as fast as normal, if you are able to feed the data with that speed.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Excessive playspeed beyond the ability to stream data between the SdCard, Arduino and VS10xx may result in erratic behavior. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6a4b776e45e151a7c330d91a9e88fb78"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::getTrackInfo </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>infobuffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fetch ID3 Tag information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>for the desired information desired. </td></tr>
+    <tr><td class="paramname">infobuffer</td><td>pointer char array of filename to be read.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Read current filehandles offset of track ID3 tag information. Then strip all non readible (ascii) characters.</p>
+<dl class="section note"><dt>Note</dt><dd>this suspends currently playing streams and returns afterwards. Restoring the file position to where it left off, before resuming. </dd></dl>
 
 </div>
 </div>
@@ -452,7 +817,214 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <li>2 indicates that test is already in progress.</li>
 </ul>
 </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a63496f15a18d3f39a49c58699111078c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t SFEMP3Shield::Mp3ReadRegister </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>addressbyte</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a VS10xx register. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's register to be read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>result read from the register</dd></dl>
+<p>Primative function to suspend playing and directly communicate over the SPI to the VSdsp's registers. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae21524d33ede24fd0cea7f0cbe108d59"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t SFEMP3Shield::Mp3ReadWRAM </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>addressbyte</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a VS10xx WRAM Location. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's WRAM to be read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>result read from the WRAM</dd></dl>
+<p>Function to communicate to the VSdsp's registers, indirectly accessing the WRAM. As per data sheet the result is read back twice to verify. As it is not buffered. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa46b6c89ce48ddbb038fa5c47446e583"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::Mp3WriteRegister </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>addressbyte</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>highbyte</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>lowbyte</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a value a VSDsp's register. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's register to be written </td></tr>
+    <tr><td class="paramname">highbyte</td><td>to writen to the register </td></tr>
+    <tr><td class="paramname">lowbyte</td><td>to writen to the register</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Primative function to suspend playing and directly communicate over the SPI to the VSdsp's registers. Where the value write is Big Endian (MSB first). </p>
+
+</div>
+</div>
+<a class="anchor" id="adb475ad5eeac52d0c148190bcba74922"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::Mp3WriteRegister </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>addressbyte</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>uint16_t Overload of <a class="el" href="class_s_f_e_m_p3_shield.html#aa46b6c89ce48ddbb038fa5c47446e583" title="Write a value a VSDsp&#39;s register.">SFEMP3Shield::Mp3WriteRegister</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's register to be written </td></tr>
+    <tr><td class="paramname">data</td><td>to writen to the register</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Forces the input value into the Big Endian Corresponding positions of Mp3WriteRegister as to be written to the addressed VSdsp's registers. </p>
+
+</div>
+</div>
+<a class="anchor" id="accf3f848ea1a55850af504198a65c80d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::Mp3WriteWRAM </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>addressbyte</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a VS10xx WRAM Location. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's WRAM to be read </td></tr>
+    <tr><td class="paramname">data</td><td>written to the VSdsp's WRAM</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Function to communicate to the VSdsp's registers, indirectly accessing the WRAM. </p>
 
 </div>
 </div>
@@ -470,7 +1042,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><div class="memdoc">
 
 <p>Pause streaming data to the VSdsp. </p>
-<p>Public method for disabling the refill with disableRefill(). </p>
+<p>Public method for disabling the refill with <a class="el" href="class_s_f_e_m_p3_shield.html#ad9434b81a621d100d86f4c6308d24f1c" title="Disable the Interrupts for refill.">disableRefill()</a>. </p>
 
 </div>
 </div>
@@ -497,8 +1069,8 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>Skip, if already playing. Otherwise initialize the SdCard track to desired filehandle. Reset the ByteRate and Play position and set playing to indicate such. If the filename extension is MP3, then pre-read the byterate from the file. And initially fill the VSDsp's buffer, then enable refilling.</p>
 <dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>enableRefill() will enable the appropiate interrupt to match the corresponding means selected. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a></dd></dl>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="class_s_f_e_m_p3_shield.html#abade08481dcb154690acbc62869013a9" title="Enable the Interrupts for refill.">enableRefill()</a> will enable the appropiate interrupt to match the corresponding means selected. </dd></dl>
 
 </div>
 </div>
@@ -525,7 +1097,34 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>Formats the input number into a corresponding filename, from track001.mp3 through track009.mp3. Then executes the track by calling <a class="el" href="class_s_f_e_m_p3_shield.html#ad1ece30ac83aa91c9295a83f8d69e6e3" title="Begin playing a mp3 file by its filename.">SFEMP3Shield::playMP3(char* fileName)</a></p>
 <dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="adcb213e29ec8504303fa7299ac93005b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::refill </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Refill the VS10xx buffer with new data. </p>
+<p>This the primative function to refilling the VSdsp's buffers. And is typically called as an interrupt to the rising edge of the VS10xx's DREQ. Where if the DREQ is indicating not full, it will read 32 bytes from the filehandle's track and send them via SPI to the VSdsp's data stream buffer. Repeating until the DREQ indicates it is full.</p>
+<p>When the filehandle's track indicates it is at the end of file. The track is closed, the playing indicator is set to false, interrupts for refilling are disabled and the VSdsp's data stream buffer is flushed appropiately. </p>
 
 </div>
 </div>
@@ -543,7 +1142,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><div class="memdoc">
 
 <p>Unpause streaming data to the VSdsp. </p>
-<p>Public method for re-enabling the refill with enableRefill(). Where skipped if not currently playing. </p>
+<p>Public method for re-enabling the refill with <a class="el" href="class_s_f_e_m_p3_shield.html#abade08481dcb154690acbc62869013a9" title="Enable the Interrupts for refill.">enableRefill()</a>. Where skipped if not currently playing. </p>
 
 </div>
 </div>
@@ -684,7 +1283,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <li>2 indicates that test is already in progress.</li>
 </ul>
 </dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 
 </div>
 </div>
@@ -838,11 +1437,73 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </ul>
 </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>returned Error codes are typically passed and therefore need to avoid overlap.</dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>Error Codes </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a265916fb004e8bf98d14eaa415cc28a5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::VSLoadUserCode </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>load VS1xxx with patch or plugin from file on SDcard. </p>
+<p>Loads the VX10xx with filename of the specified patch, if present. This can be used to load various VSdsp apps, patches and plug-in's. Providing many new features and updates not present on the default firmware.</p>
+<p>The file format of the plugin is raw binary, in VLSI's interleaved and RLE compressed format, as extracted from the source plugin file (.plg). A perl script <code>vs_plg_to_bin.pl</code> is provided to convert the .plg file in to the binary filename.053. Where the extension of .053 is a convention to indicate the VSdsp chip version.</p>
+<dl class="section note"><dt>Note</dt><dd>by default all plug-ins are expected to be in the root of the SdCard.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured.<ul>
+<li>0 indicates that upload was successful.</li>
+<li>1 indicates the upload can not be performed while currently streaming music.</li>
+<li>2 indicates that desired file was not found.</li>
+</ul>
+</dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><ul>
+<li><a class="el" href="index.html#Error_Codes">Error Codes</a></li>
+<li><a class="el" href="index.html#Plug_Ins">Plug Ins</a> </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a9756e8739e4757834117f25ca589b440"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::bitrate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>contains a local value of the beleived current bit-rate. </p>
+
+</div>
+</div>
 <a class="anchor" id="aab3782c1a46d8cf34d4b7a2b49c9d17e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -861,6 +1522,51 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </table>
 </div><div class="memdoc">
 
+<p>Initializer for the instance of the SdCard's static member. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab1027c13d5feef5d3b928f4d53e1f602"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::mp3DataBuffer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Buffer for moving data between Filehandle and VSdsp. </p>
+
+</div>
+</div>
+<a class="anchor" id="a50390baf6badc8f93fb3342a93a71804"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::playing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Boolean flag indicating if filehandle is streaming. </p>
 <p>Initializer for the instance of the SdCard's static member. </p>
 
 </div>
@@ -884,6 +1590,117 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><div class="memdoc">
 
 <p>Initializer for the instance of the SdCard's static member. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab4d11ba93dae4cb612cdbcb8ea2299d7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t SFEMP3Shield::spiRate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Rate of the SPI to be used with communicating to the VSdsp. </p>
+<p>Initializer for the instance of the SdCard's static member. </p>
+
+</div>
+</div>
+<a class="anchor" id="adc1a33320694fabada9acd263373d9a9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t SFEMP3Shield::start_of_music</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>contains a filehandles offset to the begining of the current file. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2daefd00dbfbf26943ea997bfeed30a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SdFile SFEMP3Shield::track</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initializer for the instance of the SdCard's static member. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6a76f4da0bbe019da1be2d4fb9319335"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::VolL</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>contains a local value of the VSdsp's master volume left channels </p>
+
+</div>
+</div>
+<a class="anchor" id="ad0791411182ff8da3892af7b1a61d573"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::VolR</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>contains a local value of the VSdsp's master volume Right channels </p>
 
 </div>
 </div>
@@ -916,7 +1733,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 3 2012 22:51:19 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 3 2012 23:42:04 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

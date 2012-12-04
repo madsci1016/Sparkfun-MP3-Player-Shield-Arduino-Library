@@ -658,10 +658,6 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
   //Open the file in read mode.
   if (!track.open(&root, fileName, O_READ)) return 2;
 
-  playing = TRUE;
-  Mp3WriteRegister(SCI_DECODE_TIME, 0); // Reset the Decode and bitrate from previous play back.
-  delay(100); // experimentally found that we need to let this settle before sending data.
-
   // find length of arrary at pointer
   int fileNamefileName_length = 0;
   while(*(fileName + fileNamefileName_length))
@@ -672,6 +668,11 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
   if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
     getBitRateFromMP3File(fileName);
   }
+
+  playing = TRUE;
+  
+  Mp3WriteRegister(SCI_DECODE_TIME, 0); // Reset the Decode and bitrate from previous play back.
+  delay(100); // experimentally found that we need to let this settle before sending data.
 
   //gotta start feeding that hungry mp3 chip
   refill();
@@ -1029,8 +1030,7 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
   uint8_t temp = 0;
   uint8_t row_num =0;
 
-    for(uint16_t i = 0; i<65535; i++){
-    //for(;;){
+    for(uint16_t i = 0; i<65535; i++) {
       if(track.read() == 0xFF) {
 
         temp = track.read();
@@ -1039,12 +1039,18 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
 
           //found the 11 1's
           //parse version, layer and bitrate out and save bitrate
-          if(!(temp & 0b00001000)) //!true if Version 1, !false version 2 and 2.5
+          if(!(temp & 0b00001000)) { //!true if Version 1, !false version 2 and 2.5
             row_num = 3;
-            if((temp & 0b00000110) == 0b00000100) //true if layer 2, false if layer 1 or 3
+          }
+          else if((temp & 0b00000110) == 0b00000100) { //true if layer 2, false if layer 1 or 3
             row_num += 1;
-          else if((temp & 0b00000110) == 0b00000010) //true if layer 3, false if layer 2 or 1
+          }
+          else if((temp & 0b00000110) == 0b00000010) { //true if layer 3, false if layer 2 or 1
             row_num += 2;
+          } else {
+          	continue; // Not found, need to skip the rest and continue looking.
+          	          // \warning But this can lead to a dead end and file end of file.
+          }
 
           //parse bitrate code from next byte
           temp = track.read();

@@ -161,7 +161,7 @@ Restart the Arduino IDE, and open up the example sketch.
 
 Most of the uses of the library are in the example sketch. 
 
-\section Error_Codes Error_Codes
+\section Error_Codes Error Codes
 From the 'begin' function:
 <pre>
 0 OK

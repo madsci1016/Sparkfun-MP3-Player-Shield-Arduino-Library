@@ -86,7 +86,8 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  * \return Any Value other than zero indicates a problem occured.
  * where value indicates specific error
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  *
  * \warning it may have problems with other instances of SdFat handles,
  * if used at the same time.
@@ -142,7 +143,8 @@ uint8_t  SFEMP3Shield::begin() {
  * \note returned Error codes are typically passed and therefore need to avoid
  * overlap.
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  */
 uint8_t SFEMP3Shield::vs_init() {
 	
@@ -211,16 +213,26 @@ uint8_t SFEMP3Shield::vs_init() {
 /**
  * \brief load VS1xxx with patch or plugin from file on SDcard.
  *
- * Reset and initialize the VS10xx chip's internal registers such as clock
- * for normal operation with the SFEMP3Shield class's members.
- * Along with uploading corresponding accumilative patch file, if present.
+ * Loads the VX10xx with filename of the specified patch, if present.
+ * This can be used to load various VSdsp apps, patches and plug-in's.
+ * Providing many new features and updates not present on the default firmware.
+ *
+ * The file format of the plugin is raw binary, in VLSI's interleaved and RLE 
+ * compressed format, as extracted from the source plugin file (.plg).
+ * A perl script \c vs_plg_to_bin.pl is provided to convert the .plg 
+ * file in to the binary filename.053. Where the extension of .053 is a
+ * convention to indicate the VSdsp chip version.
+ * 
+ * \note by default all plug-ins are expected to be in the root of the SdCard.
  *
  * \return Any Value other than zero indicates a problem occured.
  * - 0 indicates that upload was successful.
  * - 1 indicates the upload can not be performed while currently streaming music.
  * - 2 indicates that desired file was not found.
  *
- * \see Error Codes
+ * \see
+ * - \ref Error_Codes
+ * - \ref Plug_Ins
  */
 uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
 
@@ -277,7 +289,8 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  * \note 9.12.5 New Sine and Sweep Tests was not implemented.
  */
 uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
@@ -326,7 +339,8 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
  * - 0 indicates the test is not previously enabled and skipping disable.
  * - 1 indicates that test was disabled.
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  */
 uint8_t SFEMP3Shield::disableTestSineWave() {
 
@@ -376,7 +390,8 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  */
 uint16_t SFEMP3Shield::memoryTest() {
 
@@ -444,7 +459,8 @@ uint16_t SFEMP3Shield::memoryTest() {
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  */
 void SFEMP3Shield::SetVolume(uint16_t data) {
   union twobyte val;
@@ -617,7 +633,8 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
  * \return Any Value other than zero indicates a problem occured.
  * where value indicates specific error
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  */
 uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
 
@@ -646,7 +663,8 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  * \return Any Value other than zero indicates a problem occured.
  * where value indicates specific error
  *
- * \see Error Codes
+ * \see
+ * \ref Error_Codes
  *
  * \note enableRefill() will enable the appropiate interrupt to match the 
  * corresponding means selected.

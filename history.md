@@ -6,6 +6,8 @@ Revision History
 * extracted read of MP3 files bit-rate to member function.
 * cleaned up some type casting.
 * added history.md and license files
+* improved tolerance of bit-rate read from mp3 file header.
+* moved setting Playing to true after file is opened and bitrate is read.
 
 ## 0.09.00
 

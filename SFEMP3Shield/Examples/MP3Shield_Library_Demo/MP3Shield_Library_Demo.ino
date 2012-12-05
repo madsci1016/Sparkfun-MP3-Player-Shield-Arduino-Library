@@ -306,9 +306,9 @@ void help() {
   Serial.println(F(" [1-9] to play a track"));
   Serial.println(F(" [s] to stop playing"));
   Serial.println(F(" [+ or -] to change volume"));
-  Serial.println(F(" [> or <] to increament or decreament playspeed by 1 factor"));
-  Serial.println(F(" [i] retreieve current audio information (partial list)"));
-  Serial.println(F(" [e] increament Spatial EarSpeaker, default is 0, wraps after 4"));
+  Serial.println(F(" [> or <] to increment or decrement play speed by 1 factor"));
+  Serial.println(F(" [i] retrieve current audio information (partial list)"));
+  Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
   Serial.println(F(" [p] to pause."));
   Serial.println(F(" [r] to resume."));
   Serial.println(F(" [r] Resets and initializes VS10xx chip."));

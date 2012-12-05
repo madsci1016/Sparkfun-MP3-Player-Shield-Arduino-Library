@@ -1,8 +1,8 @@
 /**
-\file SFEMP3ShieldConfig.h
+\file SFEMP3Shield.h
 
-\brief Hardware dependent configuration definitions
-\remarks implemented with Doxygen Markdown format
+\brief Header file for the SFEMP3Shield library
+\remarks comments are implemented with Doxygen Markdown format
 
 */
 
@@ -36,29 +36,29 @@ enum flush_m {
  * This will cause SFEMP3Shield::flush_cancel(flush_m) to flush with endfillbyte
  * after issuing the cancel
  */
-	post,
+  post,
 
 /** \brief Flush First
  *
  * This will cause SFEMP3Shield::flush_cancel(flush_m) to flush with endfillbyte
  * before issuing the cancel
  */
-	pre, 
+  pre,
 
 /** \brief Flush both First and After
  *
  * This will cause SFEMP3Shield::flush_cancel(flush_m) to flush with endfillbyte
  * before and after issuing the cancel
  */
-	both, 
+  both,
 
 /** \brief Don't Flush
  *
  * This will cause SFEMP3Shield::flush_cancel(flush_m) NOT to flush with endfillbyte
  * when issuing the cancel
  */
-	none
-	}; //enum flush_m
+  none
+  }; //enum flush_m
 
 //------------------------------------------------------------------------------
 /** \name External_Variable_Group
@@ -66,7 +66,7 @@ enum flush_m {
  *  /@{
  */
 
-// 
+//
 /** \brief Sd2Card card;
  *
  * used by SFEMP3Shield Class for accessing the SdCard.
@@ -100,7 +100,7 @@ extern SdFile root;
 extern SdFile track;
 
 /** End External_Variable_Group
- *  /@} 
+ *  /@}
  */
 
 //------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ extern SdFile track;
 /**
  * \brief A macro of the SCI MODE register's address (R/W)
  *
- * SCI_MODE is a Read/Write register used to control the operation of VS1053b and defaults to 0x0800 
+ * SCI_MODE is a Read/Write register used to control the operation of VS1053b and defaults to 0x0800
  * (SM_SDINEW set).
  *
  * \see SCI_MODE_Bit_Definitions_Group
@@ -131,7 +131,7 @@ extern SdFile track;
 /**
  * \brief A macro of the SCI BASS register's address (R/W)
  *
- * SCI_BASS is a Read/Write register used to control VSBE. 
+ * SCI_BASS is a Read/Write register used to control VSBE.
  * The Bass Enhancer VSBE is a powerful bass boosting DSP algorithm, which tries to take the
  * most out of the users earphones without causing clipping.
  */
@@ -140,7 +140,7 @@ extern SdFile track;
 /**
  * \brief A macro of the SCI CLOCKF register's address (R/W)
  *
- * SCI_CLOCKF is a Read/Write register used to control Clock Multipler. 
+ * SCI_CLOCKF is a Read/Write register used to control Clock Multipler.
  */
 #define SCI_CLOCKF            0x03
 
@@ -154,14 +154,14 @@ extern SdFile track;
  * SCI_DECODE_TIME also resets the byteRate calculation.
  * SCI_DECODE_TIME is reset at every hardware and software reset. It is no longer cleared
  * when decoding of a file ends to allow the decode time to proceed automatically with looped
- * files and with seamless playback of multiple files. 
+ * files and with seamless playback of multiple files.
  */
 #define SCI_DECODE_TIME       0x04
 
 /**
  * \brief A macro of the SCI AUDATA register's address (R/W)
  *
- * SCI_AUDATA is a Read/Write register containing information when decoding correct data, 
+ * SCI_AUDATA is a Read/Write register containing information when decoding correct data,
  * the current samplerate and number of channels can be found
  * in bits 15:1 and 0 of SCI_AUDATA, respectively. Bits 15:1 contain the samplerate divided by
  * two, and bit 0 is 0 for mono data and 1 for stereo. Writing to SCI_AUDATA will change the
@@ -191,12 +191,12 @@ extern SdFile track;
 
 /**
  * \brief A macro of the SCI HDAT0 register's address (R/W)
- 
+
  * SCI_HDAT0 register is a Read/Write register which contains header information that is extracted from MP3 stream
  * currently being decoded. After reset both registers are cleared, indicating no data has been found yet.
  *
  * The register is used in conjuction with HDAT1 to provide various information about
- * the current operating mode of the VSdsp. Where its value may represent different information based on 
+ * the current operating mode of the VSdsp. Where its value may represent different information based on
  * the value of HDAT1. Typically, HDAT0's value indicates something about the various speed or rate.
  * \see <A HREF = "http://www.vlsi.fi/en/products/vs1053.html"> VS1053 Datasheet</A>.
  */
@@ -208,7 +208,7 @@ extern SdFile track;
  * currently being decoded. After reset both registers are cleared, indicating no data has been found yet.
  *
  * The register is used in conjuction with HDAT0 to provide various information about
- * the current operating mode of the VSdsp. Where its value typically indicates the encoding format of the 
+ * the current operating mode of the VSdsp. Where its value typically indicates the encoding format of the
  * current stream of playback.
  * \see <A HREF = "http://www.vlsi.fi/en/products/vs1053.html"> VS1053 Datasheet</A>.
  */
@@ -217,23 +217,23 @@ extern SdFile track;
 /**
  * \brief A macro of the SCI AIADDR register's address (R/W)
  *
- * SCI_AIADDR is a Read/Write register indicates the start address of the application code written 
+ * SCI_AIADDR is a Read/Write register indicates the start address of the application code written
  * earlier with SCI_WRAMADDR and SCI_WRAM registers. If no application code is used, this register
- * should not be initialized,or it should be initialized to zero. For more details, 
+ * should not be initialized,or it should be initialized to zero. For more details,
  * \see Application Notes for VS10XX.
  *
- * \note Reading AIADDR is not recommended. It can cause samplerate to be set to a very low value. 
+ * \note Reading AIADDR is not recommended. It can cause samplerate to be set to a very low value.
  */
 #define SCI_AIADDR            0x0A
 
 /**
  * \brief A macro of the SCI VOL register's address (R/W)
  *
- * SCI_VOL is a Read/Write register to control master volume for the player hardware. 
- * The most significant byte of the volume register controls the left channel volume, 
- * the low part controls the right channel volume. The channel volume sets the attenuation from the 
+ * SCI_VOL is a Read/Write register to control master volume for the player hardware.
+ * The most significant byte of the volume register controls the left channel volume,
+ * the low part controls the right channel volume. The channel volume sets the attenuation from the
  * maximum volume level in 0.5 dB steps. Thus, maximum volume is 0x0000 and total silence is 0xFEFE.
- * 
+ *
  * \note After hardware reset the volume is set to full volume. Resetting the software does not reset the volume setting.
  *
  * Setting SCI_VOL to 0xFFFF will activate analog powerdown mode.
@@ -273,7 +273,7 @@ extern SdFile track;
 #define SCI_AICTRL3           0x0F
 
 /** End SCI_Register_Group
- *  /@} 
+ *  /@}
  */
 
 //------------------------------------------------------------------------------
@@ -412,7 +412,7 @@ extern SdFile track;
  * buffer is filled with data. This patch implements pause by stopping audio generation if
  * bit 13 in SCI_MODE is set.
  *
- * \note This is only available with patch loaded. Typically done with SFEMP3Shield::vs_init() 
+ * \note This is only available with patch loaded. Typically done with SFEMP3Shield::vs_init()
  */
 #define SM_PAUSE            0x2000  // note: Only availble with patch. This only quickly pauses the VS's internal buffer, when canceling quickly. It won't unpause.
 
@@ -434,7 +434,7 @@ extern SdFile track;
 #define SM_CLK_RANGE        0x8000
 
 /** End SCI_MODE_Group
- *  /@} 
+ *  /@}
  */
 
 //------------------------------------------------------------------------------
@@ -443,127 +443,127 @@ extern SdFile track;
  *  /@{
  */
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_chipID_0 register's address (R/W)
- *                                       
- * para_chipID_0 is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_chipID_0 is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * The fuse-programmed ID is read at startup and copied into the chipID field.
  * If not available the value will be all zeros.
- */                                      
+ */
 #define para_chipID_0       0x1E00
-                                         
-/**                                      
+
+/**
  * \brief A macro of the WRAM para_chipID_1 register's address (R/W)
- *                                       
- * para_chipID_1 is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_chipID_1 is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * The fuse-programmed ID is read at startup and copied into the chipID field.
  * If not available the value will be all zeros.
- */                                      
+ */
 #define para_chipID_1       0x1E01
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_version register's address (R/W)
- *                                       
- * para_version is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
  *
- * 
- */                                      
+ * para_version is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
+ *
+ *
+ */
 #define para_version        0x1E02
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_config1 register's address (R/W)
- *                                       
- * para_config1 is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_config1 is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * The version field can be used to determine the layout of the rest
  * of the structure. The version number is changed when the structure is changed. For VS1053b
  * the structure version is 3.
- */                                      
+ */
 #define para_config1        0x1E03
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_playSpeed register's address (R/W)
- *                                       
- * para_playSpeed is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_playSpeed is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * config1 controls MIDI Reverb and AAC’s SBR and PS settings.
- */                                      
+ */
 #define para_playSpeed      0x1E04
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_byteRate register's address (R/W)
- *                                       
- * para_byteRate is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_byteRate is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * playSpeed makes it possible to fast forward songs. Decoding of the bitstream is performed,
  * but only each playSpeed frames are played. For example by writing 4 to playSpeed will play
  * the song four times as fast as normal, if you are able to feed the data with that speed. Write 0
  * or 1 to return to normal speed. SCI_DECODE_TIME will also count faster. All current codecs
  * support the playSpeed configuration.
- */                                      
+ */
 #define para_byteRate       0x1E05
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_endFillByte register's address (R/W)
- *                                       
- * para_endFillByte is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_endFillByte is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * byteRate contains the average bitrate in bytes per second for every code. The value is updated
  * once per second and it can be used to calculate an estimate of the remaining playtime. This
  * value is also available in SCI_HDAT0 for all codecs except MP3, MP2, and MP1.
- */                                      
+ */
 #define para_endFillByte    0x1E06
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_positionMsec_0 register's address (R/W)
- *                                       
- * para_positionMsec_0 is a Read/Write Extra Parameter in X memory, accessed indirectly 
+ *
+ * para_positionMsec_0 is a Read/Write Extra Parameter in X memory, accessed indirectly
  * with the SCI_WRAMADDR and SCI_WRAM. Corresponding to the high 16 bit value of positionMsec
  *
  * positionMsec is a field that gives the current play position in a file in milliseconds, regardless
  * of rewind and fast forward operations. The value is only available in codecs that can determine
  * the play position from the stream itself. Currently WMA and Ogg Vorbis provide this information.
  * If the position is unknown, this field contains -1.
- */                                      
+ */
 
 #define para_positionMsec_0 0x1E27
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_positionMsec_1 register's address (R/W)
  *
- * para_positionMsec_1 is a Read/Write Extra Parameter in X memory, accessed indirectly 
+ * para_positionMsec_1 is a Read/Write Extra Parameter in X memory, accessed indirectly
  * with the SCI_WRAMADDR and SCI_WRAM. Corresponding to the high 16 bit value of positionMsec
  *
  * positionMsec is a field that gives the current play position in a file in milliseconds, regardless
  * of rewind and fast forward operations. The value is only available in codecs that can determine
  * the play position from the stream itself. Currently WMA and Ogg Vorbis provide this information.
  * If the position is unknown, this field contains -1.
- */                                      
+ */
 #define para_positionMsec_1 0x1E28
 
-/**                                      
+/**
  * \brief A macro of the WRAM para_resync register's address (R/W)
- *                                       
- * para_resync is a Read/Write Extra Parameter in X memory, accessed indirectly 
- * with the SCI_WRAMADDR and SCI_WRAM. 
+ *
+ * para_resync is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
  *
  * The resync field is set to 32767 after a reset to make resynchronization the default action, but
  * it can be cleared after reset to restore the old action. When resync is set, every file decode
  * should always end as described in Chapter 9.5.1.
- */                                      
+ */
 #define para_resync         0x1E29
 
 /** End Extra_Parameter_Group
- *  /@} 
+ *  /@}
  */
 
 #define TRUE                     1
@@ -575,36 +575,36 @@ extern SdFile track;
  *  /@{
  */
 
-/**                                      
+/**
  * \brief A macro of the offset for the track's Title
- *                                       
- * The offset from the begining of the ID3 tag for the location containing the track's Title of the 
+ *
+ * The offset from the begining of the ID3 tag for the location containing the track's Title of the
  * mp3 file being read from the SdCard.
- * 
+ *
  * \warning This may not be available on all source music files.
- */                                      
+ */
 #define TRACK_TITLE              3
-/**                                      
+/**
  * \brief A macro of the offset for the track's Artist
- *                                       
- * The offset from the begining of the ID3 tag for the location containing the track's Artist of the 
+ *
+ * The offset from the begining of the ID3 tag for the location containing the track's Artist of the
  * mp3 file being read from the SdCard.
- * 
+ *
  * \warning This may not be available on all source music files.
- */                                      
+ */
 #define TRACK_ARTIST            33
-/**                                      
+/**
  * \brief A macro of the offset for the track's Album
- *                                       
- * The offset from the begining of the ID3 tag for the location containing the track's Artist of the 
+ *
+ * The offset from the begining of the ID3 tag for the location containing the track's Artist of the
  * mp3 file being read from the SdCard.
- * 
+ *
  * \warning This may not be available on all source music files.
- */                                      
+ */
 #define TRACK_ALBUM             63
 
 /** End ID3_Tag_Group
- *  /@} 
+ *  /@}
  */
 
 //------------------------------------------------------------------------------
@@ -702,13 +702,13 @@ char* strip_nonalpha_inplace(char *s);
  * \brief A handler for accessing bytes of a word.
  *
  * Often individual bytes of a word are handled by bit shifting e.g.
- * \code 
+ * \code
  * Mp3WriteRegister(SCI_MODE, ((MP3SCI_MODE >> 8) & 0xFF), (MP3SCI_MODE & 0xFF) );
  * \endcode
  * This may lead to excessive shifts and worse; signed carries of the second shift,
  * If the casting is not correct.
  * This union allows a more efficient and simpler method to directly access the
- * individual bytes of the word. 
+ * individual bytes of the word.
  * And is convienent for handeling Endian issues. Where byte[0..1] can be
  * assigned specific endian and the word (aka uint16_t) can be used.
  */

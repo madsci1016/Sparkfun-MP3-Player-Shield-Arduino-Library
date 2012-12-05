@@ -1,3 +1,11 @@
+/**
+\file SFEMP3Shield.cpp
+
+\brief Code file for the SFEMP3Shield library
+\remarks comments are implemented with Doxygen Markdown format
+
+*/
+
 #include "SFEMP3Shield.h"
 // inslude the SPI library:
 #include "SPI.h"
@@ -8,13 +16,13 @@
  * \brief bitrate lookup table
  *
  * This is a table to decode the bitrate as per the MP3 file format,
- * as read by the SdCard 
+ * as read by the SdCard
  *
  * \link http://www.mp3-tech.org/programmer/frame_header.html \endlink
  * \note PROGMEM macro forces to Flash space.
  * \warning This consums 190 bytes of flash
  */
-PROGMEM uint16_t bitrate_table[15][6] = {  
+PROGMEM uint16_t bitrate_table[15][6] = {
                  { 0,   0,  0,  0,  0,  0}, //0000
                  { 32, 32, 32, 32,  8,  8}, //0001
                  { 64, 48, 40, 48, 16, 16}, //0010
@@ -85,6 +93,13 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  *
  * \return Any Value other than zero indicates a problem occured.
  * where value indicates specific error
+ * - 0 indicates that begin was successful.
+ * - 1 indicates failure of SdFat to initialize physical contact with the SdCard
+ * - 2 indicates failure of SdFat to start the SdCard's volume
+ * - 3 indicates failure of SdFat to mount the root directory on the volume of the SdCard
+ * - 4 indicates other than default values were found in the SCI_MODE register.
+ * - 5 indicates SCI_CLOCKF did not read back and verify the configured value.
+ * - 6 indicates patch was not loaded successfully. This may result in playTrack errors
  *
  * \see
  * \ref Error_Codes
@@ -102,7 +117,7 @@ uint8_t  SFEMP3Shield::begin() {
   cs_high();  //MP3_XCS, Init Control Select to deselected
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
-  
+
   //Setup SD card interface
   //Initialize the SD card and configure the I/O pins.
   if (!card.init(SPI_FULL_SPEED, SD_SEL)) return 1; // Serial.println(F("Error: Card init"));
@@ -113,7 +128,7 @@ uint8_t  SFEMP3Shield::begin() {
 
   uint8_t result = vs_init();
   if (result) {
-  	return result;
+    return result;
   }
 
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
@@ -147,9 +162,9 @@ uint8_t  SFEMP3Shield::begin() {
  * \ref Error_Codes
  */
 uint8_t SFEMP3Shield::vs_init() {
-	
+
   //Initialize VS1053 chip
-  
+
   //Reset if not already
   delay(100); // keep clear of anything prior
   digitalWrite(MP3_RESET, LOW); //Shut down VS1053
@@ -203,10 +218,16 @@ uint8_t SFEMP3Shield::vs_init() {
   int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
   if(MP3Clock != 0x6000) return 5;
 
-  if (VSLoadUserCode("patches.053")) Serial.println(F("Warning: patch file not found, skipping."));
-
   SetVolume(40, 40);
-  delay(100); // keep clear of anything prior
+  // one would think the following patch would over write the volume.
+  // But the SCI_VOL register space is not in the VSdsp's WRAM space.
+  // Note to keep an eye on it for future patches.
+
+  if (VSLoadUserCode("patches.053")) return 6;
+
+  delay(100); // just a good idea to let settle.
+
+  return 0; // indicating all was good.
 }
 
 //------------------------------------------------------------------------------
@@ -217,12 +238,12 @@ uint8_t SFEMP3Shield::vs_init() {
  * This can be used to load various VSdsp apps, patches and plug-in's.
  * Providing many new features and updates not present on the default firmware.
  *
- * The file format of the plugin is raw binary, in VLSI's interleaved and RLE 
+ * The file format of the plugin is raw binary, in VLSI's interleaved and RLE
  * compressed format, as extracted from the source plugin file (.plg).
- * A perl script \c vs_plg_to_bin.pl is provided to convert the .plg 
+ * A perl script \c vs_plg_to_bin.pl is provided to convert the .plg
  * file in to the binary filename.053. Where the extension of .053 is a
  * convention to indicate the VSdsp chip version.
- * 
+ *
  * \note by default all plug-ins are expected to be in the root of the SdCard.
  *
  * \return Any Value other than zero indicates a problem occured.
@@ -272,19 +293,19 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @{ 
+// @{
 // SelfTest_Group
 
 //------------------------------------------------------------------------------
 /**
  * \brief Generate Test Sine wave
  *
- * \param freq specifies the output frequency sine wave.
+ * \param[in] freq specifies the output frequency sine wave.
  *
  * Enable and/or report the generation of Test Sine Wave as per specified.
  * As specified by Data Sheet Section 9.12.1
  *
- * \return 
+ * \return
  * - -1 indicates the test can not be performed while currently streaming music.
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
@@ -299,7 +320,7 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
     Serial.println(F("Warning Tests are not available while playing."));
     return -1;
   }
-  
+
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
   if (MP3SCI_MODE & SM_TESTS) {
     return 2;
@@ -334,7 +355,7 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
  *
  * Disable and report the generation of Test Sine Wave as per specified.
  * As specified by Data Sheet Section 9.12.1
- * \return 
+ * \return
  * - -1 indicates the test can not be performed while currently streaming music.
  * - 0 indicates the test is not previously enabled and skipping disable.
  * - 1 indicates that test was disabled.
@@ -348,7 +369,7 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
     Serial.println(F("Warning Tests are not available while playing."));
     return -1;
   }
-  
+
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
   if (!(MP3SCI_MODE & SM_TESTS)) {
     return 0;
@@ -385,7 +406,7 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
  * Perform the internal memory test of the VSdsp core processor and resources.
  * As specified by Data Sheet Section 9.12.4
  *
- * \return 
+ * \return
  * - -1 indicates the test can not be performed while currently streaming music.
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
@@ -436,25 +457,25 @@ uint16_t SFEMP3Shield::memoryTest() {
 
   return MP3SCI_HDAT0;
 }
-// @} 
+// @}
 // SelfTest_Group
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @{ 
+// @{
 // Volume_Group
 
 //------------------------------------------------------------------------------
 /**
  * \brief Overload function of SFEMP3Shield::SetVolume(leftchannel, rightchannel)
  *
- * \param data packed with left and right master volume
+ * \param[in] data packed with left and right master volume
  *
  * calls SFEMP3Shield::SetVolume expecting the left channel in the upper byte
- * and right channel in the lower byte. 
+ * and right channel in the lower byte.
  *
  * As specified by Data Sheet Section 8.7.11
  *
- * \return 
+ * \return
  * - -1 indicates the test can not be performed while currently streaming music.
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
@@ -470,12 +491,12 @@ void SFEMP3Shield::SetVolume(uint16_t data) {
 
 //------------------------------------------------------------------------------
 /**
- * \brief Store and Push member volume to VS10xx chip 
+ * \brief Store and Push member volume to VS10xx chip
  *
- * \param leftchannel writes the left channel master volume
- * \param rightchannel writes the right channel master volume
+ * \param[in] leftchannel writes the left channel master volume
+ * \param[in] rightchannel writes the right channel master volume
  *
- * Updates the VS10xx SCI_VOL register's left and right master volume level in 
+ * Updates the VS10xx SCI_VOL register's left and right master volume level in
  * -0.5 dB Steps. Where maximum volume is 0x0000 and total silence is 0xFEFE.
  * As specified by Data Sheet Section 8.7.11
  *
@@ -490,41 +511,41 @@ void SFEMP3Shield::SetVolume(uint8_t leftchannel, uint8_t rightchannel){
 
 //------------------------------------------------------------------------------
 /**
- * \brief Get the current volume from the VS10xx chip 
+ * \brief Get the current volume from the VS10xx chip
  *
  * Read the VS10xx SC_VOL register and return its results
  * As specified by Data Sheet Section 8.7.11
  *
- * \return uint16_t of both channels of master volume. 
+ * \return uint16_t of both channels of master volume.
  * Where the left channel is in the upper byte and right channel is in the lower
  * byte.
  *
  * \note Input values are -1/2dB. e.g. 40 results in -20dB.
- * \note Cast the output to the union of twobyte.word to access individual 
+ * \note Cast the output to the union of twobyte.word to access individual
  * channels, with twobyte.byte[1] and [0].
  */
 uint16_t SFEMP3Shield::GetVolume() {
   uint16_t MP3SCI_VOL = Mp3ReadRegister(SCI_VOL);
   return MP3SCI_VOL;
 }
-// @} 
+// @}
 // Volume_Group
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @{ 
+// @{
 // PlaySpeed_Group
 
 //------------------------------------------------------------------------------
 /**
- * \brief Get the current playSpeed from the VS10xx chip 
+ * \brief Get the current playSpeed from the VS10xx chip
  *
- * Read the VS10xx extra parameter memory for playSpeed register and return its 
- * results. 
+ * Read the VS10xx extra parameter memory for playSpeed register and return its
+ * results.
  * As specified by Data Sheet Section 9.11.1
  *
  * \return multipler of current playspeed versus normal speed.
- * Where 0 and/or 1 are normal 1x speed. 
- * e.g. 4 to playSpeed will play the song four times as fast as normal, 
+ * Where 0 and/or 1 are normal 1x speed.
+ * e.g. 4 to playSpeed will play the song four times as fast as normal,
  * if you are able to feed the data with that speed.
  *
  * \warning Excessive playspeed beyond the ability to stream data between the
@@ -537,13 +558,13 @@ uint16_t SFEMP3Shield::GetPlaySpeed() {
 
 //------------------------------------------------------------------------------
 /**
- * \brief Set the current playSpeed of the VS10xx chip 
+ * \brief Set the current playSpeed of the VS10xx chip
  *
  * Write the VS10xx extra parameter memory for playSpeed register with the
  * desired multipler.
  *
- * Where 0 and/or 1 are normal 1x speed. 
- * e.g. 4 to playSpeed will play the song four times as fast as normal, 
+ * Where 0 and/or 1 are normal 1x speed.
+ * e.g. 4 to playSpeed will play the song four times as fast as normal,
  * if you are able to feed the data with that speed.
  * As specified by Data Sheet Section 9.11.1
  *
@@ -553,19 +574,19 @@ uint16_t SFEMP3Shield::GetPlaySpeed() {
 void SFEMP3Shield::SetPlaySpeed(uint16_t data) {
   Mp3WriteWRAM(para_playSpeed, data);
 }
-// @} 
+// @}
 //PlaySpeed_Group
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @{ 
+// @{
 // EarSpeaker_Group
 
 //------------------------------------------------------------------------------
 /**
- * \brief Get the current Spatial EarSpeaker setting from the VS10xx chip 
+ * \brief Get the current Spatial EarSpeaker setting from the VS10xx chip
  *
  * Read the VS10xx SCI_MODE register bits SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH
- * for current EarSpeaker and return its results as a composite integer. 
+ * for current EarSpeaker and return its results as a composite integer.
  * As specified by Data Sheet Section 8.7.1 and 8.4
  *
  * \return result between 0 and 3. Where 0 is OFF and 3 is maximum.
@@ -586,10 +607,10 @@ uint8_t SFEMP3Shield::GetEarSpeaker() {
 
 //------------------------------------------------------------------------------
 /**
- * \brief Set the current Spatial EarSpeaker setting of the VS10xx chip 
+ * \brief Set the current Spatial EarSpeaker setting of the VS10xx chip
  *
- * \param EarSpeaker integer value between 0 and 3. Where 0 is OFF and 3 is maximum.
- * 
+ * \param[in] EarSpeaker integer value between 0 and 3. Where 0 is OFF and 3 is maximum.
+ *
  * The input value is decoded into SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH bits
  * and written the VS10xx SCI_MODE register, preserving the remainder of SCI_MODE.
  * As specified by Data Sheet Section 8.7.1 and 8.4
@@ -612,22 +633,22 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
   Mp3WriteRegister(SCI_MODE, MP3SCI_MODE);
 //  Mp3WriteRegister(SCI_MODE, ((MP3SCI_MODE >> 8) & 0xFF), (MP3SCI_MODE & 0xFF) );
 }
-// @} 
+// @}
 // EarSpeaker_Group
 
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @{ 
+// @{
 // Play_Control_Group
 
 //------------------------------------------------------------------------------
 /**
  * \brief Begin playing a mp3 file, just with a number
  *
- * \param trackNo integer value between 0 and 9, corresponding to the track to play.
+ * \param[in] trackNo integer value between 0 and 9, corresponding to the track to play.
  *
- * Formats the input number into a corresponding filename, 
- * from track001.mp3 through track009.mp3. Then executes the track by 
+ * Formats the input number into a corresponding filename,
+ * from track001.mp3 through track009.mp3. Then executes the track by
  * calling SFEMP3Shield::playMP3(char* fileName)
  *
  * \return Any Value other than zero indicates a problem occured.
@@ -653,7 +674,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
 /**
  * \brief Begin playing a mp3 file by its filename.
  *
- * \param fileName pointer of a char array (aka string), contianing the filename
+ * \param[out] fileName pointer of a char array (aka string), contianing the filename
  *
  * Skip, if already playing. Otherwise initialize the SdCard track to desired filehandle.
  * Reset the ByteRate and Play position and set playing to indicate such.
@@ -666,7 +687,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  * \see
  * \ref Error_Codes
  *
- * \note enableRefill() will enable the appropiate interrupt to match the 
+ * \note enableRefill() will enable the appropiate interrupt to match the
  * corresponding means selected.
  */
 uint8_t SFEMP3Shield::playMP3(char* fileName) {
@@ -688,7 +709,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
   }
 
   playing = TRUE;
-  
+
   Mp3WriteRegister(SCI_DECODE_TIME, 0); // Reset the Decode and bitrate from previous play back.
   delay(100); // experimentally found that we need to let this settle before sending data.
 
@@ -705,7 +726,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
 /**
  * \brief Gracefully close track and cancel refill
  *
- * Skip if already not playing. Otherwise Disable the refill means, 
+ * Skip if already not playing. Otherwise Disable the refill means,
  * then set playing to false, close the filehandle track instance.
  * And finally flush the VSdsp's stream buffer.
  */
@@ -732,7 +753,7 @@ void SFEMP3Shield::stopTrack(){
  *
  * Public method for determining if a file is streaming to the VSdsp.
  *
- * \return 
+ * \return
  * - 0 indicates \b NO file is currently being streamed to the VSdsp.
  * - 1 indicates that a file is currently being streamed to the VSdsp.
  */
@@ -783,12 +804,12 @@ void SFEMP3Shield::resumeDataStream(){
 /**
  * \brief Skips to a certain point in the track
  *
- * \param offset milliseconds from the begining of the file.
+ * \param[in] offset milliseconds from the begining of the file.
  *
  * Repositions the filehandles track location to the requested offset.
  * As calculated by the bitrate multiplied by the desired ms offset.
  *
- * Skipped if not currently playing. 
+ * Skipped if not currently playing.
  *
  * \return
  * - 0 indicates the position was changed.
@@ -838,7 +859,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 /**
  * \brief Current timecode in ms
  *
- * Reads the currenty position from the VSdsp's decode time 
+ * Reads the currenty position from the VSdsp's decode time
  * and converts the value to milliseconds.
  *
  * \return the milliseconds offset of stream played.
@@ -846,7 +867,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
  * \note SCI_DECODE_TIME is cleared during SFEMP3Shield::playMP3, as to restart
  * the position for each file stream. Erasing prior streams weight.
  *
- * \warning Not very accurate, rounded off to second. And Variable Bit-Rates 
+ * \warning Not very accurate, rounded off to second. And Variable Bit-Rates
  * are completely inaccurate.
  */
 uint32_t SFEMP3Shield::currentPosition(){
@@ -854,20 +875,20 @@ uint32_t SFEMP3Shield::currentPosition(){
   return(Mp3ReadRegister(SCI_DECODE_TIME) << 10); // multiply by 1024 to convert to milliseconds.
 }
 
-// @} 
+// @}
 // Play_Control_Group
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// @{ 
+// @{
 // Audio_Information_Group
 
 //------------------------------------------------------------------------------
 /**
  * \brief Get Track's Artist
  *
- * \param infobuffer pointer char array to be updated with result
- * 
- * Extract the Artist from the current filehandles track ID3 tag information. 
+ * \param[out] infobuffer pointer char array to be updated with result
+ *
+ * Extract the Artist from the current filehandles track ID3 tag information.
  *
  * \warning ID3 Tag information may not be present on all source files.
  * Otherwise may result in non-sense.
@@ -881,9 +902,9 @@ void SFEMP3Shield::trackArtist(char* infobuffer){
 /**
  * \brief Get Track's Title
  *
- * \param infobuffer pointer char array to be updated with result
- * 
- * Extract the Title from the current filehandles track ID3 tag information. 
+ * \param[out] infobuffer pointer char array to be updated with result
+ *
+ * Extract the Title from the current filehandles track ID3 tag information.
  *
  * \warning ID3 Tag information may not be present on all source files.
  * Otherwise may result in non-sense.
@@ -897,8 +918,8 @@ void SFEMP3Shield::trackTitle(char* infobuffer){
 /**
  * \brief Get Track's Album
  *
- * \param infobuffer pointer char array to be updated with result
- * 
+ * \param[out] infobuffer pointer char array to be updated with result
+ *
  * Extract the Album from the current filehandles track ID3 tag information.
  *
  * \warning ID3 Tag information may not be present on all source files.
@@ -913,9 +934,9 @@ void SFEMP3Shield::trackAlbum(char* infobuffer){
 /**
  * \brief Fetch ID3 Tag information
  *
- * \param offset for the desired information desired.
- * \param infobuffer pointer char array of filename to be read.
- * 
+ * \param[in] offset for the desired information desired.
+ * \param[out] infobuffer pointer char array of filename to be read.
+ *
  * Read current filehandles offset of track ID3 tag information. Then strip
  * all non readible (ascii) characters.
  *
@@ -1020,7 +1041,7 @@ void SFEMP3Shield::getAudioInfo() {
   uint16_t MP3SCI_DECODE_TIME = Mp3ReadRegister(SCI_DECODE_TIME);
   Serial.print(F("\t\t"));
   Serial.print(MP3SCI_DECODE_TIME, DEC);
-  
+
   Serial.print(F("\t\t"));
   Serial.print(currentPosition(), DEC);
 
@@ -1031,15 +1052,15 @@ void SFEMP3Shield::getAudioInfo() {
 /**
  * \brief Read the Bit-Rate from the current track's filehandle.
  *
- * \param fileName pointer of a char array (aka string), contianing the filename
+ * \param[out] fileName pointer of a char array (aka string), contianing the filename
  *
  * locate the MP3 header in the current file and from there determine the
- * Bit-Rate, using bitrate_table located in flash. And return the position 
+ * Bit-Rate, using bitrate_table located in flash. And return the position
  * to the prior location.
  *
  * \note the bitrate will be updated, as read back from the VS10xx when needed.
  *
- * \warning This feature only works on MP3 files. 
+ * \warning This feature only works on MP3 files.
  * It will \b LOCK-UP on other file formats, looking for the MP3 header.
  */
 void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
@@ -1066,8 +1087,8 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
           else if((temp & 0b00000110) == 0b00000010) { //true if layer 3, false if layer 2 or 1
             row_num += 2;
           } else {
-          	continue; // Not found, need to skip the rest and continue looking.
-          	          // \warning But this can lead to a dead end and file end of file.
+            continue; // Not found, need to skip the rest and continue looking.
+                      // \warning But this can lead to a dead end and file end of file.
           }
 
           //parse bitrate code from next byte
@@ -1098,16 +1119,16 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
     }
   }
 
-// @} 
+// @}
 // Audio_Information_Group
 
 //------------------------------------------------------------------------------
 /**
  * \brief Force bit rate
  *
- * \param bitr new bit-rate
+ * \param[in] bitr new bit-rate
  *
- * Public method for forcing the percieved bit-rate to a desired value. 
+ * Public method for forcing the percieved bit-rate to a desired value.
  * Useful if auto-detect failed
  */
 void SFEMP3Shield::setBitRate(uint16_t bitr){
@@ -1120,8 +1141,8 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
 /**
  * \brief Select Control Channel
  *
- * Primative function to configure the SPI's Mode and rate control to that of 
- * the current VX10xx. Then select the VS10xx's Control Chip Select as per 
+ * Primative function to configure the SPI's Mode and rate control to that of
+ * the current VX10xx. Then select the VS10xx's Control Chip Select as per
  * defined by MP3_XCS.
  */
 void SFEMP3Shield::cs_low() {
@@ -1134,7 +1155,7 @@ void SFEMP3Shield::cs_low() {
 /**
  * \brief Deselect Control Channel
  *
- * Primative function to Deselect the VS10xx's Control Chip Select as per 
+ * Primative function to Deselect the VS10xx's Control Chip Select as per
  * defined by MP3_XCS.
  */
 void SFEMP3Shield::cs_high() {
@@ -1145,8 +1166,8 @@ void SFEMP3Shield::cs_high() {
 /**
  * \brief Select Data Channel
  *
- * Primative function to configure the SPI's Mode and rate control to that of 
- * the current VX10xx. Then select the VS10xx's Data Chip Select as per 
+ * Primative function to configure the SPI's Mode and rate control to that of
+ * the current VX10xx. Then select the VS10xx's Data Chip Select as per
  * defined by MP3_XDCS.
  */
 void SFEMP3Shield::dcs_low() {
@@ -1159,7 +1180,7 @@ void SFEMP3Shield::dcs_low() {
 /**
  * \brief Deselect Data Channel
  *
- * Primative function to Deselect the VS10xx's Control Data Select as per 
+ * Primative function to Deselect the VS10xx's Control Data Select as per
  * defined by MP3_XDCS.
  */
 void SFEMP3Shield::dcs_high() {
@@ -1170,10 +1191,10 @@ void SFEMP3Shield::dcs_high() {
 /**
  * \brief uint16_t Overload of SFEMP3Shield::Mp3WriteRegister
  *
- * \param addressbyte of the VSdsp's register to be written
- * \param data to writen to the register
+ * \param[in] addressbyte of the VSdsp's register to be written
+ * \param[in] data to writen to the register
  *
- * Forces the input value into the Big Endian Corresponding positions of 
+ * Forces the input value into the Big Endian Corresponding positions of
  * Mp3WriteRegister as to be written to the addressed VSdsp's registers.
  */
 void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint16_t data) {
@@ -1184,11 +1205,11 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint16_t data) {
 
 //------------------------------------------------------------------------------
 /**
- * \brief Write a value a VSDsp's register. 
+ * \brief Write a value a VSDsp's register.
  *
- * \param addressbyte of the VSdsp's register to be written
- * \param highbyte to writen to the register
- * \param lowbyte to writen to the register
+ * \param[in] addressbyte of the VSdsp's register to be written
+ * \param[in] highbyte to writen to the register
+ * \param[in] lowbyte to writen to the register
  *
  * Primative function to suspend playing and directly communicate over the SPI
  * to the VSdsp's registers. Where the value write is Big Endian (MSB first).
@@ -1227,7 +1248,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
 /**
  * \brief Read a VS10xx register
  *
- * \param addressbyte of the VSdsp's register to be read
+ * \param[in] addressbyte of the VSdsp's register to be read
  * \return result read from the register
  *
  * Primative function to suspend playing and directly communicate over the SPI
@@ -1270,7 +1291,7 @@ uint16_t SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
 /**
  * \brief Read a VS10xx WRAM Location
  *
- * \param addressbyte of the VSdsp's WRAM to be read
+ * \param[in] addressbyte of the VSdsp's WRAM to be read
  * \return result read from the WRAM
  *
  * Function to communicate to the VSdsp's registers, indirectly accessing the WRAM.
@@ -1302,8 +1323,8 @@ uint16_t SFEMP3Shield::Mp3ReadWRAM (uint16_t addressbyte){
 /**
  * \brief Write a VS10xx WRAM Location
  *
- * \param addressbyte of the VSdsp's WRAM to be read
- * \param data written to the VSdsp's WRAM
+ * \param[in] addressbyte of the VSdsp's WRAM to be read
+ * \param[in] data written to the VSdsp's WRAM
  *
  * Function to communicate to the VSdsp's registers, indirectly accessing the WRAM.
  */
@@ -1318,7 +1339,7 @@ void SFEMP3Shield::Mp3WriteWRAM(uint16_t addressbyte, uint16_t data){
 /**
  * \brief Public interface of refill.
  *
- * Serves as a helper as to correspondingly run either the timer service or run 
+ * Serves as a helper as to correspondingly run either the timer service or run
  * the refill() direclty, depending upon the configured means for refilling.
  */
 void SFEMP3Shield::available() {
@@ -1335,12 +1356,12 @@ void SFEMP3Shield::available() {
  *
  * This the primative function to refilling the VSdsp's buffers. And is
  * typically called as an interrupt to the rising edge of the VS10xx's DREQ.
- * Where if the DREQ is indicating not full, it will read 32 bytes from the 
+ * Where if the DREQ is indicating not full, it will read 32 bytes from the
  * filehandle's track and send them via SPI to the VSdsp's data stream buffer.
  * Repeating until the DREQ indicates it is full.
  *
  * When the filehandle's track indicates it is at the end of file. The track is
- * closed, the playing indicator is set to false, interrupts for refilling are 
+ * closed, the playing indicator is set to false, interrupts for refilling are
  * disabled and the VSdsp's data stream buffer is flushed appropiately.
  */
 void SFEMP3Shield::refill() {
@@ -1414,11 +1435,11 @@ void SFEMP3Shield::disableRefill() {
 /**
  * \brief flush the VSdsp buffer and cancel
  *
- * \param mode is an enumerated value of flush_m
- * 
- * Typically called after a filehandlers' stream has been stopped, as to 
- * gracefully flush any buffer contents still playing. Along with issueing a 
- * SM_CANCEL to the VSdsp's SCI_MODE register. 
+ * \param[in] mode is an enumerated value of flush_m
+ *
+ * Typically called after a filehandlers' stream has been stopped, as to
+ * gracefully flush any buffer contents still playing. Along with issueing a
+ * SM_CANCEL to the VSdsp's SCI_MODE register.
 
  * - post - will flush vx10xx's 2K buffer after cancelled, typically with stopping a file, to have immediate affect.
  * - pre  - will flush buffer prior to issuing cancel, typically to allow completion of file
@@ -1475,7 +1496,7 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
 /**
  * \brief chomp non printable characters out of string.
  *
- * \param s pointer of a char array (aka string)
+ * \param[out] s pointer of a char array (aka string)
  *
  * \return char array (aka string) with out whitespaces
  */

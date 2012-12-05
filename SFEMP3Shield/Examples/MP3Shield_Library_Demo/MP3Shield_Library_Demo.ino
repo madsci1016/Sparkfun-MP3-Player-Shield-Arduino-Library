@@ -1,20 +1,22 @@
-/**************************************
-*
-*  Example for Sparkfun MP3 Shield Library
-*      By: Bill Porter
-*      www.billporter.info
-*
-*   Function:
-*      This sketch listens for commands from a serial terminal (like the Serial Monitor in
-*      the Arduino IDE). If it sees 1-9 it will try to play an MP3 file named track00x.mp3
-*      where x is a number from 1 to 9. For eaxmple, pressing 2 will play 'track002.mp3'.
-*      A lowe case 's' will stop playing the mp3.
-*      'f' will play an MP3 by calling it by it's filename as opposed to a track number.
-*
-*      Sketch assumes you have MP3 files with filenames like
-*      "track001.mp3", "track002.mp3", etc on an SD card loaded into the shield.
-*
-***************************************/
+/**
+ * \file SMP3Shield_Library_Demo.ino
+ *
+ * \brief Example sketch of using the SMP3Shield Arduino driver
+ * \remarks comments are implemented with Doxygen Markdown format
+ *
+ * \author Bill Porter
+ * \author Michael P. Flaga
+ *
+ * This sketch listens for commands from a serial terminal (like the Serial
+ * Monitor in the Arduino IDE). If it sees 1-9 it will try to play an MP3 file
+ * named track00x.mp3 where x is a number from 1 to 9. For eaxmple, pressing
+ * 2 will play 'track002.mp3'. A lowe case 's' will stop playing the mp3.
+ * 'f' will play an MP3 by calling it by it's filename as opposed to a track
+ * number.
+ *
+ * Sketch assumes you have MP3 files with filenames like "track001.mp3",
+ * "track002.mp3", etc on an SD card loaded into the shield.
+ */
 
 #include <SPI.h>
 
@@ -41,13 +43,26 @@ char title[30];
 char artist[30];
 char album[30];
 
+//------------------------------------------------------------------------------
+/**
+ * \brief Setup the Arduino Chip's feature for our use.
+ *
+ * After Arduino's kernel has booted initialize basic features for this
+ * application, such as Serial port and MP3player objects with .begin.
+ * Along with displaying the Help Menu.
+ *
+ * \note returned Error codes are typically passed up from MP3player.
+ * Whicn in turns creates and initializes the SdCard objects.
+ *
+ * \see
+ * \ref Error_Codes
+ */
 void setup() {
   Serial.begin(115200);
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
   Serial.println(F(" Should be a base line of 1007, on ATmega328 when using INTx"));
-
 
   //boot up the MP3 Player Shield
   result = MP3player.begin();
@@ -56,10 +71,25 @@ void setup() {
     Serial.print(F("Error code: "));
     Serial.print(result);
     Serial.println(F(" when trying to start MP3 player"));
+    if ( result == 6 ) {
+      Serial.println(F("Warning: patch file not found, skipping.")); // can be removed for space, if needed.
+      Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
+    }
   }
   help();
 }
 
+//------------------------------------------------------------------------------
+/**
+ * \brief Main Loop the Arduino Chip
+ *
+ * This is called at the end of Arduino kernel's main loop before recycling.
+ * And is where the user's serial input of bytes are read and analyzed by
+ * parsed_menu.
+ *
+ * Additionally, if the means of refilling is not interrupt based then the
+ * MP3player object is serviced with the availaible function.
+ */
 void loop() {
 
 // Below is only needed if not interrupt driven. Safe to remove if not using.
@@ -77,6 +107,14 @@ void loop() {
   delay(100);
 }
 
+//------------------------------------------------------------------------------
+/**
+ * \brief Decode the Menu.
+ *
+ * Parses through the bytes of the users input, executing corresponding
+ * MP3player functions and features and displaying a brief menu and prompt for
+ * next input command.
+ */
 void parse_menu(byte key_command) {
 
   Serial.print(F("Received command: "));
@@ -252,9 +290,15 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i>,<,p,r,R,t,m :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,h :"));
 }
 
+//------------------------------------------------------------------------------
+/**
+ * \brief Print Help Menu.
+ *
+ * Prints a full menu of the commands available along with descriptions.
+ */
 void help() {
   Serial.println(F("Arduino SFEMP3Shield Library Example:"));
   Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));

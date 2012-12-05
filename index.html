@@ -81,24 +81,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#Intro">Introduction</a></li>
-<li class="level1"><a href="#Contributers">Contributers</a></li>
-<li class="level1"><a href="#SDcard">SD\SDHC Cards</a></li>
-<li class="level1"><a href="#Hardware">Hardware Configuration</a></li>
-<li class="level1"><a href="#comment">Bugs and Comments</a></li>
-<li class="level1"><a href="#SdFatClass">SdFat Usage</a></li>
-<li class="level1"><a href="#References">References</a></li>
+<li class="level1"><a href="#Contributors">Contributors</a></li>
+<li class="level1"><a href="#Requirements">Requirements</a></li>
 <li class="level1"><a href="#Installation">Installation</a></li>
-<li class="level1"><a href="#Error_Codes">Error Codes</a></li>
+<li class="level1"><a href="#Hardware">Hardware</a><ul><li class="level2"><a href="#ArduinoMega">ArduinoMega</a></li>
+<li class="level2"><a href="#Seeeduino">Seeeduino</a></li>
+<li class="level2"><a href="#limitation">Limitations.</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#Troubleshooting">Troubleshooting</a></li>
+<li class="level1"><a href="#comment">Support</a></li>
 <li class="level1"><a href="#Plug_Ins">Plug Ins</a></li>
+<li class="level1"><a href="#Error_Codes">Error Codes</a><ul><li class="level2"><a href="#beginfunc">begin function:</a></li>
+<li class="level2"><a href="#playfunc">Playing functions:</a></li>
+<li class="level2"><a href="#skipTofunc">Playing function:</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#References">References</a></li>
 </ul>
 </div>
 <div class="textblock"><center>Copyright &copy; 2012 </center><h1><a class="anchor" id="Intro"></a>
 Introduction</h1>
 <p>The Arduino <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's</p>
-<p>Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Seeduino MP3 Player Shield and documention is provied as to how to implement on a Arduino Mega. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.</p>
-<p>The main classes in <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> is <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a>.</p>
-<h1><a class="anchor" id="Contributers"></a>
-Contributers</h1>
+<p>Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Seeduino MP3 Player Shield. <a class="el" href="index.html#Hardware">Hardware</a> and documentation is provided as to how to implement this and an Arduino Mega. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.</p>
+<h1><a class="anchor" id="Contributors"></a>
+Contributors</h1>
 <dl class="section author"><dt>Author</dt><dd>Nathan Seidle, www.sparkfun.com </dd>
 <dd>
 Bill Porter, www.billporter.info </dd>
@@ -108,37 +115,163 @@ Michael Flaga, www.flaga.net </dd>
 ddz </dd>
 <dd>
 Wade Brainerd</dd></dl>
-<p>The <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> use SdFile class</p>
-<p>The SdVolume class supports FAT16 and FAT32 partitions. Most applications will not need to call SdVolume member function.</p>
-<p>The Sd2Card class supports access to standard SD cards and SDHC cards. Most applications will not need to call Sd2Card functions. The Sd2Card class can be used for raw access to the SD card.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>speed up digitalwrites by using SdFat's atomwrite</dd></dl>
+<h1><a class="anchor" id="Requirements"></a>
+Requirements</h1>
+<ul>
+<li>Software<ul>
+<li>Arduino 1.0 IDE or greater.</li>
+<li>The most current <a href="https://github.com/mpflaga/Sparkfun-MP3-Player-Shield-Arduino-Library.git">SFEMP3Shield Driver </a></li>
+<li>SdFat Driver, while included a newer version may retrieved from <a href="http://code.google.com/p/sdfatlib/">SdFatLib' repository </a>.</li>
+<li>Optionally, used if Hardware Interrupts are not supported:<ul>
+<li><a href="http://www.arduino.cc/playground/Code/SimpleTimer#GetTheCode">SimpleTimer.h </a>. library can be downloaded from for library.</li>
+<li><a href="http://code.google.com/p/arduino-timerone/">TimerOne.h </a>. library can be downloaded from for library.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Hardware<ul>
+<li>Arduino 328 UNO/Duemilanove or better.</li>
+<li>Shield or break out with appropiate pins wired up.</li>
+<li>Shield or break out for SdCard</li>
+<li>SdCard FAT formatted with valid <a href="http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">Audio files</a> and filenames</li>
+</ul>
+</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>This library was originally developed on IDE 0.2x and later ported to 1.x. Compatibility was lost with use of the Serial.print(F("...")) and can be restored by replacing it with SdFat's PgmPrint function</dd></dl>
+<h1><a class="anchor" id="Installation"></a>
+Installation</h1>
+<p>To install 1, 2, 3 !</p>
+<ol type="1">
+<li>unzip and place './SFEMP3Shield' and './SdFat' folder into your 'C:/Users/{user name}/Documents/Arduino/libraries' folder or '{Arduino IDE path}/hardware/libraries" or {Arduino IDE path}/libraries" directory.<ul>
+<li>Along with SimpleTimer and or TimerOne if needed. Restart the Arduino IDE, and open up the example sketch.</li>
+</ul>
+</li>
+<li>Copy the contents of this projects the './plugins' folder onto the root of the SdCard to be used. Along with desired audio files named appropriately; track001.mp3 through track009.mp3.<ul>
+<li>The plugins and audio files are <b>not</b> needed to be placed into the Arduino directories as they are not directly a part of the compiled project.</li>
+</ul>
+</li>
+<li>Start IDE, load Example MP3Shield_Library_Demo.ino, select appropriate Board, Serial Port, Compile, load, run Serial Monitor at 115200 baud rate.<ul>
+<li>May need to Reset target Arduino and wait for Menu.</li>
+</ul>
+</li>
+</ol>
 <p>An example is provided in the SFEMP3Shield/examples folder. Which is developed to test <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> and illustrate its various common uses.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>SdFat was developed for high speed data recording. SdFat was used to implement an audio record/play class, WaveRP, for the Adafruit Wave Shield. This application uses special Sd2Card calls to write to contiguous files in raw mode. These functions reduce write latency so that audio can be recorded with the small amount of RAM in the Arduino.</dd></dl>
-<h1><a class="anchor" id="SDcard"></a>
-SD\SDHC Cards</h1>
-<p>Arduinos access SD cards using the cards SPI protocol. PCs, Macs, and most consumer devices use the 4-bit parallel SD protocol. A card that functions well on A PC or Mac may not work well on the Arduino.</p>
-<p>Most cards have good SPI read performance but cards vary widely in SPI write performance. Write performance is limited by how efficiently the card manages internal erase/remapping operations. The Arduino cannot optimize writes to reduce erase operations because of its limit RAM.</p>
-<p>SanDisk cards generally have good write performance. They seem to have more internal RAM buffering than other cards and therefore can limit the number of flash erase operations that the Arduino forces due to its limited RAM.</p>
 <h1><a class="anchor" id="Hardware"></a>
-Hardware Configuration</h1>
-<p><a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> was developed using an <a href="http://www.sparkfun.com/">Sparkfun Electonics</a> <a href="https://www.sparkfun.com/products/10628">MP3 Player Shield DEV-10628</a>.</p>
-<p>The hardware interface to the SD card should not use a resistor based level shifter. SdFat sets the SPI bus frequency to 8 MHz which results in signal rise times that are too slow for the edge detectors in many newer SD card controllers when resistor voltage dividers are used.</p>
-<p>The 5 to 3.3 V level shifter for 5 V Arduinos should be IC based like the 74HC4050N based circuit shown in the file SdLevel.png. The Adafruit Wave Shield uses a 74AHC125N. Gravitech sells SD and MicroSD Card Adapters based on the 74LCX245.</p>
-<p>If you are using a resistor based level shifter and are having problems try setting the SPI bus frequency to 4 MHz. This can be done by using card.init(SPI_HALF_SPEED) to initialize the SD card.</p>
+Hardware</h1>
+<p>As mentioned the initial and principal support of this library is with Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Although various other boards and shields may be implemented by customing the <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a> file.</p>
+<h2><a class="anchor" id="ArduinoMega"></a>
+ArduinoMega</h2>
+<p>Support for Arduino Mega's is documented <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a>, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. \</p>
+<h2><a class="anchor" id="Seeeduino"></a>
+Seeeduino</h2>
+<p>Support for Seeeduino please see <a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a67a5bb336baa6444775e21f2e2d53f98">SEEEDUINO</a> and may require additional libraries, as per <a class="el" href="index.html#Requirements">Requirements</a></p>
+<h2><a class="anchor" id="limitation"></a>
+Limitations.</h2>
+<ul>
+<li>The SPI Bus: The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.</li>
+</ul>
+<ul>
+<li>Non-Blocking: The controlling sketch needs to enquire via isPlaying as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.</li>
+</ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite</dd></dl>
+<h1><a class="anchor" id="Troubleshooting"></a>
+Troubleshooting</h1>
+<p>The below is a list of basic questions to ask when attempting to determine the problem.</p>
+<ul>
+<li>Did it initially <b>PRINT</b> the available RAM and Full Help Menu?<ul>
+<li>The MP3Shield_Library_Demo.ino example should initially provide a opening print indicating the amount of available SRAM and full menu help. If you don't see this the problem is between your Target and IDE. And likely not this library</li>
+<li>Is Serial Monitor set to the correct tty or com port and 115200 baud rate? Did you change the baud rate?</li>
+<li>Reset the Arduino after Serial Monitor is open or send any key. It may have printed these prior to the Serial Monitor being started.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><b>WHAT</b> is the Error reported?<ul>
+<li>Is the Error Code is indicating a file problem. Use the 'd' menu command to display contents of the SdCard. See also <a class="el" href="index.html#Error_Codes">Error Codes</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Did the SdCard <b>LOAD</b>?<ul>
+<li>Try reseating your SdCard.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Is it <b>FAT</b> (FAT16 or FAT32)?<ul>
+<li>If the Error Code is indicating problems with the INIT, VOLUME or Track not being successful. It is recommend to use SdFat Example Library's QuickStart.ino as to see if it can access the card. Additionaly, SdInfo.ino may indicate if it can mount the card. Which may then need to formatted in FAT16 or FAT32. Where SdFormatter.ino can do this for you.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Are the needed files on the <b>root</b>?<ul>
+<li>Remember to put patch and audio track files on the SdCard after formatting.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><pre>Error code: 1 when trying to play track</pre><ul>
+<li>See the above <a class="el" href="index.html#limitation">Limitations.</a> about Non-Blocking.</li>
+<li>Remember to check your audio cables and volume.</li>
+</ul>
+</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.</dd></dl>
 <h1><a class="anchor" id="comment"></a>
-Bugs and Comments</h1>
-<p>If you wish to report bugs or have comments, send email to <a href="#" onclick="location.href='mai'+'lto:'+'fat'+'16'+'lib'+'@s'+'bcg'+'lo'+'bal'+'.n'+'et'; return false;">fat16<span style="display: none;">.nosp@m.</span>lib@<span style="display: none;">.nosp@m.</span>sbcgl<span style="display: none;">.nosp@m.</span>obal<span style="display: none;">.nosp@m.</span>.net</a>.</p>
-<h1><a class="anchor" id="SdFatClass"></a>
-SdFat Usage</h1>
-<p>SdFat uses a slightly restricted form of short names. Only printable ASCII characters are supported. No characters with code point values greater than 127 are allowed. Space is not allowed even though space was allowed in the API of early versions of DOS.</p>
-<p>Short names are limited to 8 characters followed by an optional period (.) and extension of up to 3 characters. The characters may be any combination of letters and digits. The following special characters are also allowed:</p>
-<p>$ % ' - _ @ ~ ` ! ( ) { } ^ # &amp;</p>
-<p>Short names are always converted to upper case and their original case value is lost.</p>
-<dl class="section note"><dt>Note</dt><dd>The Arduino Print class uses character at a time writes so it was necessary to use a <a class="el" href="">sync() </a> function to control when data is written to the SD card.</dd></dl>
-<dl class="section user"><dt></dt><dd>An application which writes to a file using print(), println() or <a class="el" href="">write() </a> must call <a class="el" href="">sync() </a> at the appropriate time to force data and directory information to be written to the SD Card. Data and directory information are also written to the SD card when <a class="el" href="">close() </a> is called.</dd></dl>
-<dl class="section user"><dt></dt><dd>Applications must use care calling <a class="el" href="">sync() </a> since 2048 bytes of I/O is required to update file and directory information. This includes writing the current data block, reading the block that contains the directory entry for update, writing the directory block back and reading back the current data block.</dd></dl>
-<p>It is possible to open a file with two or more instances of SdFile. A file may be corrupted if data is written to the file by more than one instance of SdFile.</p>
-<h1><a class="anchor" id="References"></a>
+Support</h1>
+<p>The code has been written with plenty of appropiate comments, describing key components, features and reasonings in Doxygen markdown style as to autogenerate this html suppoting document. Which is loaded into the repositories' gh-page branch to be displayed on the projects's GitHub Page.</p>
+<p>Additional support may be reached from any of the following: Please read through this document and refering linked resources.</p>
+<ul>
+<li><a href="http://www.billporter.info/forum/forum/sparkfun-mp3-shield-support-forum/">Bills WordPress forum </a></li>
+<li><a href="https://github.com/mpflaga/Sparkfun-MP3-Player-Shield-Arduino-Library/issues">Flaga's github Issues forum </a></li>
+<li><a href="https://github.com/madsci1016/Sparkfun-MP3-Player-Shield-Arduino-Library/issues">Bill's github Issues forum </a></li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>Problems with SdCard initializing is outside the scope of this library. <a href="http://code.google.com/p/sdfatlib/">SdFatLib' repository </a> was selected being the best choice.</dd></dl>
+<h1><a class="anchor" id="Plug_Ins"></a>
+Plug Ins</h1>
+<p>..pl is a perl script that will read and digest the .plg files and convert them to raw binary as to be read by <a class="el" href="class_s_f_e_m_p3_shield.html#a265916fb004e8bf98d14eaa415cc28a5" title="load VS1xxx with patch or plugin from file on SDcard.">SFEMP3Shield::VSLoadUserCode()</a> from the SdCard. Allowing updates to the VSDsp into its volatile memory after each reset. These updates may be custom features or accumulated patches.</p>
+<p>By storing them on the SdCard these plug-ins do not consume the Arduino's limited Flash spaces</p>
+<p>Below are pre-compiled binary's of corresponding provided VSLI patches/plugins. The filenames are kept short as SdCard only support 8.3.</p>
+<pre>
+.\pcm.053       .\vs1053-pcm110\vs1053pcm.plg
+.\admxleft.053  .\vs1053b-admix130\admix-left.plg
+.\admxmono.053  .\vs1053b-admix130\admix-mono.plg
+.\admxrght.053  .\vs1053b-admix130\admix-right.plg
+.\admxster.053  .\vs1053b-admix130\admix-stereo.plg
+.\admxswap.053  .\vs1053b-admix130\admix-swap.plg
+.\patchesf.053  .\vs1053b-patches195\vs1053b-patches-flac.plg
+.\patches.053   .\vs1053b-patches195\vs1053b-patches.plg
+.\rtmidi.053    .\vs1053b-rtmidistart\rtmidistart.plg
+.\eq5.053       .\vs1053b-eq5-090\vs1053b-eq5.plg
+</pre><dl class="section note"><dt>Note</dt><dd>These plugins should be placed in the root of the SdCard.</dd></dl>
+<h1><a class="anchor" id="Error_Codes"></a>
+Error Codes</h1>
+<p>Error Codes typically are returned from this Library's object's in place of Serial.print messages. As to both save Flash space and Serial devices may not always be present. Where it becomes the responsibility of the calling sketch of the library's object to appropiately react or display corresponding messages.</p>
+<h2><a class="anchor" id="beginfunc"></a>
+begin function:</h2>
+<p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">SFEMP3Shield::begin()</a> member function. </p>
+<pre>
+0 OK
+1 SD Card Init Failure
+2 SD Card File System (FAT) init failure
+3 SD Card Root Directory init failure
+4 MP3 Decoder mode failure
+5 MP3 Decoder speed failure
+</pre><h2><a class="anchor" id="playfunc"></a>
+Playing functions:</h2>
+<p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#a6c9b14ae792c9140a81236a36bcb707b" title="Begin playing a mp3 file, just with a number.">SFEMP3Shield::playTrack()</a> or <a class="el" href="class_s_f_e_m_p3_shield.html#ad1ece30ac83aa91c9295a83f8d69e6e3" title="Begin playing a mp3 file by its filename.">SFEMP3Shield::playMP3()</a> member functions. </p>
+<pre>
+0 OK
+1 Already playing track
+2 File not found
+</pre><h2><a class="anchor" id="skipTofunc"></a>
+Playing function:</h2>
+<p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#aa9f035dad97e78bc501f05575a931754" title="Skips to a certain point in the track.">SFEMP3Shield::skipTo()</a>member function. </p>
+<pre>
+0 OK
+1 Not Playing track
+2 Failed to skip to new file location
+</pre><h1><a class="anchor" id="References"></a>
 References</h1>
 <dl class="section see"><dt>See Also</dt><dd></dd></dl>
 <p><a href="http://www.vlsi.fi/en/products/vs1053.html">VS1053 Datasheet</a>.</p>
@@ -147,55 +280,15 @@ References</h1>
 <p><a href="http://www.vlsi.fi/fileadmin/app_notes/vlsi/vs10XXan_output.pdf">VS10XX AppNote: Connecting analog outputs</a>.</p>
 <p><a href="http://www.sparkfun.com/">Sparkfun Electonics</a></p>
 <p><a href="https://www.sparkfun.com/products/10628">MP3 Player Shield DEV-10628</a>.</p>
+<p><a href="http://www.sparkfun.com/tutorials/295">MP3 Player Shield Landing Page / Tutorials</a>.</p>
 <p><a href="http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3%20Shield-v13.pdf">SFE's Schematic</a>.</p>
 <p><a href="http://www.adafruit.com/">Adafruit Industries:</a>.</p>
 <p><a href="http://www.arduino.cc/">The Arduino site</a>.</p>
-<p><a href="http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf">The ATmega328 datasheet</a>.</p>
-<h1><a class="anchor" id="Installation"></a>
-Installation</h1>
-<p>To install, unzip and place '<a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a>', 'SdFat' and 'plugins' folder into your 'C:\{user name}' folder or '{Arduino IDE path}" or {Arduino IDE path}\libraries" directory. Restart the Arduino IDE, and open up the example sketch.</p>
-<p>Most of the uses of the library are in the example sketch.</p>
-<h1><a class="anchor" id="Error_Codes"></a>
-Error Codes</h1>
-<p>From the 'begin' function: </p>
-<pre>
-0 OK
-1 SD Card Init Failure
-2 SD Card File System (FAT) init failure
-3 SD Card Root Directory init failure
-4 MP3 Decoder mode failure
-5 MP3 Decoder speed failure
-</pre><p>From the 'playTrack' or 'playMP3' function: </p>
-<pre>
-0 OK
-1 Already playing track
-2 File not found
-</pre><p>From the 'skipTo' function </p>
-<pre>
-0 OK
-1 Not Playing track
-2 Failed to skip to new file location
-</pre><h1><a class="anchor" id="Plug_Ins"></a>
-Plug Ins</h1>
-<p>..pl is a perl script that will read and digest the .plg files and convert them to raw binary as to be read by <a class="el" href="class_s_f_e_m_p3_shield.html#a265916fb004e8bf98d14eaa415cc28a5" title="load VS1xxx with patch or plugin from file on SDcard.">SFEMP3Shield::VSLoadUserCode()</a> from the SdCard. Allowing updates to the VSDsp into its volatile memory after each reset. These updates may be custom features or accumilated patches.</p>
-<p>By storing them on the SdCard these plug-ins do not consume the Arduino's limited Flash spaces</p>
-<p>Below are pre-compiled binarys of corresponding provided VSLI patches/plugins. The filenames are kept short as SdCard only support 8.3.</p>
-<pre>
-.\pcm.053       .\vs1053-pcm110\vs1053pcm.plg                 
-.\admxleft.053  .\vs1053b-admix130\admix-left.plg             
-.\admxmono.053  .\vs1053b-admix130\admix-mono.plg             
-.\admxrght.053  .\vs1053b-admix130\admix-right.plg            
-.\admxster.053  .\vs1053b-admix130\admix-stereo.plg           
-.\admxswap.053  .\vs1053b-admix130\admix-swap.plg             
-.\patchesf.053  .\vs1053b-patches195\vs1053b-patches-flac.plg 
-.\patches.053   .\vs1053b-patches195\vs1053b-patches.plg      
-.\rtmidi.053    .\vs1053b-rtmidistart\rtmidistart.plg         
-.\eq5.053       .\vs1053b-eq5-090\vs1053b-eq5.plg        
-</pre><p>These plugins should be placed in the root of the SdCard. </p>
+<p><a href="http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf">The ATmega328 datasheet</a>. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 3 2012 23:42:04 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 4 2012 22:21:47 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

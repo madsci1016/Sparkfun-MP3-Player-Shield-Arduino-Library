@@ -330,7 +330,16 @@ Static Private Attributes</h2></td></tr>
 
 <p>Initialize the MP3 Player shield. </p>
 <p>Execute this function before anything else, typically during setup(). It will create an instance of SdFat's card, volume and root. and initialize the VS10xx with <a class="el" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a" title="Initialize the VS10xx Audio Decoder Chip.">vs_init()</a></p>
-<dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error<ul>
+<li>0 indicates that begin was successful.</li>
+<li>1 indicates failure of SdFat to initialize physical contact with the SdCard</li>
+<li>2 indicates failure of SdFat to start the SdCard's volume</li>
+<li>3 indicates failure of SdFat to mount the root directory on the volume of the SdCard</li>
+<li>4 indicates other than default values were found in the SCI_MODE register.</li>
+<li>5 indicates SCI_CLOCKF did not read back and verify the configured value.</li>
+<li>6 indicates patch was not loaded successfully. This may result in playTrack errors</li>
+</ul>
+</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a></dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>it may have problems with other instances of SdFat handles, if used at the same time. </dd></dl>
 
@@ -555,7 +564,7 @@ Static Private Attributes</h2></td></tr>
 <p>Generate Test Sine wave. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">freq</td><td>specifies the output frequency sine wave.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">freq</td><td>specifies the output frequency sine wave.</td></tr>
   </table>
   </dd>
 </dl>
@@ -596,7 +605,7 @@ Static Private Attributes</h2></td></tr>
 <p>flush the VSdsp buffer and cancel </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mode</td><td>is an enumerated value of flush_m</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>is an enumerated value of flush_m</td></tr>
   </table>
   </dd>
 </dl>
@@ -656,7 +665,7 @@ Static Private Attributes</h2></td></tr>
 <p>Read the Bit-Rate from the current track's filehandle. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
   </table>
   </dd>
 </dl>
@@ -741,8 +750,8 @@ Static Private Attributes</h2></td></tr>
 <p>Fetch ID3 Tag information. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">offset</td><td>for the desired information desired. </td></tr>
-    <tr><td class="paramname">infobuffer</td><td>pointer char array of filename to be read.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>for the desired information desired. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">infobuffer</td><td>pointer char array of filename to be read.</td></tr>
   </table>
   </dd>
 </dl>
@@ -846,7 +855,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Read a VS10xx register. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's register to be read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addressbyte</td><td>of the VSdsp's register to be read </td></tr>
   </table>
   </dd>
 </dl>
@@ -880,7 +889,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Read a VS10xx WRAM Location. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's WRAM to be read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addressbyte</td><td>of the VSdsp's WRAM to be read </td></tr>
   </table>
   </dd>
 </dl>
@@ -930,9 +939,9 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Write a value a VSDsp's register. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's register to be written </td></tr>
-    <tr><td class="paramname">highbyte</td><td>to writen to the register </td></tr>
-    <tr><td class="paramname">lowbyte</td><td>to writen to the register</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addressbyte</td><td>of the VSdsp's register to be written </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">highbyte</td><td>to writen to the register </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lowbyte</td><td>to writen to the register</td></tr>
   </table>
   </dd>
 </dl>
@@ -975,8 +984,8 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>uint16_t Overload of <a class="el" href="class_s_f_e_m_p3_shield.html#aa46b6c89ce48ddbb038fa5c47446e583" title="Write a value a VSDsp&#39;s register.">SFEMP3Shield::Mp3WriteRegister</a> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's register to be written </td></tr>
-    <tr><td class="paramname">data</td><td>to writen to the register</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addressbyte</td><td>of the VSdsp's register to be written </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>to writen to the register</td></tr>
   </table>
   </dd>
 </dl>
@@ -1019,8 +1028,8 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Write a VS10xx WRAM Location. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">addressbyte</td><td>of the VSdsp's WRAM to be read </td></tr>
-    <tr><td class="paramname">data</td><td>written to the VSdsp's WRAM</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addressbyte</td><td>of the VSdsp's WRAM to be read </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>written to the VSdsp's WRAM</td></tr>
   </table>
   </dd>
 </dl>
@@ -1063,7 +1072,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Begin playing a mp3 file by its filename. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
   </table>
   </dd>
 </dl>
@@ -1091,7 +1100,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Begin playing a mp3 file, just with a number. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">trackNo</td><td>integer value between 0 and 9, corresponding to the track to play.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">trackNo</td><td>integer value between 0 and 9, corresponding to the track to play.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1163,7 +1172,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Force bit rate. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">bitr</td><td>new bit-rate</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bitr</td><td>new bit-rate</td></tr>
   </table>
   </dd>
 </dl>
@@ -1188,7 +1197,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Set the current Spatial EarSpeaker setting of the VS10xx chip. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">EarSpeaker</td><td>integer value between 0 and 3. Where 0 is OFF and 3 is maximum.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">EarSpeaker</td><td>integer value between 0 and 3. Where 0 is OFF and 3 is maximum.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1244,8 +1253,8 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Store and Push member volume to VS10xx chip. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">leftchannel</td><td>writes the left channel master volume </td></tr>
-    <tr><td class="paramname">rightchannel</td><td>writes the right channel master volume</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">leftchannel</td><td>writes the left channel master volume </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rightchannel</td><td>writes the right channel master volume</td></tr>
   </table>
   </dd>
 </dl>
@@ -1271,7 +1280,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Overload function of SFEMP3Shield::SetVolume(leftchannel, rightchannel) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">data</td><td>packed with left and right master volume</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>packed with left and right master volume</td></tr>
   </table>
   </dd>
 </dl>
@@ -1304,7 +1313,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Skips to a certain point in the track. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">offset</td><td>milliseconds from the begining of the file.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>milliseconds from the begining of the file.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1353,7 +1362,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Get Track's Album. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">infobuffer</td><td>pointer char array to be updated with result</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">infobuffer</td><td>pointer char array to be updated with result</td></tr>
   </table>
   </dd>
 </dl>
@@ -1379,7 +1388,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Get Track's Artist. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">infobuffer</td><td>pointer char array to be updated with result</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">infobuffer</td><td>pointer char array to be updated with result</td></tr>
   </table>
   </dd>
 </dl>
@@ -1405,7 +1414,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Get Track's Title. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">infobuffer</td><td>pointer char array to be updated with result</td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">infobuffer</td><td>pointer char array to be updated with result</td></tr>
   </table>
   </dd>
 </dl>
@@ -1733,7 +1742,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 3 2012 23:42:04 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 4 2012 22:21:47 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

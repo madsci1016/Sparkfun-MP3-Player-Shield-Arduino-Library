@@ -99,7 +99,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="_s_f_e_m_p3_shield_config_8h__dep__incl.png" border="0" usemap="#_s_f_e_m_p3_shield_2_s_f_e_m_p3_shield_config_8hdep" alt=""/></div>
 <map name="_s_f_e_m_p3_shield_2_s_f_e_m_p3_shield_config_8hdep" id="_s_f_e_m_p3_shield_2_s_f_e_m_p3_shield_config_8hdep">
-<area shape="rect" id="node3" href="_s_f_e_m_p3_shield_8h.html" title="SFEMP3Shield/SFEMP3Shield.h" alt="" coords="13,96,227,123"/><area shape="rect" id="node5" href="_s_f_e_m_p3_shield_8cpp.html" title="SFEMP3Shield/SFEMP3Shield.cpp" alt="" coords="5,171,235,197"/></map>
+<area shape="rect" id="node3" href="_s_f_e_m_p3_shield_8h.html" title="Header file for the SFEMP3Shield library." alt="" coords="13,96,227,123"/><area shape="rect" id="node5" href="_s_f_e_m_p3_shield_8cpp.html" title="Code file for the SFEMP3Shield library." alt="" coords="5,171,235,197"/></map>
 </div>
 </div>
 <p><a href="_s_f_e_m_p3_shield_config_8h_source.html">Go to the source code of this file.</a></p>
@@ -145,20 +145,18 @@ Macros</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Hardware dependent configuration definitions. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>implemented with Doxygen Markdown format</dd>
-<dd>
-implemented with Doxygen Markdown format</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>comments are implemented with Doxygen Markdown format</dd></dl>
 <p>This <a class="el" href="_s_f_e_m_p3_shield_config_8h.html" title="Hardware dependent configuration definitions.">SFEMP3ShieldConfig.h</a> helps configure the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> library for various supported different base Arduino boards and shield's using the VS10xx chip. It is possible this may support other VS10xx chips. But are unverified at this time.</p>
 <p>As the name <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> implies this driver was originally developed from Sparkfun's MP3 Player Shield. Whereas it can and has been easily adapted to other hardware, both base Arduino's and shield's using the VS10xx.</p>
 <p>The default configuration of this library assumes the SFE MP3 Shield, on an UNO/Duemilanove, when left un-altered.</p>
-<dl class="section note"><dt>Note</dt><dd>MEGA: Arduino Mega's REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. When using a mega with SFE or Seeduino jump the following pings : <code> <br/>
+<dl class="section note"><dt>Note</dt><dd>Support forArduino Mega's REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. When using a mega with SFE compatible shields jump the following pings : <code> <br/>
  Mega's 51 to the MP3's D11 for MOSI <br/>
  Mega's 50 to the MP3's D12 for MISO <br/>
  Mega's 52 to the MP3's D13 for SCK </code> <br/>
  The remainder of pins may remain unchanged. Including INT0 as the Mega maps INT0 to D2 as to support USE_MP3_INTx, as is. Like the Uno. <br/>
- Yes, SdFat's SoftSPI.h was tried, but has problems when used twice once with Sd2Card.cpp and a 2nd time with <a class="el" href="_s_f_e_m_p3_shield_8cpp.html">SFEMP3Shield.cpp</a>.</dd></dl>
-<dl class="section see"><dt>See Also</dt><dd>see also www.sparkfun.com </dd></dl>
-<dl class="MPF"><dt><b><a class="el" href="_m_p_f.html#_MPF000001">MPF:</a></b></dt><dd></dd></dl>
+ Where the default <a class="el" href="_s_f_e_m_p3_shield_config_8h.html" title="Hardware dependent configuration definitions.">SFEMP3ShieldConfig.h</a> should not need changing. <br/>
+ Yes, SdFat's SoftSPI.h was tried, but has problems when used twice once with Sd2Card.cpp and a 2nd time with <a class="el" href="_s_f_e_m_p3_shield_8cpp.html" title="Code file for the SFEMP3Shield library.">SFEMP3Shield.cpp</a>.</dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a67a5bb336baa6444775e21f2e2d53f98" title="A macro to configure use on a Seeeduino MP3 player shield.">SEEEDUINO</a> as to how to configure for Seeeduino's Music Shield. </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a1831fd1c252d7a04297f27fc9bdbbdc4"></a>
 <div class="memitem">
@@ -263,7 +261,8 @@ implemented with Doxygen Markdown format</dd></dl>
 </div><div class="memdoc">
 
 <p>A macro to configure use on a Seeeduino MP3 player shield. </p>
-<p>Seeduino MP3 Players is supported. However, its DREQ is not connected to a hard INT(x) pin, hence it MUST be polled. This can be configured, using USE_MP3_SimpleTimer. When using a Seeeduino MP3 Player shield set the below define of SEEEDUINO to 1 Along with USE_MP3_REFILL_MEANS should not be USE_MP3_INTx, unless extra wires.</p>
+<p>Seeduino MP3 Players is supported. However, its DREQ is not connected to a hard INT(x) pin, hence it MUST be polled. This can be configured, using USE_MP3_SimpleTimer. When using a Seeeduino MP3 Player shield set the below define of SEEEDUINO to 1. As so the correct IO pins are configured MP3_XCS, MP3_XDCS and MP3_DREQ</p>
+<p>Along with USE_MP3_REFILL_MEANS should not be USE_MP3_INTx, unless extra jumper wires are used.</p>
 <p>Set <code>SEEEDUINO</code> to <code>0</code> to use on a SparkFun MP3 player shield</p>
 <p>Set <code>SEEEDUINO</code> to <code>1</code> to use on a Seeeduino MP3 player shield </p>
 
@@ -365,7 +364,7 @@ The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more b
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 3 2012 23:42:04 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 4 2012 22:21:47 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

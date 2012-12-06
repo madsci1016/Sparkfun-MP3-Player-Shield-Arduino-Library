@@ -31,6 +31,19 @@ INT0 to D2 as to support USE_MP3_INTx, as is. Like the Uno.
 \n Yes, SdFat's SoftSPI.h was tried, but has problems when used twice once with
 Sd2Card.cpp and a 2nd time with SFEMP3Shield.cpp.
 
+\n
+
+\note 
+Support for Arduino Leonardo is afflicted by having the SPI pins not routing the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it should simply work with additional jumpers, from the Leonardo's ICSP port, which has the SPI pins to the MP3 shields equivalent SPI pins.
+<tt>
+\n Leo's ICSP4 to the MP3's D11 for MOSI
+\n Leo's ICSP1 to the MP3's D12 for MISO
+\n Leo's ICSP3 to the MP3's D13 for SCK
+</tt>
+\n and remember to \b NOT use D10 as an input. It must be left as output.
+
+\todo Please let us know if this works? I think it should.
+
 \sa SEEEDUINO as to how to configure for Seeeduino's Music Shield.
  */
 

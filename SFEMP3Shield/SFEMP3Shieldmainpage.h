@@ -69,11 +69,14 @@ Support for Seeduino MP3 Player Shield please see \ref SEEEDUINO and may require
 
 \subsection limitation Limitations.
 
-- The SPI Bus:
+- <b>The SPI Bus:</b>
 The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.
 
-- Non-Blocking:
+- <b>Non-Blocking:</b>
 The controlling sketch needs to enquire via SFEMP3Shield::isPlaying as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.
+
+- <b>Multi-Chip VS10xx support:</b>
+Not at this time. There are too many issues with member functions of the SFEMP3Shield class requiring to be static.
 
 \todo
 There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite

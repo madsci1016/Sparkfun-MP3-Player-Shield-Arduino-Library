@@ -330,16 +330,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Initialize the MP3 Player shield. </p>
 <p>Execute this function before anything else, typically during setup(). It will create an instance of SdFat's card, volume and root. and initialize the VS10xx with <a class="el" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a" title="Initialize the VS10xx Audio Decoder Chip.">vs_init()</a></p>
-<dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error<ul>
-<li>0 indicates that begin was successful.</li>
-<li>1 indicates failure of SdFat to initialize physical contact with the SdCard</li>
-<li>2 indicates failure of SdFat to start the SdCard's volume</li>
-<li>3 indicates failure of SdFat to mount the root directory on the volume of the SdCard</li>
-<li>4 indicates other than default values were found in the SCI_MODE register.</li>
-<li>5 indicates SCI_CLOCKF did not read back and verify the configured value.</li>
-<li>6 indicates patch was not loaded successfully. This may result in playTrack errors</li>
-</ul>
-</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a></dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>it may have problems with other instances of SdFat handles, if used at the same time. </dd></dl>
 
@@ -1742,7 +1733,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 6 2012 00:52:24 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 6 2012 17:05:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

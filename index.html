@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li class="level1"><a href="#Troubleshooting">Troubleshooting</a></li>
 <li class="level1"><a href="#Error_Codes">Error Codes</a><ul><li class="level2"><a href="#beginfunc">begin function:</a></li>
 <li class="level2"><a href="#playfunc">Playing functions:</a></li>
-<li class="level2"><a href="#skipTofunc">Playing function:</a></li>
+<li class="level2"><a href="#skipTofunc">Skip function:</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#comment">Support</a></li>
@@ -166,8 +166,8 @@ Arduino Mega Board</h2>
 <p>Support for Arduino Mega's is documented <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a>, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. \</p>
 <h2><a class="anchor" id="Arduino_Leonardo"></a>
 Arduino Leonardo Board</h2>
-<p>Support for Arduino Mega's is afflicted by having the SPI pins not routing the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it could simply work with additional jumpers. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>This is yet to be verified.</dd></dl>
+<p>Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it could simply work with additional jumpers. Or by defining USE_MP3_REFILL_MEANS to USE_MP3_Polled. See <a href="http://arduino.cc/en/Reference/AttachInterrupt">attachInterrupt() </a>. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>This is yet to be verified.</dd></dl>
 <h2><a class="anchor" id="SparkFunMP3Player"></a>
 SparkFun MP3 Player Shield</h2>
 <p>SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 328 UNO/Duemilanove, with Interrupts.</p>
@@ -177,12 +177,15 @@ Seeduino MP3 Player Shield</h2>
 <h2><a class="anchor" id="limitation"></a>
 Limitations.</h2>
 <ul>
-<li>The SPI Bus: The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.</li>
+<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.</li>
 </ul>
 <ul>
-<li>Non-Blocking: The controlling sketch needs to enquire via <a class="el" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980" title="Inidicate if a song is playing?">SFEMP3Shield::isPlaying</a> as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.</li>
+<li><b>Non-Blocking:</b> The controlling sketch needs to enquire via <a class="el" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980" title="Inidicate if a song is playing?">SFEMP3Shield::isPlaying</a> as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite</dd></dl>
+<ul>
+<li><b>Multi-Chip VS10xx support:</b> Not at this time. There are too many issues with member functions of the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> class requiring to be static.</li>
+</ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite</dd></dl>
 <h1><a class="anchor" id="Plug_Ins"></a>
 Plug Ins</h1>
 <p>vs_plg_to_bin.pl is a perl script that will read and digest the .plg files and convert them to raw binary as to be read by <a class="el" href="class_s_f_e_m_p3_shield.html#a265916fb004e8bf98d14eaa415cc28a5" title="load VS1xxx with patch or plugin from file on SDcard.">SFEMP3Shield::VSLoadUserCode()</a> from the SdCard. Allowing updates to the VSDsp into its volatile memory after each reset. These updates may be custom features or accumulated patches.</p>
@@ -239,9 +242,16 @@ Troubleshooting</h1>
 </li>
 </ul>
 <ul>
-<li><pre>"Error code: 1 when trying to play track"</pre><ul>
+<li><pre>"Error code: 1 when \b trying to play track"</pre><ul>
 <li>See the above <a class="el" href="index.html#limitation">Limitations.</a> about Non-Blocking.</li>
 <li>Remember to check your audio cables and volume.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Why do I only <b>hear</b> 1 second of music?<ul>
+<li>This symptom is typical of the interrupt not triggering the <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a>. I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.</li>
+<li>What board is it? Check Hardware <a class="el" href="index.html#limitation">Limitations.</a> about Interrupts.</li>
 </ul>
 </li>
 </ul>
@@ -255,11 +265,12 @@ begin function:</h2>
 <p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">SFEMP3Shield::begin()</a> member function. </p>
 <pre>
 0 OK
-1 SD Card Init Failure
-2 SD Card File System (FAT) init failure
-3 SD Card Root Directory init failure
-4 MP3 Decoder mode failure
-5 MP3 Decoder speed failure
+1 Failure of SdFat to initialize physical contact with the SdCard
+2 Failure of SdFat to start the SdCard's volume
+3 Failure of SdFat to mount the root directory on the volume of the SdCard
+4 Other than default values were found in the SCI_MODE register.
+5 SCI_CLOCKF did not read back and verify the configured value.
+6 Patch was not loaded successfully. This may result in playTrack errors
 </pre><h2><a class="anchor" id="playfunc"></a>
 Playing functions:</h2>
 <p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#a6c9b14ae792c9140a81236a36bcb707b" title="Begin playing a mp3 file, just with a number.">SFEMP3Shield::playTrack()</a> or <a class="el" href="class_s_f_e_m_p3_shield.html#ad1ece30ac83aa91c9295a83f8d69e6e3" title="Begin playing a mp3 file by its filename.">SFEMP3Shield::playMP3()</a> member functions. </p>
@@ -268,7 +279,7 @@ Playing functions:</h2>
 1 Already playing track
 2 File not found
 </pre><h2><a class="anchor" id="skipTofunc"></a>
-Playing function:</h2>
+Skip function:</h2>
 <p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#aa9f035dad97e78bc501f05575a931754" title="Skips to a certain point in the track.">SFEMP3Shield::skipTo()</a>member function. </p>
 <pre>
 0 OK
@@ -301,7 +312,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 6 2012 00:52:24 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 6 2012 17:05:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

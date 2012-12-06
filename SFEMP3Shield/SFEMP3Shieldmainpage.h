@@ -55,11 +55,17 @@ An example is provided in the SFEMP3Shield/examples folder.  Which is developed 
 
 As mentioned the initial and principal support of this library is with Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Although various other boards and shields may be implemented by customing the \ref SFEMP3ShieldConfig.h file.
 
-\subsection ArduinoMega ArduinoMega
+\subsection ArduinoMega Arduino Mega Board
 Support for Arduino Mega's is documented \ref SFEMP3ShieldConfig.h, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. \
 
-\subsection Seeeduino Seeeduino
-Support for Seeeduino please see \ref SEEEDUINO and may require additional libraries, as per \ref Requirements
+\subsection Arduino_Leonardo Arduino Leonardo Board
+Support for Arduino Mega's is afflicted by having the SPI pins not routing the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it could simply work with additional jumpers. \todo This is yet to be verified.
+
+\subsection SparkFunMP3Player SparkFun MP3 Player Shield
+SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 328 UNO/Duemilanove, with Interrupts.
+
+\subsection Seeeduino Seeduino MP3 Player Shield
+Support for Seeduino MP3 Player Shield please see \ref SEEEDUINO and may require additional libraries, as per \ref Requirements
 
 \subsection limitation Limitations.
 
@@ -67,51 +73,13 @@ Support for Seeeduino please see \ref SEEEDUINO and may require additional libra
 The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.
 
 - Non-Blocking:
-The controlling sketch needs to enquire via isPlaying as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.
+The controlling sketch needs to enquire via SFEMP3Shield::isPlaying as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.
 
 \todo
 There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite
 
-\section Troubleshooting Troubleshooting
-
-The below is a list of basic questions to ask when attempting to determine the problem.
-
-- Did it initially \b PRINT the available RAM and Full Help Menu?
-  - The MP3Shield_Library_Demo.ino example should initially provide a opening print indicating the amount of available SRAM and full menu help. If you don't see this the problem is between your Target and IDE. And likely not this library
-  - Is Serial Monitor set to the correct tty or com port and 115200 baud rate? Did you change the baud rate?
-  - Reset the Arduino after Serial Monitor is open or send any key. It may have printed these prior to the Serial Monitor being started.
-
-- \b WHAT is the Error reported?
-  - Is the Error Code is indicating a file problem. Use the 'd' menu command to display contents of the SdCard. See also \ref Error_Codes
-
-- Did the SdCard \b LOAD?
-  - Try reseating your SdCard.
-
-- Is it \b FAT (FAT16 or FAT32)?
-  - If the Error Code is indicating problems with the INIT, VOLUME or Track not being successful. It is recommend to use SdFat Example Library's QuickStart.ino as to see if it can access the card. Additionaly, SdInfo.ino may indicate if it can mount the card. Which may then need to formatted in FAT16 or FAT32. Where SdFormatter.ino can do this for you.
-
-- Are the needed files on the \b root?
-  - Remember to put patch and audio track files on the SdCard after formatting.
-
-- <pre>Error code: 1 when trying to play track</pre>
-  - See the above \ref limitation about Non-Blocking.
-  - Remember to check your audio cables and volume.
-
-\note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
-
-\section comment Support
-The code has been written with plenty of appropiate comments, describing key components, features and reasonings in Doxygen markdown style as to autogenerate this html suppoting document. Which is loaded into the repositories' gh-page branch to be displayed on the projects's GitHub Page.
-
-Additional support may be reached from any of the following:
-Please read through this document and refering linked resources.
-- <A HREF = "http://www.billporter.info/forum/forum/sparkfun-mp3-shield-support-forum/" > Bills WordPress forum </A>
-- <A HREF = "https://github.com/mpflaga/Sparkfun-MP3-Player-Shield-Arduino-Library/issues" > Flaga's github Issues forum </A>
-- <A HREF = "https://github.com/madsci1016/Sparkfun-MP3-Player-Shield-Arduino-Library/issues" > Bill's github Issues forum </A>
-
-\note Problems with SdCard initializing is outside the scope of this library. <A HREF = "http://code.google.com/p/sdfatlib/" > SdFatLib' repository </A> was selected being the best choice.
-
 \section Plug_Ins Plug Ins
-.\vs_plg_to_bin.pl is a perl script that will read and digest the .plg files
+vs_plg_to_bin.pl is a perl script that will read and digest the .plg files
 and convert them to raw binary as to be read by SFEMP3Shield::VSLoadUserCode() from the SdCard.
 Allowing updates to the VSDsp into its volatile memory after each reset.
 These updates may be custom features or accumulated patches.
@@ -135,6 +103,40 @@ The filenames are kept short as SdCard only support 8.3.
 </pre>
 
 \note These plugins should be placed in the root of the SdCard.
+
+\section Troubleshooting Troubleshooting
+
+The below is a list of basic questions to ask when attempting to determine the problem.
+
+- Did it initially \b PRINT the available RAM and Full Help Menu?
+  - The MP3Shield_Library_Demo.ino example should initially provide a opening print indicating the amount of available SRAM and full menu help. If you don't see this the problem is between your Target and IDE. And likely not this library
+  - Is Serial Monitor set to the correct tty or com port and 115200 baud rate? Did you change the baud rate?
+  - Reset the Arduino after Serial Monitor is open or send any key. It may have printed these prior to the Serial Monitor being started.
+
+- \b WHAT is the Error reported?
+  - Is the Error Code is indicating a file problem. 
+  - Are the filenames 8.3 format? See below warning.
+  - See also \ref Error_Codes
+
+- Did the SdCard \b LOAD?
+  - Try reseating your SdCard.
+
+- Is it \b FAT (FAT16 or FAT32)?
+  - If the Error Code is indicating problems with the INIT, VOLUME or Track not being successful. It is recommend to use SdFat Example Library's QuickStart.ino as to see if it can access the card. Additionaly, SdInfo.ino may indicate if it can mount the card. Which may then need to formatted in FAT16 or FAT32. Where SdFormatter.ino can do this for you.
+
+- Are the needed files on the \b root?
+  - Remember to put patch and audio track files on the SdCard after formatting.
+  - Are the filenames 8.3 format? See below warning.
+
+- <pre>"Error code: 1 when trying to play track"</pre>
+  - See the above \ref limitation about Non-Blocking.
+  - Remember to check your audio cables and volume.
+
+\note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
+
+\warning SdFatLib only supports 8.3 filenames. Long file names will not work.
+Use the \c 'd' menu command to display directory contents of the SdCard. 
+\c "longfilename.mp3" will be converted to \c "longfi~1\.mp3" . Where one can not predict the value of the 1. The DOS command of \c "dir \c /x" will list a cross reference, so that you know exactly, what is what.
 
 \section Error_Codes Error Codes
 Error Codes typically are returned from this Library's object's in place of Serial.print messages. As to both save Flash space and Serial devices may not always be present. Where it becomes the responsibility of the calling sketch of the library's object to appropiately react or display corresponding messages.
@@ -165,6 +167,17 @@ The following error codes return from the SFEMP3Shield::skipTo()member function.
 1 Not Playing track
 2 Failed to skip to new file location
 </pre>
+
+\section comment Support
+The code has been written with plenty of appropiate comments, describing key components, features and reasonings in Doxygen markdown style as to autogenerate this html suppoting document. Which is loaded into the repositories' gh-page branch to be displayed on the projects's GitHub Page.
+
+Additional support may be reached from any of the following:
+Please read through this document and refering linked resources.
+- <A HREF = "http://www.billporter.info/forum/forum/sparkfun-mp3-shield-support-forum/" > Bills WordPress forum </A>
+- <A HREF = "https://github.com/mpflaga/Sparkfun-MP3-Player-Shield-Arduino-Library/issues" > Flaga's github Issues forum </A>
+- <A HREF = "https://github.com/madsci1016/Sparkfun-MP3-Player-Shield-Arduino-Library/issues" > Bill's github Issues forum </A>
+
+\note Problems with SdCard initializing is outside the scope of this library. <A HREF = "http://code.google.com/p/sdfatlib/" > SdFatLib' repository </A> was selected being the best choice.
 
 \section  References References
 \see

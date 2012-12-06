@@ -142,7 +142,11 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
 #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
 #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin
 #define MP3_DREQ             2 //Data Request Pin: Player asks for more data
+#if defined(__AVR_ATmega32U4__)
+#define MP3_DREQINT          1 //Corresponding INTx for DREQ pin
+#else // swapped between Uno and Leonardo.
 #define MP3_DREQINT          0 //Corresponding INTx for DREQ pin
+#endif
 #define MP3_RESET            8 //Reset is active low
 #define SD_SEL               9 //select pin for SD card
 #endif
@@ -184,10 +188,12 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * Where the Interrupt Service Routine attached to INTx as per attachInterrupt(MP3_DREQINT, refill, RISING)
  * causes execution of SFEMP3Shield::refill() as per the VS10xx need per DREQ.
  *
- * \note MP3_DREQINT corresponds the interrupt vector associated with the pin assigned to MP3_DREQ.
+ * \note MP3_DREQINT corresponds the interrupt vector associated with the pin assigned to MP3_DREQ. As defined in WIterrupts.c
  *
- * \note INT(x) may not be available on some base systems depending upon design.
- * Where SFE MP3 Player can use USE_MP3_INTx as DREQ is connected to D2 or INT0.
+ * \note INT(x) may be relocated or not be available on some base systems depending upon design.
+ * Such as with the Lenoardo, which have pins D2/D3 and there corresponding INT0/INT1 swapped, versus the UNO.
+ * See <a href="http://arduino.cc/en/Reference/AttachInterrupt"> attachInterrupt() </a>
+ * Where SFE MP3 Player can use USE_MP3_INTx as DREQ is connected to D2 aka INT0.
  * Noting that MP3_DREQINT vector is defined above, in pin assignments.
  */
 #define USE_MP3_INTx        0

@@ -93,13 +93,6 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  *
  * \return Any Value other than zero indicates a problem occured.
  * where value indicates specific error
- * - 0 indicates that begin was successful.
- * - 1 indicates failure of SdFat to initialize physical contact with the SdCard
- * - 2 indicates failure of SdFat to start the SdCard's volume
- * - 3 indicates failure of SdFat to mount the root directory on the volume of the SdCard
- * - 4 indicates other than default values were found in the SCI_MODE register.
- * - 5 indicates SCI_CLOCKF did not read back and verify the configured value.
- * - 6 indicates patch was not loaded successfully. This may result in playTrack errors
  *
  * \see
  * \ref Error_Codes

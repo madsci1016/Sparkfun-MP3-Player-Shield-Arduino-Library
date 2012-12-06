@@ -59,7 +59,8 @@ As mentioned the initial and principal support of this library is with Arduino 3
 Support for Arduino Mega's is documented \ref SFEMP3ShieldConfig.h, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. \
 
 \subsection Arduino_Leonardo Arduino Leonardo Board
-Support for Arduino Mega's is afflicted by having the SPI pins not routing the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it could simply work with additional jumpers. \todo This is yet to be verified.
+Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it could simply work with additional jumpers. Or by defining USE_MP3_REFILL_MEANS to USE_MP3_Polled. See <a href="http://arduino.cc/en/Reference/AttachInterrupt"> attachInterrupt() </a>.
+\todo This is yet to be verified.
 
 \subsection SparkFunMP3Player SparkFun MP3 Player Shield
 SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 328 UNO/Duemilanove, with Interrupts.
@@ -131,9 +132,13 @@ The below is a list of basic questions to ask when attempting to determine the p
   - Remember to put patch and audio track files on the SdCard after formatting.
   - Are the filenames 8.3 format? See below warning.
 
-- <pre>"Error code: 1 when trying to play track"</pre>
+- <pre>"Error code: 1 when \b trying to play track"</pre>
   - See the above \ref limitation about Non-Blocking.
   - Remember to check your audio cables and volume.
+
+- Why do I only \b hear 1 second of music?
+  - This symptom is typical of the interrupt not triggering the SFEMP3Shield::refill(). I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.
+  - What board is it? Check Hardware \ref limitation about Interrupts.
 
 \note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
 
@@ -148,11 +153,12 @@ Error Codes typically are returned from this Library's object's in place of Seri
 The following error codes return from the SFEMP3Shield::begin() member function.
 <pre>
 0 OK
-1 SD Card Init Failure
-2 SD Card File System (FAT) init failure
-3 SD Card Root Directory init failure
-4 MP3 Decoder mode failure
-5 MP3 Decoder speed failure
+1 Failure of SdFat to initialize physical contact with the SdCard
+2 Failure of SdFat to start the SdCard's volume
+3 Failure of SdFat to mount the root directory on the volume of the SdCard
+4 Other than default values were found in the SCI_MODE register.
+5 SCI_CLOCKF did not read back and verify the configured value.
+6 Patch was not loaded successfully. This may result in playTrack errors
 </pre>
 
 \subsection playfunc Playing functions:
@@ -163,7 +169,7 @@ The following error codes return from the SFEMP3Shield::playTrack() or SFEMP3Shi
 2 File not found
 </pre>
 
-\subsection skipTofunc Playing function:
+\subsection skipTofunc Skip function:
 The following error codes return from the SFEMP3Shield::skipTo()member function.
 <pre>
 0 OK

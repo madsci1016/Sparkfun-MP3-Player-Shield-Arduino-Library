@@ -45,6 +45,7 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
 \todo Please let us know if this works? I think it should.
 
 \sa SEEEDUINO as to how to configure for Seeeduino's Music Shield.
+\sa GRAVITECH as to how to configure for Gravitech's MP3-4NANO Shield.
  */
 
 #ifndef SFEMP3ShieldConfig_h
@@ -68,9 +69,22 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * Set \c SEEEDUINO to \c 0 to use on a SparkFun MP3 player shield
  *
  * Set \c SEEEDUINO to \c 1 to use on a Seeeduino MP3 player shield
- *
  */
 #define SEEEDUINO 0 // uncomment if using the Seeeduino Music Shield
+
+/**
+ * \def GRAVITECH
+ * \brief A macro to configure use on a Gravitech's MP3-4NANO shield
+ *
+ * Gravitech's MP3-4NANO shield is supported. However, its chip select of the 
+ * SdCard connected to D4. This can be configured, simply by setting the below 
+ * define of GRAVITECH to 1.
+ *
+ * Set \c GRAVITECH to \c 0 to use on a Gravitech's MP3-4NANO shield
+ *
+ * Set \c GRAVITECH to \c 1 to use on a Gravitech's MP3-4NANO
+ */
+#define GRAVITECH 0 // uncomment if using the Gravitech's MP3-4NANO shield
 
 //------------------------------------------------------------------------------
 /*
@@ -148,7 +162,11 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
 #define MP3_DREQINT          0 //Corresponding INTx for DREQ pin
 #endif
 #define MP3_RESET            8 //Reset is active low
+#if ( GRAVITECH == 1 )
+#define SD_SEL               4 //select pin for SD card
+#else
 #define SD_SEL               9 //select pin for SD card
+#endif
 #endif
 
 //------------------------------------------------------------------------------

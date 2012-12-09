@@ -285,12 +285,23 @@ void parse_menu(byte key_command) {
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
 
+  } else if (key_command == 'M') {
+      uint16_t monostate = MP3player.GetMonoMode();
+      Serial.print(F("Mono Mode "));
+      if (monostate == 0) {
+      	MP3player.SetMonoMode(1);
+        Serial.println(F("Enabled."));
+      } else {
+      	MP3player.SetMonoMode(0);
+        Serial.println(F("Disabled."));
+      }
+
   } else if (key_command == 'h') {
     help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,h :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,M,h :"));
 }
 
 //------------------------------------------------------------------------------
@@ -311,9 +322,10 @@ void help() {
   Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
   Serial.println(F(" [p] to pause."));
   Serial.println(F(" [r] to resume."));
-  Serial.println(F(" [r] Resets and initializes VS10xx chip."));
+  Serial.println(F(" [R] Resets and initializes VS10xx chip."));
   Serial.println(F(" [t] to toggle sine wave test"));
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
+  Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
   Serial.println(F(" [h] this help"));
 }
 

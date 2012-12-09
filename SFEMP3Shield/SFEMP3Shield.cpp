@@ -624,11 +624,49 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
     MP3SCI_MODE &= ~SM_EARSPEAKER_HI;
   }
   Mp3WriteRegister(SCI_MODE, MP3SCI_MODE);
-//  Mp3WriteRegister(SCI_MODE, ((MP3SCI_MODE >> 8) & 0xFF), (MP3SCI_MODE & 0xFF) );
 }
 // @}
 // EarSpeaker_Group
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @{
+// Stereo_Group
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Get the current Stereo/Mono setting of the VS10xx output
+ *
+ * Read the VS10xx WRAMADDR bit 0 of para_MonoOutput] for the current Stereo/Mono and 
+ * return its results as a byte. As specified by VS1053B PATCHES AND FLAC 
+ * DECODER Data Sheet Section 1.2 Mono output mode.
+ *
+ * \return result between 0 and 3. Where 0 is OFF and 3 is maximum.
+ *
+ * \warning This feature is only available when composite patch 1.7 or higher
+ * is loaded into the VSdsp.
+ */
+uint16_t SFEMP3Shield::GetMonoMode() {
+  uint16_t result = (Mp3ReadWRAM(para_MonoOutput) & 0x0001);
+  return result;
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Set the current Stereo/Mono setting of the VS10xx output
+ *
+ * Write the VS10xx WRAMADDR para_MonoOutput bit 0 to configure the current 
+ * Stereo/Mono. As specified by VS1053B PATCHES AND FLAC DECODER Data Sheet 
+ * Section 1.2 Mono output mode. While preserving the other bits. 
+ *
+ * \warning This feature is only available when composite patch 1.7 or higher
+ * is loaded into the VSdsp.
+ */
+void SFEMP3Shield::SetMonoMode(uint16_t StereoMode) {
+  uint16_t data = (Mp3ReadWRAM(para_MonoOutput) & ~0x0001); // preserve other bits
+  Mp3WriteWRAM(0x1e09, (StereoMode | (data & 0x0001)));
+}
+// @}
+// Stereo_Group
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @{

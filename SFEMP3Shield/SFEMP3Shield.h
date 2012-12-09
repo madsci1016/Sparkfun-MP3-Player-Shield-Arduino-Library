@@ -517,11 +517,28 @@ extern SdFile track;
  * para_endFillByte is a Read/Write Extra Parameter in X memory, accessed indirectly
  * with the SCI_WRAMADDR and SCI_WRAM.
  *
- * byteRate contains the average bitrate in bytes per second for every code. The value is updated
- * once per second and it can be used to calculate an estimate of the remaining playtime. This
- * value is also available in SCI_HDAT0 for all codecs except MP3, MP2, and MP1.
+ * The endFillByte indicates what byte value to send as to properly flush the 
+ * streams playback buffer, before SM_CANCEL is set, as to gracefully end the 
+ * current stream.
+ *
+ * \warning Omitting the endFillByte requirement may prevent subsequent streams from
+ * properly resyncing.
  */
 #define para_endFillByte    0x1E06
+
+/**
+ * \brief A macro of the WRAM para_MonoOutput register's address (R/W)
+ *
+ * para_MonoOutput is a Read/Write Extra Parameter in X memory, accessed indirectly
+ * with the SCI_WRAMADDR and SCI_WRAM.
+ *
+ * Analog output of the VS10XX may be configuured to be either either 
+ * Stereo(default) or Mono. When correspondingly set to 0 or 1.
+ *
+ * \warning This feature is only available when composite patch 1.7 or higher
+ * is loaded into the VSdsp.
+ */
+#define para_MonoOutput    0x1E09
 
 /**
  * \brief A macro of the WRAM para_positionMsec_0 register's address (R/W)
@@ -623,6 +640,8 @@ class SFEMP3Shield {
     uint16_t GetVolume();
     uint8_t GetEarSpeaker();
     void SetEarSpeaker(uint16_t);
+    uint16_t GetMonoMode();
+    void SetMonoMode(uint16_t );
     uint8_t playTrack(uint8_t);
     uint8_t playMP3(char*);
     void trackTitle(char*);

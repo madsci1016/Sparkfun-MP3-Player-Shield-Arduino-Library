@@ -68,6 +68,9 @@ SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 
 \subsection Seeeduino Seeduino MP3 Player Shield
 Support for Seeduino MP3 Player Shield please see \ref SEEEDUINO and may require additional libraries, as per \ref Requirements
 
+\subsection Gravitech MP3-4NANO Shield
+Support for Gravitech MP3-4NANO shield please see \ref GRAVITECH
+
 \subsection limitation Limitations.
 
 - <b>The SPI Bus:</b>

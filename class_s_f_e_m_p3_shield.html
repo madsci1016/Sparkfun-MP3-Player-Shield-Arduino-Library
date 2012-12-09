@@ -137,6 +137,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1411e02136f99aa5dedfbfb45c1397b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current Spatial EarSpeaker setting of the VS10xx chip.  <a href="#a1411e02136f99aa5dedfbfb45c1397b8"></a><br/></td></tr>
 <tr class="separator:a1411e02136f99aa5dedfbfb45c1397b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a1ab75852cbac9f9be8fe3ad14d93430d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a1ab75852cbac9f9be8fe3ad14d93430d">GetMonoMode</a> ()</td></tr>
+<tr class="memdesc:a1ab75852cbac9f9be8fe3ad14d93430d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current Stereo/Mono setting of the VS10xx output.  <a href="#a1ab75852cbac9f9be8fe3ad14d93430d"></a><br/></td></tr>
+<tr class="separator:a1ab75852cbac9f9be8fe3ad14d93430d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e4cd618a1202f0d3e34eb869181e1d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a4e4cd618a1202f0d3e34eb869181e1d1">SetMonoMode</a> (uint16_t)</td></tr>
+<tr class="memdesc:a4e4cd618a1202f0d3e34eb869181e1d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current Stereo/Mono setting of the VS10xx output.  <a href="#a4e4cd618a1202f0d3e34eb869181e1d1"></a><br/></td></tr>
+<tr class="separator:a4e4cd618a1202f0d3e34eb869181e1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a6c9b14ae792c9140a81236a36bcb707b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a6c9b14ae792c9140a81236a36bcb707b">playTrack</a> (uint8_t)</td></tr>
 <tr class="memdesc:a6c9b14ae792c9140a81236a36bcb707b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin playing a mp3 file, just with a number.  <a href="#a6c9b14ae792c9140a81236a36bcb707b"></a><br/></td></tr>
 <tr class="separator:a6c9b14ae792c9140a81236a36bcb707b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -686,6 +693,26 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1ab75852cbac9f9be8fe3ad14d93430d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t SFEMP3Shield::GetMonoMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the current Stereo/Mono setting of the VS10xx output. </p>
+<p>Read the VS10xx WRAMADDR bit 0 of para_MonoOutput] for the current Stereo/Mono and return its results as a byte. As specified by VS1053B PATCHES AND FLAC DECODER Data Sheet Section 1.2 Mono output mode.</p>
+<dl class="section return"><dt>Returns</dt><dd>result between 0 and 3. Where 0 is OFF and 3 is maximum.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>This feature is only available when composite patch 1.7 or higher is loaded into the VSdsp. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a26e42545cbdea49000ff40e6dda2b06f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1193,6 +1220,26 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
   </dd>
 </dl>
 <p>The input value is decoded into SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH bits and written the VS10xx SCI_MODE register, preserving the remainder of SCI_MODE. As specified by Data Sheet Section 8.7.1 and 8.4 </p>
+
+</div>
+</div>
+<a class="anchor" id="a4e4cd618a1202f0d3e34eb869181e1d1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::SetMonoMode </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>StereoMode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the current Stereo/Mono setting of the VS10xx output. </p>
+<p>Write the VS10xx WRAMADDR para_MonoOutput bit 0 to configure the current Stereo/Mono. As specified by VS1053B PATCHES AND FLAC DECODER Data Sheet Section 1.2 Mono output mode. While preserving the other bits.</p>
+<dl class="section warning"><dt>Warning</dt><dd>This feature is only available when composite patch 1.7 or higher is loaded into the VSdsp. </dd></dl>
 
 </div>
 </div>
@@ -1733,7 +1780,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 6 2012 17:05:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 8 2012 19:58:39 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -109,6 +109,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a67a5bb336baa6444775e21f2e2d53f98"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a67a5bb336baa6444775e21f2e2d53f98">SEEEDUINO</a>&#160;&#160;&#160;0</td></tr>
 <tr class="memdesc:a67a5bb336baa6444775e21f2e2d53f98"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro to configure use on a Seeeduino MP3 player shield.  <a href="#a67a5bb336baa6444775e21f2e2d53f98"></a><br/></td></tr>
 <tr class="separator:a67a5bb336baa6444775e21f2e2d53f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36ca8260c1ba2bc253b2da84cf27ce6a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a36ca8260c1ba2bc253b2da84cf27ce6a">GRAVITECH</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a36ca8260c1ba2bc253b2da84cf27ce6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro to configure use on a Gravitech's MP3-4NANO shield.  <a href="#a36ca8260c1ba2bc253b2da84cf27ce6a"></a><br/></td></tr>
+<tr class="separator:a36ca8260c1ba2bc253b2da84cf27ce6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa37859adf05cbfc9aa03bbd4fdbc4f20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#aa37859adf05cbfc9aa03bbd4fdbc4f20">MP3_XCS</a>&#160;&#160;&#160;6</td></tr>
 <tr class="memdesc:aa37859adf05cbfc9aa03bbd4fdbc4f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro to configure the XCS pin.  <a href="#aa37859adf05cbfc9aa03bbd4fdbc4f20"></a><br/></td></tr>
 <tr class="separator:aa37859adf05cbfc9aa03bbd4fdbc4f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,8 +167,27 @@ Macros</h2></td></tr>
  Leo's ICSP3 to the MP3's D13 for SCK </code> <br/>
  and remember to <b>NOT</b> use D10 as an input. It must be left as output.</dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>Please let us know if this works? I think it should.</dd></dl>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a67a5bb336baa6444775e21f2e2d53f98" title="A macro to configure use on a Seeeduino MP3 player shield.">SEEEDUINO</a> as to how to configure for Seeeduino's Music Shield. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a67a5bb336baa6444775e21f2e2d53f98" title="A macro to configure use on a Seeeduino MP3 player shield.">SEEEDUINO</a> as to how to configure for Seeeduino's Music Shield. </dd>
+<dd>
+<a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a36ca8260c1ba2bc253b2da84cf27ce6a" title="A macro to configure use on a Gravitech&#39;s MP3-4NANO shield.">GRAVITECH</a> as to how to configure for Gravitech's MP3-4NANO Shield. </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a36ca8260c1ba2bc253b2da84cf27ce6a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GRAVITECH&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A macro to configure use on a Gravitech's MP3-4NANO shield. </p>
+<p>Gravitech's MP3-4NANO shield is supported. However, its chip select of the SdCard connected to D4. This can be configured, simply by setting the below define of GRAVITECH to 1.</p>
+<p>Set <code>GRAVITECH</code> to <code>0</code> to use on a Gravitech's MP3-4NANO shield</p>
+<p>Set <code>GRAVITECH</code> to <code>1</code> to use on a Gravitech's MP3-4NANO </p>
+
+</div>
+</div>
 <a class="anchor" id="a1831fd1c252d7a04297f27fc9bdbbdc4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +394,7 @@ The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more b
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 6 2012 17:05:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 8 2012 19:58:39 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -2,6 +2,7 @@ var searchData=
 [
   ['setbitrate',['setBitRate',['../class_s_f_e_m_p3_shield.html#a5ac4bf6a2eb42f50e2472530f5842687',1,'SFEMP3Shield']]],
   ['setearspeaker',['SetEarSpeaker',['../class_s_f_e_m_p3_shield.html#a1411e02136f99aa5dedfbfb45c1397b8',1,'SFEMP3Shield']]],
+  ['setmonomode',['SetMonoMode',['../class_s_f_e_m_p3_shield.html#a4e4cd618a1202f0d3e34eb869181e1d1',1,'SFEMP3Shield']]],
   ['setplayspeed',['SetPlaySpeed',['../class_s_f_e_m_p3_shield.html#a6ef670bee9d1083782b85dfde577ddd7',1,'SFEMP3Shield']]],
   ['setvolume',['SetVolume',['../class_s_f_e_m_p3_shield.html#a29c4421e5b87e9d822db9520b907aba4',1,'SFEMP3Shield::SetVolume(uint8_t, uint8_t)'],['../class_s_f_e_m_p3_shield.html#ae50b1dd92e49e2d03c3e6216198e92bb',1,'SFEMP3Shield::SetVolume(uint16_t)']]],
   ['skipto',['skipTo',['../class_s_f_e_m_p3_shield.html#aa9f035dad97e78bc501f05575a931754',1,'SFEMP3Shield']]],

@@ -260,6 +260,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a61b0e1daf543e2bf0405da7886a0efb6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a61b0e1daf543e2bf0405da7886a0efb6">para_endFillByte</a>&#160;&#160;&#160;0x1E06</td></tr>
 <tr class="memdesc:a61b0e1daf543e2bf0405da7886a0efb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro of the WRAM para_endFillByte register's address (R/W)  <a href="#a61b0e1daf543e2bf0405da7886a0efb6"></a><br/></td></tr>
 <tr class="separator:a61b0e1daf543e2bf0405da7886a0efb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15c797e896130938d3d7f33545128f4f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a15c797e896130938d3d7f33545128f4f">para_MonoOutput</a>&#160;&#160;&#160;0x1E09</td></tr>
+<tr class="memdesc:a15c797e896130938d3d7f33545128f4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro of the WRAM para_MonoOutput register's address (R/W)  <a href="#a15c797e896130938d3d7f33545128f4f"></a><br/></td></tr>
+<tr class="separator:a15c797e896130938d3d7f33545128f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a003ddc3f8e3f2a4180945c9a6fec4159"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a003ddc3f8e3f2a4180945c9a6fec4159">para_positionMsec_0</a>&#160;&#160;&#160;0x1E27</td></tr>
 <tr class="memdesc:a003ddc3f8e3f2a4180945c9a6fec4159"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro of the WRAM para_positionMsec_0 register's address (R/W)  <a href="#a003ddc3f8e3f2a4180945c9a6fec4159"></a><br/></td></tr>
 <tr class="separator:a003ddc3f8e3f2a4180945c9a6fec4159"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -408,7 +411,25 @@ Variables</h2></td></tr>
 
 <p>A macro of the WRAM para_endFillByte register's address (R/W) </p>
 <p>para_endFillByte is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
-<p>byteRate contains the average bitrate in bytes per second for every code. The value is updated once per second and it can be used to calculate an estimate of the remaining playtime. This value is also available in SCI_HDAT0 for all codecs except MP3, MP2, and MP1. </p>
+<p>The endFillByte indicates what byte value to send as to properly flush the streams playback buffer, before SM_CANCEL is set, as to gracefully end the current stream.</p>
+<dl class="section warning"><dt>Warning</dt><dd>Omitting the endFillByte requirement may prevent subsequent streams from properly resyncing. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a15c797e896130938d3d7f33545128f4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define para_MonoOutput&#160;&#160;&#160;0x1E09</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A macro of the WRAM para_MonoOutput register's address (R/W) </p>
+<p>para_MonoOutput is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
+<p>Analog output of the VS10XX may be configuured to be either either Stereo(default) or Mono. When correspondingly set to 0 or 1.</p>
+<dl class="section warning"><dt>Warning</dt><dd>This feature is only available when composite patch 1.7 or higher is loaded into the VSdsp. </dd></dl>
 
 </div>
 </div>
@@ -1174,7 +1195,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 6 2012 17:05:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 8 2012 19:58:39 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

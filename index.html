@@ -253,9 +253,11 @@ Troubleshooting</h1>
 </li>
 </ul>
 <ul>
-<li>Why do I only <b>hear</b> 1 second of music?<ul>
+<li>Why do I only <b>hear</b> 1 second of music, or less?<ul>
 <li>This symptom is typical of the interrupt not triggering the <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a>. I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.</li>
 <li>What board is it? Check Hardware <a class="el" href="index.html#limitation">Limitations.</a> about Interrupts.</li>
+<li>Are you trying the <a href="&amp;quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? These are nice as they are Immediately LOUD.</li>
+<li>Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.</li>
 </ul>
 </li>
 </ul>
@@ -316,7 +318,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 8 2012 19:58:39 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 15 2012 19:49:59 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -139,9 +139,11 @@ The below is a list of basic questions to ask when attempting to determine the p
   - See the above \ref limitation about Non-Blocking.
   - Remember to check your audio cables and volume.
 
-- Why do I only \b hear 1 second of music?
+- Why do I only \b hear 1 second of music, or less?
   - This symptom is typical of the interrupt not triggering the SFEMP3Shield::refill(). I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.
   - What board is it? Check Hardware \ref limitation about Interrupts.
+  - Are you trying the SFE provided <a href="&quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? The SFE test files are nice as they are Immediately LOUD. 
+  - Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.
 
 \note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
 

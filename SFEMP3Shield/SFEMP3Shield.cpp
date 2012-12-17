@@ -227,6 +227,8 @@ uint8_t SFEMP3Shield::vs_init() {
 /**
  * \brief load VS1xxx with patch or plugin from file on SDcard.
  *
+ * \param[out] fileName pointer of a char array (aka string), contianing the filename
+ *
  * Loads the VX10xx with filename of the specified patch, if present.
  * This can be used to load various VSdsp apps, patches and plug-in's.
  * Providing many new features and updates not present on the default firmware.
@@ -636,8 +638,8 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
 /**
  * \brief Get the current Stereo/Mono setting of the VS10xx output
  *
- * Read the VS10xx WRAMADDR bit 0 of para_MonoOutput] for the current Stereo/Mono and 
- * return its results as a byte. As specified by VS1053B PATCHES AND FLAC 
+ * Read the VS10xx WRAMADDR bit 0 of para_MonoOutput] for the current Stereo/Mono and
+ * return its results as a byte. As specified by VS1053B PATCHES AND FLAC
  * DECODER Data Sheet Section 1.2 Mono output mode.
  *
  * \return result between 0 and 3. Where 0 is OFF and 3 is maximum.
@@ -654,9 +656,9 @@ uint16_t SFEMP3Shield::GetMonoMode() {
 /**
  * \brief Set the current Stereo/Mono setting of the VS10xx output
  *
- * Write the VS10xx WRAMADDR para_MonoOutput bit 0 to configure the current 
- * Stereo/Mono. As specified by VS1053B PATCHES AND FLAC DECODER Data Sheet 
- * Section 1.2 Mono output mode. While preserving the other bits. 
+ * Write the VS10xx WRAMADDR para_MonoOutput bit 0 to configure the current
+ * Stereo/Mono. As specified by VS1053B PATCHES AND FLAC DECODER Data Sheet
+ * Section 1.2 Mono output mode. While preserving the other bits.
  *
  * \warning This feature is only available when composite patch 1.7 or higher
  * is loaded into the VSdsp.
@@ -1493,7 +1495,8 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
 
   for (int n = 0; n < 64 ; n++)
   {
-    Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_CANCEL);
+//    Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_CANCEL); // old way of SCI_MODE WRITE.
+    Mp3WriteRegister(SCI_MODE, (Mp3ReadRegister(SCI_MODE) | SM_CANCEL));
     dcs_low(); //Select Data
     for(int y = 0 ; y < 32 ; y++) {
       while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
@@ -1517,9 +1520,87 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
   }
   // Cancel has not succeeded.
   //Serial.println(F("Warning: VS10XX chip did not cancel, reseting chip!"));
-  Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET);
-  //begin(); // however, SFEMP3Shield::begin() is member function that does not exist statically.
+//  Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET); // old way of SCI_MODE WRITE.
+  Mp3WriteRegister(SCI_MODE, (Mp3ReadRegister(SCI_MODE) | SM_RESET));  // software reset. but vs_init will HW reset anyways.
+//  vs_init(); // perform hardware reset followed by re-initializing.
+  //vs_init(); // however, SFEMP3Shield::begin() is member function that does not exist statically.
 }
+
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Initially load ADMixer patch and configure line/mic mode
+ *
+ * \param[out] fileName pointer of a char array (aka string), contianing the filename
+ *
+ * Loads a patch file of Analog to Digital Mixer. Current available options are
+ * as follows:
+ * - "admxster.053" Takes both ADC channels and routes them to left and right outputs.
+ * - "admxswap.053" Swaps both Left and Right ADC channels and routes them to left and right outputs.
+ * - "admxleft.053" MIC/LINE1 routed to both left and right output
+ * - "admxrght.053" LINE2 routed to both left and right output
+ * - "admxmono.053" mono version mixes both left and right inputs and plays them using both left and right outputs.
+ *
+ * And subsequently returns the following result codes.
+ *
+ * \return Any Value other than zero indicates a problem occured.
+ * - 0 indicates that upload was successful.
+ * - 1 indicates the upload can not be performed while currently streaming music.
+ * - 2 indicates that desired file was not found.
+ */
+uint8_t SFEMP3Shield::ADMixerLoad(char* fileName){
+
+  if(playing != FALSE)
+    return 1;
+
+  if (VSLoadUserCode(fileName)) return 2; // Serial.print(F("Error: ")); Serial.print(fileName); Serial.println(F(", file not found, skipping."));
+
+  // Set Input Mode to either Line1 or Microphone.
+#if defined(VS_LINE1_MODE)
+    Mp3WriteRegister(SCI_MODE, (Mp3ReadRegister(SCI_MODE) | SM_LINE1));
+#else
+    Mp3WriteRegister(SCI_MODE, (Mp3ReadRegister(SCI_MODE) & ~SM_LINE1));
+#endif
+  return 0;
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Set ADMixer's attenuation of input to between -3 and -31 dB otherwise
+ * disable.
+ *
+ * \param[in] -3 through -31 dB of attentuation.
+ *
+ * Will range check the requested value and for values out of range the VSdsp's
+ * ADMixer will be disabled. While valid ranges will write to VSdsp's current
+ * operating volume and enable the the ADMixer.
+ *
+ * \warning If file patch not applied this call will lock up the VS10xx.
+ * need to add interlock to avoid.
+ */
+void SFEMP3Shield::ADMixerVol(int8_t ADM_volume){
+  union twobyte MP3AIADDR;
+  union twobyte MP3AICTRL0;
+
+  MP3AIADDR.word = Mp3ReadRegister(SCI_AIADDR);
+
+  if ((ADM_volume > -3) || (-31 > ADM_volume)) {
+    // Disable Mixer Patch
+    MP3AIADDR.word = 0x0F01;
+    Mp3WriteRegister(SCI_AIADDR, MP3AIADDR.word);
+  } else {
+    // Set Volume
+    //MP3AICTRL0.word = Mp3ReadRegister(SCI_AICTRL0);
+    MP3AICTRL0.byte[1] = (uint8_t) ADM_volume; // upper byte appears to have no affect
+    MP3AICTRL0.byte[0] = (uint8_t) ADM_volume;
+    Mp3WriteRegister(SCI_AICTRL0, MP3AICTRL0.word);
+
+    // Enable Mixer Patch
+    MP3AIADDR.word = 0x0F00;
+    Mp3WriteRegister(SCI_AIADDR, MP3AIADDR.word);
+  }
+}
+
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Global Function

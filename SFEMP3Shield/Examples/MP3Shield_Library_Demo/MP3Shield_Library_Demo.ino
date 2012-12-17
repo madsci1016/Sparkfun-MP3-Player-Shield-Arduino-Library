@@ -76,6 +76,11 @@ void setup() {
       Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
     }
   }
+//  Serial.println(F("Applying ADMixer patch."));
+//  MP3player.ADMixerLoad("admxster.053");
+//  Serial.println(F("Setting ADMixer Volume."));
+//  MP3player.ADMixerVol(-3);
+
   help();
 }
 
@@ -289,10 +294,10 @@ void parse_menu(byte key_command) {
       uint16_t monostate = MP3player.GetMonoMode();
       Serial.print(F("Mono Mode "));
       if (monostate == 0) {
-      	MP3player.SetMonoMode(1);
+        MP3player.SetMonoMode(1);
         Serial.println(F("Enabled."));
       } else {
-      	MP3player.SetMonoMode(0);
+        MP3player.SetMonoMode(0);
         Serial.println(F("Disabled."));
       }
 

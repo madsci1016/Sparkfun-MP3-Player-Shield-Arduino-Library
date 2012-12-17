@@ -421,6 +421,8 @@ extern SdFile track;
  *
  * SM_LINE_IN is used to select the left-channel input for ADPCM recording. If '0', differential
  * microphone input pins MICP and MICN are used; if '1', line-level MICP/LINEIN1 pin is used.
+ *
+ * \see VS_LINE1_MODE
  */
 #define SM_LINE1            0x4000
 
@@ -432,6 +434,22 @@ extern SdFile track;
  * 12 MHz. SM_CLK_RANGE should be set as soon as possible after a chip reset.
  */
 #define SM_CLK_RANGE        0x8000
+
+/**
+ * \brief A macro of the VS_LINE1_MODE to configure either Line level or
+ * microphone input.
+ *
+ * Used by SFEMP3Shield::ADMixerLoad to determine if the SM_LINE1 of SCI_MODE being set as to
+ * use both MICP and LINEIN1 pins as \b stereo input, at line levels.
+ * Commenting it out, will result MICP and MICN used as differential input with
+ * resulting \b mono signal on the left channel.
+ *
+ * \see SM_LINE1
+ */
+// configure Line1 as single ended, otherwise as differential 10x gain for microphones.
+#define VS_LINE1_MODE
+
+
 
 /** End SCI_MODE_Group
  *  /@}
@@ -517,8 +535,8 @@ extern SdFile track;
  * para_endFillByte is a Read/Write Extra Parameter in X memory, accessed indirectly
  * with the SCI_WRAMADDR and SCI_WRAM.
  *
- * The endFillByte indicates what byte value to send as to properly flush the 
- * streams playback buffer, before SM_CANCEL is set, as to gracefully end the 
+ * The endFillByte indicates what byte value to send as to properly flush the
+ * streams playback buffer, before SM_CANCEL is set, as to gracefully end the
  * current stream.
  *
  * \warning Omitting the endFillByte requirement may prevent subsequent streams from
@@ -532,7 +550,7 @@ extern SdFile track;
  * para_MonoOutput is a Read/Write Extra Parameter in X memory, accessed indirectly
  * with the SCI_WRAMADDR and SCI_WRAM.
  *
- * Analog output of the VS10XX may be configuured to be either either 
+ * Analog output of the VS10XX may be configuured to be either either
  * Stereo(default) or Mono. When correspondingly set to 0 or 1.
  *
  * \warning This feature is only available when composite patch 1.7 or higher
@@ -662,6 +680,8 @@ class SFEMP3Shield {
     uint8_t enableTestSineWave(uint8_t);
     uint8_t disableTestSineWave();
     uint16_t memoryTest();
+    uint8_t ADMixerLoad(char*);
+    void ADMixerVol(int8_t);
 
   private:
     static SdFile track;

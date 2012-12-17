@@ -12,7 +12,7 @@
 </CENTER>
 
 \section Intro Introduction
-The Arduino SFEMP3Shield Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's
+The Arduino SFEMP3Shield Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino, along with mixing input signals. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's
 
 Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Seeduino MP3 Player Shield. \ref Hardware and documentation is provided as to how to implement this and an Arduino Mega. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.
 
@@ -75,6 +75,8 @@ Support for Gravitech MP3-4NANO shield please see \ref GRAVITECH
 
 - <b>The SPI Bus:</b>
 The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.
+\todo
+There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite
 
 - <b>Non-Blocking:</b>
 The controlling sketch needs to enquire via SFEMP3Shield::isPlaying as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.
@@ -82,12 +84,16 @@ The controlling sketch needs to enquire via SFEMP3Shield::isPlaying as to determ
 - <b>Multi-Chip VS10xx support:</b>
 Not at this time. There are too many issues with member functions of the SFEMP3Shield class requiring to be static.
 
+- <b>Audio Input</b>
+Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and SFEMP3Shield::ADMixerLoad and SFEMP3Shield::ADMixerVol are provided for such devices. Otherwise the example MP3Shield_Library_Demo.ino has these lines commented out in setup(). As to reduce complications. To re-enable simply uncomment.
+
+- <b>Recording</b>
+As most commericially available shields do not support audio input this feature has not been implemented. 
 \todo
-There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite
+Support Audio Recording.
 
 \section Plug_Ins Plug Ins
-vs_plg_to_bin.pl is a perl script that will read and digest the .plg files
-and convert them to raw binary as to be read by SFEMP3Shield::VSLoadUserCode() from the SdCard.
+\em vs_plg_to_bin.pl is a perl script, that is provided in this library to run on your PC, to read and digest the .plg files converting them to raw binary as to be read by SFEMP3Shield::VSLoadUserCode() from the SdCard.
 Allowing updates to the VSDsp into its volatile memory after each reset.
 These updates may be custom features or accumulated patches.
 
@@ -109,7 +115,9 @@ The filenames are kept short as SdCard only support 8.3.
 .\\eq5.053       .\\vs1053b-eq5-090\\vs1053b-eq5.plg
 </pre>
 
-\note These plugins should be placed in the root of the SdCard.
+\note All plugins should be placed in the root of the SdCard.
+\note Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a>. 
+\see about Analog to Digital Mixer (e.g. admx____.053) please note \ref limitation
 
 \section Troubleshooting Troubleshooting
 
@@ -121,7 +129,7 @@ The below is a list of basic questions to ask when attempting to determine the p
   - Reset the Arduino after Serial Monitor is open or send any key. It may have printed these prior to the Serial Monitor being started.
 
 - \b WHAT is the Error reported?
-  - Is the Error Code is indicating a file problem. 
+  - Is the Error Code is indicating a file problem.
   - Are the filenames 8.3 format? See below warning.
   - See also \ref Error_Codes
 
@@ -142,13 +150,13 @@ The below is a list of basic questions to ask when attempting to determine the p
 - Why do I only \b hear 1 second of music, or less?
   - This symptom is typical of the interrupt not triggering the SFEMP3Shield::refill(). I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.
   - What board is it? Check Hardware \ref limitation about Interrupts.
-  - Are you trying the SFE provided <a href="&quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? The SFE test files are nice as they are Immediately LOUD. 
+  - Are you trying the SFE provided <a href="&quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? The SFE test files are nice as they are Immediately LOUD.
   - Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.
 
 \note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
 
 \warning SdFatLib only supports 8.3 filenames. Long file names will not work.
-Use the \c 'd' menu command to display directory contents of the SdCard. 
+Use the \c 'd' menu command to display directory contents of the SdCard.
 \c "longfilename.mp3" will be converted to \c "longfi~1\.mp3" . Where one can not predict the value of the 1. The DOS command of \c "dir \c /x" will list a cross reference, so that you know exactly, what is what.
 
 \section Error_Codes Error Codes

@@ -112,6 +112,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ac4bf6a2eb42f50e2472530f5842687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a5ac4bf6a2eb42f50e2472530f5842687">setBitRate</a> (uint16_t)</td></tr>
 <tr class="memdesc:a5ac4bf6a2eb42f50e2472530f5842687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force bit rate.  <a href="#a5ac4bf6a2eb42f50e2472530f5842687"></a><br/></td></tr>
 <tr class="separator:a5ac4bf6a2eb42f50e2472530f5842687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40c1c5874c8edc63c3e2eb4d346fd2e3"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3">ADMixerLoad</a> (char *)</td></tr>
+<tr class="memdesc:a40c1c5874c8edc63c3e2eb4d346fd2e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initially load ADMixer patch and configure line/mic mode.  <a href="#a40c1c5874c8edc63c3e2eb4d346fd2e3"></a><br/></td></tr>
+<tr class="separator:a40c1c5874c8edc63c3e2eb4d346fd2e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b1696f32ac61f8d78d538cb5b5ee2db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db">ADMixerVol</a> (int8_t)</td></tr>
+<tr class="memdesc:a3b1696f32ac61f8d78d538cb5b5ee2db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set ADMixer's attenuation of input to between -3 and -31 dB otherwise disable.  <a href="#a3b1696f32ac61f8d78d538cb5b5ee2db"></a><br/></td></tr>
+<tr class="separator:a3b1696f32ac61f8d78d538cb5b5ee2db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a29c4421e5b87e9d822db9520b907aba4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a29c4421e5b87e9d822db9520b907aba4">SetVolume</a> (uint8_t, uint8_t)</td></tr>
 <tr class="memdesc:a29c4421e5b87e9d822db9520b907aba4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store and Push member volume to VS10xx chip.  <a href="#a29c4421e5b87e9d822db9520b907aba4"></a><br/></td></tr>
@@ -296,6 +302,71 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Interface Driver to the VS10xx chip on the SPI. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a40c1c5874c8edc63c3e2eb4d346fd2e3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t SFEMP3Shield::ADMixerLoad </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>fileName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initially load ADMixer patch and configure line/mic mode. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Loads a patch file of Analog to Digital Mixer. Current available options are as follows:</p>
+<ul>
+<li>"admxster.053" Takes both ADC channels and routes them to left and right outputs.</li>
+<li>"admxswap.053" Swaps both Left and Right ADC channels and routes them to left and right outputs.</li>
+<li>"admxleft.053" MIC/LINE1 routed to both left and right output</li>
+<li>"admxrght.053" LINE2 routed to both left and right output</li>
+<li>"admxmono.053" mono version mixes both left and right inputs and plays them using both left and right outputs.</li>
+</ul>
+<p>And subsequently returns the following result codes.</p>
+<dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured.<ul>
+<li>0 indicates that upload was successful.</li>
+<li>1 indicates the upload can not be performed while currently streaming music.</li>
+<li>2 indicates that desired file was not found. </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3b1696f32ac61f8d78d538cb5b5ee2db"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::ADMixerVol </td>
+          <td>(</td>
+          <td class="paramtype">int8_t&#160;</td>
+          <td class="paramname"><em>ADM_volume</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set ADMixer's attenuation of input to between -3 and -31 dB otherwise disable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">-3</td><td>through -31 dB of attentuation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Will range check the requested value and for values out of range the VSdsp's ADMixer will be disabled. While valid ranges will write to VSdsp's current operating volume and enable the the ADMixer.</p>
+<dl class="section warning"><dt>Warning</dt><dd>If file patch not applied this call will lock up the VS10xx. need to add interlock to avoid. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a6a0a8fdb064732ff6e98cc4a717600a5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1511,6 +1582,12 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><div class="memdoc">
 
 <p>load VS1xxx with patch or plugin from file on SDcard. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename</td></tr>
+  </table>
+  </dd>
+</dl>
 <p>Loads the VX10xx with filename of the specified patch, if present. This can be used to load various VSdsp apps, patches and plug-in's. Providing many new features and updates not present on the default firmware.</p>
 <p>The file format of the plugin is raw binary, in VLSI's interleaved and RLE compressed format, as extracted from the source plugin file (.plg). A perl script <code>vs_plg_to_bin.pl</code> is provided to convert the .plg file in to the binary filename.053. Where the extension of .053 is a convention to indicate the VSdsp chip version.</p>
 <dl class="section note"><dt>Note</dt><dd>by default all plug-ins are expected to be in the root of the SdCard.</dd></dl>
@@ -1780,7 +1857,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 15 2012 19:49:59 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 16 2012 21:05:16 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

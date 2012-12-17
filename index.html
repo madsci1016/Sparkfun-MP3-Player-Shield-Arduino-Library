@@ -105,7 +105,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="textblock"><center>Copyright &copy; 2012 </center><h1><a class="anchor" id="Intro"></a>
 Introduction</h1>
-<p>The Arduino <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's</p>
+<p>The Arduino <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino, along with mixing input signals. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's</p>
 <p>Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Seeduino MP3 Player Shield. <a class="el" href="index.html#Hardware">Hardware</a> and documentation is provided as to how to implement this and an Arduino Mega. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.</p>
 <h1><a class="anchor" id="Contributors"></a>
 Contributors</h1>
@@ -181,7 +181,8 @@ MP3-4NANO Shield</h2>
 <h2><a class="anchor" id="limitation"></a>
 Limitations.</h2>
 <ul>
-<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.</li>
+<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite</dd></dl>
+</li>
 </ul>
 <ul>
 <li><b>Non-Blocking:</b> The controlling sketch needs to enquire via <a class="el" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980" title="Inidicate if a song is playing?">SFEMP3Shield::isPlaying</a> as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.</li>
@@ -189,10 +190,16 @@ Limitations.</h2>
 <ul>
 <li><b>Multi-Chip VS10xx support:</b> Not at this time. There are too many issues with member functions of the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> class requiring to be static.</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite</dd></dl>
+<ul>
+<li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable.">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example MP3Shield_Library_Demo.ino has these lines commented out in setup(). As to reduce complications. To re-enable simply uncomment.</li>
+</ul>
+<ul>
+<li><b>Recording</b> As most commericially available shields do not support audio input this feature has not been implemented. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>Support Audio Recording.</dd></dl>
+</li>
+</ul>
 <h1><a class="anchor" id="Plug_Ins"></a>
 Plug Ins</h1>
-<p>vs_plg_to_bin.pl is a perl script that will read and digest the .plg files and convert them to raw binary as to be read by <a class="el" href="class_s_f_e_m_p3_shield.html#a265916fb004e8bf98d14eaa415cc28a5" title="load VS1xxx with patch or plugin from file on SDcard.">SFEMP3Shield::VSLoadUserCode()</a> from the SdCard. Allowing updates to the VSDsp into its volatile memory after each reset. These updates may be custom features or accumulated patches.</p>
+<p><em>vs_plg_to_bin.pl</em> is a perl script, that is provided in this library to run on your PC, to read and digest the .plg files converting them to raw binary as to be read by <a class="el" href="class_s_f_e_m_p3_shield.html#a265916fb004e8bf98d14eaa415cc28a5" title="load VS1xxx with patch or plugin from file on SDcard.">SFEMP3Shield::VSLoadUserCode()</a> from the SdCard. Allowing updates to the VSDsp into its volatile memory after each reset. These updates may be custom features or accumulated patches.</p>
 <p>By storing them on the SdCard these plug-ins do not consume the Arduino's limited Flash spaces</p>
 <p>Below are pre-compiled binary's of corresponding provided VSLI patches/plugins. The filenames are kept short as SdCard only support 8.3.</p>
 <pre>
@@ -206,7 +213,10 @@ Plug Ins</h1>
 .\patches.053   .\vs1053b-patches195\vs1053b-patches.plg
 .\rtmidi.053    .\vs1053b-rtmidistart\rtmidistart.plg
 .\eq5.053       .\vs1053b-eq5-090\vs1053b-eq5.plg
-</pre><dl class="section note"><dt>Note</dt><dd>These plugins should be placed in the root of the SdCard.</dd></dl>
+</pre><dl class="section note"><dt>Note</dt><dd>All plugins should be placed in the root of the SdCard. </dd>
+<dd>
+Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a>. </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>about Analog to Digital Mixer (e.g. admx____.053) please note <a class="el" href="index.html#limitation">Limitations.</a></dd></dl>
 <h1><a class="anchor" id="Troubleshooting"></a>
 Troubleshooting</h1>
 <p>The below is a list of basic questions to ask when attempting to determine the problem.</p>
@@ -256,7 +266,7 @@ Troubleshooting</h1>
 <li>Why do I only <b>hear</b> 1 second of music, or less?<ul>
 <li>This symptom is typical of the interrupt not triggering the <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data.">SFEMP3Shield::refill()</a>. I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.</li>
 <li>What board is it? Check Hardware <a class="el" href="index.html#limitation">Limitations.</a> about Interrupts.</li>
-<li>Are you trying the <a href="&amp;quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? These are nice as they are Immediately LOUD.</li>
+<li>Are you trying the SFE provided <a href="&amp;quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? The SFE test files are nice as they are Immediately LOUD.</li>
 <li>Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.</li>
 </ul>
 </li>
@@ -318,7 +328,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 15 2012 19:49:59 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 16 2012 21:05:16 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

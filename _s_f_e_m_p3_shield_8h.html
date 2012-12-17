@@ -236,6 +236,9 @@ Macros</h2></td></tr>
 <tr class="memitem:af901d82a70ea82d76ffff4f558edd588"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#af901d82a70ea82d76ffff4f558edd588">SM_CLK_RANGE</a>&#160;&#160;&#160;0x8000</td></tr>
 <tr class="memdesc:af901d82a70ea82d76ffff4f558edd588"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro of the SM_CLK_RANGE bit mask of the SCI_MODE register.  <a href="#af901d82a70ea82d76ffff4f558edd588"></a><br/></td></tr>
 <tr class="separator:af901d82a70ea82d76ffff4f558edd588"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7e48f49e56c8407b261019bb419d8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a4f7e48f49e56c8407b261019bb419d8e">VS_LINE1_MODE</a></td></tr>
+<tr class="memdesc:a4f7e48f49e56c8407b261019bb419d8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro of the VS_LINE1_MODE to configure either Line level or microphone input.  <a href="#a4f7e48f49e56c8407b261019bb419d8e"></a><br/></td></tr>
+<tr class="separator:a4f7e48f49e56c8407b261019bb419d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Extra_Parameter_Group</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Extra Parameter in X memory (refer to p.58 of the datasheet) / </p>
 </div></td></tr>
@@ -892,7 +895,8 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A macro of the SM_LINE1 bit mask of the SCI_MODE register. </p>
-<p>SM_LINE_IN is used to select the left-channel input for ADPCM recording. If '0', differential microphone input pins MICP and MICN are used; if '1', line-level MICP/LINEIN1 pin is used. </p>
+<p>SM_LINE_IN is used to select the left-channel input for ADPCM recording. If '0', differential microphone input pins MICP and MICN are used; if '1', line-level MICP/LINEIN1 pin is used.</p>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_8h.html#a4f7e48f49e56c8407b261019bb419d8e" title="A macro of the VS_LINE1_MODE to configure either Line level or microphone input.">VS_LINE1_MODE</a> </dd></dl>
 
 </div>
 </div>
@@ -1065,6 +1069,22 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4f7e48f49e56c8407b261019bb419d8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VS_LINE1_MODE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A macro of the VS_LINE1_MODE to configure either Line level or microphone input. </p>
+<p>Used by <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> to determine if the SM_LINE1 of SCI_MODE being set as to use both MICP and LINEIN1 pins as <b>stereo</b> input, at line levels. Commenting it out, will result MICP and MICN used as differential input with resulting <b>mono</b> signal on the left channel.</p>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_8h.html#a13ee6003e76f9ea30610e18acb34f0e1" title="A macro of the SM_LINE1 bit mask of the SCI_MODE register.">SM_LINE1</a> </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a class="anchor" id="ad701087b7fa2b683f9da6cdb04c9ecbf"></a>
 <div class="memitem">
@@ -1195,7 +1215,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 15 2012 19:49:59 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 16 2012 21:05:16 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

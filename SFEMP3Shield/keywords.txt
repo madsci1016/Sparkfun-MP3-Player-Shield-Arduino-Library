@@ -6,26 +6,41 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-SFEMP3Shield	KEYWORD1
+SFEMP3Shield             KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin	KEYWORD2
-available	KEYWORD2
-stopTrack	KEYWORD2
-playTrack	KEYWORD2
-playMP3	KEYWORD2
-SetVolume	KEYWORD2
-isPlaying   KEYWORD2
-pauseDataStream	KEYWORD2
-resumeDataStream	KEYWORD2
-skipTo	KEYWORD2
-currentPosition	KEYWORD2
-setBitRate	KEYWORD2
-trackTitle	KEYWORD2
-trackArtist	KEYWORD2
-trackAlbum	KEYWORD2
+ADMixerLoad              KEYWORD2
+ADMixerVol               KEYWORD2
+available                KEYWORD2
+begin                    KEYWORD2
+currentPosition          KEYWORD2
+disableTestSineWave      KEYWORD2
+enableTestSineWave       KEYWORD2
+getAudioInfo             KEYWORD2
+GetEarSpeaker            KEYWORD2
+GetMonoMode              KEYWORD2
+GetPlaySpeed             KEYWORD2
+GetVolume                KEYWORD2
+isPlaying                KEYWORD2
+memoryTest               KEYWORD2
+pauseDataStream          KEYWORD2
+playMP3                  KEYWORD2
+playTrack                KEYWORD2
+resumeDataStream         KEYWORD2
+setBitRate               KEYWORD2
+SetEarSpeaker            KEYWORD2
+SetMonoMode              KEYWORD2
+SetPlaySpeed             KEYWORD2
+SetVolume                KEYWORD2
+skipTo                   KEYWORD2
+stopTrack                KEYWORD2
+trackAlbum               KEYWORD2
+trackArtist              KEYWORD2
+trackTitle               KEYWORD2
+vs_init                  KEYWORD2
+
 
 #######################################
 # Constants (LITERAL1)
@@ -34,5 +49,4 @@ trackAlbum	KEYWORD2
 #######################################
 # Instances (KEYWORD3)
 #######################################
-MP3player	KEYWORD3
-
+MP3player                KEYWORD3

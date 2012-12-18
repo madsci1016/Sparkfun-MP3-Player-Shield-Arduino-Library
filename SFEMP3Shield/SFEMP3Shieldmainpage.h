@@ -160,6 +160,9 @@ The below is a list of basic questions to ask when attempting to determine the p
   - Are you trying the SFE provided <a href="&quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? The SFE test files are nice as they are Immediately LOUD.
   - Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.
 
+- <tt>Free RAM = 1090 Should be a base line of 1094</tt>
+  - As a courtesy and good practice the provided example MP3Shield_Library_Demo.ino prints out the available remaining RAM, not statically allocated. And the actual available amount may depend on specific processor, IDE version, libraries and or other factors. A Uno built with IDE version 1.0.2 should have approximately 1094 bytes available from the example as is. And a Mega using a 2560 may show 6713, as it has more RAM. 
+
 \note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
 
 \warning SdFatLib only supports 8.3 filenames. Long file names will not work.

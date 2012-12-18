@@ -33,7 +33,7 @@ Sd2Card.cpp and a 2nd time with SFEMP3Shield.cpp.
 
 \n
 
-\note 
+\note
 Support for Arduino Leonardo is afflicted by having the SPI pins not routing the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it should simply work with additional jumpers, from the Leonardo's ICSP port, which has the SPI pins to the MP3 shields equivalent SPI pins.
 <tt>
 \n Leo's ICSP4 to the MP3's D11 for MOSI
@@ -76,8 +76,8 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * \def GRAVITECH
  * \brief A macro to configure use on a Gravitech's MP3-4NANO shield
  *
- * Gravitech's MP3-4NANO shield is supported. However, its chip select of the 
- * SdCard connected to D4. This can be configured, simply by setting the below 
+ * Gravitech's MP3-4NANO shield is supported. However, its chip select of the
+ * SdCard connected to D4. This can be configured, simply by setting the below
  * define of GRAVITECH to 1.
  *
  * Set \c GRAVITECH to \c 0 to use on a Gravitech's MP3-4NANO shield
@@ -146,28 +146,28 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
 
 // if SEEDUINO use the following pin outs
 #if ( SEEEDUINO == 1 )
-#define MP3_XCS             A3 //Control Chip Select Pin (for accessing SPI Control/Status registers)
-#define MP3_XDCS            A2 //Data Chip Select / BSYNC Pin
-#define MP3_DREQ            A1 //Data Request Pin: Player asks for more data
-//#define MP3_DREQINT        0 // There is no IRQ used on Seeduino
-#define MP3_RESET           A0 //Reset is active low
-#define SD_SEL              10 //select pin for SD card
+  #define MP3_XCS             A3 //Control Chip Select Pin (for accessing SPI Control/Status registers)
+  #define MP3_XDCS            A2 //Data Chip Select / BSYNC Pin
+  #define MP3_DREQ            A1 //Data Request Pin: Player asks for more data
+  //#define MP3_DREQINT        0 // There is no IRQ used on Seeduino
+  #define MP3_RESET           A0 //Reset is active low
+  #define SD_SEL              10 //select pin for SD card
 #else // otherwise use pinout of typical Sparkfun MP3 Player Shield.
-#define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
-#define MP3_XDCS             7 //Data Chip Select / BSYNC Pin
-#define MP3_DREQ             2 //Data Request Pin: Player asks for more data
-#if defined(__AVR_ATmega32U4__)
-#define MP3_DREQINT          1 //Corresponding INTx for DREQ pin
-#else // swapped between Uno and Leonardo.
-#define MP3_DREQINT          0 //Corresponding INTx for DREQ pin
-#endif
-#define MP3_RESET            8 //Reset is active low
-#if ( GRAVITECH == 1 )
-#define SD_SEL               4 //select pin for SD card
-#else
-#define SD_SEL               9 //select pin for SD card
-#endif
-#endif
+  #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
+  #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin
+  #define MP3_DREQ             2 //Data Request Pin: Player asks for more data
+  #if defined(__AVR_ATmega32U4__)
+    #define MP3_DREQINT          1 //Corresponding INTx for DREQ pin
+  #else // swapped between Uno and Leonardo.
+    #define MP3_DREQINT          0 //Corresponding INTx for DREQ pin
+  #endif
+  #define MP3_RESET            8 //Reset is active low
+  #if ( GRAVITECH == 1 )
+    #define SD_SEL               4 //select pin for SD card
+  #else
+    #define SD_SEL               9 //select pin for SD card
+  #endif // GRAVITECH
+#endif // none SEEEDUINO
 
 //------------------------------------------------------------------------------
 /**

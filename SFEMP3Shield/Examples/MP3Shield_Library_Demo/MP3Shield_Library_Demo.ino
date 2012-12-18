@@ -34,14 +34,12 @@
   #include <SimpleTimer.h>
 #endif
 
-//create and name the library object
+/**
+ * \brief Object instancing the library.
+ *
+ * principal object for handling all the attributes, members and functions for the library.
+ */
 SFEMP3Shield MP3player;
-
-byte result;
-
-char title[30];
-char artist[30];
-char album[30];
 
 //------------------------------------------------------------------------------
 /**
@@ -58,11 +56,14 @@ char album[30];
  * \ref Error_Codes
  */
 void setup() {
+
+  uint8_t result; //result code from some function as to be tested at later time.
+
   Serial.begin(115200);
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1007, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1094, on ATmega328 when using INTx"));
 
   //boot up the MP3 Player Shield
   result = MP3player.begin();
@@ -76,10 +77,13 @@ void setup() {
       Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
     }
   }
+
+// Typically not used by most shields, hence commented out.
 //  Serial.println(F("Applying ADMixer patch."));
-//  MP3player.ADMixerLoad("admxster.053");
-//  Serial.println(F("Setting ADMixer Volume."));
-//  MP3player.ADMixerVol(-3);
+//  if (MP3player.ADMixerLoad("admxster.053") == 0) {
+//    Serial.println(F("Setting ADMixer Volume."));
+//    MP3player.ADMixerVol(-3);
+//  }
 
   help();
 }
@@ -121,6 +125,14 @@ void loop() {
  * next input command.
  */
 void parse_menu(byte key_command) {
+
+  uint8_t result; // result code from some function as to be tested at later time.
+  
+  // Note these buffer may be desired to exist globably. 
+  // but do take much space if only needed temporarily, hence they are here.
+  char title[30]; // buffer to contain the extract the Title from the current filehandles
+  char artist[30]; // buffer to contain the extract the artist name from the current filehandles
+  char album[30]; // buffer to contain the extract the album name from the current filehandles
 
   Serial.print(F("Received command: "));
   Serial.write(key_command);

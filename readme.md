@@ -1,4 +1,4 @@
-# Arduino VS1053 Library 
+# Arduino VS1053 Library
 
 The Arduino SFEMP3Shield Library is a real time non-blocking interrupt driven library for VSLI's VS10xx. (e.i. VS1053), implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino. Principally this library is developed for the VS1053\. where it may be compatible with other VS10xx's
 

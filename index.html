@@ -20,6 +20,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
    &#160;<span id="projectnumber">1.00.01</span>
@@ -180,8 +181,7 @@ MP3-4NANO Shield</h2>
 <h2><a class="anchor" id="limitation"></a>
 Limitations.</h2>
 <ul>
-<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>There is a way to speed up digitalwrites, a principal causing delay, by either directly writing the I/O or perferably. using SdFat's atomwrite</dd></dl>
-</li>
+<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.</li>
 </ul>
 <ul>
 <li><b>Non-Blocking:</b> The controlling sketch needs to enquire via <a class="el" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980" title="Inidicate if a song is playing?">SFEMP3Shield::isPlaying</a> as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.</li>
@@ -193,7 +193,7 @@ Limitations.</h2>
 <li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable.">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example <a class="el" href="_m_p3_shield___library___demo_8ino.html">MP3Shield_Library_Demo.ino</a> has these lines commented out in <a class="el" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup()</a>. As to reduce complications. To re-enable simply uncomment.</li>
 </ul>
 <ul>
-<li><b>Recording</b> As most commericially available shields do not support audio input this feature has not been implemented. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Support Audio Recording.</dd></dl>
+<li><b>Recording</b> As most commericially available shields do not support audio input this feature has not been implemented. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Support Audio Recording.</dd></dl>
 </li>
 </ul>
 <h1><a class="anchor" id="Plug_Ins"></a>
@@ -344,7 +344,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 18 2012 15:30:51 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 18 2012 16:35:55 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

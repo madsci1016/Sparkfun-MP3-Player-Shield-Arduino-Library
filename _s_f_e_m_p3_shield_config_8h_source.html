@@ -20,6 +20,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
    &#160;<span id="projectnumber">1.00.01</span>
@@ -104,76 +105,86 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment"> * MP3 Player Shield pin mapping. See the appropiate schematic</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">// if SEEDUINO use the following pin outs</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="preprocessor">#if ( SEEEDUINO == 1 )</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_XCS             A3 //Control Chip Select Pin (for accessing SPI Control/Status registers)</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_XDCS            A2 //Data Chip Select / BSYNC Pin</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_DREQ            A1 //Data Request Pin: Player asks for more data</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor"></span>  <span class="comment">//#define MP3_DREQINT        0 // There is no IRQ used on Seeduino</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">  #define MP3_RESET           A0 //Reset is active low</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define SD_SEL              10 //select pin for SD card</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#else // otherwise use pinout of typical Sparkfun MP3 Player Shield.</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aa37859adf05cbfc9aa03bbd4fdbc4f20">  156</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aafbb2c3ede0f64728c04d7e835d25423">  157</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a1831fd1c252d7a04297f27fc9bdbbdc4">  158</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_DREQ             2 //Data Request Pin: Player asks for more data</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #if defined(__AVR_ATmega32U4__)</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_DREQINT          1 //Corresponding INTx for DREQ pin</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #else // swapped between Uno and Leonardo.</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a125a689293ff5d276cd0f92f9e51c147">  162</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_DREQINT          0 //Corresponding INTx for DREQ pin</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #endif</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a702bf9d1ef734b404340d69ab24cb1e6">  164</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #define MP3_RESET            8 //Reset is active low</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #if ( GRAVITECH == 1 )</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define SD_SEL               4 //select pin for SD card</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #else</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aacbac5c44278a37aeeceffe01ccdda1b">  168</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define SD_SEL               9 //select pin for SD card</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #endif // GRAVITECH</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif // none SEEEDUINO</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a4c60fb7c286789d19f9ed13a19891653">  195</a></span>&#160;<span class="comment"></span><span class="preprocessor">#define USE_MP3_REFILL_MEANS USE_MP3_INTx</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment"> * Configure the implemented means of Refilling the VS10xx chip</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS)</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00217"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a23367b3a13b44ead98bf4ecadad83a4f">  217</a></span>&#160;<span class="preprocessor">#define USE_MP3_INTx        0</span></div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00227"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a1ab77ddc51395e573f6f1dd2f8c63b0f">  227</a></span>&#160;<span class="preprocessor">#define USE_MP3_Polled      1</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">//#if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1280__)</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">//  #define MP3_XCS             67      //PK5 Output, Active Low,  Control Chip Select Pin (for accessing SPI Control/Status registers)</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">//  #define MP3_XDCS            68      //PK6 Output, Active Low,  Data Chip Select / BSYNC Pin</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">//  #define MP3_DREQ            66      //PK4 Input , Active High, Data Request Pin: Player asks for more data</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">//  #define MP3_DREQINT          5      //Corresponding INTx for DREQ pin</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">//  #define MP3_RESET           65      //PK3 Output, Active Low,  Reset is active low</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">//  #define SDCARD_CS           76      //PJ6 Output, Active Low</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment">//  #define SD_SEL       SDCARD_CS      //select pin for SD card</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="comment">//#else</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="comment">// if SEEDUINO use the following pin outs</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">  #if ( SEEEDUINO == 1 )</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_XCS             A3 //Control Chip Select Pin (for accessing SPI Control/Status registers)</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_XDCS            A2 //Data Chip Select / BSYNC Pin</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_DREQ            A1 //Data Request Pin: Player asks for more data</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor"></span>    <span class="comment">//#define MP3_DREQINT        0 // There is no IRQ used on Seeduino</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="preprocessor">    #define MP3_RESET           A0 //Reset is active low</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define SD_SEL              10 //select pin for SD card</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #else // otherwise use pinout of typical Sparkfun MP3 Player Shield.</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aa37859adf05cbfc9aa03bbd4fdbc4f20">  165</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aafbb2c3ede0f64728c04d7e835d25423">  166</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a1831fd1c252d7a04297f27fc9bdbbdc4">  167</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_DREQ             2 //Data Request Pin: Player asks for more data</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #if defined(__AVR_ATmega32U4__)</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor"></span><span class="preprocessor">      #define MP3_DREQINT          1 //Corresponding INTx for DREQ pin</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #else // swapped between Uno and Leonardo.</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a125a689293ff5d276cd0f92f9e51c147">  171</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">      #define MP3_DREQINT          0 //Corresponding INTx for DREQ pin</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a702bf9d1ef734b404340d69ab24cb1e6">  173</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #define MP3_RESET            8 //Reset is active low</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #if ( GRAVITECH == 1 )</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="preprocessor"></span><span class="preprocessor">      #define SD_SEL               4 //select pin for SD card</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #else</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aacbac5c44278a37aeeceffe01ccdda1b">  177</a></span>&#160;<span class="preprocessor"></span><span class="preprocessor">      #define SD_SEL               9 //select pin for SD card</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="preprocessor"></span><span class="preprocessor">    #endif // GRAVITECH</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #endif // none SEEEDUINO</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="preprocessor"></span><span class="comment">//#endif //__AVR_ATmega2560__</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a4c60fb7c286789d19f9ed13a19891653">  205</a></span>&#160;<span class="comment"></span><span class="preprocessor">#define USE_MP3_REFILL_MEANS USE_MP3_INTx</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="comment"> * Configure the implemented means of Refilling the VS10xx chip</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS)</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a23367b3a13b44ead98bf4ecadad83a4f">  227</a></span>&#160;<span class="preprocessor">#define USE_MP3_INTx        0</span></div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00239"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a95aa08c3b9f0124c89535b4fa0e0b502">  239</a></span>&#160;<span class="preprocessor">#define USE_MP3_Timer1      2</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00255"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#af051296056aad0d0c1c11eb173f42d63">  255</a></span>&#160;<span class="preprocessor">#define USE_MP3_SimpleTimer 3</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment"> * When means other than Polled and INTx are used the following Libraries need to be loaded.</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS == USE_MP3_Timer1</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #include &lt;TimerOne.h&gt;</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">// strange if TimerOne.h is present but not selected it still consums 6 bytes, something to do with Arduino&#39;s pre-compiler and Linker.</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="preprocessor">#elif defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #include &lt;SimpleTimer.h&gt;</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment">   When means are time based, need to define the period of update.</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">   100ms is recommened for 192K sample rate MP3. other rates may vary.</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS &gt; USE_MP3_Polled // not needed if INTx is used or polled in loop.</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="preprocessor">#define MP3_REFILL_PERIOD 100</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="preprocessor">#endif  // SFEMP3ShieldConfig_h</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a1ab77ddc51395e573f6f1dd2f8c63b0f">  237</a></span>&#160;<span class="preprocessor">#define USE_MP3_Polled      1</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00249"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a95aa08c3b9f0124c89535b4fa0e0b502">  249</a></span>&#160;<span class="preprocessor">#define USE_MP3_Timer1      2</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00265"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_config_8h.html#af051296056aad0d0c1c11eb173f42d63">  265</a></span>&#160;<span class="preprocessor">#define USE_MP3_SimpleTimer 3</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment"> * When means other than Polled and INTx are used the following Libraries need to be loaded.</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS == USE_MP3_Timer1</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #include &lt;TimerOne.h&gt;</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">// strange if TimerOne.h is present but not selected it still consums 6 bytes, something to do with Arduino&#39;s pre-compiler and Linker.</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor">#elif defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #include &lt;SimpleTimer.h&gt;</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="comment">   When means are time based, need to define the period of update.</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="comment">   100ms is recommened for 192K sample rate MP3. other rates may vary.</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS &gt; USE_MP3_Polled // not needed if INTx is used or polled in loop.</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="preprocessor">#define MP3_REFILL_PERIOD 100</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="preprocessor">#endif  // SFEMP3ShieldConfig_h</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 18 2012 15:30:51 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 18 2012 16:35:55 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -56,11 +56,10 @@ An example is provided in the SFEMP3Shield/examples folder.  Which is developed 
 As mentioned the initial and principal support of this library is with Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Although various other boards and shields may be implemented by customing the \ref SFEMP3ShieldConfig.h file.
 
 \subsection ArduinoMega Arduino Mega Board
-Support for Arduino Mega's is documented \ref SFEMP3ShieldConfig.h, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove. \
+Support for Arduino and Seeeduino Mega's are documented in \ref SFEMP3ShieldConfig.h, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove.
 
 \subsection Arduino_Leonardo Arduino Leonardo Board
-Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO. This is similar to the Arduino Mega. Where as it appears it could simply work with additional jumpers. Or by defining USE_MP3_REFILL_MEANS to USE_MP3_Polled. See <a href="http://arduino.cc/en/Reference/AttachInterrupt"> attachInterrupt() </a>.
-\todo This is yet to be verified.
+Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO/Duemilanove . This is similar to the Arduino Mega. Which simply REQUIRES additional jumpers, as documented in \ref SFEMP3ShieldConfig.h to correct the SPI. The swapping of INT0/INT1 is automatically corrected based on the Leonardo's processor type of __AVR_ATmega32U4__ being detected.
 
 \subsection SparkFunMP3Player SparkFun MP3 Player Shield
 SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 328 UNO/Duemilanove, with Interrupts.
@@ -92,7 +91,10 @@ As most commericially available shields do not support audio input this feature 
 \todo
 Support Audio Recording.
 
-\section Plug_Ins Plug Ins
+\section Plug_Ins Plug Ins and Patches
+
+The VS10xx chips are DSP's that run firmware out of RAM, that is loaded from ROM at boot time. The ROM is internal to the VS10xx chip itself. Where the VSdsp's RAM can additionally be loaded with externally provided firmware, also known as patches or plug-ins, over the SPI port and executed. This allows the VSdsp to have a method for both fixing problems that may exist in the factory ROM's firmware and or add new features provided by <A HREF = "http://www.vlsi.fi/en/support/software.html">VLSI's website</A>. It is even possible to write your own custom VSdsp code, using there Integrated Development Tools (VSIDE).
+
 \em vs_plg_to_bin.pl is a perl script, that is provided in this library to run on your PC, to read and digest the .plg files converting them to raw binary as to be read by SFEMP3Shield::VSLoadUserCode() from the SdCard.
 Allowing updates to the VSDsp into its volatile memory after each reset.
 These updates may be custom features or accumulated patches.
@@ -116,6 +118,8 @@ The filenames are kept short as SdCard only support 8.3.
 </pre>
 
 \note All plugins should be placed in the root of the SdCard.
+\note \b patches.053 is a cumulative update correcting many known troublesome issues. Hence patches.053 is attempted in SFEMP3Shield::vs_init.
+\note VSLI may post periodic updates on there <A HREF = "http://www.vlsi.fi/en/support/software.html">software website</A>
 \note Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a>. 
 \see about Analog to Digital Mixer (e.g. admx____.053) please note \ref limitation
 
@@ -143,9 +147,12 @@ The below is a list of basic questions to ask when attempting to determine the p
   - Remember to put patch and audio track files on the SdCard after formatting.
   - Are the filenames 8.3 format? See below warning.
 
-- <pre>"Error code: 1 when \b trying to play track"</pre>
+- <tt>"Error code: 1 when \b trying to play track"</tt>
   - See the above \ref limitation about Non-Blocking.
   - Remember to check your audio cables and volume.
+
+- <tt>"Warning: patch file not found, skipping."</tt>
+  - See the \ref Plug_Ins
 
 - Why do I only \b hear 1 second of music, or less?
   - This symptom is typical of the interrupt not triggering the SFEMP3Shield::refill(). I bet repeatidly sendnig a track number will advance the play about one second at a time, then stop.

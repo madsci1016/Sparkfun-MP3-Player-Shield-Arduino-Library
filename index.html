@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.00.00</span>
+   &#160;<span id="projectnumber">1.00.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -153,7 +153,7 @@ Installation</h1>
 <li>The plugins and audio files are <b>not</b> needed to be placed into the Arduino directories as they are not directly a part of the compiled project.</li>
 </ul>
 </li>
-<li>Start IDE, load Example MP3Shield_Library_Demo.ino, select appropriate Board, Serial Port, Compile, load, run Serial Monitor at 115200 baud rate.<ul>
+<li>Start IDE, load Example <a class="el" href="_m_p3_shield___library___demo_8ino.html">MP3Shield_Library_Demo.ino</a>, select appropriate Board, Serial Port, Compile, load, run Serial Monitor at 115200 baud rate.<ul>
 <li>May need to Reset target Arduino and wait for Menu.</li>
 </ul>
 </li>
@@ -190,7 +190,7 @@ Limitations.</h2>
 <li><b>Multi-Chip VS10xx support:</b> Not at this time. There are too many issues with member functions of the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> class requiring to be static.</li>
 </ul>
 <ul>
-<li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable.">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example MP3Shield_Library_Demo.ino has these lines commented out in setup(). As to reduce complications. To re-enable simply uncomment.</li>
+<li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable.">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example <a class="el" href="_m_p3_shield___library___demo_8ino.html">MP3Shield_Library_Demo.ino</a> has these lines commented out in <a class="el" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup()</a>. As to reduce complications. To re-enable simply uncomment.</li>
 </ul>
 <ul>
 <li><b>Recording</b> As most commericially available shields do not support audio input this feature has not been implemented. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Support Audio Recording.</dd></dl>
@@ -226,7 +226,7 @@ Troubleshooting</h1>
 <p>The below is a list of basic questions to ask when attempting to determine the problem.</p>
 <ul>
 <li>Did it initially <b>PRINT</b> the available RAM and Full Help Menu?<ul>
-<li>The MP3Shield_Library_Demo.ino example should initially provide a opening print indicating the amount of available SRAM and full menu help. If you don't see this the problem is between your Target and IDE. And likely not this library</li>
+<li>The <a class="el" href="_m_p3_shield___library___demo_8ino.html">MP3Shield_Library_Demo.ino</a> example should initially provide a opening print indicating the amount of available SRAM and full menu help. If you don't see this the problem is between your Target and IDE. And likely not this library</li>
 <li>Is Serial Monitor set to the correct tty or com port and 115200 baud rate? Did you change the baud rate?</li>
 <li>Reset the Arduino after Serial Monitor is open or send any key. It may have printed these prior to the Serial Monitor being started.</li>
 </ul>
@@ -278,6 +278,12 @@ Troubleshooting</h1>
 <li>What board is it? Check Hardware <a class="el" href="index.html#limitation">Limitations.</a> about Interrupts.</li>
 <li>Are you trying the SFE provided <a href="&amp;quot;http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">test files</a> ? Or some homemade mp3 files? The SFE test files are nice as they are Immediately LOUD.</li>
 <li>Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><code>Free RAM = 1090 Should be a base line of 1094</code><ul>
+<li>As a courtesy and good practice the provided example <a class="el" href="_m_p3_shield___library___demo_8ino.html">MP3Shield_Library_Demo.ino</a> prints out the available remaining RAM, not statically allocated. And the actual available amount may depend on specific processor, IDE version, libraries and or other factors. A Uno built with IDE version 1.0.2 should have approximately 1094 bytes available from the example as is. And a Mega using a 2560 may show 6713, as it has more RAM.</li>
 </ul>
 </li>
 </ul>
@@ -338,7 +344,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 18 2012 11:37:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 18 2012 15:30:51 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

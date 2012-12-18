@@ -11,6 +11,7 @@ var searchData=
   ['para_5fpositionmsec_5f1',['para_positionMsec_1',['../_s_f_e_m_p3_shield_8h.html#af1e9ff94ad9a684e10252866f0097480',1,'SFEMP3Shield.h']]],
   ['para_5fresync',['para_resync',['../_s_f_e_m_p3_shield_8h.html#ab709a4c7ea09adabf0dbe1b100e2874d',1,'SFEMP3Shield.h']]],
   ['para_5fversion',['para_version',['../_s_f_e_m_p3_shield_8h.html#ad9d42f71b6e9f419f395e62957f065f0',1,'SFEMP3Shield.h']]],
+  ['parse_5fmenu',['parse_menu',['../_m_p3_shield___library___demo_8ino.html#a5cf3f5b5058bbd17aa0201c371163fb0',1,'MP3Shield_Library_Demo.ino']]],
   ['pausedatastream',['pauseDataStream',['../class_s_f_e_m_p3_shield.html#a077360a1036cf9c5cea1c1fe0657fec3',1,'SFEMP3Shield']]],
   ['playing',['playing',['../class_s_f_e_m_p3_shield.html#a50390baf6badc8f93fb3342a93a71804',1,'SFEMP3Shield']]],
   ['playmp3',['playMP3',['../class_s_f_e_m_p3_shield.html#ad1ece30ac83aa91c9295a83f8d69e6e3',1,'SFEMP3Shield']]],

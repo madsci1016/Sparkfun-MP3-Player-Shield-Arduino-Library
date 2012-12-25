@@ -1,5 +1,5 @@
 /**
- * \file SMP3Shield_Library_Demo.ino
+ * \file MP3Shield_Library_Demo.ino
  *
  * \brief Example sketch of using the SMP3Shield Arduino driver
  * \remarks comments are implemented with Doxygen Markdown format
@@ -98,6 +98,9 @@ void setup() {
  *
  * Additionally, if the means of refilling is not interrupt based then the
  * MP3player object is serviced with the availaible function.
+ *
+ * \note Actual examples of the libraries public functions are implemented in
+ * the parse_menu() function.
  */
 void loop() {
 
@@ -120,9 +123,9 @@ void loop() {
 /**
  * \brief Decode the Menu.
  *
- * Parses through the bytes of the users input, executing corresponding
- * MP3player functions and features and displaying a brief menu and prompt for
- * next input command.
+ * Parses through the characters of the users input, executing corresponding
+ * MP3player library functions and features then displaying a brief menu and 
+ * prompting for next input command.
  */
 void parse_menu(byte key_command) {
 

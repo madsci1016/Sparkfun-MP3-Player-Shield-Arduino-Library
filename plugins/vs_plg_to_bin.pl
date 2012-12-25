@@ -1,25 +1,43 @@
-#!/usr/bin/perl
-#
-# Converts VSLI's VS1xxx VSIDE plugin's to raw binary file
-#
-# usage  : vs_plg_to_bin.pl input.plg [output.vs]
-# where input.plg is provided by VSLI's down load software
-#  http://www.vlsi.fi/en/support/software.html
-# [output.vs] is optional, default is to output input.plg
-#
-# example: vs_plg_to_bin.pl c:\rtmidistart.plg
-# output: c:\rtmidistart.vs
-#
 
+#!/usr/bin/perl
+
+#** @file vs_plg_to_bin.pl
+# @verbatim
+#####################################################################
+# This program is not guaranteed to work at all, and by using this  #
+# program you release the author of any and all liability.          #
+#                                                                   #
+# You may use this code as long as you are in compliance with the   #
+# license (see the LICENSE file) and this notice, disclaimer and    #
+# comment box remain intact and unchanged.                          #
+#                                                                   #
+# Package:     Doxygen                                              #
+# Class:       Filter                                               #
+# Description: Methods for prefiltering code for Doxygen            #
+#                                                                   #
+# Written by:  Bret Jordan (jordan at open1x littledot org)         #
+# Created:     2011-10-13                                           #
+##################################################################### 
+# @endverbatim
+#
+# @copy 2011, Bret Jordan (jordan2175@gmail.com, jordan@open1x.org)
+# $Id: Filter.pm 88 2012-07-07 04:27:35Z jordan2175 $
+#*
 use strict;
 use warnings;
 
+#** @var $inF
+# Input Arguement of Filename to be processed.
+#*
 my $inF = $ARGV[0] or die "Need input file.\n";
 if ($inF !~ m/.plg$/i) {
 	print "Input file must be plg extension.\n";
 	exit(1);
 }
 
+#** @var
+# Output Arguement of Filename to be created.
+#*
 my $outF = $ARGV[1] || $inF; # create the name of the output file name, if not provided.
 $outF =~ s/.plg$/.vs/i;
 

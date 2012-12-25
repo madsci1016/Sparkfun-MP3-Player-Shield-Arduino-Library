@@ -91,7 +91,7 @@ Support Audio Recording.
 
 \section Plug_Ins Plug Ins and Patches
 
-The VS10xx chips are DSP's that run firmware out of RAM, that is loaded from ROM at boot time. The ROM is internal to the VS10xx chip itself. Where the VSdsp's RAM can additionally be loaded with externally provided firmware, also known as patches or plug-ins, over the SPI port and executed. This allows the VSdsp to have a method for both fixing problems that may exist in the factory ROM's firmware and or add new features provided by <A HREF = "http://www.vlsi.fi/en/support/software.html">VLSI's website</A>. It is even possible to write your own custom VSdsp code, using there Integrated Development Tools (VSIDE).
+The VS10xx chips are DSP's that run firmware out of ROM, that is internal to the VS10xx chip itself. Where the VSdsp's RAM can additionally be loaded with externally provided firmware and executed, also known as patches or plug-ins, over the SPI port and executed. This allows the VSdsp to have a method for both fixing problems that may exist in the factory ROM's firmware and or add new features provided by <A HREF = "http://www.vlsi.fi/en/support/software.html">VLSI's website</A>. It is even possible to write your own custom VSdsp code, using there Integrated Development Tools (VSIDE).
 
 \em vs_plg_to_bin.pl is a perl script, that is provided in this library to run on your PC, to read and digest the .plg files converting them to raw binary as to be read by SFEMP3Shield::VSLoadUserCode() from the SdCard.
 Allowing updates to the VSDsp into its volatile memory after each reset.
@@ -118,7 +118,7 @@ The filenames are kept short as SdCard only support 8.3.
 \note All plugins should be placed in the root of the SdCard.
 \note \b patches.053 is a cumulative update correcting many known troublesome issues. Hence patches.053 is attempted in SFEMP3Shield::vs_init.
 \note VSLI may post periodic updates on there <A HREF = "http://www.vlsi.fi/en/support/software.html">software website</A>
-\note Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a>. 
+\note Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a> for windows systems. 
 \see about Analog to Digital Mixer (e.g. admx____.053) please note \ref limitation
 
 \section Troubleshooting Troubleshooting

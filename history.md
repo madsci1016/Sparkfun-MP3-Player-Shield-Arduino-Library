@@ -1,5 +1,14 @@
 Revision History
 ---------------
+## 1.00.02
+* Fixed SkipTo() feature and added menu command.
+
+## 1.00.01
+* added support for Leonardo's interrupt switching and documentation.
+* added documentation Gravitech's MP3-4NANO
+* added Mono Mode and menu command, because of Nano's single speaker.
+* added ADMixerLoad and ADMixerVol features
+
 ## 1.00.00
 * formatted comments with Doxygen markdown.
 * rearranged location of functions for organizing documentation 

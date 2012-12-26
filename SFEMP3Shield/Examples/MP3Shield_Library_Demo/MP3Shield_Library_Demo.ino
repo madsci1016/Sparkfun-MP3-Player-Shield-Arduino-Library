@@ -1,7 +1,7 @@
 /**
  * \file MP3Shield_Library_Demo.ino
  *
- * \brief Example sketch of using the SMP3Shield Arduino driver
+ * \brief Example sketch of using the MP3Shield Arduino driver
  * \remarks comments are implemented with Doxygen Markdown format
  *
  * \author Bill Porter
@@ -124,14 +124,14 @@ void loop() {
  * \brief Decode the Menu.
  *
  * Parses through the characters of the users input, executing corresponding
- * MP3player library functions and features then displaying a brief menu and 
+ * MP3player library functions and features then displaying a brief menu and
  * prompting for next input command.
  */
 void parse_menu(byte key_command) {
 
   uint8_t result; // result code from some function as to be tested at later time.
-  
-  // Note these buffer may be desired to exist globably. 
+
+  // Note these buffer may be desired to exist globably.
   // but do take much space if only needed temporarily, hence they are here.
   char title[30]; // buffer to contain the extract the Title from the current filehandles
   char artist[30]; // buffer to contain the extract the artist name from the current filehandles
@@ -257,20 +257,20 @@ void parse_menu(byte key_command) {
     MP3player.getAudioInfo();
 
   } else if (key_command == 'p') {
-      MP3player.pauseDataStream();
-      Serial.println(F("Pausing"));
+    MP3player.pauseDataStream();
+    Serial.println(F("Pausing"));
 
   } else if (key_command == 'r') {
-      MP3player.resumeDataStream();
-      Serial.println(F("Resuming"));
+    MP3player.resumeDataStream();
+    Serial.println(F("Resuming"));
 
   } else if (key_command == 'R') {
-      MP3player.stopTrack();
-      MP3player.vs_init();
-      Serial.println(F("Reseting VS10xx chip"));
+    MP3player.stopTrack();
+    MP3player.vs_init();
+    Serial.println(F("Reseting VS10xx chip"));
 
   } else if (key_command == 't') {
-      int8_t teststate = MP3player.enableTestSineWave(126);
+    int8_t teststate = MP3player.enableTestSineWave(126);
     if (teststate == -1) {
       Serial.println(F("Un-Available while playing music."));
     } else if (teststate == 1) {
@@ -306,22 +306,34 @@ void parse_menu(byte key_command) {
     Serial.println(earspeaker, DEC);
 
   } else if (key_command == 'M') {
-      uint16_t monostate = MP3player.GetMonoMode();
-      Serial.print(F("Mono Mode "));
-      if (monostate == 0) {
-        MP3player.SetMonoMode(1);
-        Serial.println(F("Enabled."));
-      } else {
-        MP3player.SetMonoMode(0);
-        Serial.println(F("Disabled."));
-      }
+    uint16_t monostate = MP3player.GetMonoMode();
+    Serial.print(F("Mono Mode "));
+    if (monostate == 0) {
+      MP3player.SetMonoMode(1);
+      Serial.println(F("Enabled."));
+    } else {
+      MP3player.SetMonoMode(0);
+      Serial.println(F("Disabled."));
+    }
+
+  } else if (key_command == 'g') {
+    int32_t offset_ms = 20000; // Note this is just an example, try your own number.
+    Serial.print(F("Skipping = "));
+    Serial.print(offset_ms, DEC);
+    Serial.println(F("[milliseconds]"));
+    result = MP3player.skipTo(offset_ms);
+    if(result != 0) {
+      Serial.print(F("Error code: "));
+      Serial.print(result);
+      Serial.println(F(" when trying to skip track"));
+    }
 
   } else if (key_command == 'h') {
     help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,M,h :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,M,g,h :"));
 }
 
 //------------------------------------------------------------------------------
@@ -346,6 +358,7 @@ void help() {
   Serial.println(F(" [t] to toggle sine wave test"));
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
   Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
+  Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
   Serial.println(F(" [h] this help"));
 }
 

@@ -842,11 +842,12 @@ void SFEMP3Shield::resumeDataStream(){
  * Repositions the filehandles track location to the requested offset.
  * As calculated by the bitrate multiplied by the desired ms offset.
  *
- * Skipped if not currently playing.
- *
  * \return
  * - 0 indicates the position was changed.
  * - 1 indicates no action, in lieu of any current file stream.
+ * - 2 indicates failure to skip to new file location.
+ *
+ * \warning Limited to first 65535ms, since SdFile::seekSet(int32_t);
  */
 bool SFEMP3Shield::skipTo(uint32_t timecode){
 
@@ -856,9 +857,10 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
     disableRefill();
     playing=FALSE;
 
-    //seek to new position in file
-    bitrate = (Mp3ReadWRAM(para_byteRate) << 10); // multiply by 1024 to convert from K.
-    if(!track.seekSet((timecode * bitrate) + start_of_music))
+    // try to set the files position to current position + offset(in bytes)
+    // as calculated from current byte rate, as per VSdsp.
+    if(!track.seekSet(((timecode * Mp3ReadWRAM(para_byteRate))/1000) + start_of_music)) // skip to X ms.
+    //if(!track.seekCur((uint32_t(timecode/1000 * Mp3ReadWRAM(para_byteRate))))) // skip next X ms.
       return 2;
 
     Mp3WriteRegister(SCI_VOL, 0xFE, 0xFE);
@@ -1024,8 +1026,8 @@ void SFEMP3Shield::getAudioInfo() {
   Serial.print(F("\tStatus"));
   Serial.print(F("\tClockF"));
   Serial.print(F("\tpversion"));
-  Serial.print(F("\tpbyteRate"));
-  Serial.print(F("\tBitRate[K]"));
+  Serial.print(F("\t[Bytes/S]"));
+  Serial.print(F("\t[KBits/S]"));
   Serial.print(F("\tPlaySpeed"));
   Serial.print(F("\tDECODE_TIME"));
   Serial.print(F("\tCurrentPos"));
@@ -1065,7 +1067,7 @@ void SFEMP3Shield::getAudioInfo() {
   Serial.print(MP3ByteRate, HEX);
 
   Serial.print(F("\t\t"));
-  Serial.print((MP3ByteRate>>7), DEC);
+  Serial.print((MP3ByteRate>>7), DEC); // shift 7 is the same as *8/1024, and easier math.
 
   uint16_t MP3playSpeed = Mp3ReadWRAM(para_playSpeed);
   Serial.print(F("\t\t"));
@@ -1420,7 +1422,7 @@ void SFEMP3Shield::refill() {
 
     //Once DREQ is released (high) we now feed 32 bytes of data to the VS1053 from our SD read buffer
     dcs_low(); //Select Data
-    for(int y = 0 ; y < sizeof(mp3DataBuffer) ; y++) {
+    for(uint8_t y = 0 ; y < sizeof(mp3DataBuffer) ; y++) {
       //while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high // turns out it is not needed.
       SPI.transfer(mp3DataBuffer[y]); // Send SPI byte
     }
@@ -1477,7 +1479,7 @@ void SFEMP3Shield::disableRefill() {
  * - post - will flush vx10xx's 2K buffer after cancelled, typically with stopping a file, to have immediate affect.
  * - pre  - will flush buffer prior to issuing cancel, typically to allow completion of file
  * - both - will flush before and after issuing cancel
- * - none - will just issue cancel. Not sure if this should be used. Such as in skipto.
+ * - none - will just issue cancel. Not sure if this should be used. Such as in skipTo().
  *
  * \note if cancel fails the vs10xx will be reset and initialized to current values.
  */

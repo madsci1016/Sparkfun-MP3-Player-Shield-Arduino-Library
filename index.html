@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.00.02</span>
+   &#160;<span id="projectnumber">1.01.00 - Dev branch</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -297,19 +297,21 @@ begin function:</h2>
 <p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">SFEMP3Shield::begin()</a> member function. </p>
 <pre>
 0 OK
-1 Failure of SdFat to initialize physical contact with the SdCard
-2 Failure of SdFat to start the SdCard's volume
-3 Failure of SdFat to mount the root directory on the volume of the SdCard
+1 *Failure of SdFat to initialize physical contact with the SdCard
+2 *Failure of SdFat to start the SdCard's volume
+3 *Failure of SdFat to mount the root directory on the volume of the SdCard
 4 Other than default values were found in the SCI_MODE register.
 5 SCI_CLOCKF did not read back and verify the configured value.
 6 Patch was not loaded successfully. This may result in playTrack errors
-</pre><h2><a class="anchor" id="playfunc"></a>
+</pre> <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Error codes 1,2,3 due to use of <code>sd.begin()</code> as global, starting version 1.1.0</dd></dl>
+<h2><a class="anchor" id="playfunc"></a>
 Playing functions:</h2>
 <p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#a6c9b14ae792c9140a81236a36bcb707b" title="Begin playing a mp3 file, just with a number.">SFEMP3Shield::playTrack()</a> or <a class="el" href="class_s_f_e_m_p3_shield.html#ad1ece30ac83aa91c9295a83f8d69e6e3" title="Begin playing a mp3 file by its filename.">SFEMP3Shield::playMP3()</a> member functions. </p>
 <pre>
 0 OK
 1 Already playing track
 2 File not found
+3 indicates that the VSdsp is in reset.
 </pre><h2><a class="anchor" id="skipTofunc"></a>
 Skip function:</h2>
 <p>The following error codes return from the <a class="el" href="class_s_f_e_m_p3_shield.html#aa9f035dad97e78bc501f05575a931754" title="Skips to a certain point in the track.">SFEMP3Shield::skipTo()</a>member function. </p>
@@ -344,7 +346,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 26 2012 16:04:54 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 31 2012 14:14:27 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

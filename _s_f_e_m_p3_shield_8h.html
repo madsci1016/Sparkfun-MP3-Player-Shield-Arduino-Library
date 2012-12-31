@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.00.02</span>
+   &#160;<span id="projectnumber">1.01.00 - Dev branch</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -310,18 +310,9 @@ Variables</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">External_Variable_Group</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>External Variables accessed by other files. / </p>
 </div></td></tr>
-<tr class="memitem:aeeb69ee529b0f58271aa28e823825f77"><td class="memItemLeft" align="right" valign="top">Sd2Card&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#aeeb69ee529b0f58271aa28e823825f77">card</a></td></tr>
-<tr class="memdesc:aeeb69ee529b0f58271aa28e823825f77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sd2Card card;.  <a href="#aeeb69ee529b0f58271aa28e823825f77"></a><br/></td></tr>
-<tr class="separator:aeeb69ee529b0f58271aa28e823825f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89ea83df4812c74a5c11a988458471c8"><td class="memItemLeft" align="right" valign="top">SdVolume&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a89ea83df4812c74a5c11a988458471c8">volume</a></td></tr>
-<tr class="memdesc:a89ea83df4812c74a5c11a988458471c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">SdVolume volume;.  <a href="#a89ea83df4812c74a5c11a988458471c8"></a><br/></td></tr>
-<tr class="separator:a89ea83df4812c74a5c11a988458471c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04284a6711f66caf6c351007f90d935e"><td class="memItemLeft" align="right" valign="top">SdFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a04284a6711f66caf6c351007f90d935e">root</a></td></tr>
-<tr class="memdesc:a04284a6711f66caf6c351007f90d935e"><td class="mdescLeft">&#160;</td><td class="mdescRight">SdFile root;.  <a href="#a04284a6711f66caf6c351007f90d935e"></a><br/></td></tr>
-<tr class="separator:a04284a6711f66caf6c351007f90d935e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78313e312dad4eb5add10cef4b07f5ce"><td class="memItemLeft" align="right" valign="top">SdFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a78313e312dad4eb5add10cef4b07f5ce">track</a></td></tr>
-<tr class="memdesc:a78313e312dad4eb5add10cef4b07f5ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">SdFile track;.  <a href="#a78313e312dad4eb5add10cef4b07f5ce"></a><br/></td></tr>
-<tr class="separator:a78313e312dad4eb5add10cef4b07f5ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15e6b7e1f0fb2d1e0fe1654721bb5302"><td class="memItemLeft" align="right" valign="top">SdFat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a15e6b7e1f0fb2d1e0fe1654721bb5302">sd</a></td></tr>
+<tr class="memdesc:a15e6b7e1f0fb2d1e0fe1654721bb5302"><td class="mdescLeft">&#160;</td><td class="mdescRight">SdFat sd;.  <a href="#a15e6b7e1f0fb2d1e0fe1654721bb5302"></a><br/></td></tr>
+<tr class="separator:a15e6b7e1f0fb2d1e0fe1654721bb5302"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file for the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> library. </p>
@@ -339,7 +330,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00605">605</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00580">580</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -357,7 +348,7 @@ Variables</h2></td></tr>
 <p>para_byteRate is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
 <p>playSpeed makes it possible to fast forward songs. Decoding of the bitstream is performed, but only each playSpeed frames are played. For example by writing 4 to playSpeed will play the song four times as fast as normal, if you are able to feed the data with that speed. Write 0 or 1 to return to normal speed. SCI_DECODE_TIME will also count faster. All current codecs support the playSpeed configuration. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00530">530</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00505">505</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -375,7 +366,7 @@ Variables</h2></td></tr>
 <p>para_chipID_0 is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
 <p>The fuse-programmed ID is read at startup and copied into the chipID field. If not available the value will be all zeros. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00473">473</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00448">448</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -393,7 +384,7 @@ Variables</h2></td></tr>
 <p>para_chipID_1 is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
 <p>The fuse-programmed ID is read at startup and copied into the chipID field. If not available the value will be all zeros. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00484">484</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00459">459</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -411,7 +402,7 @@ Variables</h2></td></tr>
 <p>para_config1 is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
 <p>The version field can be used to determine the layout of the rest of the structure. The version number is changed when the structure is changed. For VS1053b the structure version is 3. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00506">506</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00481">481</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -430,7 +421,7 @@ Variables</h2></td></tr>
 <p>The endFillByte indicates what byte value to send as to properly flush the streams playback buffer, before SM_CANCEL is set, as to gracefully end the current stream.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Omitting the endFillByte requirement may prevent subsequent streams from properly resyncing. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00545">545</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00520">520</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -449,7 +440,7 @@ Variables</h2></td></tr>
 <p>Analog output of the VS10XX may be configuured to be either either Stereo(default) or Mono. When correspondingly set to 0 or 1.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This feature is only available when composite patch 1.7 or higher is loaded into the VSdsp. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00559">559</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00534">534</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -467,7 +458,7 @@ Variables</h2></td></tr>
 <p>para_playSpeed is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
 <p>config1 controls MIDI Reverb and AAC’s SBR and PS settings. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00516">516</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00491">491</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -485,7 +476,7 @@ Variables</h2></td></tr>
 <p>para_positionMsec_0 is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM. Corresponding to the high 16 bit value of positionMsec</p>
 <p>positionMsec is a field that gives the current play position in a file in milliseconds, regardless of rewind and fast forward operations. The value is only available in codecs that can determine the play position from the stream itself. Currently WMA and Ogg Vorbis provide this information. If the position is unknown, this field contains -1. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00573">573</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00548">548</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -503,7 +494,7 @@ Variables</h2></td></tr>
 <p>para_positionMsec_1 is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM. Corresponding to the high 16 bit value of positionMsec</p>
 <p>positionMsec is a field that gives the current play position in a file in milliseconds, regardless of rewind and fast forward operations. The value is only available in codecs that can determine the play position from the stream itself. Currently WMA and Ogg Vorbis provide this information. If the position is unknown, this field contains -1. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00586">586</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00561">561</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -521,7 +512,7 @@ Variables</h2></td></tr>
 <p>para_resync is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM.</p>
 <p>The resync field is set to 32767 after a reset to make resynchronization the default action, but it can be cleared after reset to restore the old action. When resync is set, every file decode should always end as described in Chapter 9.5.1. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00598">598</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00573">573</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -538,7 +529,7 @@ Variables</h2></td></tr>
 <p>A macro of the WRAM para_version register's address (R/W) </p>
 <p>para_version is a Read/Write Extra Parameter in X memory, accessed indirectly with the SCI_WRAMADDR and SCI_WRAM. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00494">494</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00469">469</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -557,7 +548,7 @@ Variables</h2></td></tr>
 <dl class="section see"><dt>See Also</dt><dd>Application Notes for VS10XX.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Reading AIADDR is not recommended. It can cause samplerate to be set to a very low value. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00227">227</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00202">202</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -574,7 +565,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI AICTRL[x] register's address (R/W) </p>
 <p>SCI_AICTRL[x] registers ( x=[0 .. 3] ) are Read/Write that can be used to access the user's application program. The AICTRL registers are also used with PCM/ADPCM encoding mode. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00249">249</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00224">224</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -591,7 +582,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI AICTRL[x] register's address (R/W) </p>
 <p>SCI_AICTRL[x] registers ( x=[0 .. 3] ) are Read/Write that can be used to access the user's application program. The AICTRL registers are also used with PCM/ADPCM encoding mode. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00257">257</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00232">232</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -608,7 +599,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI AICTRL[x] register's address (R/W) </p>
 <p>SCI_AICTRL[x] registers ( x=[0 .. 3] ) are Read/Write that can be used to access the user's application program. The AICTRL registers are also used with PCM/ADPCM encoding mode. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00265">265</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00240">240</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -625,7 +616,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI AICTRL[x] register (R/W) </p>
 <p>SCI_AICTRL[x] registers ( x=[0 .. 3] ) are Read/Write that can be used to access the user's application program. The AICTRL registers are also used with PCM/ADPCM encoding mode. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00273">273</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00248">248</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -642,7 +633,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI AUDATA register's address (R/W) </p>
 <p>SCI_AUDATA is a Read/Write register containing information when decoding correct data, the current samplerate and number of channels can be found in bits 15:1 and 0 of SCI_AUDATA, respectively. Bits 15:1 contain the samplerate divided by two, and bit 0 is 0 for mono data and 1 for stereo. Writing to SCI_AUDATA will change the samplerate directly. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00170">170</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00145">145</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -659,7 +650,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI BASS register's address (R/W) </p>
 <p>SCI_BASS is a Read/Write register used to control VSBE. The Bass Enhancer VSBE is a powerful bass boosting DSP algorithm, which tries to take the most out of the users earphones without causing clipping. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00138">138</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00113">113</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -676,7 +667,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI CLOCKF register's address (R/W) </p>
 <p>SCI_CLOCKF is a Read/Write register used to control Clock Multipler. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00145">145</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00120">120</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -693,7 +684,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI Decode Time register's address (R/W) </p>
 <p>SCI_DECODE_TIME is a Read/Write register containing information when decoding correct data, current decoded time is shown in this register in full seconds. The user may change the value of this register. In that case the new value should be written twice to make absolutely certain that the change is not overwritten by the firmware. A write to SCI_DECODE_TIME also resets the byteRate calculation. SCI_DECODE_TIME is reset at every hardware and software reset. It is no longer cleared when decoding of a file ends to allow the decode time to proceed automatically with looped files and with seamless playback of multiple files. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00159">159</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00134">134</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -712,7 +703,7 @@ Variables</h2></td></tr>
 <p>The register is used in conjuction with HDAT1 to provide various information about the current operating mode of the VSdsp. Where its value may represent different information based on the value of HDAT1. Typically, HDAT0's value indicates something about the various speed or rate. </p>
 <dl class="section see"><dt>See Also</dt><dd><a href="http://www.vlsi.fi/en/products/vs1053.html">VS1053 Datasheet</a>. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00203">203</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00178">178</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -731,7 +722,7 @@ Variables</h2></td></tr>
 <p>The register is used in conjuction with HDAT0 to provide various information about the current operating mode of the VSdsp. Where its value typically indicates the encoding format of the current stream of playback. </p>
 <dl class="section see"><dt>See Also</dt><dd><a href="http://www.vlsi.fi/en/products/vs1053.html">VS1053 Datasheet</a>. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00215">215</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00190">190</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -749,7 +740,7 @@ Variables</h2></td></tr>
 <p>SCI_MODE is a Read/Write register used to control the operation of VS1053b and defaults to 0x0800 (SM_SDINEW set).</p>
 <dl class="section see"><dt>See Also</dt><dd>SCI_MODE_Bit_Definitions_Group </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00121">121</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00096">96</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -766,7 +757,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI STATUS register's address (R/W) </p>
 <p>SCI_STATUS is a Read/Write register containing information on the current status of VS1053b. It also controls some low-level things that the user does not usually have to care about. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00129">129</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00104">104</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -785,7 +776,7 @@ Variables</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>After hardware reset the volume is set to full volume. Resetting the software does not reset the volume setting.</dd></dl>
 <p>Setting SCI_VOL to 0xFFFF will activate analog powerdown mode. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00241">241</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00216">216</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -802,7 +793,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI WRAM register's address (R/W) </p>
 <p>SCI_AUDATA is a Read/Write register used to upload application programs and data to instruction and data RAMs. The start address must be initialized by writing to SCI_WRAMADDR prior to the first write/read of SCI_WRAM. As 16 bits of data can be transferred with one SCI_WRAM write/read, and the instruction word is 32 bits long, two consecutive writes/reads are needed for each instruction word. The byte order is big-endian (i.e. most significant words first). After each full-word write/read, the internal pointer is autoincremented. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00182">182</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00157">157</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -819,7 +810,7 @@ Variables</h2></td></tr>
 <p>A macro of the SCI WRAMADDR register (W) </p>
 <p>SCI_WRAMADDR is a Write only register used to set the program address for following SCI_WRAM writes/reads. Use an address offset from the following table to access X, Y, I or peripheral memory. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00190">190</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00165">165</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -836,7 +827,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_ADPCM bit mask of the SCI_MODE register. </p>
 <p>By activating SM_ADPCM and SM_RESET at the same time, the user will activate IMA ADPCM recording mode (see section 9.8). </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00405">405</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00380">380</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -853,7 +844,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_DIFF bit mask of the SCI_MODE register. </p>
 <p>If you want to stop decoding a in the middle, set SM_CANCEL, and continue sending data honouring DREQ. When SM_CANCEL is detected by a codec, it will stop decoding and return to the main loop. The stream buffer content is discarded and the SM_CANCEL bit cleared. SCI_HDAT1 will also be cleared. See Chapter 9.5.2 for details. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00317">317</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00292">292</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -870,7 +861,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_CLK_RANGE bit mask of the SCI_MODE register. </p>
 <p>SM_CLK_RANGE activates a clock divider in the XTAL input. When SM_CLK_RANGE is set, the clock is divided by 2 at the input. From the chip's point of view e.g. 24 MHz becomes 12 MHz. SM_CLK_RANGE should be set as soon as possible after a chip reset. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00436">436</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00411">411</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -887,7 +878,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_DACT bit mask of the SCI_MODE register. </p>
 <p>SM_DACT defines the active edge of data clock for SDI. When '0', data is read at the rising edge, when '1', data is read at the falling edge. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00366">366</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00341">341</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -904,7 +895,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_DIFF bit mask of the SCI_MODE register. </p>
 <p>When SM_DIFF is set, the player inverts the left channel output. For a stereo input this creates virtual surround, and for a mono input this creates a differential left/right signal. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00291">291</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00266">266</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -921,7 +912,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_EARSPEAKER_HI bit mask of the SCI_MODE register. </p>
 <p>SM_STREAM activates VS1053b's stream mode. In this mode, data should be sent with as even intervals as possible and preferable in blocks of less than 512 bytes, and VS1053b makes every attempt to keep its input buffer half full by changing its playback speed upto 5%. For best quality sound, the average speed error should be within 0.5%, the bitrate should not exceed 160 kbit/s and VBR should not be used. For details, see Application Notes for VS10XX. This mode only works with MP3 and WAV files. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00358">358</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00333">333</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -938,7 +929,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_EARSPEAKER_LO bit mask of the SCI_MODE register. </p>
 <p>Bits SM_EARSPEAKER_LO and SM_EARSPEAKER_HI control the EarSpeaker spatial processing. If both are 0, the processing is not active. Other combinations activate the processing and select 3 different effect levels: LO = 1, HI = 0 selects minimal, LO = 0, HI = 1 selects normal, and LO = 1, HI = 1 selects extreme. EarSpeaker takes approximately 12 MIPS at 44.1 kHz samplerate. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00328">328</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00303">303</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -955,7 +946,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_LAYER12 bit mask of the SCI_MODE register. </p>
 <p>SM_LAYER12 enables MPEG 1.0 and 2.0 layer I and II decoding in addition to layer III. If you enable Layer I and Layer II decoding, you are liable for any patent issues that may arise. Joint licensing of MPEG 1.0 / 2.0 Layer III does not cover all patents pertaining to layers I and II. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00300">300</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00275">275</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -973,7 +964,7 @@ Variables</h2></td></tr>
 <p>SM_LINE_IN is used to select the left-channel input for ADPCM recording. If '0', differential microphone input pins MICP and MICN are used; if '1', line-level MICP/LINEIN1 pin is used.</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_8h.html#a4f7e48f49e56c8407b261019bb419d8e" title="A macro of the VS_LINE1_MODE to configure either Line level or microphone input.">VS_LINE1_MODE</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00427">427</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00402">402</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -991,7 +982,7 @@ Variables</h2></td></tr>
 <p>Play pause is traditionally implemented by stopping sending data to VS10xx. With lowbitrate songs, especially MIDI, decoding will continue for a long time because stream buffer is filled with data. This patch implements pause by stopping audio generation if bit 13 in SCI_MODE is set.</p>
 <dl class="section note"><dt>Note</dt><dd>This is only available with patch loaded. Typically done with <a class="el" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a" title="Initialize the VS10xx Audio Decoder Chip.">SFEMP3Shield::vs_init()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00417">417</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00392">392</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1008,7 +999,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_DIFF bit mask of the SM_RESET register. </p>
 <p>Software reset is initiated by setting SM_RESET to 1. This bit is cleared automatically. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00307">307</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00282">282</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1026,7 +1017,7 @@ Variables</h2></td></tr>
 <p>Setting SM_SDINEW will activate VS1002 native serial modes as described in Chapters 7.2.1 and 7.4.2. This bit is set as a default when VS1053b is started up.</p>
 <dl class="section note"><dt>Note</dt><dd>This value is set correctly and should not be changed for use with AVR's Arduiino ATmega SPI operation.r. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00397">397</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00372">372</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1044,7 +1035,7 @@ Variables</h2></td></tr>
 <p>When SM_SDIORD is clear, bytes on SDI are sent MSb first. By setting SM_SDIORD, the user may reverse the bit order for SDI, i.e. bit 0 is received first and bit 7 last. Bytes are, however, still sent in the default order. This register bit has no effect on the SCI bus.</p>
 <dl class="section note"><dt>Note</dt><dd>This value is set correctly and should not be changed for use with AVR's Arduiino ATmega SPI operation.r. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00377">377</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00352">352</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1062,7 +1053,7 @@ Variables</h2></td></tr>
 <p>Setting SM_SDISHARE makes SCI and SDI share the same chip select, as explained in Chapter 7.2, if also SM_SDINEW is set.</p>
 <dl class="section note"><dt>Note</dt><dd>This value is set correctly and should not be changed for use with AVR's Arduiino ATmega SPI operation.r. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00387">387</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00362">362</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1079,7 +1070,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_STREAM bit mask of the SCI_MODE register. </p>
 <p>If SM_TESTS is set, SDI tests are allowed. For more details on SDI tests, look at Chapter 9.12. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00346">346</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00321">321</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1096,7 +1087,7 @@ Variables</h2></td></tr>
 <p>A macro of the SM_TESTS bit mask of the SCI_MODE register. </p>
 <p>Bits SM_EARSPEAKER_LO and SM_EARSPEAKER_HI control the EarSpeaker spatial processing. If both are 0, the processing is not active. Other combinations activate the processing and select 3 different effect levels: LO = 1, HI = 0 selects minimal, LO = 0, HI = 1 selects normal, and LO = 1, HI = 1 selects extreme. EarSpeaker takes approximately 12 MIPS at 44.1 kHz samplerate. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00339">339</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00314">314</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1114,7 +1105,7 @@ Variables</h2></td></tr>
 <p>The offset from the begining of the ID3 tag for the location containing the track's Artist of the mp3 file being read from the SdCard.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This may not be available on all source music files. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00639">639</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00614">614</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1132,7 +1123,7 @@ Variables</h2></td></tr>
 <p>The offset from the begining of the ID3 tag for the location containing the track's Artist of the mp3 file being read from the SdCard.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This may not be available on all source music files. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00630">630</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00605">605</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1150,7 +1141,7 @@ Variables</h2></td></tr>
 <p>The offset from the begining of the ID3 tag for the location containing the track's Title of the mp3 file being read from the SdCard.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This may not be available on all source music files. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00621">621</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00596">596</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1164,7 +1155,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00604">604</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00579">579</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1182,7 +1173,7 @@ Variables</h2></td></tr>
 <p>Used by <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> to determine if the SM_LINE1 of SCI_MODE being set as to use both MICP and LINEIN1 pins as <b>stereo</b> input, at line levels. Commenting it out, will result MICP and MICN used as differential input with resulting <b>mono</b> signal on the left channel.</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_8h.html#a13ee6003e76f9ea30610e18acb34f0e1" title="A macro of the SM_LINE1 bit mask of the SCI_MODE register.">SM_LINE1</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00450">450</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00425">425</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -1248,79 +1239,33 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>char array (aka string) with out whitespaces </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01617">1617</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01622">1622</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="aeeb69ee529b0f58271aa28e823825f77"></a>
+<a class="anchor" id="a15e6b7e1f0fb2d1e0fe1654721bb5302"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Sd2Card card</td>
+          <td class="memname">SdFat sd</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sd2Card card;. </p>
-<p>used by <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Class for accessing the SdCard. </p>
-<dl class="section note"><dt>Note</dt><dd>this static value is extern as it is originally defined as a member of <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> and accessed by static functions. </dd></dl>
+<p>SdFat sd;. </p>
+<p>An external reference used by <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Class for individual files of the SdCard. </p>
+<dl class="section note"><dt>Note</dt><dd>this is an extern and needs to correspond to the same in the calling INO file. of <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> and accessed by static functions. </dd></dl>
 
-</div>
-</div>
-<a class="anchor" id="a04284a6711f66caf6c351007f90d935e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SdFile root</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>SdFile root;. </p>
-<p>used by <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Class for mounting the SdCard's root directory. </p>
-<dl class="section note"><dt>Note</dt><dd>this static value is extern as it is originally defined as a member of <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> and accessed by static functions. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a78313e312dad4eb5add10cef4b07f5ce"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SdFile track</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>SdFile track;. </p>
-<p>used by <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Class for individual files of the SdCard. </p>
-<dl class="section note"><dt>Note</dt><dd>this static value is extern as it is originally defined as a member of <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> and accessed by static functions. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a89ea83df4812c74a5c11a988458471c8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SdVolume volume</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>SdVolume volume;. </p>
-<p>used by <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> Class for mounting the SdCard's volume of the FAT. </p>
-<dl class="section note"><dt>Note</dt><dd>this static value is extern as it is originally defined as a member of <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> and accessed by static functions. </dd></dl>
+<p>Definition at line <a class="el" href="_m_p3_shield___library___demo_8ino_source.html#l00038">38</a> of file <a class="el" href="_m_p3_shield___library___demo_8ino_source.html">MP3Shield_Library_Demo.ino</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 26 2012 16:04:53 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 31 2012 14:14:27 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -16,6 +16,7 @@ var searchData=
   ['sci_5fvol',['SCI_VOL',['../_s_f_e_m_p3_shield_8h.html#acbe16d04305413900b248ac13532f0de',1,'SFEMP3Shield.h']]],
   ['sci_5fwram',['SCI_WRAM',['../_s_f_e_m_p3_shield_8h.html#aff726bf42852036bacf19b4a15879344',1,'SFEMP3Shield.h']]],
   ['sci_5fwramaddr',['SCI_WRAMADDR',['../_s_f_e_m_p3_shield_8h.html#af2191d414c5eb3a2973ebf773c41b607',1,'SFEMP3Shield.h']]],
+  ['sd',['sd',['../_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302',1,'sd():&#160;MP3Shield_Library_Demo.ino'],['../_s_f_e_m_p3_shield_8h.html#a15e6b7e1f0fb2d1e0fe1654721bb5302',1,'sd():&#160;MP3Shield_Library_Demo.ino']]],
   ['sd_5fsel',['SD_SEL',['../_s_f_e_m_p3_shield_config_8h.html#aacbac5c44278a37aeeceffe01ccdda1b',1,'SFEMP3ShieldConfig.h']]],
   ['seeeduino',['SEEEDUINO',['../_s_f_e_m_p3_shield_config_8h.html#a67a5bb336baa6444775e21f2e2d53f98',1,'SFEMP3ShieldConfig.h']]],
   ['setbitrate',['setBitRate',['../class_s_f_e_m_p3_shield.html#a5ac4bf6a2eb42f50e2472530f5842687',1,'SFEMP3Shield']]],

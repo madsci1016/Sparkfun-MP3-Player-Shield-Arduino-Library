@@ -15,6 +15,7 @@ ADMixerLoad              KEYWORD2
 ADMixerVol               KEYWORD2
 available                KEYWORD2
 begin                    KEYWORD2
+end                      KEYWORD2
 currentPosition          KEYWORD2
 disableTestSineWave      KEYWORD2
 enableTestSineWave       KEYWORD2

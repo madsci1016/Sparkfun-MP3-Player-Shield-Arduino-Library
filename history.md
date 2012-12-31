@@ -1,5 +1,9 @@
 Revision History
 ---------------
+## 1.01.00
+* changed sdFat to be instanced from INO file using sd.begin() for simpler use.
+* added end() feature to put VS10xx into low power mode, along with corresponding checks.
+
 ## 1.00.02
 * Fixed SkipTo() feature and added menu command.
 

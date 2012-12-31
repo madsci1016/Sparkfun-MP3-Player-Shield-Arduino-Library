@@ -47,21 +47,6 @@ PROGMEM uint16_t bitrate_table[15][6] = {
 /**
  * \brief Initializer for the instance of the SdCard's static member.
  */
-Sd2Card  SFEMP3Shield::card;
-
-/**
- * \brief Initializer for the instance of the SdCard's static member.
- */
-SdVolume SFEMP3Shield::volume;
-
-/**
- * \brief Initializer for the instance of the SdCard's static member.
- */
-SdFile   SFEMP3Shield::root;
-
-/**
- * \brief Initializer for the instance of the SdCard's static member.
- */
 SdFile   SFEMP3Shield::track;
 
 /**
@@ -88,17 +73,17 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  * \brief Initialize the MP3 Player shield.
  *
  * Execute this function before anything else, typically during setup().
- * It will create an instance of SdFat's card, volume and root.
- * and initialize the VS10xx with vs_init()
+ * It will bring the VS10xx out of reset, initialize the connected pins and 
+ * then ready the VSdsp for playback, with vs_init().
  *
  * \return Any Value other than zero indicates a problem occured.
  * where value indicates specific error
  *
  * \see
+ * end() for low power mode
+ * \see
  * \ref Error_Codes
- *
- * \warning it may have problems with other instances of SdFat handles,
- * if used at the same time.
+ * \warning Will interrupt playback if issued while playing back.
  */
 uint8_t  SFEMP3Shield::begin() {
 
@@ -111,16 +96,8 @@ uint8_t  SFEMP3Shield::begin() {
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
 
-  //Setup SD card interface
-  //Initialize the SD card and configure the I/O pins.
-  if (!card.init(SPI_FULL_SPEED, SD_SEL)) return 1; // Serial.println(F("Error: Card init"));
-  //Initialize a volume on the SD card.
-  if (!volume.init(&card)) return 2; //Serial.println(F("Error: Volume ini"));
-  //Open the root directory in the volume.
-  if (!root.openRoot(&volume)) return 3; //Serial.println(F("Error: Opening root")); //Open the root directory in the volume.
-
   uint8_t result = vs_init();
-  if (result) {
+  if(result) {
     return result;
   }
 
@@ -132,6 +109,26 @@ uint8_t  SFEMP3Shield::begin() {
 #endif
 
   return 0;
+}
+
+/**
+ * \brief Disables the MP3 Player shield.
+ *
+ * Places the VS10xx into low power hard reset, after polity closing files
+ * after releasing interrupts and or timers.
+ *
+ * \warning Will stop any playing tracks. Check isPlaying() prior to executing, as not to stop on a track.
+ * \note use begin() to reinitialize the VS10xx, for use.
+ */
+void SFEMP3Shield::end() {
+  
+  stopTrack(); // Stop and CLOSE any open tracks.
+  disableRefill(); // shut down specific interrupts
+  cs_high();  //MP3_XCS, Init Control Select to deselected
+  dcs_high(); //MP3_XDCS, Init Data Select to deselected
+  
+  // most importantly...
+  digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
 }
 
 //------------------------------------------------------------------------------
@@ -216,7 +213,7 @@ uint8_t SFEMP3Shield::vs_init() {
   // But the SCI_VOL register space is not in the VSdsp's WRAM space.
   // Note to keep an eye on it for future patches.
 
-  if (VSLoadUserCode("patches.053")) return 6;
+  if(VSLoadUserCode("patches.053")) return 6;
 
   delay(100); // just a good idea to let settle.
 
@@ -245,6 +242,7 @@ uint8_t SFEMP3Shield::vs_init() {
  * - 0 indicates that upload was successful.
  * - 1 indicates the upload can not be performed while currently streaming music.
  * - 2 indicates that desired file was not found.
+ * - 3 indicates that the VSdsp is in reset.
  *
  * \see
  * - \ref Error_Codes
@@ -256,28 +254,30 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
   union twobyte addr;
   union twobyte n;
 
-  if (playing) return 1;
+  if(!digitalRead(MP3_RESET)) return 3;
+  if(playing) return 1;
+  if(!digitalRead(MP3_RESET)) return 3;
 
   //Open the file in read mode.
-  if (!track.open(&root, fileName, O_READ)) return 2;
+  if(!track.open(fileName, O_READ)) return 2;
   //playing = TRUE;
-  //while (i<size_of_Plugin/sizeof(Plugin[0])) {
-  while (1) {
+  //while(i<size_of_Plugin/sizeof(Plugin[0])) {
+  while(1) {
     //addr = Plugin[i++];
-    if (!track.read(addr.byte, 2)) break;
+    if(!track.read(addr.byte, 2)) break;
     //n = Plugin[i++];
-    if (!track.read(n.byte, 2)) break;
-    if (n.word & 0x8000U) { /* RLE run, replicate n samples */
+    if(!track.read(n.byte, 2)) break;
+    if(n.word & 0x8000U) { /* RLE run, replicate n samples */
       n.word &= 0x7FFF;
       //val = Plugin[i++];
-      if (!track.read(val.byte, 2)) break;
-      while (n.word--) {
+      if(!track.read(val.byte, 2)) break;
+      while(n.word--) {
         Mp3WriteRegister(addr.word, val.word);
       }
     } else {           /* Copy run, copy n samples */
-      while (n.word--) {
+      while(n.word--) {
         //val = Plugin[i++];
-        if (!track.read(val.byte, 2))   break;
+        if(!track.read(val.byte, 2))   break;
         Mp3WriteRegister(addr.word, val.word);
       }
     }
@@ -301,7 +301,8 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
  * As specified by Data Sheet Section 9.12.1
  *
  * \return
- * - -1 indicates the test can not be performed while currently streaming music.
+ * - -1 indicates the test can not be performed while currently streaming music
+ *      or chip is reset.
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
  *
@@ -311,13 +312,13 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
  */
 uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
 
-  if(playing) {
-    Serial.println(F("Warning Tests are not available while playing."));
+  if(playing || !digitalRead(MP3_RESET)) {
+    Serial.println(F("Warning Tests are not available."));
     return -1;
   }
 
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
-  if (MP3SCI_MODE & SM_TESTS) {
+  if(MP3SCI_MODE & SM_TESTS) {
     return 2;
   }
 
@@ -351,7 +352,8 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
  * Disable and report the generation of Test Sine Wave as per specified.
  * As specified by Data Sheet Section 9.12.1
  * \return
- * - -1 indicates the test can not be performed while currently streaming music.
+ * - -1 indicates the test can not be performed while currently streaming music
+ *      or chip is reset.
  * - 0 indicates the test is not previously enabled and skipping disable.
  * - 1 indicates that test was disabled.
  *
@@ -360,13 +362,13 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
  */
 uint8_t SFEMP3Shield::disableTestSineWave() {
 
-  if(playing) {
-    Serial.println(F("Warning Tests are not available while playing."));
+  if(playing || !digitalRead(MP3_RESET)) {
+    Serial.println(F("Warning Tests are not available."));
     return -1;
   }
 
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
-  if (!(MP3SCI_MODE & SM_TESTS)) {
+  if(!(MP3SCI_MODE & SM_TESTS)) {
     return 0;
   }
 
@@ -402,7 +404,8 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
  * As specified by Data Sheet Section 9.12.4
  *
  * \return
- * - -1 indicates the test can not be performed while currently streaming music.
+ * - -1 indicates the test can not be performed while currently streaming music
+ *      or chip is reset.
  * - 1 indicates that test has begun successfully.
  * - 2 indicates that test is already in progress.
  *
@@ -411,15 +414,15 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
  */
 uint16_t SFEMP3Shield::memoryTest() {
 
-  if(playing) {
-    Serial.println(F("Warning Tests are not available while playing."));
+  if(playing || !digitalRead(MP3_RESET)) {
+    Serial.println(F("Warning Tests are not available."));
     return -1;
   }
 
   vs_init();
 
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
-  if (MP3SCI_MODE & SM_TESTS) {
+  if(MP3SCI_MODE & SM_TESTS) {
     return 2;
   }
 
@@ -469,14 +472,6 @@ uint16_t SFEMP3Shield::memoryTest() {
  * and right channel in the lower byte.
  *
  * As specified by Data Sheet Section 8.7.11
- *
- * \return
- * - -1 indicates the test can not be performed while currently streaming music.
- * - 1 indicates that test has begun successfully.
- * - 2 indicates that test is already in progress.
- *
- * \see
- * \ref Error_Codes
  */
 void SFEMP3Shield::SetVolume(uint16_t data) {
   union twobyte val;
@@ -591,10 +586,10 @@ uint8_t SFEMP3Shield::GetEarSpeaker() {
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
   // SM_EARSPEAKER bits are not adjacent hence need to add them together
-  if (MP3SCI_MODE & SM_EARSPEAKER_LO) {
+  if(MP3SCI_MODE & SM_EARSPEAKER_LO) {
     result += 0b01;
   }
-  if (MP3SCI_MODE & SM_EARSPEAKER_HI) {
+  if(MP3SCI_MODE & SM_EARSPEAKER_HI) {
     result += 0b10;
   }
   return result;
@@ -614,13 +609,13 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
   // SM_EARSPEAKER bits are not adjacent hence need to add them individually
-  if (EarSpeaker & 0b01) {
+  if(EarSpeaker & 0b01) {
     MP3SCI_MODE |=  SM_EARSPEAKER_LO;
   } else {
     MP3SCI_MODE &= ~SM_EARSPEAKER_LO;
   }
 
-  if (EarSpeaker & 0b10) {
+  if(EarSpeaker & 0b10) {
     MP3SCI_MODE |=  SM_EARSPEAKER_HI;
   } else {
     MP3SCI_MODE &= ~SM_EARSPEAKER_HI;
@@ -725,10 +720,11 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  */
 uint8_t SFEMP3Shield::playMP3(char* fileName) {
 
-  if (playing) return 1;
+  if(playing) return 1;
+  if(!digitalRead(MP3_RESET)) return 3;
 
   //Open the file in read mode.
-  if (!track.open(&root, fileName, O_READ)) return 2;
+  if(!track.open(fileName, O_READ)) return 2;
 
   // find length of arrary at pointer
   int fileNamefileName_length = 0;
@@ -737,7 +733,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
 
   // Only know how to read bitrate from MP3 file. ignore the rest.
   // Note bitrate may get updated later by GetAudioInfo()
-  if ((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
+  if((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
     getBitRateFromMP3File(fileName);
   }
 
@@ -765,7 +761,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
  */
 void SFEMP3Shield::stopTrack(){
 
-  if(playing == FALSE)
+  if((playing == FALSE) || !digitalRead(MP3_RESET))
     return;
 
   //cancel external interrupt
@@ -789,11 +785,14 @@ void SFEMP3Shield::stopTrack(){
  * \return
  * - 0 indicates \b NO file is currently being streamed to the VSdsp.
  * - 1 indicates that a file is currently being streamed to the VSdsp.
+ * - 3 indicates that the VSdsp is in reset.
  */
 //
 uint8_t SFEMP3Shield::isPlaying(){
 
-  if(playing == FALSE)
+  if(!digitalRead(MP3_RESET)) 
+    return 3;
+  else if(playing == FALSE)
     return 0;
   else
     return 1;
@@ -809,9 +808,8 @@ uint8_t SFEMP3Shield::isPlaying(){
 void SFEMP3Shield::pauseDataStream(){
 
   //cancel external interrupt
-  if(playing)
+  if(playing && digitalRead(MP3_RESET))
     disableRefill();
-
 }
 
 //------------------------------------------------------------------------------
@@ -823,14 +821,13 @@ void SFEMP3Shield::pauseDataStream(){
  */
 void SFEMP3Shield::resumeDataStream(){
 
-  if(playing) {
+  if(playing && digitalRead(MP3_RESET)) {
     //see if it is already ready for more
     refill();
 
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
   }
-
 }
 
 //------------------------------------------------------------------------------
@@ -851,7 +848,7 @@ void SFEMP3Shield::resumeDataStream(){
  */
 bool SFEMP3Shield::skipTo(uint32_t timecode){
 
-  if(playing) {
+  if(playing && digitalRead(MP3_RESET)) {
 
     //stop interupt for now
     disableRefill();
@@ -1251,6 +1248,9 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint16_t data) {
  */
 void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8_t lowbyte) {
 
+  // skip if the chip is in reset.
+  if(!digitalRead(MP3_RESET)) return;
+
   //cancel interrupt if playing
   if(playing)
     disableRefill();
@@ -1292,6 +1292,9 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
 uint16_t SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
 
   union twobyte resultvalue;
+
+  // skip if the chip is in reset.
+  if(!digitalRead(MP3_RESET)) return 0;
 
   //cancel interrupt if playing
   if(playing)
@@ -1342,15 +1345,15 @@ uint16_t SFEMP3Shield::Mp3ReadWRAM (uint16_t addressbyte){
   Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
   tmp2 = Mp3ReadRegister(SCI_WRAM);
 
-  if (tmp1==tmp2) return tmp1;
+  if(tmp1==tmp2) return tmp1;
   Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
   tmp2 = Mp3ReadRegister(SCI_WRAM);
 
-  if (tmp1==tmp2) return tmp1;
+  if(tmp1==tmp2) return tmp1;
   Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
   tmp2 = Mp3ReadRegister(SCI_WRAM);
 
-  if (tmp1==tmp2) return tmp1;
+  if(tmp1==tmp2) return tmp1;
   return tmp1;
 }
 
@@ -1486,7 +1489,7 @@ void SFEMP3Shield::disableRefill() {
 void SFEMP3Shield::flush_cancel(flush_m mode) {
   int8_t endFillByte = (int8_t) (Mp3ReadWRAM(para_endFillByte) & 0xFF);
 
-  if ((mode == post) || (mode == both)) {
+  if((mode == post) || (mode == both)) {
     dcs_low(); //Select Data
     for(int y = 0 ; y < 2052 ; y++) {
       while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
@@ -1507,9 +1510,9 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
     dcs_high(); //Deselect Data
 
     int cancel = Mp3ReadRegister(SCI_MODE) & SM_CANCEL;
-    if (cancel == 0) {
+    if(cancel == 0) {
       // Cancel has succeeded.
-      if ((mode == pre) || (mode == both)) {
+      if((mode == pre) || (mode == both)) {
         dcs_low(); //Select Data
         for(int y = 0 ; y < 2052 ; y++) {
           while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
@@ -1549,13 +1552,15 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
  * - 0 indicates that upload was successful.
  * - 1 indicates the upload can not be performed while currently streaming music.
  * - 2 indicates that desired file was not found.
+ * - 3 indicates that the VSdsp is in reset.
  */
 uint8_t SFEMP3Shield::ADMixerLoad(char* fileName){
 
+  if(!digitalRead(MP3_RESET)) return 3;
   if(playing != FALSE)
     return 1;
 
-  if (VSLoadUserCode(fileName)) return 2; // Serial.print(F("Error: ")); Serial.print(fileName); Serial.println(F(", file not found, skipping."));
+  if(VSLoadUserCode(fileName)) return 2; // Serial.print(F("Error: ")); Serial.print(fileName); Serial.println(F(", file not found, skipping."));
 
   // Set Input Mode to either Line1 or Microphone.
 #if defined(VS_LINE1_MODE)
@@ -1586,7 +1591,7 @@ void SFEMP3Shield::ADMixerVol(int8_t ADM_volume){
 
   MP3AIADDR.word = Mp3ReadRegister(SCI_AIADDR);
 
-  if ((ADM_volume > -3) || (-31 > ADM_volume)) {
+  if((ADM_volume > -3) || (-31 > ADM_volume)) {
     // Disable Mixer Patch
     MP3AIADDR.word = 0x0F01;
     Mp3WriteRegister(SCI_AIADDR, MP3AIADDR.word);
@@ -1617,7 +1622,7 @@ void SFEMP3Shield::ADMixerVol(int8_t ADM_volume){
 char* strip_nonalpha_inplace(char *s) {
   for ( ; *s && !isalpha(*s); ++s)
     ; // skip leading non-alpha chars
-  if (*s == '\0')
+  if(*s == '\0')
     return s; // there are no alpha characters
 
   char *tail = s + strlen(s);

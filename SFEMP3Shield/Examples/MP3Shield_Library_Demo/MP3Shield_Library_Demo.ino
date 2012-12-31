@@ -34,6 +34,8 @@
   #include <SimpleTimer.h>
 #endif
 
+
+SdFat sd;
 /**
  * \brief Object instancing the library.
  *
@@ -65,14 +67,18 @@ void setup() {
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
   Serial.println(F(" Should be a base line of 1094, on ATmega328 when using INTx"));
 
-  //boot up the MP3 Player Shield
+  
+  //Initialize the SdCard.
+  if(!sd.begin(SD_SEL, SPI_HALF_SPEED)) sd.initErrorHalt();
+  
+  //Initialize the MP3 Player Shield
   result = MP3player.begin();
   //check result, see readme for error codes.
   if(result != 0) {
     Serial.print(F("Error code: "));
     Serial.print(result);
     Serial.println(F(" when trying to start MP3 player"));
-    if ( result == 6 ) {
+    if( result == 6 ) {
       Serial.println(F("Warning: patch file not found, skipping.")); // can be removed for space, if needed.
       Serial.println(F("Use the \"d\" command to verify SdCard can be read")); // can be removed for space, if needed.
     }
@@ -80,7 +86,7 @@ void setup() {
 
 // Typically not used by most shields, hence commented out.
 //  Serial.println(F("Applying ADMixer patch."));
-//  if (MP3player.ADMixerLoad("admxster.053") == 0) {
+//  if(MP3player.ADMixerLoad("admxster.053") == 0) {
 //    Serial.println(F("Setting ADMixer Volume."));
 //    MP3player.ADMixerVol(-3);
 //  }
@@ -142,11 +148,11 @@ void parse_menu(byte key_command) {
   Serial.println(F(" "));
 
   //if s, stop the current track
-  if (key_command == 's') {
+  if(key_command == 's') {
     MP3player.stopTrack();
 
   //if 1-9, play corresponding track
-  } else if (key_command >= '1' && key_command <= '9') {
+  } else if(key_command >= '1' && key_command <= '9') {
     //convert ascii numbers to real numbers
     key_command = key_command - 48;
 
@@ -179,19 +185,19 @@ void parse_menu(byte key_command) {
     Serial.println();
 
   //if +/- to change volume
-  } else if ((key_command == '-') || (key_command == '+')) {
+  } else if((key_command == '-') || (key_command == '+')) {
     union twobyte mp3_vol; // create key_command existing variable that can be both word and double byte of left and right.
     mp3_vol.word = MP3player.GetVolume(); // returns a double uint8_t of Left and Right packed into int16_t
 
-    if (key_command == '-') { // note dB is negative
+    if(key_command == '-') { // note dB is negative
       // assume equal balance and use byte[1] for math
-      if (mp3_vol.byte[1] >= 254) { // range check
+      if(mp3_vol.byte[1] >= 254) { // range check
         mp3_vol.byte[1] = 254;
       } else {
         mp3_vol.byte[1] += 2; // keep it simpler with whole dB's
       }
     } else {
-      if (mp3_vol.byte[1] <= 2) { // range check
+      if(mp3_vol.byte[1] <= 2) { // range check
         mp3_vol.byte[1] = 2;
       } else {
         mp3_vol.byte[1] -= 2;
@@ -204,18 +210,18 @@ void parse_menu(byte key_command) {
     Serial.println(F("[dB]"));
 
   //if < or > to change Play Speed
-  } else if ((key_command == '>') || (key_command == '<')) {
+  } else if((key_command == '>') || (key_command == '<')) {
     uint16_t playspeed = MP3player.GetPlaySpeed(); // create key_command existing variable
     // note playspeed of Zero is equal to ONE, normal speed.
-    if (key_command == '>') { // note dB is negative
+    if(key_command == '>') { // note dB is negative
       // assume equal balance and use byte[1] for math
-      if (playspeed >= 254) { // range check
+      if(playspeed >= 254) { // range check
         playspeed = 5;
       } else {
         playspeed += 1; // keep it simpler with whole dB's
       }
     } else {
-      if (playspeed == 0) { // range check
+      if(playspeed == 0) { // range check
         playspeed = 0;
       } else {
         playspeed -= 1;
@@ -227,7 +233,7 @@ void parse_menu(byte key_command) {
 
   /* Alterativly, you could call a track by it's file name by using playMP3(filename);
   But you must stick to 8.1 filenames, only 8 characters long, and 3 for the extension */
-  } else if (key_command == 'f') {
+  } else if(key_command == 'f') {
     //create a string with the filename
     char trackName[] = "track001.mp3";
 
@@ -241,50 +247,50 @@ void parse_menu(byte key_command) {
     }
 
   /* Display the file on the SdCard */
-  } else if (key_command == 'd') {
+  } else if(key_command == 'd') {
     if(!MP3player.isPlaying()) {
       // prevent root.ls when playing, something locks the dump. but keeps playing.
       // yes, I have tried another unique instance with same results.
       // something about SdFat and its 500byte cache.
       Serial.println(F("Files found (name date time size):"));
-      SFEMP3Shield::root.ls(LS_R | LS_DATE | LS_SIZE);
+      sd.ls(LS_R | LS_DATE | LS_SIZE);
     } else {
       Serial.println(F("Busy Playing Files, try again later."));
     }
 
   /* Get and Display the Audio Information */
-  } else if (key_command == 'i') {
+  } else if(key_command == 'i') {
     MP3player.getAudioInfo();
 
-  } else if (key_command == 'p') {
+  } else if(key_command == 'p') {
     MP3player.pauseDataStream();
     Serial.println(F("Pausing"));
 
-  } else if (key_command == 'r') {
+  } else if(key_command == 'r') {
     MP3player.resumeDataStream();
     Serial.println(F("Resuming"));
 
-  } else if (key_command == 'R') {
+  } else if(key_command == 'R') {
     MP3player.stopTrack();
     MP3player.vs_init();
     Serial.println(F("Reseting VS10xx chip"));
 
-  } else if (key_command == 't') {
+  } else if(key_command == 't') {
     int8_t teststate = MP3player.enableTestSineWave(126);
-    if (teststate == -1) {
-      Serial.println(F("Un-Available while playing music."));
-    } else if (teststate == 1) {
+    if(teststate == -1) {
+      Serial.println(F("Un-Available while playing music or chip in reset."));
+    } else if(teststate == 1) {
       Serial.println(F("Enabling Test Sine Wave"));
-    } else if (teststate == 2) {
+    } else if(teststate == 2) {
       MP3player.disableTestSineWave();
       Serial.println(F("Disabling Test Sine Wave"));
     }
 
-  } else if (key_command == 'm') {
+  } else if(key_command == 'm') {
       uint16_t teststate = MP3player.memoryTest();
-    if (teststate == -1) {
-      Serial.println(F("Un-Available while playing music."));
-    } else if (teststate == 2) {
+    if(teststate == -1) {
+      Serial.println(F("Un-Available while playing music or chip in reset."));
+    } else if(teststate == 2) {
       teststate = MP3player.disableTestSineWave();
       Serial.println(F("Un-Available while Sine Wave Test"));
     } else {
@@ -294,9 +300,9 @@ void parse_menu(byte key_command) {
       Serial.println(F("Reset is needed to recover to normal operation"));
     }
 
-  } else if (key_command == 'e') {
+  } else if(key_command == 'e') {
     uint8_t earspeaker = MP3player.GetEarSpeaker();
-    if (earspeaker >= 3){
+    if(earspeaker >= 3){
       earspeaker = 0;
     } else {
       earspeaker++;
@@ -305,10 +311,10 @@ void parse_menu(byte key_command) {
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
 
-  } else if (key_command == 'M') {
+  } else if(key_command == 'M') {
     uint16_t monostate = MP3player.GetMonoMode();
     Serial.print(F("Mono Mode "));
-    if (monostate == 0) {
+    if(monostate == 0) {
       MP3player.SetMonoMode(1);
       Serial.println(F("Enabled."));
     } else {
@@ -316,7 +322,7 @@ void parse_menu(byte key_command) {
       Serial.println(F("Disabled."));
     }
 
-  } else if (key_command == 'g') {
+  } else if(key_command == 'g') {
     int32_t offset_ms = 20000; // Note this is just an example, try your own number.
     Serial.print(F("Skipping = "));
     Serial.print(offset_ms, DEC);
@@ -328,12 +334,20 @@ void parse_menu(byte key_command) {
       Serial.println(F(" when trying to skip track"));
     }
 
-  } else if (key_command == 'h') {
+  } else if(key_command == 'O') {
+    MP3player.end();
+    Serial.println(F("VS10xx placed into low power reset mode."));
+
+  } else if(key_command == 'o') {
+    MP3player.begin();
+    Serial.println(F("VS10xx restored from low power reset mode."));
+
+  } else if(key_command == 'h') {
     help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,M,g,h :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,M,g,h,O,o :"));
 }
 
 //------------------------------------------------------------------------------
@@ -359,6 +373,8 @@ void help() {
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
   Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
   Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
+  Serial.println(F(" [O} turns OFF the VS10xx into low power reset."));
+  Serial.println(F(" [o} turns ON the VS10xx out of low power reset."));
   Serial.println(F(" [h] this help"));
 }
 

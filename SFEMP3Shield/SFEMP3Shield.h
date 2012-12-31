@@ -66,38 +66,13 @@ enum flush_m {
  *  /@{
  */
 
-//
-/** \brief Sd2Card card;
+/** \brief SdFat sd;
  *
- * used by SFEMP3Shield Class for accessing the SdCard.
- * \note this static value is extern as it is originally defined as a member
+ * An external reference used by SFEMP3Shield Class for individual files of the SdCard.
+ * \note this is an extern and needs to correspond to the same in the calling INO file.
  * of SFEMP3Shield and accessed by static functions.
  */
-extern Sd2Card card;
-
-/** \brief  SdVolume volume;
- *
- * used by SFEMP3Shield Class for mounting the SdCard's volume of the FAT.
- * \note this static value is extern as it is originally defined as a member
- * of SFEMP3Shield and accessed by static functions.
- */
-extern SdVolume volume;
-
-/** \brief SdFile root;
- *
- * used by SFEMP3Shield Class for mounting the SdCard's root directory.
- * \note this static value is extern as it is originally defined as a member
- * of SFEMP3Shield and accessed by static functions.
- */
-extern SdFile root;
-
-/** \brief SdFile track;
- *
- * used by SFEMP3Shield Class for individual files of the SdCard.
- * \note this static value is extern as it is originally defined as a member
- * of SFEMP3Shield and accessed by static functions.
- */
-extern SdFile track;
+extern SdFat sd;
 
 /** End External_Variable_Group
  *  /@}
@@ -650,6 +625,7 @@ extern SdFile track;
 class SFEMP3Shield {
   public:
     uint8_t begin();
+    void end();
     uint8_t vs_init();
     void SetVolume(uint8_t, uint8_t);
     void SetVolume(uint16_t);
@@ -672,9 +648,6 @@ class SFEMP3Shield {
     void setBitRate(uint16_t);
     void pauseDataStream();
     void resumeDataStream();
-    static Sd2Card card;
-    static SdVolume volume;
-    static SdFile root;
     static void available();
     void getAudioInfo();
     uint8_t enableTestSineWave(uint8_t);

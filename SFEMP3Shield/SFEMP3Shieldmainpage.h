@@ -174,13 +174,14 @@ Error Codes typically are returned from this Library's object's in place of Seri
 The following error codes return from the SFEMP3Shield::begin() member function.
 <pre>
 0 OK
-1 Failure of SdFat to initialize physical contact with the SdCard
-2 Failure of SdFat to start the SdCard's volume
-3 Failure of SdFat to mount the root directory on the volume of the SdCard
+1 *Failure of SdFat to initialize physical contact with the SdCard
+2 *Failure of SdFat to start the SdCard's volume
+3 *Failure of SdFat to mount the root directory on the volume of the SdCard
 4 Other than default values were found in the SCI_MODE register.
 5 SCI_CLOCKF did not read back and verify the configured value.
 6 Patch was not loaded successfully. This may result in playTrack errors
 </pre>
+\deprecated Error codes 1,2,3 due to use of \c sd.begin() as global, starting version 1.1.0
 
 \subsection playfunc Playing functions:
 The following error codes return from the SFEMP3Shield::playTrack() or SFEMP3Shield::playMP3() member functions.
@@ -188,6 +189,7 @@ The following error codes return from the SFEMP3Shield::playTrack() or SFEMP3Shi
 0 OK
 1 Already playing track
 2 File not found
+3 indicates that the VSdsp is in reset.
 </pre>
 
 \subsection skipTofunc Skip function:

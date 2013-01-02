@@ -22,6 +22,7 @@ enableTestSineWave       KEYWORD2
 getAudioInfo             KEYWORD2
 GetEarSpeaker            KEYWORD2
 GetMonoMode              KEYWORD2
+GetDiffertialOutput      KEYWORD2
 GetPlaySpeed             KEYWORD2
 GetVolume                KEYWORD2
 isPlaying                KEYWORD2
@@ -33,6 +34,7 @@ resumeDataStream         KEYWORD2
 setBitRate               KEYWORD2
 SetEarSpeaker            KEYWORD2
 SetMonoMode              KEYWORD2
+SetDiffertialOutput      KEYWORD2
 SetPlaySpeed             KEYWORD2
 SetVolume                KEYWORD2
 skipTo                   KEYWORD2

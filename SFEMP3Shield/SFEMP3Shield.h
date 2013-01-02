@@ -636,6 +636,8 @@ class SFEMP3Shield {
     void SetEarSpeaker(uint16_t);
     uint16_t GetMonoMode();
     void SetMonoMode(uint16_t );
+    void SetDiffertialOutput(uint16_t);
+    uint8_t GetDiffertialOutput();
     uint8_t playTrack(uint8_t);
     uint8_t playMP3(char*);
     void trackTitle(char*);

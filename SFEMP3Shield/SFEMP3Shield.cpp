@@ -601,7 +601,7 @@ uint8_t SFEMP3Shield::GetEarSpeaker() {
  *
  * \param[in] EarSpeaker integer value between 0 and 3. Where 0 is OFF and 3 is maximum.
  *
- * The input value is decoded into SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH bits
+ * The input value is mapped onto SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH bits
  * and written the VS10xx SCI_MODE register, preserving the remainder of SCI_MODE.
  * As specified by Data Sheet Section 8.7.1 and 8.4
  */
@@ -624,6 +624,63 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
 }
 // @}
 // EarSpeaker_Group
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @{
+// Differential_Output_Mode_Group
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Get the current SM_DIFF setting from the VS10xx chip
+ *
+ * Read the VS10xx SCI_MODE register bits SM_DIFF
+ * for current SM_DIFF and return its results as a composite integer.
+ * To indicate if the Left Channel is either normal or differential output.
+ * As specified by Data Sheet Section 8.7.1
+ *
+ * \return 0 for Normal and 1 is Differential Output.
+ * \return
+ * - 0 Normal in-phase audio output of left and right speaker signals.
+ * - 1 Left channel output is the invert of the right channel.
+ *
+ * \see SetDiffertialOutput()
+ */
+uint8_t SFEMP3Shield::GetDiffertialOutput() {
+  uint8_t result = 0;
+  uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+
+  if(MP3SCI_MODE & SM_DIFF) {
+    result = 1;
+  }
+  return result;
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Set the current SM_DIFF setting of the VS10xx chip
+ *
+ * \param[in] SM_DIFF integer value between 0 and 1.
+ *
+ * The input value is mapped onto the SM_DIFF of the SCI_MODE register,
+ *  preserving the remainder of SCI_MODE. For stereo playback streams this 
+ * creates a virtual sound, and for mono streams this creates a differential 
+ * left/right output with a maximum output of 3V.
+
+ * As specified by Data Sheet Section 8.7.1
+ * \see GetDiffertialOutput()
+ */
+void SFEMP3Shield::SetDiffertialOutput(uint16_t DiffMode) {
+  uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
+
+  if(DiffMode) {
+    MP3SCI_MODE |=  SM_DIFF;
+  } else {
+    MP3SCI_MODE &= ~SM_DIFF;
+  }
+  Mp3WriteRegister(SCI_MODE, MP3SCI_MODE);
+}
+// @}
+// Differential_Output_Mode_Group
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @{

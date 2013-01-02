@@ -342,6 +342,17 @@ void parse_menu(byte key_command) {
     MP3player.begin();
     Serial.println(F("VS10xx restored from low power reset mode."));
 
+  } else if(key_command == 'D') {
+    uint16_t diff_state = MP3player.GetDiffertialOutput();
+    Serial.print(F("Differential Mode "));
+    if(diff_state == 0) {
+      MP3player.SetDiffertialOutput(1);
+      Serial.println(F("Enabled."));
+    } else {
+      MP3player.SetDiffertialOutput(0);
+      Serial.println(F("Disabled."));
+    }
+
   } else if(key_command == 'h') {
     help();
   }
@@ -362,6 +373,7 @@ void help() {
   Serial.println(F("COMMANDS:"));
   Serial.println(F(" [1-9] to play a track"));
   Serial.println(F(" [s] to stop playing"));
+  Serial.println(F(" [d] display directory of SdCard"));
   Serial.println(F(" [+ or -] to change volume"));
   Serial.println(F(" [> or <] to increment or decrement play speed by 1 factor"));
   Serial.println(F(" [i] retrieve current audio information (partial list)"));
@@ -375,6 +387,7 @@ void help() {
   Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
   Serial.println(F(" [O} turns OFF the VS10xx into low power reset."));
   Serial.println(F(" [o} turns ON the VS10xx out of low power reset."));
+  Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
   Serial.println(F(" [h] this help"));
 }
 

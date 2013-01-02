@@ -1,5 +1,9 @@
 Revision History
 ---------------
+## 1.01.01
+* added GetDiffertialOutput() and SetDiffertialOutput() feature to change the output, as to create a differential 
+     left/right output with a maximum output of 3V.
+
 ## 1.01.00
 * changed sdFat to be instanced from INO file using sd.begin() for simpler use.
 * added end() feature to put VS10xx into low power mode, along with corresponding checks.

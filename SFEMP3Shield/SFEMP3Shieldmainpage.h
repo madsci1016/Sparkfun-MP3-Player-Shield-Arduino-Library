@@ -32,10 +32,11 @@ Initial development was implemented on an Arduino 328 UNO/Duemilanove with a Spa
     - <A HREF = "http://www.arduino.cc/playground/Code/SimpleTimer#GetTheCode" > SimpleTimer.h </A>. library can be downloaded from for library.
     - <A HREF = "http://code.google.com/p/arduino-timerone/" > TimerOne.h </A>. library can be downloaded from for library.
 - Hardware
-  - Arduino 328 UNO/Duemilanove or better.
+  - 5V Arduino 328 UNO/Duemilanove or better.
   - Shield or break out with appropiate pins wired up.
   - Shield or break out for SdCard
   - SdCard FAT formatted with valid <A HREF = "http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip"> Audio files</A> and filenames
+  - See \ref Hardware for alternative solutions.
 
 \note This library was originally developed on IDE 0.2x and later ported to 1.x. Compatibility was lost with use of the Serial.print(F("...")) and can be restored by replacing it with SdFat's PgmPrint function
 
@@ -60,6 +61,9 @@ Support for Arduino and Seeeduino Mega's are documented in \ref SFEMP3ShieldConf
 
 \subsection Arduino_Leonardo Arduino Leonardo Board
 Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO/Duemilanove . This is similar to the Arduino Mega. Which simply REQUIRES additional jumpers, as documented in \ref SFEMP3ShieldConfig.h to correct the SPI. The swapping of INT0/INT1 is automatically corrected based on the Leonardo's processor type of __AVR_ATmega32U4__ being detected.
+
+\subsection Arduino_Pro Arduino Pro 5V vs 3V
+SFE Arduino Pro's while similar to UNO/Duemilanove's pin outs, they are available in either 5V or 3.3V. Where the SFE MP3 Player Shield requires 5V and locally generating the needed 3.3V and 1.8V for the VS10xx chip. Noting that 3.3V Pro's do not supply 5V, this causes a problem. It is possible to modify the shield as to use base Arduino supplied 3V's.
 
 \subsection SparkFunMP3Player SparkFun MP3 Player Shield
 SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 328 UNO/Duemilanove, with Interrupts.

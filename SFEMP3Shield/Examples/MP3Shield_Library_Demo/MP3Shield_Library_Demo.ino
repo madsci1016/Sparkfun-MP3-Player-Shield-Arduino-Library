@@ -67,10 +67,10 @@ void setup() {
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
   Serial.println(F(" Should be a base line of 1094, on ATmega328 when using INTx"));
 
-  
+
   //Initialize the SdCard.
   if(!sd.begin(SD_SEL, SPI_HALF_SPEED)) sd.initErrorHalt();
-  
+
   //Initialize the MP3 Player Shield
   result = MP3player.begin();
   //check result, see readme for error codes.
@@ -156,6 +156,9 @@ void parse_menu(byte key_command) {
     //convert ascii numbers to real numbers
     key_command = key_command - 48;
 
+#if USE_MULTIPLE_CARDS
+    sd.chvol(); // assign desired sdcard's volume.
+#endif
     //tell the MP3 Shield to play a track
     result = MP3player.playTrack(key_command);
 
@@ -237,6 +240,9 @@ void parse_menu(byte key_command) {
     //create a string with the filename
     char trackName[] = "track001.mp3";
 
+#if USE_MULTIPLE_CARDS
+    sd.chvol(); // assign desired sdcard's volume.
+#endif
     //tell the MP3 Shield to play that file
     result = MP3player.playMP3(trackName);
     //check result, see readme for error codes.

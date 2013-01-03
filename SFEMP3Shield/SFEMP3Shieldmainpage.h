@@ -89,7 +89,7 @@ Not at this time. There are too many issues with member functions of the SFEMP3S
 Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and SFEMP3Shield::ADMixerLoad and SFEMP3Shield::ADMixerVol are provided for such devices. Otherwise the example MP3Shield_Library_Demo.ino has these lines commented out in setup(). As to reduce complications. To re-enable simply uncomment.
 
 - <b>Recording</b>
-As most commericially available shields do not support audio input this feature has not been implemented. 
+As most commericially available shields do not support audio input this feature has not been implemented.
 \todo
 Support Audio Recording.
 
@@ -122,7 +122,7 @@ The filenames are kept short as SdCard only support 8.3.
 \note All plugins should be placed in the root of the SdCard.
 \note \b patches.053 is a cumulative update correcting many known troublesome issues. Hence patches.053 is attempted in SFEMP3Shield::vs_init.
 \note VSLI may post periodic updates on there <A HREF = "http://www.vlsi.fi/en/support/software.html">software website</A>
-\note Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a> for windows systems. 
+\note Perl is natively provided on Linux systems, and may be downloaded from <a href="http://www.activestate.com/activeperl/downloads">Active Perl </a> for windows systems.
 \see about Analog to Digital Mixer (e.g. admx____.053) please note \ref limitation
 
 \section Troubleshooting Troubleshooting
@@ -163,7 +163,7 @@ The below is a list of basic questions to ask when attempting to determine the p
   - Interrupt problems may cause mp3 files that have a quiet lead in (or ramp up of volume) to be falsely diagnosed as not playing at all. Where the first 1 second may not be loud enough to be heard.
 
 - <tt>Free RAM = 1090 Should be a base line of 1094</tt>
-  - As a courtesy and good practice the provided example MP3Shield_Library_Demo.ino prints out the available remaining RAM, not statically allocated. And the actual available amount may depend on specific processor, IDE version, libraries and or other factors. A Uno built with IDE version 1.0.2 should have approximately 1094 bytes available from the example as is. And a Mega using a 2560 may show 6713, as it has more RAM. 
+  - As a courtesy and good practice the provided example MP3Shield_Library_Demo.ino prints out the available remaining RAM, not statically allocated. And the actual available amount may depend on specific processor, IDE version, libraries and or other factors. A Uno built with IDE version 1.0.2 should have approximately 1094 bytes available from the example as is. And a Mega using a 2560 may show 6713, as it has more RAM.
 
 \note This library makes extensive use of SdFat Library as to retrieve the stream of audio data from the SdCard. Notably this is where most failures occur. Where some SdCard types and manufacturers are not supported by SdFat. Though SdFat Lib is at this time, supporting most known cards.
 

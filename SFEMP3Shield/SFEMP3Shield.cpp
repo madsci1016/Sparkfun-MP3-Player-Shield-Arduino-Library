@@ -73,7 +73,7 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  * \brief Initialize the MP3 Player shield.
  *
  * Execute this function before anything else, typically during setup().
- * It will bring the VS10xx out of reset, initialize the connected pins and 
+ * It will bring the VS10xx out of reset, initialize the connected pins and
  * then ready the VSdsp for playback, with vs_init().
  *
  * \return Any Value other than zero indicates a problem occured.
@@ -121,12 +121,12 @@ uint8_t  SFEMP3Shield::begin() {
  * \note use begin() to reinitialize the VS10xx, for use.
  */
 void SFEMP3Shield::end() {
-  
+
   stopTrack(); // Stop and CLOSE any open tracks.
   disableRefill(); // shut down specific interrupts
   cs_high();  //MP3_XCS, Init Control Select to deselected
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
-  
+
   // most importantly...
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
 }
@@ -662,8 +662,8 @@ uint8_t SFEMP3Shield::GetDiffertialOutput() {
  * \param[in] SM_DIFF integer value between 0 and 1.
  *
  * The input value is mapped onto the SM_DIFF of the SCI_MODE register,
- *  preserving the remainder of SCI_MODE. For stereo playback streams this 
- * creates a virtual sound, and for mono streams this creates a differential 
+ *  preserving the remainder of SCI_MODE. For stereo playback streams this
+ * creates a virtual sound, and for mono streams this creates a differential
  * left/right output with a maximum output of 3V.
 
  * As specified by Data Sheet Section 8.7.1
@@ -774,6 +774,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  *
  * \note enableRefill() will enable the appropiate interrupt to match the
  * corresponding means selected.
+ * \note use \c SdFat::chvol() command prior, to select desired SdCard volume, if multiple cards are used.
  */
 uint8_t SFEMP3Shield::playMP3(char* fileName) {
 
@@ -847,7 +848,7 @@ void SFEMP3Shield::stopTrack(){
 //
 uint8_t SFEMP3Shield::isPlaying(){
 
-  if(!digitalRead(MP3_RESET)) 
+  if(!digitalRead(MP3_RESET))
     return 3;
   else if(playing == FALSE)
     return 0;

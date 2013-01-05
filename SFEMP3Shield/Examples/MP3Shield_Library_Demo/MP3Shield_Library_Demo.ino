@@ -197,7 +197,7 @@ void parse_menu(byte key_command) {
   //if +/- to change volume
   } else if((key_command == '-') || (key_command == '+')) {
     union twobyte mp3_vol; // create key_command existing variable that can be both word and double byte of left and right.
-    mp3_vol.word = MP3player.GetVolume(); // returns a double uint8_t of Left and Right packed into int16_t
+    mp3_vol.word = MP3player.getVolume(); // returns a double uint8_t of Left and Right packed into int16_t
 
     if(key_command == '-') { // note dB is negative
       // assume equal balance and use byte[1] for math
@@ -214,14 +214,14 @@ void parse_menu(byte key_command) {
       }
     }
     // push byte[1] into both left and right assuming equal balance.
-    MP3player.SetVolume(mp3_vol.byte[1], mp3_vol.byte[1]); // commit new volume
+    MP3player.setVolume(mp3_vol.byte[1], mp3_vol.byte[1]); // commit new volume
     Serial.print(F("Volume changed to -"));
     Serial.print(mp3_vol.byte[1]>>1, 1);
     Serial.println(F("[dB]"));
 
   //if < or > to change Play Speed
   } else if((key_command == '>') || (key_command == '<')) {
-    uint16_t playspeed = MP3player.GetPlaySpeed(); // create key_command existing variable
+    uint16_t playspeed = MP3player.getPlaySpeed(); // create key_command existing variable
     // note playspeed of Zero is equal to ONE, normal speed.
     if(key_command == '>') { // note dB is negative
       // assume equal balance and use byte[1] for math
@@ -237,7 +237,7 @@ void parse_menu(byte key_command) {
         playspeed -= 1;
       }
     }
-    MP3player.SetPlaySpeed(playspeed); // commit new playspeed
+    MP3player.setPlaySpeed(playspeed); // commit new playspeed
     Serial.print(F("playspeed to "));
     Serial.println(playspeed, DEC);
 
@@ -318,24 +318,24 @@ void parse_menu(byte key_command) {
     }
 
   } else if(key_command == 'e') {
-    uint8_t earspeaker = MP3player.GetEarSpeaker();
+    uint8_t earspeaker = MP3player.getEarSpeaker();
     if(earspeaker >= 3){
       earspeaker = 0;
     } else {
       earspeaker++;
     }
-    MP3player.SetEarSpeaker(earspeaker); // commit new earspeaker
+    MP3player.setEarSpeaker(earspeaker); // commit new earspeaker
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
 
   } else if(key_command == 'M') {
-    uint16_t monostate = MP3player.GetMonoMode();
+    uint16_t monostate = MP3player.getMonoMode();
     Serial.print(F("Mono Mode "));
     if(monostate == 0) {
-      MP3player.SetMonoMode(1);
+      MP3player.setMonoMode(1);
       Serial.println(F("Enabled."));
     } else {
-      MP3player.SetMonoMode(0);
+      MP3player.setMonoMode(0);
       Serial.println(F("Disabled."));
     }
 
@@ -360,13 +360,13 @@ void parse_menu(byte key_command) {
     Serial.println(F("VS10xx restored from low power reset mode."));
 
   } else if(key_command == 'D') {
-    uint16_t diff_state = MP3player.GetDiffertialOutput();
+    uint16_t diff_state = MP3player.getDiffertialOutput();
     Serial.print(F("Differential Mode "));
     if(diff_state == 0) {
-      MP3player.SetDiffertialOutput(1);
+      MP3player.setDiffertialOutput(1);
       Serial.println(F("Enabled."));
     } else {
-      MP3player.SetDiffertialOutput(0);
+      MP3player.setDiffertialOutput(0);
       Serial.println(F("Disabled."));
     }
 

@@ -212,7 +212,7 @@ uint8_t SFEMP3Shield::vs_init() {
   int MP3Clock = Mp3ReadRegister(SCI_CLOCKF);
   if(MP3Clock != 0x6000) return 5;
 
-  SetVolume(40, 40);
+  setVolume(40, 40);
   // one would think the following patch would over write the volume.
   // But the SCI_VOL register space is not in the VSdsp's WRAM space.
   // Note to keep an eye on it for future patches.
@@ -474,19 +474,19 @@ uint16_t SFEMP3Shield::memoryTest() {
 
 //------------------------------------------------------------------------------
 /**
- * \brief Overload function of SFEMP3Shield::SetVolume(leftchannel, rightchannel)
+ * \brief Overload function of SFEMP3Shield::setVolume(leftchannel, rightchannel)
  *
  * \param[in] data packed with left and right master volume
  *
- * calls SFEMP3Shield::SetVolume expecting the left channel in the upper byte
+ * calls SFEMP3Shield::setVolume expecting the left channel in the upper byte
  * and right channel in the lower byte.
  *
  * As specified by Data Sheet Section 8.7.11
  */
-void SFEMP3Shield::SetVolume(uint16_t data) {
+void SFEMP3Shield::setVolume(uint16_t data) {
   union twobyte val;
   val.word = data;
-  SetVolume(val.byte[1], val.byte[0]);
+  setVolume(val.byte[1], val.byte[0]);
 }
 
 //------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void SFEMP3Shield::SetVolume(uint16_t data) {
  *
  * \note input values are -1/2dB. e.g. 40 results in -20dB.
  */
-void SFEMP3Shield::SetVolume(uint8_t leftchannel, uint8_t rightchannel){
+void SFEMP3Shield::setVolume(uint8_t leftchannel, uint8_t rightchannel){
 
   VolL = leftchannel;
   VolR = rightchannel;
@@ -524,7 +524,7 @@ void SFEMP3Shield::SetVolume(uint8_t leftchannel, uint8_t rightchannel){
  * \note Cast the output to the union of twobyte.word to access individual
  * channels, with twobyte.byte[1] and [0].
  */
-uint16_t SFEMP3Shield::GetVolume() {
+uint16_t SFEMP3Shield::getVolume() {
   uint16_t MP3SCI_VOL = Mp3ReadRegister(SCI_VOL);
   return MP3SCI_VOL;
 }
@@ -551,7 +551,7 @@ uint16_t SFEMP3Shield::GetVolume() {
  * \warning Excessive playspeed beyond the ability to stream data between the
  * SdCard, Arduino and VS10xx may result in erratic behavior.
  */
-uint16_t SFEMP3Shield::GetPlaySpeed() {
+uint16_t SFEMP3Shield::getPlaySpeed() {
   uint16_t MP3playspeed = Mp3ReadWRAM(para_playSpeed);
   return MP3playspeed;
 }
@@ -571,7 +571,7 @@ uint16_t SFEMP3Shield::GetPlaySpeed() {
  * \warning Excessive playspeed beyond the ability to stream data between the
  * SdCard, Arduino and VS10xx may result in erratic behavior.
  */
-void SFEMP3Shield::SetPlaySpeed(uint16_t data) {
+void SFEMP3Shield::setPlaySpeed(uint16_t data) {
   Mp3WriteWRAM(para_playSpeed, data);
 }
 // @}
@@ -591,7 +591,7 @@ void SFEMP3Shield::SetPlaySpeed(uint16_t data) {
  *
  * \return result between 0 and 3. Where 0 is OFF and 3 is maximum.
  */
-uint8_t SFEMP3Shield::GetEarSpeaker() {
+uint8_t SFEMP3Shield::getEarSpeaker() {
   uint8_t result = 0;
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
@@ -615,7 +615,7 @@ uint8_t SFEMP3Shield::GetEarSpeaker() {
  * and written the VS10xx SCI_MODE register, preserving the remainder of SCI_MODE.
  * As specified by Data Sheet Section 8.7.1 and 8.4
  */
-void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
+void SFEMP3Shield::setEarSpeaker(uint16_t EarSpeaker) {
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
   // SM_EARSPEAKER bits are not adjacent hence need to add them individually
@@ -653,9 +653,9 @@ void SFEMP3Shield::SetEarSpeaker(uint16_t EarSpeaker) {
  * - 0 Normal in-phase audio output of left and right speaker signals.
  * - 1 Left channel output is the invert of the right channel.
  *
- * \see SetDiffertialOutput()
+ * \see setDiffertialOutput()
  */
-uint8_t SFEMP3Shield::GetDiffertialOutput() {
+uint8_t SFEMP3Shield::getDiffertialOutput() {
   uint8_t result = 0;
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
@@ -677,9 +677,9 @@ uint8_t SFEMP3Shield::GetDiffertialOutput() {
  * left/right output with a maximum output of 3V.
 
  * As specified by Data Sheet Section 8.7.1
- * \see GetDiffertialOutput()
+ * \see getDiffertialOutput()
  */
-void SFEMP3Shield::SetDiffertialOutput(uint16_t DiffMode) {
+void SFEMP3Shield::setDiffertialOutput(uint16_t DiffMode) {
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
   if(DiffMode) {
@@ -709,7 +709,7 @@ void SFEMP3Shield::SetDiffertialOutput(uint16_t DiffMode) {
  * \warning This feature is only available when composite patch 1.7 or higher
  * is loaded into the VSdsp.
  */
-uint16_t SFEMP3Shield::GetMonoMode() {
+uint16_t SFEMP3Shield::getMonoMode() {
   uint16_t result = (Mp3ReadWRAM(para_MonoOutput) & 0x0001);
   return result;
 }
@@ -725,7 +725,7 @@ uint16_t SFEMP3Shield::GetMonoMode() {
  * \warning This feature is only available when composite patch 1.7 or higher
  * is loaded into the VSdsp.
  */
-void SFEMP3Shield::SetMonoMode(uint16_t StereoMode) {
+void SFEMP3Shield::setMonoMode(uint16_t StereoMode) {
   uint16_t data = (Mp3ReadWRAM(para_MonoOutput) & ~0x0001); // preserve other bits
   Mp3WriteWRAM(0x1e09, (StereoMode | (data & 0x0001)));
 }
@@ -800,7 +800,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
     fileNamefileName_length++;
 
   // Only know how to read bitrate from MP3 file. ignore the rest.
-  // Note bitrate may get updated later by GetAudioInfo()
+  // Note bitrate may get updated later by getAudioInfo()
   if((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
     getBitRateFromMP3File(fileName);
   }
@@ -963,7 +963,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
     delay(50);
 
     //one of these days I'll come back and try to do it the right way.
-    SetVolume(VolL,VolR);
+    setVolume(VolL,VolR);
 
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();

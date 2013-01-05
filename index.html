@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.01.00 - Dev branch</span>
+   &#160;<span id="projectnumber">1.01.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -87,6 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li class="level1"><a href="#Installation">Installation</a></li>
 <li class="level1"><a href="#Hardware">Hardware</a><ul><li class="level2"><a href="#ArduinoMega">Arduino Mega Board</a></li>
 <li class="level2"><a href="#Arduino_Leonardo">Arduino Leonardo Board</a></li>
+<li class="level2"><a href="#Arduino_Pro">Arduino Pro 5V vs 3V</a></li>
 <li class="level2"><a href="#SparkFunMP3Player">SparkFun MP3 Player Shield</a></li>
 <li class="level2"><a href="#Seeeduino">Seeduino MP3 Player Shield</a></li>
 <li class="level2"><a href="#Gravitech">MP3-4NANO Shield</a></li>
@@ -134,10 +135,11 @@ Requirements</h1>
 </ul>
 </li>
 <li>Hardware<ul>
-<li>Arduino 328 UNO/Duemilanove or better.</li>
+<li>5V Arduino 328 UNO/Duemilanove or better.</li>
 <li>Shield or break out with appropiate pins wired up.</li>
 <li>Shield or break out for SdCard</li>
 <li>SdCard FAT formatted with valid <a href="http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip">Audio files</a> and filenames</li>
+<li>See <a class="el" href="index.html#Hardware">Hardware</a> for alternative solutions.</li>
 </ul>
 </li>
 </ul>
@@ -169,6 +171,9 @@ Arduino Mega Board</h2>
 <h2><a class="anchor" id="Arduino_Leonardo"></a>
 Arduino Leonardo Board</h2>
 <p>Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO/Duemilanove . This is similar to the Arduino Mega. Which simply REQUIRES additional jumpers, as documented in <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a> to correct the SPI. The swapping of INT0/INT1 is automatically corrected based on the Leonardo's processor type of <b>AVR_ATmega32U4</b> being detected.</p>
+<h2><a class="anchor" id="Arduino_Pro"></a>
+Arduino Pro 5V vs 3V</h2>
+<p>SFE Arduino Pro's while similar to UNO/Duemilanove's pin outs, they are available in either 5V or 3.3V. Where the SFE MP3 Player Shield requires 5V and locally generating the needed 3.3V and 1.8V for the VS10xx chip. Noting that 3.3V Pro's do not supply 5V, this causes a problem. It is possible to modify the shield as to use base Arduino supplied 3V's.</p>
 <h2><a class="anchor" id="SparkFunMP3Player"></a>
 SparkFun MP3 Player Shield</h2>
 <p>SparkFun MP3 Player Shield should just work out of the box (bag) with a Arduino 328 UNO/Duemilanove, with Interrupts.</p>
@@ -346,7 +351,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 31 2012 14:14:27 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jan 5 2013 16:28:29 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -70,7 +70,7 @@ void setup() {
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1094, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1095, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
@@ -89,12 +89,14 @@ void setup() {
     }
   }
 
-// Typically not used by most shields, hence commented out.
-//  Serial.println(F("Applying ADMixer patch."));
-//  if(MP3player.ADMixerLoad("admxster.053") == 0) {
-//    Serial.println(F("Setting ADMixer Volume."));
-//    MP3player.ADMixerVol(-3);
-//  }
+#if (0)
+  // Typically not used by most shields, hence commented out.
+  Serial.println(F("Applying ADMixer patch."));
+  if(MP3player.ADMixerLoad("admxster.053") == 0) {
+    Serial.println(F("Setting ADMixer Volume."));
+    MP3player.ADMixerVol(-3);
+  }
+#endif
 
   help();
 }

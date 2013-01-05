@@ -34,10 +34,15 @@
   #include <SimpleTimer.h>
 #endif
 
-
-SdFat sd;
 /**
- * \brief Object instancing the library.
+ * \brief Object instancing the SdFat library.
+ *
+ * principal object for handling all SdCard functions.
+ */
+SdFat sd;
+
+/**
+ * \brief Object instancing the SFEMP3Shield library.
  *
  * principal object for handling all the attributes, members and functions for the library.
  */
@@ -149,6 +154,7 @@ void parse_menu(byte key_command) {
 
   //if s, stop the current track
   if(key_command == 's') {
+    Serial.println(F("Stopping"));
     MP3player.stopTrack();
 
   //if 1-9, play corresponding track
@@ -167,26 +173,27 @@ void parse_menu(byte key_command) {
       Serial.print(F("Error code: "));
       Serial.print(result);
       Serial.println(F(" when trying to play track"));
+    } else {
+
+      Serial.println(F("Playing:"));
+  
+      //we can get track info by using the following functions and arguments
+      //the functions will extract the requested information, and put it in the array we pass in
+      MP3player.trackTitle((char*)&title);
+      MP3player.trackArtist((char*)&artist);
+      MP3player.trackAlbum((char*)&album);
+  
+      //print out the arrays of track information
+      Serial.write((byte*)&title, 30);
+      Serial.println();
+      Serial.print(F("by:  "));
+      Serial.write((byte*)&artist, 30);
+      Serial.println();
+      Serial.print(F("Album:  "));
+      Serial.write((byte*)&album, 30);
+      Serial.println();
     }
-
-    Serial.println(F("Playing:"));
-
-    //we can get track info by using the following functions and arguments
-    //the functions will extract the requested information, and put it in the array we pass in
-    MP3player.trackTitle((char*)&title);
-    MP3player.trackArtist((char*)&artist);
-    MP3player.trackAlbum((char*)&album);
-
-    //print out the arrays of track information
-    Serial.write((byte*)&title, 30);
-    Serial.println();
-    Serial.print(F("by:  "));
-    Serial.write((byte*)&artist, 30);
-    Serial.println();
-    Serial.print(F("Album:  "));
-    Serial.write((byte*)&album, 30);
-    Serial.println();
-
+  
   //if +/- to change volume
   } else if((key_command == '-') || (key_command == '+')) {
     union twobyte mp3_vol; // create key_command existing variable that can be both word and double byte of left and right.
@@ -269,12 +276,16 @@ void parse_menu(byte key_command) {
     MP3player.getAudioInfo();
 
   } else if(key_command == 'p') {
-    MP3player.pauseDataStream();
-    Serial.println(F("Pausing"));
 
-  } else if(key_command == 'r') {
-    MP3player.resumeDataStream();
-    Serial.println(F("Resuming"));
+    if( MP3player.getState() == playback) {
+      MP3player.pauseDataStream();
+      Serial.println(F("Pausing"));
+    } else if( MP3player.getState() == paused_playback) {
+      MP3player.resumeDataStream();
+      Serial.println(F("Resuming"));
+    } else {
+      Serial.println(F("Not Playing!"));
+    }
 
   } else if(key_command == 'R') {
     MP3player.stopTrack();
@@ -359,12 +370,49 @@ void parse_menu(byte key_command) {
       Serial.println(F("Disabled."));
     }
 
+  } else if(key_command == 'S') {
+    Serial.println(F("Current State of VS10xx is."));
+    Serial.print(F("isPlaying() = "));
+    Serial.println(MP3player.isPlaying());
+
+    Serial.print(F("getState() = "));
+    switch (MP3player.getState()) {
+    case unintialized:
+      Serial.print(F("unintialized"));
+      break;
+    case intialized:
+      Serial.print(F("intialized"));
+      break;
+    case deactivated:
+      Serial.print(F("deactivated"));
+      break;
+    case loading:
+      Serial.print(F("loading"));
+      break;
+    case ready:
+      Serial.print(F("ready"));
+      break;
+    case playback:
+      Serial.print(F("playback"));
+      break;
+    case paused_playback:
+      Serial.print(F("paused_playback"));
+      break;
+    case testing_memory:
+      Serial.print(F("testing_memory"));
+      break;
+    case testing_sinewave:
+      Serial.print(F("testing_sinewave"));
+      break;
+    }
+    Serial.println();
+
   } else if(key_command == 'h') {
     help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,r,R,t,m,M,g,h,O,o :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,R,t,m,M,g,h,O,o,D,S :"));
 }
 
 //------------------------------------------------------------------------------
@@ -385,7 +433,6 @@ void help() {
   Serial.println(F(" [i] retrieve current audio information (partial list)"));
   Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
   Serial.println(F(" [p] to pause."));
-  Serial.println(F(" [r] to resume."));
   Serial.println(F(" [R] Resets and initializes VS10xx chip."));
   Serial.println(F(" [t] to toggle sine wave test"));
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
@@ -394,6 +441,7 @@ void help() {
   Serial.println(F(" [O} turns OFF the VS10xx into low power reset."));
   Serial.println(F(" [o} turns ON the VS10xx out of low power reset."));
   Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
+  Serial.println(F(" [S] Show State of Device."));
   Serial.println(F(" [h] this help"));
 }
 

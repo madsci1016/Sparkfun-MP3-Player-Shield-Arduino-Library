@@ -24,6 +24,7 @@ GetEarSpeaker            KEYWORD2
 GetMonoMode              KEYWORD2
 GetDiffertialOutput      KEYWORD2
 GetPlaySpeed             KEYWORD2
+getState                 KEYWORD2
 GetVolume                KEYWORD2
 isPlaying                KEYWORD2
 memoryTest               KEYWORD2

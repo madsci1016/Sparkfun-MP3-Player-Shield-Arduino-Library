@@ -25,9 +25,29 @@
 #include <SdFatUtil.h>
 
 
-/** \brief selects the way SFEMP3Shield::flush_cancel() will flush buffer
+/** \brief State of the SFEMP3Shield device
  *
- * see Data sheet 9.5.2
+ * Value of SFEMP3Shield::playing_state detailing the current state of the VSdsp.
+ * Noting that test, pause, play and idle states are not directly the same.
+ */
+enum state_m {
+  unintialized,
+  intialized,
+  deactivated,
+  loading,
+  ready,
+  playback,
+  paused_playback,
+  testing_memory,
+  testing_sinewave,
+  }; //enum state_m
+
+/** \brief How to flush the VSdsp's buffer
+ * 
+ * For use with SFEMP3Shield::flush_cancel(flush_m) as to how to flush the 
+ * VSdsp's buffer. 
+ *
+ * See Data sheet 9.5.2
  */
 enum flush_m {
 
@@ -633,6 +653,7 @@ class SFEMP3Shield {
     uint16_t GetPlaySpeed();
     uint16_t GetVolume();
     uint8_t GetEarSpeaker();
+    state_m getState();
     void SetEarSpeaker(uint16_t);
     uint16_t GetMonoMode();
     void SetMonoMode(uint16_t );
@@ -680,7 +701,7 @@ class SFEMP3Shield {
     //Create the variables to be used by SdFat Library
 
 /** \brief Boolean flag indicating if filehandle is streaming.*/
-    static uint8_t playing;
+    static state_m playing_state;
 
 /** \brief Rate of the SPI to be used with communicating to the VSdsp.*/
     static uint16_t spiRate;

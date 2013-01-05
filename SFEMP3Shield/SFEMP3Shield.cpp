@@ -52,7 +52,7 @@ SdFile   SFEMP3Shield::track;
 /**
  * \brief Initializer for the instance of the SdCard's static member.
  */
-uint8_t  SFEMP3Shield::playing;
+state_m  SFEMP3Shield::playing_state;
 
 /**
  * \brief Initializer for the instance of the SdCard's static member.
@@ -95,6 +95,8 @@ uint8_t  SFEMP3Shield::begin() {
   cs_high();  //MP3_XCS, Init Control Select to deselected
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
+  
+  playing_state = intialized;
 
   uint8_t result = vs_init();
   if(result) {
@@ -129,6 +131,8 @@ void SFEMP3Shield::end() {
 
   // most importantly...
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
+
+  playing_state = deactivated;
 }
 
 //------------------------------------------------------------------------------
@@ -255,12 +259,12 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
   union twobyte n;
 
   if(!digitalRead(MP3_RESET)) return 3;
-  if(playing) return 1;
+  if(isPlaying()) return 1;
   if(!digitalRead(MP3_RESET)) return 3;
 
   //Open the file in read mode.
   if(!track.open(fileName, O_READ)) return 2;
-  //playing = TRUE;
+  //playing_state = loading;
   //while(i<size_of_Plugin/sizeof(Plugin[0])) {
   while(1) {
     //addr = Plugin[i++];
@@ -283,7 +287,7 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
     }
   }
   track.close(); //Close out this track
-  //playing=FALSE;
+  //playing_state = ready;
   return 0;
 }
 
@@ -312,7 +316,7 @@ uint8_t SFEMP3Shield::VSLoadUserCode(char* fileName){
  */
 uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
 
-  if(playing || !digitalRead(MP3_RESET)) {
+  if(isPlaying() || !digitalRead(MP3_RESET)) {
     Serial.println(F("Warning Tests are not available."));
     return -1;
   }
@@ -342,6 +346,7 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
     dcs_high(); //Deselect Control
   }
 
+  playing_state = testing_sinewave;
   return 1;
 }
 
@@ -362,7 +367,7 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
  */
 uint8_t SFEMP3Shield::disableTestSineWave() {
 
-  if(playing || !digitalRead(MP3_RESET)) {
+  if(isPlaying() || !digitalRead(MP3_RESET)) {
     Serial.println(F("Warning Tests are not available."));
     return -1;
   }
@@ -393,6 +398,7 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
   // turn test mode bit off
   Mp3WriteRegister(SCI_MODE, Mp3ReadRegister(SCI_MODE) & ~SM_TESTS);
 
+  playing_state = ready;
   return 0;
 }
 
@@ -414,15 +420,18 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
  */
 uint16_t SFEMP3Shield::memoryTest() {
 
-  if(playing || !digitalRead(MP3_RESET)) {
+  if(isPlaying() || !digitalRead(MP3_RESET)) {
     Serial.println(F("Warning Tests are not available."));
     return -1;
   }
+  
+  playing_state = testing_memory;
 
   vs_init();
 
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
   if(MP3SCI_MODE & SM_TESTS) {
+    playing_state = ready;
     return 2;
   }
 
@@ -453,6 +462,7 @@ uint16_t SFEMP3Shield::memoryTest() {
 
   vs_init();
 
+  playing_state = ready;
   return MP3SCI_HDAT0;
 }
 // @}
@@ -778,7 +788,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  */
 uint8_t SFEMP3Shield::playMP3(char* fileName) {
 
-  if(playing) return 1;
+  if(isPlaying()) return 1;
   if(!digitalRead(MP3_RESET)) return 3;
 
   //Open the file in read mode.
@@ -795,7 +805,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
     getBitRateFromMP3File(fileName);
   }
 
-  playing = TRUE;
+  playing_state = playback;
 
   Mp3WriteRegister(SCI_DECODE_TIME, 0); // Reset the Decode and bitrate from previous play back.
   delay(100); // experimentally found that we need to let this settle before sending data.
@@ -819,12 +829,12 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
  */
 void SFEMP3Shield::stopTrack(){
 
-  if((playing == FALSE) || !digitalRead(MP3_RESET))
+  if(((playing_state != playback) && (playing_state != paused_playback)) || !digitalRead(MP3_RESET))
     return;
 
   //cancel external interrupt
   disableRefill();
-  playing=FALSE;
+  playing_state = ready;
 
   track.close(); //Close out this track
 
@@ -845,15 +855,31 @@ void SFEMP3Shield::stopTrack(){
  * - 1 indicates that a file is currently being streamed to the VSdsp.
  * - 3 indicates that the VSdsp is in reset.
  */
-//
 uint8_t SFEMP3Shield::isPlaying(){
+  uint8_t result;
 
   if(!digitalRead(MP3_RESET))
-    return 3;
-  else if(playing == FALSE)
-    return 0;
+    result = 3;
+  else if(getState() == playback)
+    result = 1;
+  else if(getState() == paused_playback)
+    result = 1;
   else
-    return 1;
+    result = 0;
+
+  return result;
+}
+
+/**
+ * \brief Get the current state of the device
+ *
+ * Reports the current operational status of the device from the list of possible
+ * states enumerated by state_m
+ *
+ * \return the value held by SFEMP3Shield::playing_state
+ */
+state_m SFEMP3Shield::getState(){
+ return playing_state; 
 }
 
 
@@ -866,8 +892,11 @@ uint8_t SFEMP3Shield::isPlaying(){
 void SFEMP3Shield::pauseDataStream(){
 
   //cancel external interrupt
-  if(playing && digitalRead(MP3_RESET))
+  if((playing_state == playback) && digitalRead(MP3_RESET))
+  {
     disableRefill();
+    playing_state = paused_playback;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -879,12 +908,13 @@ void SFEMP3Shield::pauseDataStream(){
  */
 void SFEMP3Shield::resumeDataStream(){
 
-  if(playing && digitalRead(MP3_RESET)) {
+  if((playing_state == paused_playback) && digitalRead(MP3_RESET)) {
     //see if it is already ready for more
     refill();
 
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
+    playing_state = playback;
   }
 }
 
@@ -906,11 +936,11 @@ void SFEMP3Shield::resumeDataStream(){
  */
 bool SFEMP3Shield::skipTo(uint32_t timecode){
 
-  if(playing && digitalRead(MP3_RESET)) {
+  if(isPlaying() && digitalRead(MP3_RESET)) {
 
     //stop interupt for now
     disableRefill();
-    playing=FALSE;
+    playing_state = paused_playback;
 
     // try to set the files position to current position + offset(in bytes)
     // as calculated from current byte rate, as per VSdsp.
@@ -937,7 +967,7 @@ bool SFEMP3Shield::skipTo(uint32_t timecode){
 
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
-    playing=TRUE;
+    playing_state = playback;
 
     return 0;
   }
@@ -1036,7 +1066,9 @@ void SFEMP3Shield::trackAlbum(char* infobuffer){
 void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
 
   //disable interupts
-  pauseDataStream();
+  if(playing_state == playback) {
+    disableRefill();
+  }
 
   //record current file position
   uint32_t currentPos = track.curPosition();
@@ -1052,7 +1084,9 @@ void SFEMP3Shield::getTrackInfo(uint8_t offset, char* infobuffer){
   track.seekSet(currentPos);
 
   //renable interupt
-  resumeDataStream();
+  if(playing_state == playback) {
+    enableRefill();
+  }
 
 }
 
@@ -1310,7 +1344,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
   if(!digitalRead(MP3_RESET)) return;
 
   //cancel interrupt if playing
-  if(playing)
+  if(playing_state == playback)
     disableRefill();
 
   //Wait for DREQ to go high indicating IC is available
@@ -1327,7 +1361,7 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
   cs_high(); //Deselect Control
 
   //resume interrupt if playing.
-  if(playing) {
+  if(playing_state == playback) {
     //see if it is already ready for more
     refill();
 
@@ -1355,7 +1389,7 @@ uint16_t SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
   if(!digitalRead(MP3_RESET)) return 0;
 
   //cancel interrupt if playing
-  if(playing)
+  if(playing_state == playback)
     disableRefill();
 
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
@@ -1373,7 +1407,7 @@ uint16_t SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
   cs_high(); //Deselect Control
 
   //resume interrupt if playing.
-  if(playing) {
+  if(playing_state == playback) {
     //see if it is already ready for more
     refill();
 
@@ -1468,7 +1502,7 @@ void SFEMP3Shield::refill() {
 
     if(!track.read(mp3DataBuffer, sizeof(mp3DataBuffer))) { //Go out to SD card and try reading 32 new bytes of the song
       track.close(); //Close out this track
-      playing=FALSE;
+      playing_state = ready;
 
       //cancel external interrupt
       disableRefill();
@@ -1615,10 +1649,15 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
 uint8_t SFEMP3Shield::ADMixerLoad(char* fileName){
 
   if(!digitalRead(MP3_RESET)) return 3;
-  if(playing != FALSE)
+  if(isPlaying() != FALSE)
     return 1;
-
-  if(VSLoadUserCode(fileName)) return 2; // Serial.print(F("Error: ")); Serial.print(fileName); Serial.println(F(", file not found, skipping."));
+    
+  playing_state = loading;
+  if(VSLoadUserCode(fileName)) {
+    playing_state = ready;
+    return 2;
+    // Serial.print(F("Error: ")); Serial.print(fileName); Serial.println(F(", file not found, skipping."));
+  } 
 
   // Set Input Mode to either Line1 or Microphone.
 #if defined(VS_LINE1_MODE)
@@ -1626,6 +1665,7 @@ uint8_t SFEMP3Shield::ADMixerLoad(char* fileName){
 #else
     Mp3WriteRegister(SCI_MODE, (Mp3ReadRegister(SCI_MODE) & ~SM_LINE1));
 #endif
+  playing_state = ready;
   return 0;
 }
 

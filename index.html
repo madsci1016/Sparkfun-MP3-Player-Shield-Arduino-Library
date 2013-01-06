@@ -252,6 +252,22 @@ Troubleshooting</h1>
 </li>
 </ul>
 <ul>
+<li>Is <b>MP3player.begin()</b> locking up, in <a class="el" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup()</a>?</li>
+<li>Are you trying to update from a version prior to 1.01.00?</li>
+<li>Why does my Serial Monitor display: "<code>...do not have a sd.begin in the main sketch, See Trouble Shooting Guide.</code>"</li>
+<li>Compiler Error: "<code>...undefined reference to `sd'</code>"</li>
+<li>Is the last thing printed to the Serial Monitor: "<code>Free RAM = 1097 Should be a base line of 1095, on ATmega328 when using INTx</code>" then nothing...<ul>
+<li>Versions after 1.01.00 require the <code>SdFat::begin()</code> to be initialized in the main sketch.ino, as shown in the below example. This provides more immediate access to the SdCard's files by the main sketch. However, if not done there is no immediate compiler error and the sketch will lock up after as it attempts <a class="el" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">SFEMP3Shield::begin</a>. <div class="fragment"><div class="line">...</div>
+<div class="line">SdFat <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>; <span class="comment">// newly required in 1.01.00 and higher</span></div>
+<div class="line"><span class="keywordtype">void</span> <a class="code" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup</a>() {</div>
+<div class="line">  <span class="keywordflow">if</span>(!<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.begin(<a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aacbac5c44278a37aeeceffe01ccdda1b" title="A macro to configure the SdCard Chip Select for SFEMP3SHield library.">SD_SEL</a>, SPI_HALF_SPEED)) <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.initErrorHalt(); <span class="comment">// newly required in 1.01.00 and higher</span></div>
+<div class="line">  <span class="keywordflow">if</span>(<a class="code" href="_m_p3_shield___library___demo_8ino.html#ab3c96aa4b0f9d056464804cf754a889e" title="Object instancing the SFEMP3Shield library.">MP3player</a>.<a class="code" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">begin</a>() != 0) {Serial.print(F(<span class="stringliteral">&quot;ERROR&quot;</span>));</div>
+<div class="line">...</div>
+</div><!-- fragment --></li>
+</ul>
+</li>
+</ul>
+<ul>
 <li>Is it <b>FAT</b> (FAT16 or FAT32)?<ul>
 <li>If the Error Code is indicating problems with the INIT, VOLUME or Track not being successful. It is recommend to use SdFat Example Library's QuickStart.ino as to see if it can access the card. Additionaly, SdInfo.ino may indicate if it can mount the card. Which may then need to formatted in FAT16 or FAT32. Where SdFormatter.ino can do this for you.</li>
 </ul>
@@ -351,7 +367,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jan 5 2013 16:28:29 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 6 2013 13:52:37 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

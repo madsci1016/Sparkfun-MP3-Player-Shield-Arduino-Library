@@ -142,6 +142,21 @@ The below is a list of basic questions to ask when attempting to determine the p
 - Did the SdCard \b LOAD?
   - Try reseating your SdCard.
 
+- Is \b MP3player.begin() locking up, in setup()?
+- Are you trying to update from a version prior to 1.01.00?
+- Why does my Serial Monitor display: \"<tt>...do not have a sd.begin in the main sketch, See Trouble Shooting Guide.</tt>\"
+- Compiler Error: \"<tt>...undefined reference to `sd'</tt>\"
+- Is the last thing printed to the Serial Monitor: \"<tt>Free RAM = 1097 Should be a base line of 1095, on ATmega328 when using INTx</tt>\" then nothing...
+  - Versions after 1.01.00 require the \c SdFat::begin() to be initialized in the main sketch.ino, as shown in the below example. This provides more immediate access to the SdCard's files by the main sketch. However, if not done there is no immediate compiler error and the sketch will lock up after as it attempts SFEMP3Shield::begin.
+\code
+...
+SdFat sd; // newly required in 1.01.00 and higher
+void setup() {
+  if(!sd.begin(SD_SEL, SPI_HALF_SPEED)) sd.initErrorHalt(); // newly required in 1.01.00 and higher
+  if(MP3player.begin() != 0) {Serial.print(F("ERROR"));
+...
+\endcode
+
 - Is it \b FAT (FAT16 or FAT32)?
   - If the Error Code is indicating problems with the INIT, VOLUME or Track not being successful. It is recommend to use SdFat Example Library's QuickStart.ino as to see if it can access the card. Additionaly, SdInfo.ino may indicate if it can mount the card. Which may then need to formatted in FAT16 or FAT32. Where SdFormatter.ino can do this for you.
 

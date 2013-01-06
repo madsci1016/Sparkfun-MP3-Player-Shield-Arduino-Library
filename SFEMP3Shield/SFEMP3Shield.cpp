@@ -83,9 +83,24 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  * end() for low power mode
  * \see
  * \ref Error_Codes
- * \warning Will interrupt playback if issued while playing back.
+ * \warning Will disrupt playback, if issued while playing back.
+ * \note The \c SdFat::begin() function is required to be executed prior, as to 
+ * define the volume for the tracks (aka files) to be operated on.
  */
 uint8_t  SFEMP3Shield::begin() {
+
+/*
+ This test is to assit in the migration from versions prior to 1.01.00.
+ It is not really needed, simply prints an easy error, to better assist.
+ If you are using SdFat objects other than "sd" the below may be omitted.
+ or whant to save 222 bytes of Flash space.
+ */
+#if (1)
+if (int8_t(sd.vol()->fatType()) == 0) {
+  Serial.println(F("If you get this error, you likely do not have a sd.begin in the main sketch, See Trouble Shooting Guide!"));
+  Serial.println(F("http://mpflaga.github.com/Sparkfun-MP3-Player-Shield-Arduino-Library/#Troubleshooting"));
+}
+#endif
 
   pinMode(MP3_DREQ, INPUT);
   pinMode(MP3_XCS, OUTPUT);

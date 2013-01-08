@@ -33,5 +33,6 @@ var searchData=
   ['sm_5fsdiord',['SM_SDIORD',['../_s_f_e_m_p3_shield_8h.html#a55f3672ff35a418e51b8f6289e9e9606',1,'SFEMP3Shield.h']]],
   ['sm_5fsdishare',['SM_SDISHARE',['../_s_f_e_m_p3_shield_8h.html#a01b38b83fe90ea24b711b056d41df804',1,'SFEMP3Shield.h']]],
   ['sm_5fstream',['SM_STREAM',['../_s_f_e_m_p3_shield_8h.html#a7c8d7e7fae74462ec55d9418b90b762e',1,'SFEMP3Shield.h']]],
-  ['sm_5ftests',['SM_TESTS',['../_s_f_e_m_p3_shield_8h.html#ad0971535cc6abaa3f7e4500a4ce76cc7',1,'SFEMP3Shield.h']]]
+  ['sm_5ftests',['SM_TESTS',['../_s_f_e_m_p3_shield_8h.html#ad0971535cc6abaa3f7e4500a4ce76cc7',1,'SFEMP3Shield.h']]],
+  ['ss_5fvu_5fenable',['SS_VU_ENABLE',['../_s_f_e_m_p3_shield_8h.html#a8ca7b905db938fcc36ece01b460ec00b',1,'SFEMP3Shield.h']]]
 ];

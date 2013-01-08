@@ -9,5 +9,7 @@ var searchData=
   ['getstate',['getState',['../class_s_f_e_m_p3_shield.html#a28e9dbe66184c97ba8345aabaa8cc057',1,'SFEMP3Shield']]],
   ['gettrackinfo',['getTrackInfo',['../class_s_f_e_m_p3_shield.html#a6a4b776e45e151a7c330d91a9e88fb78',1,'SFEMP3Shield']]],
   ['getvolume',['getVolume',['../class_s_f_e_m_p3_shield.html#aff5df38846b4467b094e5976e8212fca',1,'SFEMP3Shield']]],
+  ['getvulevel',['getVUlevel',['../class_s_f_e_m_p3_shield.html#aed2dc5833ab0fa71c2994cf89e598f35',1,'SFEMP3Shield']]],
+  ['getvumeter',['getVUmeter',['../class_s_f_e_m_p3_shield.html#a863a47f54aec4b9be047ef83f8c6c786',1,'SFEMP3Shield']]],
   ['gravitech',['GRAVITECH',['../_s_f_e_m_p3_shield_config_8h.html#a36ca8260c1ba2bc253b2da84cf27ce6a',1,'SFEMP3ShieldConfig.h']]]
 ];

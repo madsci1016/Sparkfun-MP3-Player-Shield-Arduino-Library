@@ -439,44 +439,67 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    }</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    Serial.println();</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span>(key_command == <span class="charliteral">&#39;h&#39;</span>) {</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <a class="code" href="_m_p3_shield___library___demo_8ino.html#a97ee70a8770dc30d06c744b24eb2fcfc" title="Print Help Menu.">help</a>();</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;  }</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;  <span class="comment">// print prompt after key stroke has been processed.</span></div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;Enter 1-9,s,d,+,-,i,&gt;,&lt;,p,R,t,m,M,g,h,O,o,D,S :&quot;</span>));</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;}</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00426"></a><span class="lineno"><a class="code" href="_m_p3_shield___library___demo_8ino.html#a97ee70a8770dc30d06c744b24eb2fcfc">  426</a></span>&#160;<span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="_m_p3_shield___library___demo_8ino.html#a97ee70a8770dc30d06c744b24eb2fcfc" title="Print Help Menu.">help</a>() {</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;Arduino SFEMP3Shield Library Example:&quot;</span>));</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; courtesy of Bill Porter &amp; Michael P. Flaga&quot;</span>));</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;COMMANDS:&quot;</span>));</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [1-9] to play a track&quot;</span>));</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [s] to stop playing&quot;</span>));</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [d] display directory of SdCard&quot;</span>));</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [+ or -] to change volume&quot;</span>));</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [&gt; or &lt;] to increment or decrement play speed by 1 factor&quot;</span>));</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [i] retrieve current audio information (partial list)&quot;</span>));</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [e] increment Spatial EarSpeaker, default is 0, wraps after 4&quot;</span>));</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [p] to pause.&quot;</span>));</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [R] Resets and initializes VS10xx chip.&quot;</span>));</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [t] to toggle sine wave test&quot;</span>));</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [m] perform memory test. reset is needed after to recover.&quot;</span>));</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [M] Toggle between Mono and Stereo Output.&quot;</span>));</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [g] Skip to a predetermined offset of ms in current track.&quot;</span>));</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [O} turns OFF the VS10xx into low power reset.&quot;</span>));</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [o} turns ON the VS10xx out of low power reset.&quot;</span>));</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [D] to toggle SM_DIFF between inphase and differential output&quot;</span>));</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [S] Show State of Device.&quot;</span>));</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [h] this help&quot;</span>));</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;}</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span>(key_command == <span class="charliteral">&#39;V&#39;</span>) {</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#ad7a26485b80f56bfafb5daaf0413b118" title="enable VSdsp VU Meter">setVUmeter</a>(1);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    Serial.print(F(<span class="stringliteral">&quot;VU meter = &quot;</span>));</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    Serial.println(MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#a863a47f54aec4b9be047ef83f8c6c786" title="get the status of the VSdsp VU Meter">getVUmeter</a>());</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    Serial.println(F(<span class="stringliteral">&quot;Hit Any key to stop.&quot;</span>));</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    <span class="keywordflow">while</span>(!Serial.available()) {</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;      <span class="keyword">union </span><a class="code" href="uniontwobyte.html" title="A handler for accessing bytes of a word.">twobyte</a> vu;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;      vu.<a class="code" href="uniontwobyte.html#a43edc27e9ba5632eed7d77f38ad1450f" title="whole word value">word</a> = MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#aed2dc5833ab0fa71c2994cf89e598f35" title="get current measured VU Meter">getVUlevel</a>();</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;      Serial.print(F(<span class="stringliteral">&quot;VU: L = &quot;</span>));</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;      Serial.print(vu.<a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593" title="individual bytes">byte</a>[1]);</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;      Serial.print(F(<span class="stringliteral">&quot; / R = &quot;</span>));</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;      Serial.print(vu.<a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593" title="individual bytes">byte</a>[0]);</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;      Serial.println(<span class="stringliteral">&quot; dB&quot;</span>);</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;      delay(1000);</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    }</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    Serial.read();</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#ad7a26485b80f56bfafb5daaf0413b118" title="enable VSdsp VU Meter">setVUmeter</a>(0);</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    Serial.print(F(<span class="stringliteral">&quot;VU meter = &quot;</span>));</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    Serial.println(MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#a863a47f54aec4b9be047ef83f8c6c786" title="get the status of the VSdsp VU Meter">getVUmeter</a>());</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;  } <span class="keywordflow">else</span> <span class="keywordflow">if</span>(key_command == <span class="charliteral">&#39;h&#39;</span>) {</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <a class="code" href="_m_p3_shield___library___demo_8ino.html#a97ee70a8770dc30d06c744b24eb2fcfc" title="Print Help Menu.">help</a>();</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;  }</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;  <span class="comment">// print prompt after key stroke has been processed.</span></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;Enter 1-9,s,d,+,-,i,&gt;,&lt;,p,R,t,m,M,g,h,O,o,D,S,V :&quot;</span>));</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;}</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00448"></a><span class="lineno"><a class="code" href="_m_p3_shield___library___demo_8ino.html#a97ee70a8770dc30d06c744b24eb2fcfc">  448</a></span>&#160;<span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="_m_p3_shield___library___demo_8ino.html#a97ee70a8770dc30d06c744b24eb2fcfc" title="Print Help Menu.">help</a>() {</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;Arduino SFEMP3Shield Library Example:&quot;</span>));</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; courtesy of Bill Porter &amp; Michael P. Flaga&quot;</span>));</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;COMMANDS:&quot;</span>));</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [1-9] to play a track&quot;</span>));</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [s] to stop playing&quot;</span>));</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [d] display directory of SdCard&quot;</span>));</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [+ or -] to change volume&quot;</span>));</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [&gt; or &lt;] to increment or decrement play speed by 1 factor&quot;</span>));</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [i] retrieve current audio information (partial list)&quot;</span>));</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [e] increment Spatial EarSpeaker, default is 0, wraps after 4&quot;</span>));</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [p] to pause.&quot;</span>));</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [R] Resets and initializes VS10xx chip.&quot;</span>));</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [t] to toggle sine wave test&quot;</span>));</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [m] perform memory test. reset is needed after to recover.&quot;</span>));</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [M] Toggle between Mono and Stereo Output.&quot;</span>));</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [g] Skip to a predetermined offset of ms in current track.&quot;</span>));</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [O} turns OFF the VS10xx into low power reset.&quot;</span>));</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [o} turns ON the VS10xx out of low power reset.&quot;</span>));</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [D] to toggle SM_DIFF between inphase and differential output&quot;</span>));</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [S] Show State of Device.&quot;</span>));</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [V] Enable VU meter Test.&quot;</span>));</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;  Serial.println(F(<span class="stringliteral">&quot; [h] this help&quot;</span>));</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;}</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jan 6 2013 13:52:36 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 8 2013 18:50:40 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

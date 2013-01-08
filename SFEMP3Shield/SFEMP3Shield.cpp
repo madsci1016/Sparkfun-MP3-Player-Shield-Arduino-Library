@@ -1258,6 +1258,63 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
     }
   }
 
+//------------------------------------------------------------------------------
+/**
+ * \brief get the status of the VSdsp VU Meter
+ *
+ * \return responds with the current value of the SS_VU_ENABLE bit of the 
+ * SCI_STATUS register indicating if the VU meter is enabled.
+ *
+ * See data patches data sheet VU meter for details.
+ * \warning This feature is only available with patches that support VU meter.
+ */
+int8_t SFEMP3Shield::getVUmeter() {
+  if(Mp3ReadRegister(SCI_STATUS) & SS_VU_ENABLE) {
+    return 1;
+  }
+  return 0;
+ }
+
+//------------------------------------------------------------------------------
+/**
+ * \brief enable VSdsp VU Meter
+ *
+ * \param[in] enable when set will enable the VU meter
+ *
+ * Writes the SS_VU_ENABLE bit of the SCI_STATUS register to enable VU meter on
+ * board to the VSdsp.
+ *
+ * See data patches data sheet VU meter for details.
+ * \warning This feature is only available with patches that support VU meter.
+ * \n The VU meter takes about 0.2MHz of processing power with 48 kHz samplerate.
+ */
+int8_t SFEMP3Shield::setVUmeter(int8_t enable) {
+  uint16_t MP3Status = Mp3ReadRegister(SCI_STATUS);
+
+  if(enable) {
+    Mp3WriteRegister(SCI_STATUS, MP3Status | SS_VU_ENABLE);
+  } else {
+    Mp3WriteRegister(SCI_STATUS, MP3Status & ~SS_VU_ENABLE);
+  }
+  return 1; // in future return if not available, if patch not applied.
+ }
+
+//------------------------------------------------------------------------------
+/**
+ * \brief get current measured VU Meter
+ *
+ * Returns the calculated peak sample values from both channels in 3 dB 
+ * increaments through. Where the high byte represent the left channel, 
+ * and the low bytes the right channel.
+ *
+ * Values from 0 to 31 are valid for both channels.
+ *
+ * \warning This feature is only available with patches that support VU meter.
+ */
+int16_t SFEMP3Shield::getVUlevel() {
+  return Mp3ReadRegister(SCI_AICTRL3);
+}
+
 // @}
 // Audio_Information_Group
 

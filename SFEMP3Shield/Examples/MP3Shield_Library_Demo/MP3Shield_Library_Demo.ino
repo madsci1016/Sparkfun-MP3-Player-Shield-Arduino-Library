@@ -409,12 +409,34 @@ void parse_menu(byte key_command) {
     }
     Serial.println();
 
+  } else if(key_command == 'V') {
+    MP3player.setVUmeter(1);
+    Serial.print(F("VU meter = "));
+    Serial.println(MP3player.getVUmeter());
+    Serial.println(F("Hit Any key to stop."));
+
+    while(!Serial.available()) {
+      union twobyte vu;
+      vu.word = MP3player.getVUlevel();
+      Serial.print(F("VU: L = "));
+      Serial.print(vu.byte[1]);
+      Serial.print(F(" / R = "));
+      Serial.print(vu.byte[0]);
+      Serial.println(" dB");
+      delay(1000);
+    }
+    Serial.read();
+
+    MP3player.setVUmeter(0);
+    Serial.print(F("VU meter = "));
+    Serial.println(MP3player.getVUmeter());
+
   } else if(key_command == 'h') {
     help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,R,t,m,M,g,h,O,o,D,S :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,R,t,m,M,g,h,O,o,D,S,V :"));
 }
 
 //------------------------------------------------------------------------------
@@ -444,6 +466,7 @@ void help() {
   Serial.println(F(" [o} turns ON the VS10xx out of low power reset."));
   Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
   Serial.println(F(" [S] Show State of Device."));
+  Serial.println(F(" [V] Enable VU meter Test."));
   Serial.println(F(" [h] this help"));
 }
 

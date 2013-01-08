@@ -451,6 +451,26 @@ extern SdFat sd;
  */
 
 //------------------------------------------------------------------------------
+/** \name SCI_STATUS_Bit_Definitions_Group
+ *  VS10xx SCI_STATUS bitmasks
+ *  /@{
+ */
+
+/**
+ * \brief A macro of the SS_VU_ENABLE bit mask of the SCI_STATUS register
+ *
+ * When SS_VU_ENABLE is set and patch 1.2 or greater is loaded the player the 
+ * VU meter is enabled. 
+ * See data patches data sheet VU meter for details.
+ * \see setVUmeter and getVUlevel
+ */
+#define SS_VU_ENABLE        0x0200
+
+/** End SCI_STATUS_Group
+ *  /@}
+ */
+
+//------------------------------------------------------------------------------
 /** \name Extra_Parameter_Group
  *  Extra Parameter in X memory (refer to p.58 of the datasheet)
  *  /@{
@@ -678,6 +698,9 @@ class SFEMP3Shield {
     uint16_t memoryTest();
     uint8_t ADMixerLoad(char*);
     void ADMixerVol(int8_t);
+    int8_t getVUmeter();
+    int8_t setVUmeter(int8_t);
+    int16_t getVUlevel();
 
   private:
     static SdFile track;

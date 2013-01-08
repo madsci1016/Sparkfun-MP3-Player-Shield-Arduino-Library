@@ -26,6 +26,8 @@ getDiffertialOutput      KEYWORD2
 getPlaySpeed             KEYWORD2
 getState                 KEYWORD2
 getVolume                KEYWORD2
+getVUlevel               KEYWORD2
+getVUmeter               KEYWORD2
 isPlaying                KEYWORD2
 memoryTest               KEYWORD2
 pauseDataStream          KEYWORD2
@@ -38,6 +40,7 @@ setMonoMode              KEYWORD2
 setDiffertialOutput      KEYWORD2
 setPlaySpeed             KEYWORD2
 setVolume                KEYWORD2
+setVUmeter               KEYWORD2
 skipTo                   KEYWORD2
 stopTrack                KEYWORD2
 trackAlbum               KEYWORD2

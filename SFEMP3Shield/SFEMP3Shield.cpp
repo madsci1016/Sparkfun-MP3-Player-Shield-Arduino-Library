@@ -785,6 +785,8 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  * \brief Begin playing a mp3 file by its filename.
  *
  * \param[out] fileName pointer of a char array (aka string), contianing the filename
+ * \param[in] offset (optional) milliseconds from the begining of the file. 
+ *  Only works with mp3 files, otherwise do nothing.
  *
  * Skip, if already playing. Otherwise initialize the SdCard track to desired filehandle.
  * Reset the ByteRate and Play position and set playing to indicate such.
@@ -797,11 +799,16 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  * \see
  * \ref Error_Codes
  *
- * \note enableRefill() will enable the appropiate interrupt to match the
- * corresponding means selected.
- * \note use \c SdFat::chvol() command prior, to select desired SdCard volume, if multiple cards are used.
+ * \note 
+ * - Currently bitrate to calculate time offset is determined by either 
+ *   playing files or by reading MP3 headers. Hence only the later is doable
+ *   without actually playing files. Hence other formats are not available, yet.
+ * - enableRefill() will enable the appropiate interrupt to match the
+ *   corresponding means selected.
+ * - use \c SdFat::chvol() command prior, to select desired SdCard volume, if 
+ *   multiple cards are used.
  */
-uint8_t SFEMP3Shield::playMP3(char* fileName) {
+uint8_t SFEMP3Shield::playMP3(char* fileName, uint32_t timecode) {
 
   if(isPlaying()) return 1;
   if(!digitalRead(MP3_RESET)) return 3;
@@ -818,6 +825,9 @@ uint8_t SFEMP3Shield::playMP3(char* fileName) {
   // Note bitrate may get updated later by getAudioInfo()
   if((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
     getBitRateFromMP3File(fileName);
+    if (timecode > 0) {
+      track.seekSet(timecode * bitrate + start_of_music); // skip to X ms.
+    }
   }
 
   playing_state = playback;
@@ -897,7 +907,6 @@ state_m SFEMP3Shield::getState(){
  return playing_state; 
 }
 
-
 //------------------------------------------------------------------------------
 /**
  * \brief Pause streaming data to the VSdsp.
@@ -935,6 +944,68 @@ void SFEMP3Shield::resumeDataStream(){
 
 //------------------------------------------------------------------------------
 /**
+ * \brief Pause music.
+ *
+ * Public method for pausing the play of music.
+ *
+ * \note This is currently equal to pauseDataStream() and is a place holder to
+ * pausing the VSdsp's playing and DREQ's.
+ */
+void SFEMP3Shield::pauseMusic() {
+  pauseDataStream();
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Resume music from pause at new location.
+ *
+ * \param[in] offset (optional) milliseconds from the begining of the file. 
+ *
+ * Public method for resuming the play of music from a specific file location.
+ *
+ * \return
+ * - 0 indicates the position was changed.
+ * - 1 indicates no action, in lieu of any current file stream.
+ * - 2 indicates failure to skip to new file location.
+ *
+ * \note This is effectively equal to resumeDataStream() and is a place holder to
+ * resuming the VSdsp's playing and DREQ's.
+ */
+uint8_t SFEMP3Shield::resumeMusic(uint32_t timecode) {
+  if((playing_state == paused_playback) && digitalRead(MP3_RESET)) {
+  
+    if(!track.seekSet(((timecode * Mp3ReadWRAM(para_byteRate))/1000) + start_of_music))    //if(!track.seekCur((uint32_t(timecode/1000 * Mp3ReadWRAM(para_byteRate)))))
+      return 2;
+
+    resumeDataStream();
+    return 0;
+  }
+  return 1;
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Resume music from where it was paused
+ *
+ * Public method for resuming the play of music from a specific file location.
+ *
+ * \return
+ * - 0 indicates the position was changed.
+ * - 1 indicates no action, in lieu of any current file stream.
+ *
+ * \note This is effectively equal to resumeDataStream() and is a place holder to
+ * resuming the VSdsp's playing and DREQ's.
+ */
+bool SFEMP3Shield::resumeMusic() {
+  if((playing_state == paused_playback) && digitalRead(MP3_RESET)) {
+    resumeDataStream();
+    return 0;
+  }
+  return 1;
+}
+
+//------------------------------------------------------------------------------
+/**
  * \brief Skips to a duration in the track
  *
  * \param[in] offset milliseconds from the current location of the file.
@@ -949,7 +1020,7 @@ void SFEMP3Shield::resumeDataStream(){
  *
  * \warning Limited to +/- 32768ms, since SdFile::seekCur(int32_t);
  */
-bool SFEMP3Shield::skip(int32_t timecode){
+uint8_t SFEMP3Shield::skip(int32_t timecode){
 
   if(isPlaying() && digitalRead(MP3_RESET)) {
 
@@ -1005,7 +1076,7 @@ bool SFEMP3Shield::skip(int32_t timecode){
  *
  * \warning Limited to first 65535ms, since SdFile::seekSet(int32_t);
  */
-bool SFEMP3Shield::skipTo(uint32_t timecode){
+uint8_t SFEMP3Shield::skipTo(uint32_t timecode){
 
   if(isPlaying() && digitalRead(MP3_RESET)) {
 

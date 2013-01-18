@@ -246,7 +246,12 @@ void parse_menu(byte key_command) {
 
   /* Alterativly, you could call a track by it's file name by using playMP3(filename);
   But you must stick to 8.1 filenames, only 8 characters long, and 3 for the extension */
-  } else if(key_command == 'f') {
+  } else if(key_command == 'f' || key_command == 'F') {
+    uint32_t offset = 0;
+    if (key_command == 'F') {
+      offset = 2000;
+    }
+
     //create a string with the filename
     char trackName[] = "track001.mp3";
 
@@ -254,7 +259,7 @@ void parse_menu(byte key_command) {
     sd.chvol(); // assign desired sdcard's volume.
 #endif
     //tell the MP3 Shield to play that file
-    result = MP3player.playMP3(trackName);
+    result = MP3player.playMP3(trackName, offset);
     //check result, see readme for error codes.
     if(result != 0) {
       Serial.print(F("Error code: "));
@@ -279,16 +284,18 @@ void parse_menu(byte key_command) {
     MP3player.getAudioInfo();
 
   } else if(key_command == 'p') {
-
     if( MP3player.getState() == playback) {
-      MP3player.pauseDataStream();
+      MP3player.pauseMusic();
       Serial.println(F("Pausing"));
     } else if( MP3player.getState() == paused_playback) {
-      MP3player.resumeDataStream();
+      MP3player.resumeMusic();
       Serial.println(F("Resuming"));
     } else {
       Serial.println(F("Not Playing!"));
     }
+
+  } else if(key_command == 'r') {
+    MP3player.resumeMusic(2000);
 
   } else if(key_command == 'R') {
     MP3player.stopTrack();
@@ -449,7 +456,7 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,R,t,m,M,g,k,h,O,o,D,S,V :"));
+  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V :"));
 }
 
 //------------------------------------------------------------------------------
@@ -463,6 +470,8 @@ void help() {
   Serial.println(F(" courtesy of Bill Porter & Michael P. Flaga"));
   Serial.println(F("COMMANDS:"));
   Serial.println(F(" [1-9] to play a track"));
+  Serial.println(F(" [f] play track001.mp3 by filename example"));
+  Serial.println(F(" [F] same as [f] but with initial skip of 2 second"));
   Serial.println(F(" [s] to stop playing"));
   Serial.println(F(" [d] display directory of SdCard"));
   Serial.println(F(" [+ or -] to change volume"));
@@ -470,6 +479,7 @@ void help() {
   Serial.println(F(" [i] retrieve current audio information (partial list)"));
   Serial.println(F(" [e] increment Spatial EarSpeaker, default is 0, wraps after 4"));
   Serial.println(F(" [p] to pause."));
+  Serial.println(F(" [r] resumes play from 2s from begin of file"));
   Serial.println(F(" [R] Resets and initializes VS10xx chip."));
   Serial.println(F(" [t] to toggle sine wave test"));
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));

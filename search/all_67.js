@@ -2,7 +2,7 @@ var searchData=
 [
   ['getaudioinfo',['getAudioInfo',['../class_s_f_e_m_p3_shield.html#a4bb1a4e18536965bd321dcfd244d9b66',1,'SFEMP3Shield']]],
   ['getbitratefrommp3file',['getBitRateFromMP3File',['../class_s_f_e_m_p3_shield.html#a759d7872b7d5f399fe556d38913416ed',1,'SFEMP3Shield']]],
-  ['getdiffertialoutput',['getDiffertialOutput',['../class_s_f_e_m_p3_shield.html#a43d2e59f3c3fa3cf2776659c4647babc',1,'SFEMP3Shield']]],
+  ['getdifferentialoutput',['getDifferentialOutput',['../class_s_f_e_m_p3_shield.html#af6e6d6bae7e379644b0ab8fdeb9b4a34',1,'SFEMP3Shield']]],
   ['getearspeaker',['getEarSpeaker',['../class_s_f_e_m_p3_shield.html#a9f24638f19da7d1cd393b2fb958bdc70',1,'SFEMP3Shield']]],
   ['getmonomode',['getMonoMode',['../class_s_f_e_m_p3_shield.html#aa76395229f67f4560e561d5ba20d9d30',1,'SFEMP3Shield']]],
   ['getplayspeed',['getPlaySpeed',['../class_s_f_e_m_p3_shield.html#a16250d6bed9c59271dc83b0ee8a3cc34',1,'SFEMP3Shield']]],

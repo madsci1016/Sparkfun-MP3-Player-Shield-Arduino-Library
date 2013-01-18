@@ -686,6 +686,7 @@ class SFEMP3Shield {
     void trackAlbum(char*);
     void stopTrack();
     uint8_t isPlaying();
+    bool skip(int32_t);
     bool skipTo(uint32_t);
     uint32_t currentPosition();
     void setBitRate(uint16_t);

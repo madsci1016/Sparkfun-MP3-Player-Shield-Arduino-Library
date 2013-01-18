@@ -935,6 +935,62 @@ void SFEMP3Shield::resumeDataStream(){
 
 //------------------------------------------------------------------------------
 /**
+ * \brief Skips to a duration in the track
+ *
+ * \param[in] offset milliseconds from the current location of the file.
+ *
+ * Repositions the filehandles track location to the requested offset.
+ * As calculated by the bitrate multiplied by the desired ms offset.
+ *
+ * \return
+ * - 0 indicates the position was changed.
+ * - 1 indicates no action, in lieu of any current file stream.
+ * - 2 indicates failure to skip to new file location.
+ *
+ * \warning Limited to +/- 32768ms, since SdFile::seekCur(int32_t);
+ */
+bool SFEMP3Shield::skip(int32_t timecode){
+
+  if(isPlaying() && digitalRead(MP3_RESET)) {
+
+    //stop interupt for now
+    disableRefill();
+    playing_state = paused_playback;
+
+    // try to set the files position to current position + offset(in bytes)
+    // as calculated from current byte rate, as per VSdsp.
+    if(!track.seekCur((uint32_t(timecode/1000 * Mp3ReadWRAM(para_byteRate))))) // skip next X ms.
+      return 2;
+
+    Mp3WriteRegister(SCI_VOL, 0xFE, 0xFE);
+    //seeked successfully
+
+    flush_cancel(pre); //possible mode of "none" for faster response.
+
+    //gotta start feeding that hungry mp3 chip
+    refill();
+
+    //again, I'm being bad and not following the spec sheet.
+    //I already turned the volume down, so when the MP3 chip gets upset at me
+    //for just slammin in new bits of the file, you won't hear it.
+    //so we'll wait a bit, and restore the volume to previous level
+    delay(50);
+
+    //one of these days I'll come back and try to do it the right way.
+    setVolume(VolL,VolR);
+
+    //attach refill interrupt off DREQ line, pin 2
+    enableRefill();
+    playing_state = playback;
+
+    return 0;
+  }
+
+  return 1;
+}
+
+//------------------------------------------------------------------------------
+/**
  * \brief Skips to a certain point in the track
  *
  * \param[in] offset milliseconds from the begining of the file.

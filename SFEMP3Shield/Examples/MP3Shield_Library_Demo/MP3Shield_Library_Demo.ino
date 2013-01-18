@@ -354,6 +354,18 @@ void parse_menu(byte key_command) {
       Serial.println(F(" when trying to skip track"));
     }
 
+  } else if(key_command == 'k') {
+    int32_t offset_ms = -1000; // Note this is just an example, try your own number.
+    Serial.print(F("Skipping = "));
+    Serial.print(offset_ms, DEC);
+    Serial.println(F("[milliseconds]"));
+    result = MP3player.skip(offset_ms);
+    if(result != 0) {
+      Serial.print(F("Error code: "));
+      Serial.print(result);
+      Serial.println(F(" when trying to skip track"));
+    }
+
   } else if(key_command == 'O') {
     MP3player.end();
     Serial.println(F("VS10xx placed into low power reset mode."));
@@ -437,7 +449,7 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,R,t,m,M,g,h,O,o,D,S,V :"));
+  Serial.println(F("Enter 1-9,s,d,+,-,i,>,<,p,R,t,m,M,g,k,h,O,o,D,S,V :"));
 }
 
 //------------------------------------------------------------------------------
@@ -463,6 +475,7 @@ void help() {
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
   Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
   Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
+  Serial.println(F(" [g] Skip a predetermined number of ms in current track."));
   Serial.println(F(" [O} turns OFF the VS10xx into low power reset."));
   Serial.println(F(" [o} turns ON the VS10xx out of low power reset."));
   Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));

@@ -3,10 +3,13 @@ Revision History
 
 ## 1.01.01
 * added getState() as to report other possible states, such as paused but playing.
-* added GetDiffertialOutput() and SetDiffertialOutput() feature to change the output, 
+* added GetDifferentialOutput() and SetDifferentialOutput() feature to change the output, 
      as to create a differential left/right output with a maximum output of 3V.
 * changed case of get.. and set.. functions all to lower case for consistency.
 * added VU meter support
+* added chdir("/") to example and fixed enableTestSineWave freq
+* Added skip, pauseMusic, resumeMusic and optional time offset to playMP3 along with examples.
+* corrected typo's in Differential and initialized.
 
 ## 1.01.00
 * changed sdFat to be instanced from INO file using sd.begin() for simpler use.

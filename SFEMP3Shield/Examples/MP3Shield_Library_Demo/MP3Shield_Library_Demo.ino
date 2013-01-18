@@ -382,13 +382,13 @@ void parse_menu(byte key_command) {
     Serial.println(F("VS10xx restored from low power reset mode."));
 
   } else if(key_command == 'D') {
-    uint16_t diff_state = MP3player.getDiffertialOutput();
+    uint16_t diff_state = MP3player.getDifferentialOutput();
     Serial.print(F("Differential Mode "));
     if(diff_state == 0) {
-      MP3player.setDiffertialOutput(1);
+      MP3player.setDifferentialOutput(1);
       Serial.println(F("Enabled."));
     } else {
-      MP3player.setDiffertialOutput(0);
+      MP3player.setDifferentialOutput(0);
       Serial.println(F("Disabled."));
     }
 
@@ -399,11 +399,11 @@ void parse_menu(byte key_command) {
 
     Serial.print(F("getState() = "));
     switch (MP3player.getState()) {
-    case unintialized:
-      Serial.print(F("unintialized"));
+    case uninitialized:
+      Serial.print(F("uninitialized"));
       break;
-    case intialized:
-      Serial.print(F("intialized"));
+    case initialized:
+      Serial.print(F("initialized"));
       break;
     case deactivated:
       Serial.print(F("deactivated"));

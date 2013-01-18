@@ -111,7 +111,7 @@ if (int8_t(sd.vol()->fatType()) == 0) {
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
   
-  playing_state = intialized;
+  playing_state = initialized;
 
   uint8_t result = vs_init();
   if(result) {
@@ -668,9 +668,9 @@ void SFEMP3Shield::setEarSpeaker(uint16_t EarSpeaker) {
  * - 0 Normal in-phase audio output of left and right speaker signals.
  * - 1 Left channel output is the invert of the right channel.
  *
- * \see setDiffertialOutput()
+ * \see setDifferentialOutput()
  */
-uint8_t SFEMP3Shield::getDiffertialOutput() {
+uint8_t SFEMP3Shield::getDifferentialOutput() {
   uint8_t result = 0;
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
@@ -692,9 +692,9 @@ uint8_t SFEMP3Shield::getDiffertialOutput() {
  * left/right output with a maximum output of 3V.
 
  * As specified by Data Sheet Section 8.7.1
- * \see getDiffertialOutput()
+ * \see getDifferentialOutput()
  */
-void SFEMP3Shield::setDiffertialOutput(uint16_t DiffMode) {
+void SFEMP3Shield::setDifferentialOutput(uint16_t DiffMode) {
   uint16_t MP3SCI_MODE = Mp3ReadRegister(SCI_MODE);
 
   if(DiffMode) {

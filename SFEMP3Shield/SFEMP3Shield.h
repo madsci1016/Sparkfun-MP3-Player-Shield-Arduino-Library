@@ -31,8 +31,8 @@
  * Noting that test, pause, play and idle states are not directly the same.
  */
 enum state_m {
-  unintialized,
-  intialized,
+  uninitialized,
+  initialized,
   deactivated,
   loading,
   ready,
@@ -677,8 +677,8 @@ class SFEMP3Shield {
     void setEarSpeaker(uint16_t);
     uint16_t getMonoMode();
     void setMonoMode(uint16_t );
-    void setDiffertialOutput(uint16_t);
-    uint8_t getDiffertialOutput();
+    void setDifferentialOutput(uint16_t);
+    uint8_t getDifferentialOutput();
     uint8_t playTrack(uint8_t);
     uint8_t playMP3(char*, uint32_t timecode = 0);
     void trackTitle(char*);

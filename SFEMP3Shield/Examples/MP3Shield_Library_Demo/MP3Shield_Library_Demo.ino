@@ -75,6 +75,7 @@ void setup() {
 
   //Initialize the SdCard.
   if(!sd.begin(SD_SEL, SPI_HALF_SPEED)) sd.initErrorHalt();
+  if(!sd.chdir("/")) sd.errorHalt("sd.chdir");
 
   //Initialize the MP3 Player Shield
   result = MP3player.begin();

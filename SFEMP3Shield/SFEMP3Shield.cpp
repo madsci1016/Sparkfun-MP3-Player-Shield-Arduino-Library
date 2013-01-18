@@ -352,7 +352,7 @@ uint8_t SFEMP3Shield::enableTestSineWave(uint8_t freq) {
     SPI.transfer(0x53);
     SPI.transfer(0xEF);
     SPI.transfer(0x6E);
-    SPI.transfer(126);
+    SPI.transfer(freq);
     SPI.transfer(0x00);
     SPI.transfer(0x00);
     SPI.transfer(0x00);

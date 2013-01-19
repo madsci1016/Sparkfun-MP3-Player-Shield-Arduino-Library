@@ -823,7 +823,7 @@ uint8_t SFEMP3Shield::playMP3(char* fileName, uint32_t timecode) {
 
   // Only know how to read bitrate from MP3 file. ignore the rest.
   // Note bitrate may get updated later by getAudioInfo()
-  if((fileName[fileNamefileName_length-2] & 0x7F) == 'p') { // case insensitive check for P of .MP3 filename extension.
+  if(strstr(strlwr(fileName), "mp3") )  {
     getBitRateFromMP3File(fileName);
     if (timecode > 0) {
       track.seekSet(timecode * bitrate + start_of_music); // skip to X ms.

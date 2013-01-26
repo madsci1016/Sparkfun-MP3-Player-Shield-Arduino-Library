@@ -192,7 +192,7 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * \warning Remember to restart Arduino IDE for new Libraries to be available.
  * Coping the file is not enough.
  */
-#define USE_MP3_REFILL_MEANS USE_MP3_INTx
+#define USE_MP3_REFILL_MEANS USE_MP3_Polled
 
 /*
  * Configure the implemented means of Refilling the VS10xx chip

@@ -11,6 +11,7 @@ Revision History
 * Added skip, pauseMusic, resumeMusic and optional time offset to playMP3 along with examples.
 * corrected typo's in Differential and initialized.
 * updated test for mp3
+* added example WebPlayer.ino
 
 ## 1.01.00
 * changed sdFat to be instanced from INO file using sd.begin() for simpler use.

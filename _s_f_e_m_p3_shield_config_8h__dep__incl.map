@@ -1,6 +1,6 @@
 <map id="SFEMP3Shield/SFEMP3ShieldConfig.h" name="SFEMP3Shield/SFEMP3ShieldConfig.h">
-<area shape="rect" id="node3" href="$_s_f_e_m_p3_shield_8h.html" title="Header file for the SFEMP3Shield library." alt="" coords="194,96,408,123"/>
-<area shape="rect" id="node5" href="$directory_8ino.html" title="SFEMP3Shield/Examples\l/directory/directory.ino" alt="" coords="5,178,179,219"/>
-<area shape="rect" id="node7" href="$_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver." alt="" coords="203,171,400,227"/>
-<area shape="rect" id="node9" href="$_s_f_e_m_p3_shield_8cpp.html" title="Code file for the SFEMP3Shield library." alt="" coords="424,185,653,212"/>
+<area shape="rect" id="node3" href="$_s_f_e_m_p3_shield_8h.html" title="Header file for the SFEMP3Shield library." alt="" coords="209,96,423,123"/>
+<area shape="rect" id="node5" href="$_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver." alt="" coords="5,171,203,227"/>
+<area shape="rect" id="node7" href="$_web_player_8ino.html" title="Example sketch of using the MP3Shield Arduino driver to create a webserver." alt="" coords="227,178,405,219"/>
+<area shape="rect" id="node9" href="$_s_f_e_m_p3_shield_8cpp.html" title="Code file for the SFEMP3Shield library." alt="" coords="429,185,659,212"/>
 </map>

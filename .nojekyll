@@ -1,0 +1,2 @@
+jekyll conflicts with Doxygen
+Avoids problem filenames with leading underscores created by Doxygen, as jekyll drops them.

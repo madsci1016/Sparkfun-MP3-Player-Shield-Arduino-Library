@@ -1050,9 +1050,9 @@ uint8_t SFEMP3Shield::skip(int32_t timecode){
     //one of these days I'll come back and try to do it the right way.
     setVolume(VolL,VolR);
 
+    playing_state = playback;
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
-    playing_state = playback;
 
     return 0;
   }
@@ -1107,9 +1107,9 @@ uint8_t SFEMP3Shield::skipTo(uint32_t timecode){
     //one of these days I'll come back and try to do it the right way.
     setVolume(VolL,VolR);
 
+    playing_state = playback;
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
-    playing_state = playback;
 
     return 0;
   }
@@ -1734,13 +1734,15 @@ void SFEMP3Shield::refill() {
  * stream buffer, this routine will enable the corresponding service.
  */
 void SFEMP3Shield::enableRefill() {
-#if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
-  Timer1.attachInterrupt( refill );
-#elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
-  timer.enable(timerId_mp3);
-#elif !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
-  attachInterrupt(MP3_DREQINT, refill, RISING);
-#endif
+  if(playing_state == playback) {
+    #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_Timer1
+      Timer1.attachInterrupt( refill );
+    #elif defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
+      timer.enable(timerId_mp3);
+    #elif !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+      attachInterrupt(MP3_DREQINT, refill, RISING);
+    #endif
+  }
 }
 
 //------------------------------------------------------------------------------

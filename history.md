@@ -3,6 +3,7 @@ Revision History
 
 ## 1.01.01
 * added getState() as to report other possible states, such as paused but playing.
+** added check to enableRefill()
 * added GetDifferentialOutput() and SetDifferentialOutput() feature to change the output, 
      as to create a differential left/right output with a maximum output of 3V.
 * changed case of get.. and set.. functions all to lower case for consistency.

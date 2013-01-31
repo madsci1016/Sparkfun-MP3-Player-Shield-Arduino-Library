@@ -72,9 +72,12 @@ void printTimestamps(SdFile& f) {
 //------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
+
   cout << pstr("Type any character to start\n");
   while (!Serial.available());
-
+  delay(400);  // catch Due reset problem
+  
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
   if (!sd.begin(chipSelect, SPI_HALF_SPEED)) sd.initErrorHalt();

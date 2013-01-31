@@ -936,9 +936,9 @@ void SFEMP3Shield::resumeDataStream(){
     //see if it is already ready for more
     refill();
 
+    playing_state = playback;
     //attach refill interrupt off DREQ line, pin 2
     enableRefill();
-    playing_state = playback;
   }
 }
 

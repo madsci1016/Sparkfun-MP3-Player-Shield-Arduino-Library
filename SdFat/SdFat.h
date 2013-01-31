@@ -25,7 +25,7 @@
  */
 //------------------------------------------------------------------------------
 /** SdFat version YYYYMMDD */
-#define SD_FAT_VERSION 20120719
+#define SD_FAT_VERSION 20121219
 //------------------------------------------------------------------------------
 /** error if old IDE */
 #if !defined(ARDUINO) || ARDUINO < 100
@@ -35,6 +35,7 @@
 #include <SdFile.h>
 #include <SdStream.h>
 #include <ArduinoStream.h>
+#include <MinimumSerial.h>
 //------------------------------------------------------------------------------
 /**
  * \class SdFat
@@ -43,41 +44,47 @@
 class SdFat {
  public:
   SdFat() {}
+#if ALLOW_DEPRECATED_FUNCTIONS && !defined(DOXYGEN)
   /**
-   * Initialize an SdFat object. Arduino friendly version of init.
+   * Initialize an SdFat object.
    *
    * Initializes the SD card, SD volume, and root directory.
    *
-   * \param[in] chipSelectPin SD chip select pin. See Sd2Card::init().
    * \param[in] sckRateID value for SPI SCK rate. See Sd2Card::init().
+   * \param[in] chipSelectPin SD chip select pin. See Sd2Card::init().
    *
    * \return The value one, true, is returned for success and
    * the value zero, false, is returned for failure.
    */
-  bool begin(uint8_t chipSelectPin = SD_CHIP_SELECT_PIN,
-    uint8_t sckRateID = SPI_FULL_SPEED) {
-    return init(sckRateID, chipSelectPin);
+  bool init(uint8_t sckRateID = SPI_FULL_SPEED,
+    uint8_t chipSelectPin = SD_CHIP_SELECT_PIN) {
+    return begin(chipSelectPin, sckRateID);
   }
+#elif  !defined(DOXYGEN)  // ALLOW_DEPRECATED_FUNCTIONS
+  bool init() __attribute__((error("use sd.begin()")));
+  bool init(uint8_t sckRateID)
+    __attribute__((error("use sd.begin(chipSelect, sckRate)")));
+  bool init(uint8_t sckRateID, uint8_t chipSelectPin)
+    __attribute__((error("use sd.begin(chipSelect, sckRate)")));
+#endif  // ALLOW_DEPRECATED_FUNCTIONS
   /** \return a pointer to the Sd2Card object. */
   Sd2Card* card() {return &card_;}
   bool chdir(bool set_cwd = false);
   bool chdir(const char* path, bool set_cwd = false);
   void chvol();
   void errorHalt();
-  void errorHalt_P(PGM_P msg);
   void errorHalt(char const *msg);
   void errorPrint();
-  void errorPrint_P(PGM_P msg);
+
   void errorPrint(char const *msg);
   bool exists(const char* name);
-  bool init(uint8_t sckRateID = SPI_FULL_SPEED,
-    uint8_t chipSelectPin = SD_CHIP_SELECT_PIN);
+  bool begin(uint8_t chipSelectPin = SD_CHIP_SELECT_PIN,
+    uint8_t sckRateID = SPI_FULL_SPEED);
+    
   void initErrorHalt();
   void initErrorHalt(char const *msg);
-  void initErrorHalt_P(PGM_P msg);
   void initErrorPrint();
   void initErrorPrint(char const *msg);
-  void initErrorPrint_P(PGM_P msg);
   void ls(uint8_t flags = 0);
   void ls(Print* pr, uint8_t flags = 0);
   bool mkdir(const char* path, bool pFlag = true);
@@ -90,7 +97,11 @@ class SdFat {
   /** \return a pointer to the volume working directory. */
   SdBaseFile* vwd() {return &vwd_;}
   //----------------------------------------------------------------------------
-  // static functions for stdOut
+  void errorHalt_P(PGM_P msg);
+  void errorPrint_P(PGM_P msg);
+  void initErrorHalt_P(PGM_P msg);
+  void initErrorPrint_P(PGM_P msg);
+  //----------------------------------------------------------------------------
   /**
    *  Set stdOut Print stream for messages.
    * \param[in] stream The new Print stream.

@@ -58,7 +58,7 @@ class ibufstream : public istream {
     setstate(eofbit);
     return -1;
   }
-  void getpos(fpos_t *pos) {
+  void getpos(FatPos_t *pos) {
     pos->position = pos_;
   }
   bool seekoff(off_type off, seekdir way) {return false;}
@@ -69,7 +69,7 @@ class ibufstream : public istream {
     }
     return false;
   }
-  void setpos(fpos_t *pos) {
+  void setpos(FatPos_t *pos) {
     pos_ = pos->position;
   }
   pos_type tellpos() {
@@ -78,8 +78,8 @@ class ibufstream : public istream {
   /// @endcond
  private:
   const char* buf_;
-  uint16_t len_;
-  uint16_t pos_;
+  size_t len_;
+  size_t pos_;
 };
 //==============================================================================
 /**
@@ -94,14 +94,14 @@ class obufstream : public ostream {
    * \param[in] buf buffer for formatted string
    * \param[in] size buffer size
    */
-  obufstream(char *buf, uint16_t size) {
+  obufstream(char *buf, size_t size) {
     init(buf, size);
   }
   /** Initialize an obufstream
    * \param[in] buf buffer for formatted string
    * \param[in] size buffer size
    */
-  void init(char *buf, uint16_t size) {
+  void init(char *buf, size_t size) {
     buf_ = buf;
     buf[0] = '\0';
     size_ = size;
@@ -110,7 +110,7 @@ class obufstream : public ostream {
   /** \return a pointer to the buffer */
   char* buf() {return buf_;}
   /** \return the length of the formatted string */
-  uint16_t length() {return in_;}
+  size_t length() {return in_;}
 
  protected:
   /// @cond SHOW_PROTECTED
@@ -140,7 +140,7 @@ class obufstream : public ostream {
   /// @endcond
  private:
   char *buf_;
-  uint16_t size_;
-  uint16_t in_;
+  size_t size_;
+  size_t in_;
 };
 #endif  // bufstream_h

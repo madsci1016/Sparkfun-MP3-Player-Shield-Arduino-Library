@@ -64,7 +64,7 @@ class SdVolume {
    * \return A pointer to the cache buffer or zero if an error occurs.
    */
   cache_t* cacheClear() {
-    if (!cacheFlush()) return 0;
+    if (!cacheSync()) return 0;
     cacheBlockNumber_ = 0XFFFFFFFF;
     return &cacheBuffer_;
   }
@@ -119,25 +119,7 @@ class SdVolume {
  private:
   // Allow SdBaseFile access to SdVolume private data.
   friend class SdBaseFile;
-
-  // value for dirty argument in cacheRawBlock to indicate read from cache
-  static bool const CACHE_FOR_READ = false;
-  // value for dirty argument in cacheRawBlock to indicate write to cache
-  static bool const CACHE_FOR_WRITE = true;
-
-#if USE_MULTIPLE_CARDS
-  cache_t cacheBuffer_;        // 512 byte cache for device blocks
-  uint32_t cacheBlockNumber_;  // Logical number of block in the cache
-  Sd2Card* sdCard_;            // Sd2Card object for cache
-  bool cacheDirty_;            // cacheFlush() will write block if true
-  uint32_t cacheMirrorBlock_;  // block number for mirror FAT
-#else  // USE_MULTIPLE_CARDS
-  static cache_t cacheBuffer_;        // 512 byte cache for device blocks
-  static uint32_t cacheBlockNumber_;  // Logical number of block in the cache
-  static Sd2Card* sdCard_;            // Sd2Card object for cache
-  static bool cacheDirty_;            // cacheFlush() will write block if true
-  static uint32_t cacheMirrorBlock_;  // block number for mirror FAT
-#endif  // USE_MULTIPLE_CARDS
+//------------------------------------------------------------------------------
   uint32_t allocSearchStart_;   // start cluster for alloc search
   uint8_t blocksPerCluster_;    // cluster size in blocks
   uint32_t blocksPerFat_;       // FAT size in blocks
@@ -149,28 +131,70 @@ class SdVolume {
   uint8_t fatType_;             // volume type (12, 16, OR 32)
   uint16_t rootDirEntryCount_;  // number of entries in FAT16 root dir
   uint32_t rootDirStart_;       // root start block for FAT16, cluster for FAT32
-  //----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// block caches
+// use of static functions save a bit of flash - maybe not worth complexity
+//
+  static const uint8_t CACHE_STATUS_DIRTY = 1;
+  static const uint8_t CACHE_STATUS_FAT_BLOCK = 2;
+  static const uint8_t CACHE_STATUS_MASK
+     = CACHE_STATUS_DIRTY | CACHE_STATUS_FAT_BLOCK;
+  static const uint8_t CACHE_OPTION_NO_READ = 4;
+  // value for option argument in cacheFetch to indicate read from cache
+  static uint8_t const CACHE_FOR_READ = 0;
+  // value for option argument in cacheFetch to indicate write to cache
+  static uint8_t const CACHE_FOR_WRITE = CACHE_STATUS_DIRTY;
+  // reserve cache block with no read
+  static uint8_t const CACHE_RESERVE_FOR_WRITE
+     = CACHE_STATUS_DIRTY | CACHE_OPTION_NO_READ;
+#if USE_MULTIPLE_CARDS
+  cache_t cacheBuffer_;        // 512 byte cache for device blocks
+  uint32_t cacheBlockNumber_;  // Logical number of block in the cache
+  uint32_t cacheFatOffset_;    // offset for mirrored FAT
+  Sd2Card* sdCard_;            // Sd2Card object for cache
+  uint8_t cacheStatus_;        // status of cache block
+#if USE_SEPARATE_FAT_CACHE
+  cache_t cacheFatBuffer_;       // 512 byte cache for FAT
+  uint32_t cacheFatBlockNumber_;  // current Fat block number
+  uint8_t  cacheFatStatus_;       // status of cache Fatblock
+#endif  // USE_SEPARATE_FAT_CACHE
+#else  // USE_MULTIPLE_CARDS
+  static cache_t cacheBuffer_;        // 512 byte cache for device blocks
+  static uint32_t cacheBlockNumber_;  // Logical number of block in the cache
+  static uint32_t cacheFatOffset_;    // offset for mirrored FAT
+  static uint8_t cacheStatus_;        // status of cache block
+#if USE_SEPARATE_FAT_CACHE
+  static cache_t cacheFatBuffer_;       // 512 byte cache for FAT
+  static uint32_t cacheFatBlockNumber_;  // current Fat block number
+  static uint8_t  cacheFatStatus_;       // status of cache Fatblock
+#endif  // USE_SEPARATE_FAT_CACHE
+  static Sd2Card* sdCard_;            // Sd2Card object for cache
+#endif  // USE_MULTIPLE_CARDS
+
+  cache_t *cacheAddress() {return &cacheBuffer_;}
+  uint32_t cacheBlockNumber() {return cacheBlockNumber_;}
+#if USE_MULTIPLE_CARDS
+  cache_t* cacheFetch(uint32_t blockNumber, uint8_t options);
+  cache_t* cacheFetchData(uint32_t blockNumber, uint8_t options);
+  cache_t* cacheFetchFat(uint32_t blockNumber, uint8_t options);
+  void cacheInvalidate();
+  bool cacheSync();
+  bool cacheWriteData();
+  bool cacheWriteFat();
+#else  // USE_MULTIPLE_CARDS
+  static cache_t* cacheFetch(uint32_t blockNumber, uint8_t options);
+  static cache_t* cacheFetchData(uint32_t blockNumber, uint8_t options);
+  static cache_t* cacheFetchFat(uint32_t blockNumber, uint8_t options);
+  static void cacheInvalidate();
+  static bool cacheSync();
+  static bool cacheWriteData();
+  static bool cacheWriteFat();
+#endif  // USE_MULTIPLE_CARDS
+//------------------------------------------------------------------------------
   bool allocContiguous(uint32_t count, uint32_t* curCluster);
   uint8_t blockOfCluster(uint32_t position) const {
           return (position >> 9) & (blocksPerCluster_ - 1);}
-  uint32_t clusterStartBlock(uint32_t cluster) const {
-           return dataStartBlock_ + ((cluster - 2) << clusterSizeShift_);}
-  cache_t *cache() {return &cacheBuffer_;}
-  uint32_t cacheBlockNumber() {return cacheBlockNumber_;}
-#if USE_MULTIPLE_CARDS
-  bool cacheFlush();
-  bool cacheRawBlock(uint32_t blockNumber, bool dirty);
-#else  // USE_MULTIPLE_CARDS
-  static bool cacheFlush();
-  static bool cacheRawBlock(uint32_t blockNumber, bool dirty);
-#endif  // USE_MULTIPLE_CARDS
-  // used by SdBaseFile write to assign cache to SD location
-  void cacheSetBlockNumber(uint32_t blockNumber, bool dirty) {
-    cacheDirty_ = dirty;
-    cacheBlockNumber_  = blockNumber;
-  }
-  void cacheSetDirty() {cacheDirty_ |= CACHE_FOR_WRITE;}
-  bool chainSize(uint32_t beginCluster, uint32_t* size);
+  uint32_t clusterStartBlock(uint32_t cluster) const;
   bool fatGet(uint32_t cluster, uint32_t* value);
   bool fatPut(uint32_t cluster, uint32_t value);
   bool fatPutEOC(uint32_t cluster) {

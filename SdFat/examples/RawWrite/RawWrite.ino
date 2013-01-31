@@ -9,11 +9,11 @@
  * two 512 byte buffers and written to the SD card.
  *
  * This sketch simulates logging from a source that produces
- * data at a constant rate of one block every MILLIS_PER_BLOCK.
+ * data at a constant rate of one block every MICROS_PER_BLOCK.
  *
  * If a high quality SanDisk card is used with this sketch
  * no overruns occur and the maximum block write time is
- * 2 millis.
+ * under 2000 micros.
  *
  * Note: WaveRP creates a very large file then truncates it
  * to the length that is used for a recording. It only takes
@@ -28,10 +28,10 @@
 const uint8_t chipSelect = SS;
 
 // number of blocks in the contiguous file
-#define BLOCK_COUNT 10000UL
+const uint32_t BLOCK_COUNT = 10000UL;
 
 // time to produce a block of data
-#define MILLIS_PER_BLOCK 10
+const uint32_t MICROS_PER_BLOCK = 10000;
 
 // file system
 SdFat sd;
@@ -57,14 +57,15 @@ struct {
 //------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
 }
 //------------------------------------------------------------------------------
 void loop(void) {
   while (Serial.read() >= 0) {}
   // pstr stores strings in flash to save RAM
   cout << pstr("Type any character to start\n");
-  while (Serial.read() < 0) {}
-
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
 
   cout << pstr("Free RAM: ") << FreeRam() << endl;
 
@@ -100,8 +101,9 @@ void loop(void) {
   }
 
   cout << pstr("Start raw write of ") << file.fileSize() << pstr(" bytes at\n");
-  cout << 512000UL/MILLIS_PER_BLOCK << pstr(" bytes per second\n");
-  cout << pstr("Please wait ") << (BLOCK_COUNT*MILLIS_PER_BLOCK)/1000UL << pstr(" seconds\n");
+  cout << 512000000UL/MICROS_PER_BLOCK << pstr(" bytes per second\n");
+  cout << pstr("Please wait ") << (BLOCK_COUNT*MICROS_PER_BLOCK)/1000000UL;
+  cout << pstr(" seconds\n");
 
   // tell card to setup for multiple block write with pre-erase
   if (!sd.card()->erase(bgnBlock, endBlock)) error("card.erase failed");
@@ -111,13 +113,13 @@ void loop(void) {
   // init stats
   uint16_t overruns = 0;
   uint32_t maxWriteTime = 0;
-  uint32_t t = millis();
+  uint32_t t = micros();
   uint32_t tNext = t;
 
   // write data
   for (uint32_t b = 0; b < BLOCK_COUNT; b++) {
     // write must be done by this time
-    tNext += MILLIS_PER_BLOCK;
+    tNext += MICROS_PER_BLOCK;
 
     // put block number at start of first line in block
     uint32_t n = b;
@@ -135,28 +137,29 @@ void loop(void) {
       maxWriteTime = tw;
     }
     // check for overrun
-    if (millis() > tNext) {
+    if (micros() > tNext) {
       if (overruns < OVER_DIM) {
         over[overruns].block = b;
         over[overruns].micros = tw;
       }
       overruns++;
       // advance time to reflect overrun
-      tNext = millis();
+      tNext = micros();
     }
     else {
       // wait for time to write next block
-      while(millis() < tNext);
+      while(micros() < tNext);
     }
   }
   // total write time
-  t = millis() - t;
+  t = micros() - t;
 
   // end multiple block write mode
   if (!sd.card()->writeStop()) error("writeStop failed");
 
   cout << pstr("Done\n");
-  cout << pstr("Elapsed time: ") << t << pstr(" millis\n");
+  cout << pstr("Elapsed time: ") << setprecision(3)<< 1.e-6*t;
+  cout << pstr(" seconds\n");
   cout << pstr("Max write time: ") << maxWriteTime << pstr(" micros\n");
   cout << pstr("Overruns: ") << overruns << endl;
   if (overruns) {

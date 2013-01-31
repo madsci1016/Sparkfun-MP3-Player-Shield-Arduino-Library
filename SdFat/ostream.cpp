@@ -18,6 +18,9 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <ostream.h>
+#ifndef PSTR
+#define PSTR(x) x
+#endif
 //------------------------------------------------------------------------------
 void ostream::do_fill(unsigned len) {
   for (; len < width(); len++) putch(fill());
@@ -156,7 +159,8 @@ void ostream::putNum(uint32_t n, bool neg) {
 }
 //------------------------------------------------------------------------------
 void ostream::putPgm(const char* str) {
-  int n = strlen_P(str);
+  int n;
+  for (n = 0; pgm_read_byte(&str[n]); n++) {}
   fill_not_left(n);
   for (uint8_t c; (c = pgm_read_byte(str)); str++) {
     putch(c);

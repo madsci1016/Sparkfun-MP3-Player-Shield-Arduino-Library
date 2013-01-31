@@ -17,31 +17,291 @@
  * along with the Arduino Sd2Card Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#include <avr/pgmspace.h>
 #include <Sd2Card.h>
-//==============================================================================
+// debug trace macro
+#define SD_TRACE(m, b)
+// #define SD_TRACE(m, b) Serial.print(m);Serial.println(b);
+
 // SPI functions
-#ifndef SOFTWARE_SPI
-// functions for hardware SPI
+//==============================================================================
+#if USE_ARDUINO_SPI_LIBRARY
+#include <SPI.h>
 //------------------------------------------------------------------------------
-// make sure SPCR rate is in expected bits
-#if (SPR0 != 0 || SPR1 != 1)
-#error unexpected SPCR bits
-#endif
+static void spiBegin() {
+  SPI.begin();
+}
+//------------------------------------------------------------------------------
+static void spiInit(uint8_t spiRate) {
+  SPI.setBitOrder(MSBFIRST);
+  SPI.setDataMode(SPI_MODE0);
+  int v;
+#ifdef SPI_CLOCK_DIV128
+  switch (spiRate/2) {
+    case 0: v = SPI_CLOCK_DIV2; break;
+    case 1: v = SPI_CLOCK_DIV4; break;
+    case 2: v = SPI_CLOCK_DIV8; break;
+    case 3: v = SPI_CLOCK_DIV16; break;
+    case 4: v = SPI_CLOCK_DIV32; break;
+    case 5: v = SPI_CLOCK_DIV64; break;
+    default: v = SPI_CLOCK_DIV128; break;
+  }
+#else  // SPI_CLOCK_DIV128
+  if (spiRate > 13) {
+    v = 255;
+  } else {
+    v = (2 | (spiRate & 1)) << (spiRate/2);
+  }
+#endif  // SPI_CLOCK_DIV128
+  SPI.setClockDivider(v);
+}
+//------------------------------------------------------------------------------
+/** SPI receive a byte */
+static  uint8_t spiRec() {
+  return SPI.transfer(0XFF);
+}
+//------------------------------------------------------------------------------
+/** SPI receive multiple bytes */
+static uint8_t spiRec(uint8_t* buf, size_t len) {
+  for (size_t i = 0; i < len; i++) {
+    buf[i] = SPI.transfer(0XFF);
+  }
+  return 0;
+}
+//------------------------------------------------------------------------------
+/** SPI send a byte */
+static void spiSend(uint8_t b) {
+  SPI.transfer(b);
+}
+//------------------------------------------------------------------------------
+/** SPI send multiple bytes */
+static void spiSend(const uint8_t* buf, size_t len) {
+  for (size_t i = 0; i < len; i++) {
+    SPI.transfer(buf[i]);
+  }
+}
+//==============================================================================
+#elif USE_NATIVE_SAM3X_SPI
+/** Use SAM3X DMAC if nonzero */
+#define USE_SAM3X_DMAC 1
+/** Use extra Bus Matrix arbitration fix if nonzero */
+#define USE_SAM3X_BUS_MATRIX_FIX 0
+/** Time in ms for DMA receive timeout */
+#define SAM3X_DMA_TIMEOUT 100
+/** chip select register number */
+#define SPI_CHIP_SEL 3
+/** DMAC receive channel */
+#define SPI_DMAC_RX_CH  1
+/** DMAC transmit channel */
+#define SPI_DMAC_TX_CH  0
+/** DMAC Channel HW Interface Number for SPI TX. */
+#define SPI_TX_IDX  1
+/** DMAC Channel HW Interface Number for SPI RX. */
+#define SPI_RX_IDX  2
+//------------------------------------------------------------------------------
+/** Disable DMA Controller. */
+static void dmac_disable() {
+  DMAC->DMAC_EN &= (~DMAC_EN_ENABLE);
+}
+/** Enable DMA Controller. */
+static void dmac_enable() {
+  DMAC->DMAC_EN = DMAC_EN_ENABLE;
+}
+/** Disable DMA Channel. */
+static void dmac_channel_disable(uint32_t ul_num) {
+  DMAC->DMAC_CHDR = DMAC_CHDR_DIS0 << ul_num;
+}
+/** Enable DMA Channel. */
+static void dmac_channel_enable(uint32_t ul_num) {
+  DMAC->DMAC_CHER = DMAC_CHER_ENA0 << ul_num;
+}
+/** Poll for transfer complete. */
+static bool dmac_channel_transfer_done(uint32_t ul_num) {
+  return (DMAC->DMAC_CHSR & (DMAC_CHSR_ENA0 << ul_num)) ? false : true;
+}
+//------------------------------------------------------------------------------
+static void spiBegin() {
+  PIO_Configure(
+      g_APinDescription[PIN_SPI_MOSI].pPort,
+      g_APinDescription[PIN_SPI_MOSI].ulPinType,
+      g_APinDescription[PIN_SPI_MOSI].ulPin,
+      g_APinDescription[PIN_SPI_MOSI].ulPinConfiguration);
+  PIO_Configure(
+      g_APinDescription[PIN_SPI_MISO].pPort,
+      g_APinDescription[PIN_SPI_MISO].ulPinType,
+      g_APinDescription[PIN_SPI_MISO].ulPin,
+      g_APinDescription[PIN_SPI_MISO].ulPinConfiguration);
+  PIO_Configure(
+      g_APinDescription[PIN_SPI_SCK].pPort,
+      g_APinDescription[PIN_SPI_SCK].ulPinType,
+      g_APinDescription[PIN_SPI_SCK].ulPin,
+      g_APinDescription[PIN_SPI_SCK].ulPinConfiguration);
+  pmc_enable_periph_clk(ID_SPI0);
+#if USE_SAM3X_DMAC
+  pmc_enable_periph_clk(ID_DMAC);
+  dmac_disable();
+  DMAC->DMAC_GCFG = DMAC_GCFG_ARB_CFG_FIXED;
+  dmac_enable();
+#if USE_SAM3X_BUS_MATRIX_FIX
+  MATRIX->MATRIX_WPMR = 0x4d415400;
+  MATRIX->MATRIX_MCFG[1] = 1;
+  MATRIX->MATRIX_MCFG[2] = 1;
+  MATRIX->MATRIX_SCFG[0] = 0x01000010;
+  MATRIX->MATRIX_SCFG[1] = 0x01000010;
+  MATRIX->MATRIX_SCFG[7] = 0x01000010;
+#endif  // USE_SAM3X_BUS_MATRIX_FIX
+#endif  // USE_SAM3X_DMAC
+}
+//------------------------------------------------------------------------------
+// start RX DMA
+void spiDmaRX(uint8_t* dst, uint16_t count) {
+  dmac_channel_disable(SPI_DMAC_RX_CH);
+  DMAC->DMAC_CH_NUM[SPI_DMAC_RX_CH].DMAC_SADDR = (uint32_t)&SPI0->SPI_RDR;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_RX_CH].DMAC_DADDR = (uint32_t)dst;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_RX_CH].DMAC_DSCR =  0;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_RX_CH].DMAC_CTRLA = count |
+    DMAC_CTRLA_SRC_WIDTH_BYTE | DMAC_CTRLA_DST_WIDTH_BYTE;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_RX_CH].DMAC_CTRLB = DMAC_CTRLB_SRC_DSCR |
+    DMAC_CTRLB_DST_DSCR | DMAC_CTRLB_FC_PER2MEM_DMA_FC |
+    DMAC_CTRLB_SRC_INCR_FIXED | DMAC_CTRLB_DST_INCR_INCREMENTING;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_RX_CH].DMAC_CFG = DMAC_CFG_SRC_PER(SPI_RX_IDX) |
+    DMAC_CFG_SRC_H2SEL | DMAC_CFG_SOD | DMAC_CFG_FIFOCFG_ASAP_CFG;
+  dmac_channel_enable(SPI_DMAC_RX_CH);
+}
+//------------------------------------------------------------------------------
+// start TX DMA
+void spiDmaTX(const uint8_t* src, uint16_t count) {
+  static uint8_t ff = 0XFF;
+  uint32_t src_incr = DMAC_CTRLB_SRC_INCR_INCREMENTING;
+  if (!src) {
+    src = &ff;
+    src_incr = DMAC_CTRLB_SRC_INCR_FIXED;
+  }
+  dmac_channel_disable(SPI_DMAC_TX_CH);
+  DMAC->DMAC_CH_NUM[SPI_DMAC_TX_CH].DMAC_SADDR = (uint32_t)src;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_TX_CH].DMAC_DADDR = (uint32_t)&SPI0->SPI_TDR;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_TX_CH].DMAC_DSCR =  0;
+  DMAC->DMAC_CH_NUM[SPI_DMAC_TX_CH].DMAC_CTRLA = count |
+    DMAC_CTRLA_SRC_WIDTH_BYTE | DMAC_CTRLA_DST_WIDTH_BYTE;
+
+  DMAC->DMAC_CH_NUM[SPI_DMAC_TX_CH].DMAC_CTRLB =  DMAC_CTRLB_SRC_DSCR |
+    DMAC_CTRLB_DST_DSCR | DMAC_CTRLB_FC_MEM2PER_DMA_FC |
+    src_incr | DMAC_CTRLB_DST_INCR_FIXED;
+
+  DMAC->DMAC_CH_NUM[SPI_DMAC_TX_CH].DMAC_CFG = DMAC_CFG_DST_PER(SPI_TX_IDX) |
+      DMAC_CFG_DST_H2SEL | DMAC_CFG_SOD | DMAC_CFG_FIFOCFG_ALAP_CFG;
+
+  dmac_channel_enable(SPI_DMAC_TX_CH);
+}
+//------------------------------------------------------------------------------
+//  initialize SPI controller
+static void spiInit(uint8_t spiRate) {
+  Spi* pSpi = SPI0;
+  uint8_t scbr = 255;
+  if (spiRate < 14) {
+    scbr = (2 | (spiRate & 1)) << (spiRate/2);
+  }
+  //  disable SPI
+  pSpi->SPI_CR = SPI_CR_SPIDIS;
+  // reset SPI
+  pSpi->SPI_CR = SPI_CR_SWRST;
+  // no mode fault detection, set master mode
+  pSpi->SPI_MR = SPI_PCS(SPI_CHIP_SEL) | SPI_MR_MODFDIS | SPI_MR_MSTR;
+  // mode 0, 8-bit,
+  pSpi->SPI_CSR[SPI_CHIP_SEL] = SPI_CSR_SCBR(scbr) | SPI_CSR_NCPHA;
+  // enable SPI
+  pSpi->SPI_CR |= SPI_CR_SPIEN;
+}
+//------------------------------------------------------------------------------
+static inline uint8_t spiTransfer(uint8_t b) {
+  Spi* pSpi = SPI0;
+
+  pSpi->SPI_TDR = b;
+  while ((pSpi->SPI_SR & SPI_SR_RDRF) == 0) {}
+  b = pSpi->SPI_RDR;
+  return b;
+}
+//------------------------------------------------------------------------------
+/** SPI receive a byte */
+static inline uint8_t spiRec() {
+  return spiTransfer(0XFF);
+}
+//------------------------------------------------------------------------------
+/** SPI receive multiple bytes */
+static uint8_t spiRec(uint8_t* buf, size_t len) {
+  Spi* pSpi = SPI0;
+  int rtn = 0;
+#if USE_SAM3X_DMAC
+  // clear overrun error
+  uint32_t s = pSpi->SPI_SR;
+
+  spiDmaRX(buf, len);
+  spiDmaTX(0, len);
+
+  uint32_t m = millis();
+  while (!dmac_channel_transfer_done(SPI_DMAC_RX_CH)) {
+    if ((millis() - m) > SAM3X_DMA_TIMEOUT)  {
+      dmac_channel_disable(SPI_DMAC_RX_CH);
+      dmac_channel_disable(SPI_DMAC_TX_CH);
+      rtn = 2;
+      break;
+    }
+  }
+  if (pSpi->SPI_SR & SPI_SR_OVRES) rtn |= 1;
+#else  // USE_SAM3X_DMAC
+  for (size_t i = 0; i < len; i++) {
+    pSpi->SPI_TDR = 0XFF;
+    while ((pSpi->SPI_SR & SPI_SR_RDRF) == 0) {}
+    buf[i] = pSpi->SPI_RDR;
+  }
+#endif  // USE_SAM3X_DMAC
+  return rtn;
+}
+//------------------------------------------------------------------------------
+/** SPI send a byte */
+static inline void spiSend(uint8_t b) {
+  spiTransfer(b);
+}
+//------------------------------------------------------------------------------
+static void spiSend(const uint8_t* buf, size_t len) {
+  Spi* pSpi = SPI0;
+#if USE_SAM3X_DMAC
+  spiDmaTX(buf, len);
+  while (!dmac_channel_transfer_done(SPI_DMAC_TX_CH)) {}
+#else  // #if USE_SAM3X_DMAC
+  while ((pSpi->SPI_SR & SPI_SR_TXEMPTY) == 0) {}
+  for (size_t i = 0; i < len; i++) {
+    pSpi->SPI_TDR = buf[i];
+    while ((pSpi->SPI_SR & SPI_SR_TDRE) == 0) {}
+  }
+#endif  // #if USE_SAM3X_DMAC
+  while ((pSpi->SPI_SR & SPI_SR_TXEMPTY) == 0) {}
+  // leave RDR empty
+  uint8_t b = pSpi->SPI_RDR;
+}
+//==============================================================================
+#elif USE_NATIVE_MK20DX128_SPI
+// Teensy 3.0 functions
+#include <mk20dx128.h>
+// use 16-bit frame if SPI_USE_8BIT_FRAME is zero
+#define SPI_USE_8BIT_FRAME 0
+// Limit initial fifo to three entries to avoid fifo overrun
+#define SPI_INITIAL_FIFO_DEPTH 3
+// define some symbols that are not in mk20dx128.h
+#ifndef SPI_SR_RXCTR
+#define SPI_SR_RXCTR 0XF0
+#endif  // SPI_SR_RXCTR
+#ifndef SPI_PUSHR_CONT
+#define SPI_PUSHR_CONT 0X80000000
+#endif   // SPI_PUSHR_CONT
+#ifndef SPI_PUSHR_CTAS
+#define SPI_PUSHR_CTAS(n) (((n) & 7) << 28)
+#endif  // SPI_PUSHR_CTAS
 //------------------------------------------------------------------------------
 /**
  * initialize SPI pins
  */
 static void spiBegin() {
-  pinMode(MISO, INPUT);
-  pinMode(MOSI, OUTPUT);
-  pinMode(SCK, OUTPUT);
-  // SS must be in output mode even it is not chip select
-  pinMode(SS, OUTPUT);
-  // set SS high - may be chip select for another SPI device
-#if SET_SPI_SS_HIGH
-  digitalWrite(SS, HIGH);
-#endif  // SET_SPI_SS_HIGH
+  // dummy - all is done in spiInit()
 }
 //------------------------------------------------------------------------------
 /**
@@ -49,52 +309,171 @@ static void spiBegin() {
  * Set SCK rate to F_CPU/pow(2, 1 + spiRate) for spiRate [0,6]
  */
 static void spiInit(uint8_t spiRate) {
-  // See avr processor documentation
-  SPCR = (1 << SPE) | (1 << MSTR) | (spiRate >> 1);
-  SPSR = spiRate & 1 || spiRate == 6 ? 0 : 1 << SPI2X;
+  SIM_SCGC6 |= SIM_SCGC6_SPI0;
+  SPI0_MCR = SPI_MCR_MDIS | SPI_MCR_HALT;
+  // spiRate = 0 or 1 : 24 or 12 Mbit/sec
+  // spiRate = 2 or 3 : 12 or 6 Mbit/sec
+  // spiRate = 4 or 5 : 6 or 3 Mbit/sec
+  // spiRate = 6 or 7 : 3 or 1.5 Mbit/sec
+  // spiRate = 8 or 9 : 1.5 or 0.75 Mbit/sec
+  // spiRate = 10 or 11 : 250 kbit/sec
+  // spiRate = 12 or more : 125 kbit/sec
+  uint32_t ctar;
+  switch (spiRate/2) {
+    case 0: ctar = SPI_CTAR_DBR | SPI_CTAR_BR(0); break;
+    case 1: ctar = SPI_CTAR_BR(0); break;
+    case 2: ctar = SPI_CTAR_BR(1); break;
+    case 3: ctar = SPI_CTAR_BR(2); break;
+    case 4: ctar = SPI_CTAR_BR(3); break;
+#if F_BUS == 48000000
+    case 5: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(5); break;
+    default: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(6);
+#elif F_BUS == 24000000
+    case 5: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(4); break;
+    default: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(5);
+#else
+#error "MK20DX128 bus frequency must be 48 or 24 MHz"
+#endif
+  }
+  // CTAR0 - 8 bit transfer
+  SPI0_CTAR0 = ctar | SPI_CTAR_FMSZ(7);
+  // CTAR1 - 16 bit transfer
+  SPI0_CTAR1 = ctar | SPI_CTAR_FMSZ(15);
+  SPI0_MCR = SPI_MCR_MSTR;
+  CORE_PIN11_CONFIG = PORT_PCR_DSE | PORT_PCR_MUX(2);
+  CORE_PIN12_CONFIG = PORT_PCR_MUX(2);
+  CORE_PIN13_CONFIG = PORT_PCR_DSE | PORT_PCR_MUX(2);
 }
 //------------------------------------------------------------------------------
 /** SPI receive a byte */
-static uint8_t spiRec() {
-  SPDR = 0XFF;
-  while (!(SPSR & (1 << SPIF)));
-  return SPDR;
+static  uint8_t spiRec() {
+  SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_CLR_RXF;
+  SPI0_PUSHR = 0xFF;
+  while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+  return SPI0_POPR;
 }
 //------------------------------------------------------------------------------
-/** SPI read data - only one call so force inline */
-static inline __attribute__((always_inline))
-  void spiRead(uint8_t* buf, uint16_t nbyte) {
-  if (nbyte-- == 0) return;
-  SPDR = 0XFF;
-  for (uint16_t i = 0; i < nbyte; i++) {
-    while (!(SPSR & (1 << SPIF)));
-    buf[i] = SPDR;
-    SPDR = 0XFF;
+/** SPI receive multiple bytes */
+static uint8_t spiRec(uint8_t* buf, size_t len) {
+  // clear any data in RX FIFO
+  SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_CLR_RXF;
+#if SPI_USE_8BIT_FRAME
+  // initial number of bytes to push into TX FIFO
+  int nf = len < SPI_INITIAL_FIFO_DEPTH ? len : SPI_INITIAL_FIFO_DEPTH;
+  for (int i = 0; i < nf; i++) {
+    SPI0_PUSHR = 0XFF;
   }
-  while (!(SPSR & (1 << SPIF)));
-  buf[nbyte] = SPDR;
+  // limit for pushing dummy data into TX FIFO
+  uint8_t* limit = buf + len - nf;
+  while (buf < limit) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    SPI0_PUSHR = 0XFF;
+    *buf++ = SPI0_POPR;
+  }
+  // limit for rest of RX data
+  limit += nf;
+  while (buf < limit) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    *buf++ = SPI0_POPR;
+  }
+#else  // SPI_USE_8BIT_FRAME
+  // use 16 bit frame to avoid TD delay between frames
+  // get one byte if len is odd
+  if (len & 1) {
+    *buf++ = spiRec();
+    len--;
+  }
+  // initial number of words to push into TX FIFO
+  int nf = len/2 < SPI_INITIAL_FIFO_DEPTH ? len/2 : SPI_INITIAL_FIFO_DEPTH;
+  for (int i = 0; i < nf; i++) {
+    SPI0_PUSHR = SPI_PUSHR_CONT | SPI_PUSHR_CTAS(1) | 0XFFFF;
+  }
+  uint8_t* limit = buf + len - 2*nf;
+  while (buf < limit) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    SPI0_PUSHR = SPI_PUSHR_CONT | SPI_PUSHR_CTAS(1) | 0XFFFF;
+    uint16_t w = SPI0_POPR;
+    *buf++ = w >> 8;
+    *buf++ = w & 0XFF;
+  }
+  // limit for rest of RX data
+  limit += 2*nf;
+  while (buf < limit) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    uint16_t w = SPI0_POPR;
+    *buf++ = w >> 8;
+    *buf++ = w & 0XFF;
+  }
+#endif  // SPI_USE_8BIT_FRAME
+  return 0;
 }
 //------------------------------------------------------------------------------
 /** SPI send a byte */
 static void spiSend(uint8_t b) {
-  SPDR = b;
-  while (!(SPSR & (1 << SPIF)));
+  SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_CLR_RXF;
+  SPI0_PUSHR = b;
+  while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+  SPI0_POPR;  // not required?
 }
 //------------------------------------------------------------------------------
-/** SPI send block - only one call so force inline */
-static inline __attribute__((always_inline))
-  void spiSendBlock(uint8_t token, const uint8_t* buf) {
-  SPDR = token;
-  for (uint16_t i = 0; i < 512; i += 2) {
-    while (!(SPSR & (1 << SPIF)));
-    SPDR = buf[i];
-    while (!(SPSR & (1 << SPIF)));
-    SPDR = buf[i + 1];
+/** SPI send multiple bytes */
+static void spiSend(const uint8_t* output, size_t len) {
+  // clear any data in RX FIFO
+  SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_CLR_RXF;
+#if SPI_USE_8BIT_FRAME
+  // initial number of bytes to push into TX FIFO
+  int nf = len < SPI_INITIAL_FIFO_DEPTH ? len : SPI_INITIAL_FIFO_DEPTH;
+  // limit for pushing data into TX fifo
+  const uint8_t* limit = output + len;
+  for (int i = 0; i < nf; i++) {
+    SPI0_PUSHR = *output++;
   }
-  while (!(SPSR & (1 << SPIF)));
+  // write data to TX FIFO
+  while (output < limit) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    SPI0_PUSHR = *output++;
+    SPI0_POPR;
+  }
+  // wait for data to be sent
+  while (nf) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    SPI0_POPR;
+    nf--;
+  }
+#else  // SPI_USE_8BIT_FRAME
+  // use 16 bit frame to avoid TD delay between frames
+  // send one byte if len is odd
+  if (len & 1) {
+    spiSend(*output++);
+    len--;
+  }
+  // initial number of words to push into TX FIFO
+  int nf = len/2 < SPI_INITIAL_FIFO_DEPTH ? len/2 : SPI_INITIAL_FIFO_DEPTH;
+  // limit for pushing data into TX fifo
+  const uint8_t* limit = output + len;
+  for (int i = 0; i < nf; i++) {
+    uint16_t w = (*output++) << 8;
+    w |= *output++;
+    SPI0_PUSHR = SPI_PUSHR_CONT | SPI_PUSHR_CTAS(1) | w;
+  }
+  // write data to TX FIFO
+  while (output < limit) {
+    uint16_t w = *output++ << 8;
+    w |= *output++;
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    SPI0_PUSHR = SPI_PUSHR_CONT | SPI_PUSHR_CTAS(1) | w;
+    SPI0_POPR;
+  }
+  // wait for data to be sent
+  while (nf) {
+    while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+    SPI0_POPR;
+    nf--;
+  }
+#endif  // SPI_USE_8BIT_FRAME
 }
-//------------------------------------------------------------------------------
-#else  // SOFTWARE_SPI
+//==============================================================================
+#elif defined(SOFTWARE_SPI)
 #include <SoftSPI.h>
 static
 SoftSPI<SOFT_SPI_MISO_PIN, SOFT_SPI_MOSI_PIN, SOFT_SPI_SCK_PIN, 0> softSpiBus;
@@ -106,16 +485,22 @@ static void spiBegin() {
   softSpiBus.begin();
 }
 //------------------------------------------------------------------------------
+/**
+ * Initialize hardware SPI - dummy for soft SPI
+ */
+static void spiInit(uint8_t spiRate) {}
+//------------------------------------------------------------------------------
 /** Soft SPI receive byte */
 static uint8_t spiRec() {
   return softSpiBus.receive();
 }
 //------------------------------------------------------------------------------
 /** Soft SPI read data */
-static void spiRead(uint8_t* buf, uint16_t nbyte) {
-  for (uint16_t i = 0; i < nbyte; i++) {
+static uint8_t spiRec(uint8_t* buf, size_t n) {
+  for (size_t i = 0; i < n; i++) {
     buf[i] = spiRec();
   }
+  return 0;
 }
 //------------------------------------------------------------------------------
 /** Soft SPI send byte */
@@ -123,15 +508,90 @@ static void spiSend(uint8_t data) {
   softSpiBus.send(data);
 }
 //------------------------------------------------------------------------------
-/** Soft SPI send block */
-static void spiSendBlock(uint8_t token, const uint8_t* buf) {
-  spiSend(token);
-  for (uint16_t i = 0; i < 512; i++) {
+static void spiSend(const uint8_t* buf, size_t n) {
+  for (size_t i = 0; i < n; i++) {
     spiSend(buf[i]);
   }
 }
+//==============================================================================
+#else
+// functions for AVR hardware SPI
+//------------------------------------------------------------------------------
+// make sure SPCR rate is in expected bits
+#if (SPR0 != 0 || SPR1 != 1)
+#error unexpected SPCR bits
+#endif
+//------------------------------------------------------------------------------
+/**
+ * initialize SPI pins
+ */
+static void spiBegin() {
+  // set SS high - may be chip select for another SPI device
+  digitalWrite(SS, HIGH);
+  // SS must be in output mode even it is not chip select
+  pinMode(SS, OUTPUT);
+  pinMode(MISO, INPUT);
+  pinMode(MOSI, OUTPUT);
+  pinMode(SCK, OUTPUT);
+}
+//------------------------------------------------------------------------------
+/**
+ * Initialize hardware SPI
+ * Set SCK rate to F_CPU/pow(2, 1 + spiRate) for spiRate [0,6]
+ */
+static void spiInit(uint8_t spiRate) {
+  spiRate = spiRate > 12 ? 6 : spiRate/2;
+  // See avr processor documentation
+  SPCR = (1 << SPE) | (1 << MSTR) | (spiRate >> 1);
+  SPSR = spiRate & 1 || spiRate == 6 ? 0 : 1 << SPI2X;
+}
+//------------------------------------------------------------------------------
+/** SPI receive a byte */
+static  uint8_t spiRec() {
+  SPDR = 0XFF;
+  while (!(SPSR & (1 << SPIF)));
+  return SPDR;
+}
+//------------------------------------------------------------------------------
+/** SPI receive multiple bytes */
+static uint8_t spiRec(uint8_t* buf, size_t n) {
+  if (n-- == 0) return 0;
+  SPDR = 0XFF;
+  for (size_t i = 0; i < n; i++) {
+    while (!(SPSR & (1 << SPIF)));
+    uint8_t b = SPDR;
+    SPDR = 0XFF;
+    buf[i] = b;
+  }
+  while (!(SPSR & (1 << SPIF)));
+  buf[n] = SPDR;
+  return 0;
+}
+//------------------------------------------------------------------------------
+/** SPI send a byte */
+static void spiSend(uint8_t b) {
+  SPDR = b;
+  while (!(SPSR & (1 << SPIF)));
+}
+//------------------------------------------------------------------------------
+static void spiSend(const uint8_t* buf , size_t n) {
+  if (n == 0) return;
+  SPDR = buf[0];
+  if (n > 1) {
+    uint8_t b = buf[1];
+    size_t i = 2;
+    while (1) {
+      while (!(SPSR & (1 << SPIF)));
+      SPDR = b;
+      if (i == n) break;
+      b = buf[i++];
+    }
+  }
+  while (!(SPSR & (1 << SPIF)));
+}
 #endif  // SOFTWARE_SPI
 //==============================================================================
+#if USE_SD_CRC
 // CRC functions
 //------------------------------------------------------------------------------
 static uint8_t CRC7(const uint8_t* data, uint8_t n) {
@@ -150,9 +610,9 @@ static uint8_t CRC7(const uint8_t* data, uint8_t n) {
 #if USE_SD_CRC == 1
 // slower CRC-CCITT
 // uses the x^16,x^12,x^5,x^1 polynomial.
-static uint16_t CRC_CCITT(const uint8_t *data, uint16_t n) {
+static uint16_t CRC_CCITT(const uint8_t *data, size_t n) {
   uint16_t crc = 0;
-  for (uint16_t i = 0; i < n; i++) {
+  for (size_t i = 0; i < n; i++) {
     crc = (uint8_t)(crc >> 8) | (crc << 8);
     crc ^= data[i];
     crc ^= (uint8_t)(crc & 0xff) >> 4;
@@ -161,11 +621,15 @@ static uint16_t CRC_CCITT(const uint8_t *data, uint16_t n) {
   }
   return crc;
 }
-#else  // CRC_CCITT
+#elif USE_SD_CRC > 1  // CRC_CCITT
 //------------------------------------------------------------------------------
 // faster CRC-CCITT
 // uses the x^16,x^12,x^5,x^1 polynomial.
-static uint16_t crctab[] PROGMEM = {
+#ifdef __AVR__
+static const uint16_t crctab[] PROGMEM = {
+#else  // __AVR__
+static const uint16_t crctab[] = {
+#endif  // __AVR__
   0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
   0x8108, 0x9129, 0xA14A, 0xB16B, 0xC18C, 0xD1AD, 0xE1CE, 0xF1EF,
   0x1231, 0x0210, 0x3273, 0x2252, 0x52B5, 0x4294, 0x72F7, 0x62D6,
@@ -199,14 +663,19 @@ static uint16_t crctab[] PROGMEM = {
   0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
   0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 };
-static uint16_t CRC_CCITT(const uint8_t* data, uint16_t n) {
+static uint16_t CRC_CCITT(const uint8_t* data, size_t n) {
   uint16_t crc = 0;
-  for (uint16_t i = 0; i < n; i++) {
+  for (size_t i = 0; i < n; i++) {
+#ifdef __AVR__
     crc = pgm_read_word(&crctab[(crc >> 8 ^ data[i]) & 0XFF]) ^ (crc << 8);
+#else  // __AVR__
+    crc = crctab[(crc >> 8 ^ data[i]) & 0XFF] ^ (crc << 8);
+#endif  // __AVR__
   }
   return crc;
 }
-#endif  //  CRC_CCITT
+#endif  // CRC_CCITT
+#endif  // USE_SD_CRC
 //==============================================================================
 // Sd2Card member functions
 //------------------------------------------------------------------------------
@@ -281,9 +750,7 @@ void Sd2Card::chipSelectHigh() {
 }
 //------------------------------------------------------------------------------
 void Sd2Card::chipSelectLow() {
-#ifndef SOFTWARE_SPI
   spiInit(spiRate_);
-#endif  // SOFTWARE_SPI
   digitalWrite(chipSelectPin_, LOW);
 }
 //------------------------------------------------------------------------------
@@ -366,11 +833,9 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   digitalWrite(chipSelectPin_, HIGH);
   spiBegin();
 
-#ifndef SOFTWARE_SPI
   // set SCK rate for initialization commands
   spiRate_ = SPI_SD_INIT_RATE;
   spiInit(spiRate_);
-#endif  // SOFTWARE_SPI
 
   // must supply min of 74 clock cycles with CS high.
   for (uint8_t i = 0; i < 10; i++) spiSend(0XFF);
@@ -389,16 +854,20 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   }
 #endif  // USE_SD_CRC
   // check SD version
-  if ((cardCommand(CMD8, 0x1AA) & R1_ILLEGAL_COMMAND)) {
-    type(SD_CARD_TYPE_SD1);
-  } else {
-    // only need last byte of r7 response
+  while (1) {
+    if (cardCommand(CMD8, 0x1AA) == (R1_ILLEGAL_COMMAND | R1_IDLE_STATE)) {
+      type(SD_CARD_TYPE_SD1);
+      break;
+    }
     for (uint8_t i = 0; i < 4; i++) status_ = spiRec();
-    if (status_ != 0XAA) {
+    if (status_ == 0XAA) {
+      type(SD_CARD_TYPE_SD2);
+      break;
+    }
+    if (((uint16_t)millis() - t0) > SD_INIT_TIMEOUT) {
       error(SD_CARD_ERROR_CMD8);
       goto fail;
     }
-    type(SD_CARD_TYPE_SD2);
   }
   // initialize card and send host supports SDHC if SD2
   arg = type() == SD_CARD_TYPE_SD2 ? 0X40000000 : 0;
@@ -421,7 +890,6 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
     for (uint8_t i = 0; i < 3; i++) spiRec();
   }
   chipSelectHigh();
-
 #ifndef SOFTWARE_SPI
   return setSckRate(sckRateID);
 #else  // SOFTWARE_SPI
@@ -443,6 +911,7 @@ bool Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
  * the value zero, false, is returned for failure.
  */
 bool Sd2Card::readBlock(uint32_t blockNumber, uint8_t* dst) {
+  SD_TRACE("RB", blockNumber);
   // use address if not SDHC card
   if (type()!= SD_CARD_TYPE_SDHC) blockNumber <<= 9;
   if (cardCommand(CMD17, blockNumber)) {
@@ -468,7 +937,7 @@ bool Sd2Card::readData(uint8_t *dst) {
   return readData(dst, 512);
 }
 //------------------------------------------------------------------------------
-bool Sd2Card::readData(uint8_t* dst, uint16_t count) {
+bool Sd2Card::readData(uint8_t* dst, size_t count) {
   uint16_t crc;
   // wait for start block token
   uint16_t t0 = millis();
@@ -483,7 +952,10 @@ bool Sd2Card::readData(uint8_t* dst, uint16_t count) {
     goto fail;
   }
   // transfer data
-  spiRead(dst, count);
+  if (status_ = spiRec(dst, count)) {
+    error(SD_CARD_ERROR_SPI_DMA);
+    goto fail;
+  }
   // get crc
   crc = (spiRec() << 8) | spiRec();
 #if USE_SD_CRC
@@ -526,6 +998,7 @@ bool Sd2Card::readRegister(uint8_t cmd, void* buf) {
  * the value zero, false, is returned for failure.
  */
 bool Sd2Card::readStart(uint32_t blockNumber) {
+  SD_TRACE("RS", blockNumber);
   if (type()!= SD_CARD_TYPE_SDHC) blockNumber <<= 9;
   if (cardCommand(CMD18, blockNumber)) {
     error(SD_CARD_ERROR_CMD18);
@@ -561,17 +1034,20 @@ bool Sd2Card::readStop() {
 /**
  * Set the SPI clock rate.
  *
- * \param[in] sckRateID A value in the range [0, 6].
+ * \param[in] sckRateID A value in the range [0, 14].
  *
- * The SPI clock will be set to F_CPU/pow(2, 1 + sckRateID). The maximum
- * SPI rate is F_CPU/2 for \a sckRateID = 0 and the minimum rate is F_CPU/128
- * for \a scsRateID = 6.
+ * The SPI clock divisor will be set to approximately
+ *
+ * (2 + (sckRateID & 1)) << ( sckRateID/2)
+ *
+ * The maximum SPI rate is F_CPU/2 for \a sckRateID = 0 and the rate is
+ * F_CPU/128 for \a scsRateID = 12.
  *
  * \return The value one, true, is returned for success and the value zero,
  * false, is returned for an invalid value of \a sckRateID.
  */
 bool Sd2Card::setSckRate(uint8_t sckRateID) {
-  if (sckRateID > 6) {
+  if (sckRateID > MAX_SCK_RATE_ID) {
     error(SD_CARD_ERROR_SCK_RATE);
     return false;
   }
@@ -600,6 +1076,7 @@ bool Sd2Card::waitNotBusy(uint16_t timeoutMillis) {
  * the value zero, false, is returned for failure.
  */
 bool Sd2Card::writeBlock(uint32_t blockNumber, const uint8_t* src) {
+  SD_TRACE("WB", blockNumber);
   // use address if not SDHC card
   if (type() != SD_CARD_TYPE_SDHC) blockNumber <<= 9;
   if (cardCommand(CMD24, blockNumber)) {
@@ -653,7 +1130,8 @@ bool Sd2Card::writeData(uint8_t token, const uint8_t* src) {
   uint16_t crc = 0XFFFF;
 #endif  // USE_SD_CRC
 
-  spiSendBlock(token, src);
+  spiSend(token);
+  spiSend(src, 512);
   spiSend(crc >> 8);
   spiSend(crc & 0XFF);
 
@@ -681,6 +1159,7 @@ bool Sd2Card::writeData(uint8_t token, const uint8_t* src) {
  * the value zero, false, is returned for failure.
  */
 bool Sd2Card::writeStart(uint32_t blockNumber, uint32_t eraseCount) {
+  SD_TRACE("WS", blockNumber);
   // send pre-erase count
   if (cardAcmd(ACMD23, eraseCount)) {
     error(SD_CARD_ERROR_ACMD23);

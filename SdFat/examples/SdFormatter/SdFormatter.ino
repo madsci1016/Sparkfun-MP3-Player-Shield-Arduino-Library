@@ -417,7 +417,10 @@ void formatCard() {
 void setup() {
   char c;
   Serial.begin(9600);
+  while (!Serial) {} // wait for Leonardo
+
   cout << pstr(
+    "\n"
     "This sketch can erase and/or format SD/SDHC cards.\n"
     "\n"
     "Erase uses the card's fast flash erase command.\n"
@@ -430,6 +433,8 @@ void setup() {
     "Warning, all data on the card will be erased.\n"
     "Enter 'Y' to continue: ");
   while (!Serial.available()) {}
+  delay(400);  // catch Due restart problem
+  
   c = Serial.read();
   cout << c << endl;
   if (c != 'Y') {

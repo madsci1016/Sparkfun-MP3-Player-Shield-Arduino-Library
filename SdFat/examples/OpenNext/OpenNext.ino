@@ -16,7 +16,9 @@ ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
-
+  while (!Serial) {} // wait for Leonardo
+  delay(1000);
+  
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
   if (!sd.begin(chipSelect, SPI_HALF_SPEED)) sd.initErrorHalt();
@@ -29,7 +31,7 @@ void setup() {
     cout << endl;
     file.close();
   }
-  cout << "Done" << endl;
+  cout << "\nDone!" << endl;
 }
 //------------------------------------------------------------------------------
 void loop() {}

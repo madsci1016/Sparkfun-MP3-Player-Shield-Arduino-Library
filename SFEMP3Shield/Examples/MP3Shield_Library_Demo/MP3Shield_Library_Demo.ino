@@ -351,7 +351,7 @@ void parse_menu(byte key_command) {
 
   } else if(key_command == 'g') {
     int32_t offset_ms = 20000; // Note this is just an example, try your own number.
-    Serial.print(F("Skipping = "));
+    Serial.print(F("jumping to "));
     Serial.print(offset_ms, DEC);
     Serial.println(F("[milliseconds]"));
     result = MP3player.skipTo(offset_ms);
@@ -363,7 +363,7 @@ void parse_menu(byte key_command) {
 
   } else if(key_command == 'k') {
     int32_t offset_ms = -1000; // Note this is just an example, try your own number.
-    Serial.print(F("Skipping = "));
+    Serial.print(F("moving = "));
     Serial.print(offset_ms, DEC);
     Serial.println(F("[milliseconds]"));
     result = MP3player.skip(offset_ms);
@@ -485,7 +485,7 @@ void help() {
   Serial.println(F(" [m] perform memory test. reset is needed after to recover."));
   Serial.println(F(" [M] Toggle between Mono and Stereo Output."));
   Serial.println(F(" [g] Skip to a predetermined offset of ms in current track."));
-  Serial.println(F(" [g] Skip a predetermined number of ms in current track."));
+  Serial.println(F(" [k] Skip a predetermined number of ms in current track."));
   Serial.println(F(" [O} turns OFF the VS10xx into low power reset."));
   Serial.println(F(" [o} turns ON the VS10xx out of low power reset."));
   Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));

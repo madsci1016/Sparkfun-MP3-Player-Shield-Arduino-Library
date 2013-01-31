@@ -24,17 +24,19 @@ void setup() {
   char name[] = "APPEND.TXT";
 
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
 
   // pstr() stores strings in flash to save RAM
   cout << endl << pstr("Type any character to start\n");
-  while (Serial.read() < 0) {}
+  while (Serial.read() <= 0) {}
+  delay(400);  // Catch Due reset problem
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
   if (!sd.begin(chipSelect, SPI_HALF_SPEED)) sd.initErrorHalt();
 
   cout << pstr("Appending to: ") << name;
-
+  
   for (uint8_t i = 0; i < 100; i++) {
     // open stream for append
     ofstream sdout(name, ios::out | ios::app);

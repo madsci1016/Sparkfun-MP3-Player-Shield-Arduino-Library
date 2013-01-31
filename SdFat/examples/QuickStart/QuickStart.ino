@@ -39,6 +39,8 @@ void reformatMsg() {
 
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
+  
   cout << pstr(
     "\nSD chip select is the key hardware option.\n"
     "Common values are:\n"

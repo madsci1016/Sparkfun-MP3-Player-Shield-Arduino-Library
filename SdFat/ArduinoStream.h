@@ -37,14 +37,14 @@ class ArduinoInStream : public ibufstream {
    * \param[in] buf buffer for input line
    * \param[in] size size of input buffer
    */
-  ArduinoInStream(Stream &hws, char* buf, uint16_t size) {
+  ArduinoInStream(Stream &hws, char* buf, size_t size) {
     hw_ = &hws;
     line_ = buf;
     size_ = size;
   }
   /** read a line. */
   void readline() {
-    uint16_t i = 0;
+    size_t i = 0;
     uint32_t t;
     line_[0] = '\0';
     while (!hw_->available());
@@ -80,7 +80,7 @@ class ArduinoInStream : public ibufstream {
 
  private:
   char *line_;
-  uint16_t size_;
+  size_t size_;
   Stream* hw_;
 };
 //==============================================================================

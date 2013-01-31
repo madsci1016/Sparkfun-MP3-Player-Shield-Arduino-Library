@@ -47,7 +47,7 @@ class SdStreamBase : protected SdBaseFile, virtual public ios {
   void setmode(ios::openmode mode) {mode_ = mode;}
   bool seekoff(off_type off, seekdir way);
   bool seekpos(pos_type pos);
-  int16_t write(const void* buf, uint16_t n);
+  int write(const void* buf, size_t n);
   void write(char c);
   /// @endcond
  private:
@@ -70,7 +70,9 @@ class fstream : public iostream, SdStreamBase {
   explicit fstream(const char* path, openmode mode = in | out) {
     open(path, mode);
   }
+#if DESTRUCTOR_CLOSES_FILE
   ~fstream() {}
+#endif  // DESTRUCTOR_CLOSES_FILE
   /** Clear state and writeError
    * \param[in] state new state for stream
    */
@@ -119,7 +121,7 @@ class fstream : public iostream, SdStreamBase {
     /** Internal - do not use
    * \param[out] pos
    */
-  void getpos(fpos_t* pos) {SdBaseFile::getpos(pos);}
+  void getpos(FatPos_t* pos) {SdBaseFile::getpos(pos);}
   /** Internal - do not use
    * \param[in] c
    */
@@ -135,7 +137,7 @@ class fstream : public iostream, SdStreamBase {
     return SdStreamBase::seekoff(off, way);
   }
   bool seekpos(pos_type pos) {return SdStreamBase::seekpos(pos);}
-  void setpos(fpos_t* pos) {SdBaseFile::setpos(pos);}
+  void setpos(FatPos_t* pos) {SdBaseFile::setpos(pos);}
   bool sync() {return SdStreamBase::sync();}
   pos_type tellpos() {return SdStreamBase::curPosition();}
   /// @endcond
@@ -156,7 +158,9 @@ class ifstream : public istream, SdStreamBase {
   explicit ifstream(const char* path, openmode mode = in) {
     open(path, mode);
   }
+#if DESTRUCTOR_CLOSES_FILE
   ~ifstream() {}
+#endif  // DESTRUCTOR_CLOSES_FILE
   /**  Close a file and force cached data and directory information
    *  to be written to the storage device.
    */
@@ -182,7 +186,7 @@ class ifstream : public istream, SdStreamBase {
   /** Internal - do not use
    * \param[out] pos
    */
-  void getpos(fpos_t* pos) {SdBaseFile::getpos(pos);}
+  void getpos(FatPos_t* pos) {SdBaseFile::getpos(pos);}
   /** Internal - do not use
    * \param[in] pos
    */
@@ -190,7 +194,7 @@ class ifstream : public istream, SdStreamBase {
     return SdStreamBase::seekoff(off, way);
   }
   bool seekpos(pos_type pos) {return SdStreamBase::seekpos(pos);}
-  void setpos(fpos_t* pos) {SdBaseFile::setpos(pos);}
+  void setpos(FatPos_t* pos) {SdBaseFile::setpos(pos);}
   pos_type tellpos() {return SdStreamBase::curPosition();}
   /// @endcond
 };
@@ -209,7 +213,9 @@ class ofstream : public ostream, SdStreamBase {
   explicit ofstream(const char* path, ios::openmode mode = out) {
     open(path, mode);
   }
+#if DESTRUCTOR_CLOSES_FILE
   ~ofstream() {}
+#endif  // DESTRUCTOR_CLOSES_FILE
   /** Clear state and writeError
    * \param[in] state new state for stream
    */

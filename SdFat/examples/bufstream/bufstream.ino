@@ -11,7 +11,9 @@ void setup() {
   int i, j, k;    // values from parsed line
 
   Serial.begin(9600);
-
+  while (!Serial) {}  // wait for Leonardo
+  delay(2000);
+  
   // initialize input string
   ibufstream bin("123 456 789");
 

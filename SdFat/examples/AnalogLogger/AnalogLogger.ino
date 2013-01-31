@@ -3,7 +3,7 @@
 #include <SdFat.h>
 #include <SdFatUtil.h>  // define FreeRam()
 
-#define CHIP_SELECT     SS  // SD chip select pin
+#define SD_CHIP_SELECT  SS  // SD chip select pin
 #define USE_DS1307       0  // set nonzero to use DS1307 RTC
 #define LOG_INTERVAL  1000  // mills between entries
 #define SENSOR_COUNT     3  // number of analog pins to log
@@ -64,13 +64,15 @@ ostream& operator << (ostream& os, DateTime& dt) {
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
-
+  while (!Serial){}  // wait for Leonardo
+  
   // pstr stores strings in flash to save RAM
   cout << endl << pstr("FreeRam: ") << FreeRam() << endl;
 
 #if WAIT_TO_START
   cout << pstr("Type any character to start\n");
-  while (Serial.read() < 0) {}
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
 #endif  // WAIT_TO_START
 
 #if USE_DS1307
@@ -85,7 +87,7 @@ void setup() {
 #endif  // USE_DS1307
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
-  if (!sd.begin(CHIP_SELECT, SPI_HALF_SPEED)) sd.initErrorHalt();
+  if (!sd.begin(SD_CHIP_SELECT, SPI_HALF_SPEED)) sd.initErrorHalt();
 
   // create a new file in root, the current working directory
   char name[] = "LOGGER00.CSV";
@@ -100,7 +102,8 @@ void setup() {
   if (!logfile.is_open()) error("file.open");
 
   cout << pstr("Logging to: ") << name << endl;
-
+  cout << pstr("Type any character to stop\n\n");
+  
   // format header in buffer
   obufstream bout(buf, sizeof(buf));
 
@@ -161,4 +164,9 @@ void loop() {
 
   // don't log two points in the same millis
   if (m == millis()) delay(1);
+  
+  if (!Serial.available()) return;
+  logfile.close();
+  cout << pstr("Done!");
+  while (1);
 }

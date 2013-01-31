@@ -137,38 +137,38 @@ class istream : public virtual ios {
     return *this;
   }
  /**
-  * Extract a value of type int16_t.
+  * Extract a value of type int.
   * \param[out] arg location to store the value.
   * \return Is always *this.  Failure is indicated by the state of *this.
   */
-  istream &operator>>(int16_t& arg) {
+  istream &operator>>(int& arg) {
     getNumber(&arg);
     return *this;
   }
  /**
-  * Extract a value of type uint16_t.
+  * Extract a value of type unsigned int.
   * \param[out] arg location to store the value.
   * \return Is always *this.  Failure is indicated by the state of *this.
   */
-  istream &operator>>(uint16_t& arg) {
+  istream &operator>>(unsigned int& arg) {
     getNumber(&arg);
     return *this;
   }
  /**
-  * Extract a value of type int32_t.
+  * Extract a value of type long.
   * \param[out] arg location to store the value.
   * \return Is always *this.  Failure is indicated by the state of *this.
   */
-  istream &operator>>(int32_t& arg) {
+  istream &operator>>(long& arg) {  // NOLINT
     getNumber(&arg);
     return *this;
   }
  /**
-  * Extract a value of type uint32_t.
+  * Extract a value of type unsigned long.
   * \param[out] arg location to store the value.
   * \return Is always *this.  Failure is indicated by the state of *this.
   */
-  istream &operator>>(uint32_t& arg) {
+  istream &operator>>(unsigned long& arg) {  // NOLINT
     getNumber(&arg);
     return *this;
   }
@@ -178,7 +178,7 @@ class istream : public virtual ios {
   * \return Is always *this.  Failure is indicated by the state of *this.
   */
   istream &operator>> (double& arg) {
-    getFloat(reinterpret_cast<float*>(&arg));
+    getDouble(&arg);
     return *this;
   }
  /**
@@ -187,7 +187,9 @@ class istream : public virtual ios {
   * \return Is always *this.  Failure is indicated by the state of *this.
   */
   istream &operator>> (float& arg) {
-    getFloat(&arg);
+    double v;
+    getDouble(&v);
+    arg = v;
     return *this;
   }
   /**
@@ -253,7 +255,7 @@ class istream : public virtual ios {
    * \param[out] pos
    * \return
    */
-  int16_t getch(fpos_t* pos) {
+  int16_t getch(FatPos_t* pos) {
     getpos(pos);
     return getch();
   }
@@ -261,22 +263,22 @@ class istream : public virtual ios {
    * Internal - do not use
    * \param[out] pos
    */
-  virtual void getpos(fpos_t* pos) = 0;
+  virtual void getpos(FatPos_t* pos) = 0;
   /**
    * Internal - do not use
    * \param[in] pos
    */
   virtual bool seekoff(off_type off, seekdir way) = 0;
   virtual bool seekpos(pos_type pos) = 0;
-  virtual void setpos(fpos_t* pos) = 0;
+  virtual void setpos(FatPos_t* pos) = 0;
   virtual pos_type tellpos() = 0;
 
   /// @endcond
  private:
-  uint16_t gcount_;
+  size_t gcount_;
   void getBool(bool *b);
   void getChar(char* ch);
-  bool getFloat(float* value);
+  bool getDouble(double* value);
   template <typename T>  void getNumber(T* value);
   bool getNumber(uint32_t posMax, uint32_t negMax, uint32_t* num);
   void getStr(char *str);

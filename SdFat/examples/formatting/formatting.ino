@@ -38,7 +38,10 @@ void showDate(int m, int d, int y) {
 //------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(9600);
-
+  
+  while (!Serial) {}  // wait for Leonardo
+  delay(2000);
+  
   cout << endl << "default formatting" << endl;
   example();
 

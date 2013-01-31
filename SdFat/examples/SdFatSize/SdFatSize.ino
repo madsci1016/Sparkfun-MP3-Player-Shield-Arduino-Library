@@ -1,6 +1,7 @@
 /*
  * Sketch to compare size of SdFat V2 with Arduino SD library.
  * See SD_Size.pde for Arduino SD sketch.
+ *
  */
 #include <SdFat.h>
 
@@ -10,9 +11,10 @@ SdFile file;
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
 
   if (!sd.begin()) {
-    Serial.println("init failed");
+    Serial.println("begin failed");
     return;
   }
   file.open("SIZE_TST.TXT", O_RDWR | O_CREAT | O_AT_END);
@@ -20,6 +22,7 @@ void setup() {
   file.println("Hello");
 
   file.close();
+  Serial.println("Done");
 }
 //------------------------------------------------------------------------------
 void loop() {}

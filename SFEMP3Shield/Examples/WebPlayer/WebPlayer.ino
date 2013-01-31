@@ -114,7 +114,7 @@ void ListFiles(EthernetClient client, uint8_t flags) {
 
   sd.vwd()->rewind();
   client.println(F("<ul>"));
-  while (sd.vwd()->readDir(p) > 0) {
+  while (sd.vwd()->readDir(&p) > 0) {
     // done if past last used entry
     if (p.name[0] == DIR_NAME_FREE) break;
 

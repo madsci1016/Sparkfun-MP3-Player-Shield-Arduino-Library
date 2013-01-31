@@ -1,5 +1,9 @@
 // Demo of fgets function to read lines from a file.
 #include <SdFat.h>
+
+// SD chip select pin
+const uint8_t chipSelect = SS;
+
 SdFat sd;
 // print stream
 ArduinoOutStream cout(Serial);
@@ -46,16 +50,20 @@ void makeTestFile() {
     "\n"  // empty line
     "Line at EOF without NL"
   ));
-  // wrfile is closed when it goes out of scope
+  wrfile.close();
 }
 //------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(9600);
+  while (!Serial) {}  // Wait for Leonardo
+
   cout << pstr("Type any character to start\n");
-  while (Serial.read() < 0) {}
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
   
-  // initialize the file system
-  if (!sd.begin()) sd.initErrorHalt();
+  // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
+  // breadboards.  use SPI_FULL_SPEED for better performance.
+  if (!sd.begin(chipSelect, SPI_HALF_SPEED)) sd.initErrorHalt();
   
   makeTestFile();
   

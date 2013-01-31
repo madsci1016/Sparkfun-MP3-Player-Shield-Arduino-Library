@@ -26,6 +26,8 @@ void makeTestFile() {
     "17 character line\n"
     "too long for buffer\n"
     "line with no nl");
+
+  sdout.close();
 }
 //------------------------------------------------------------------------------
 void testGetline() {
@@ -51,10 +53,12 @@ void testGetline() {
 //------------------------------------------------------------------------------
 void setup(void) {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
 
   // pstr stores strings in flash to save RAM
   cout << pstr("Type any character to start\n");
-  while (Serial.read() < 0) {}
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
@@ -65,6 +69,7 @@ void setup(void) {
 
   // run the example
   testGetline();
+  cout << "\nDone!\n";
 }
 //------------------------------------------------------------------------------
 void loop(void) {}

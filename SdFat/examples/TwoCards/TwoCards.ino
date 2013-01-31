@@ -26,14 +26,17 @@ const uint16_t NWRITE = FILE_SIZE/BUF_DIM;
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
   PgmPrint("FreeRam: ");
+
   Serial.println(FreeRam());
   
   // fill buffer with known data
   for (int i = 0; i < sizeof(buf); i++) buf[i] = i;
   
   PgmPrintln("type any character to start");
-  while (Serial.read() < 0) {}
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
 
   // disable sd2 while initializing sd1
   pinMode(SD2_CS, OUTPUT);

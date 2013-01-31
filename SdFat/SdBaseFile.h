@@ -23,22 +23,45 @@
  * \file
  * \brief SdBaseFile class
  */
+#ifdef __AVR__
 #include <avr/pgmspace.h>
+#else  // __AVR__
+#ifndef PGM_P
+/** pointer to flash for ARM */
+#define PGM_P const char*
+#endif  // PGM_P
+#ifndef PSTR
+/** store literal string in flash for ARM */
+#define PSTR(x) (x)
+#endif  // PSTR
+#ifndef pgm_read_byte
+/** read 8-bits from flash for ARM */
+#define pgm_read_byte(addr) (*(const unsigned char*)(addr))
+#endif  // pgm_read_byte
+#ifndef pgm_read_word
+/** read 16-bits from flash for ARM */
+#define pgm_read_word(addr) (*(const uint16_t*)(addr))
+#endif  // pgm_read_word
+#ifndef PROGMEM
+/** store in flash for ARM */
+#define PROGMEM const
+#endif  // PROGMEM
+#endif  // __AVR__
 #include <Arduino.h>
 #include <SdFatConfig.h>
 #include <SdVolume.h>
 //------------------------------------------------------------------------------
 /**
- * \struct fpos_t
+ * \struct FatPos_t
  * \brief internal type for istream
  * do not use in user apps
  */
-struct fpos_t {
+struct FatPos_t {
   /** stream position */
   uint32_t position;
   /** cluster for position */
   uint32_t cluster;
-  fpos_t() : position(0), cluster(0) {}
+  FatPos_t() : position(0), cluster(0) {}
 };
 
 // use the gnu style oflag in open()
@@ -182,7 +205,9 @@ class SdBaseFile {
   /** Create an instance. */
   SdBaseFile() : writeError(false), type_(FAT_FILE_TYPE_CLOSED) {}
   SdBaseFile(const char* path, uint8_t oflag);
+#if DESTRUCTOR_CLOSES_FILE
   ~SdBaseFile() {if(isOpen()) close();}
+#endif  // DESTRUCTOR_CLOSES_FILE
   /**
    * writeError is set to true if an error occurs during a write().
    * Set writeError to false before calling print() and/or write() and check
@@ -198,12 +223,14 @@ class SdBaseFile {
   /** get position for streams
    * \param[out] pos struct to receive position
    */
-  void getpos(fpos_t* pos);
+  void getpos(FatPos_t* pos);
   /** set position for streams
    * \param[out] pos struct with value for new position
    */
-  void setpos(fpos_t* pos);
+  void setpos(FatPos_t* pos);
   //----------------------------------------------------------------------------
+  /** \return number of bytes available from yhe current position to EOF */
+  uint32_t available() {return fileSize() - curPosition();}
   bool close();
   bool contiguousRange(uint32_t* bgnBlock, uint32_t* endBlock);
   bool createContiguous(SdBaseFile* dirFile,
@@ -290,7 +317,7 @@ class SdBaseFile {
   bool printName();
   bool printName(Print* pr);
   int16_t read();
-  int16_t read(void* buf, uint16_t nbyte);
+  int read(void* buf, size_t nbyte);
   int8_t readDir(dir_t* dir);
   static bool remove(SdBaseFile* dirFile, const char* path);
   bool remove();
@@ -327,7 +354,7 @@ class SdBaseFile {
   bool truncate(uint32_t size);
   /** \return SdVolume that contains this file. */
   SdVolume* volume() const {return vol_;}
-  int16_t write(const void* buf, uint16_t nbyte);
+  int write(const void* buf, size_t nbyte);
 //------------------------------------------------------------------------------
  private:
   // allow SdFat to set cwd_
@@ -346,19 +373,19 @@ class SdBaseFile {
   uint8_t   flags_;         // See above for definition of flags_ bits
   uint8_t   fstate_;        // error and eof indicator
   uint8_t   type_;          // type of file see above for values
+  uint8_t   dirIndex_;      // index of directory entry in dirBlock
+  SdVolume* vol_;           // volume where file is located
   uint32_t  curCluster_;    // cluster for current file position
   uint32_t  curPosition_;   // current file position in bytes from beginning
   uint32_t  dirBlock_;      // block for this files directory entry
-  uint8_t   dirIndex_;      // index of directory entry in dirBlock
   uint32_t  fileSize_;      // file size in bytes
   uint32_t  firstCluster_;  // first cluster of file
-  SdVolume* vol_;           // volume where file is located
 
   /** experimental don't use */
   bool openParent(SdBaseFile* dir);
   // private functions
   bool addCluster();
-  bool addDirCluster();
+  cache_t* addDirCluster();
   dir_t* cacheDirEntry(uint8_t action);
   int8_t lsPrintNext(Print *pr, uint8_t flags, uint8_t indent);
   static bool make83Name(const char* str, uint8_t* name, const char** ptr);
@@ -366,6 +393,7 @@ class SdBaseFile {
   bool open(SdBaseFile* dirFile, const uint8_t dname[11], uint8_t oflag);
   bool openCachedEntry(uint8_t cacheIndex, uint8_t oflags);
   dir_t* readDirCache();
+  bool setDirSize();
 //------------------------------------------------------------------------------
 // to be deleted
   static void printDirName(const dir_t& dir,
@@ -487,6 +515,45 @@ class SdBaseFile {
     *date = d;
     *time = t;
   }
+#elif !defined(DOXYGEN) // ALLOW_DEPRECATED_FUNCTIONS
+
+ public:
+  bool contiguousRange(uint32_t& bgnBlock, uint32_t& endBlock)  // NOLINT
+    __attribute__((error("use contiguousRange(&bgnBlock, &endBlock)")));
+
+  bool createContiguous(SdBaseFile& dirFile,  // NOLINT
+    const char* path, uint32_t size)
+    __attribute__((error("use createContiguous(&bgnBlock, &endBlock)")));
+
+  static void dateTimeCallback(  // NOLINT
+    void (*dateTime)(uint16_t& date, uint16_t& time))  // NOLINT
+    __attribute__((error("use void dateTimeCallback("
+     "void (*dateTime)(uint16_t* date, uint16_t* time))")));
+
+  bool dirEntry(dir_t& dir)  // NOLINT
+    __attribute__((error("use dirEntry(&dir)")));
+
+  bool mkdir(SdBaseFile& dir, const char* path)  // NOLINT
+    __attribute__((error("use mkdir(&dir, path)")));
+
+  bool open(SdBaseFile& dirFile, // NOLINT
+    const char* path, uint8_t oflag)
+    __attribute__((error("use open(&dirFile, path, oflag)")));
+
+  bool open(SdBaseFile& dirFile, const char* path)  // NOLINT
+    __attribute__((error("use open(&dirFile, path, O_RDWR)")));
+
+  bool open(SdBaseFile& dirFile, uint16_t index, uint8_t oflag) // NOLINT
+    __attribute__((error("use open(&dirFile, index, oflag)")));
+
+  bool openRoot(SdVolume& vol)  // NOLINT
+    __attribute__((error("use openRoot(&vol)")));
+
+  int8_t readDir(dir_t& dir)  // NOLINT
+    __attribute__((error("use readDir(&dir)")));
+
+  static bool remove(SdBaseFile& dirFile, const char* path)  // NOLINT
+    __attribute__((error("use remove(&dirFile, path)")));
 #endif  // ALLOW_DEPRECATED_FUNCTIONS
 };
 

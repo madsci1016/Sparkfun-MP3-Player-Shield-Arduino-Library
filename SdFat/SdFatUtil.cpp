@@ -19,24 +19,23 @@
  */
 #include <SdFat.h>
 #include <SdFatUtil.h>
+#ifdef __arm__
+// should use uinstd.h to define sbrk but Due causes a conflict
+extern "C" char* sbrk(int incr);
+#endif  // __arm__
 //------------------------------------------------------------------------------
 /** Amount of free RAM
  * \return The number of free bytes.
  */
 int SdFatUtil::FreeRam() {
-  extern int  __bss_end;
-  extern int* __brkval;
-  int free_memory;
-  if (reinterpret_cast<int>(__brkval) == 0) {
-    // if no heap use from end of bss section
-    free_memory = reinterpret_cast<int>(&free_memory)
-                  - reinterpret_cast<int>(&__bss_end);
-  } else {
-    // use from top of stack to heap
-    free_memory = reinterpret_cast<int>(&free_memory)
-                  - reinterpret_cast<int>(__brkval);
-  }
-  return free_memory;
+  char top;
+#ifdef __arm__
+  return &top - reinterpret_cast<char*>(sbrk(0));
+#else  // __arm__
+  extern char *__malloc_heap_start;
+  extern char *__brkval;
+  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+#endif  // __arm__
 }
 //------------------------------------------------------------------------------
 /** %Print a string in flash memory.

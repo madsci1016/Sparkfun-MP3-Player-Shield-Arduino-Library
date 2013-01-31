@@ -123,7 +123,7 @@ typedef struct CID {
   unsigned char always1 : 1;
   /** CRC7 checksum */
   unsigned char crc : 7;
-}cid_t;
+}__attribute__((packed)) cid_t;
 //------------------------------------------------------------------------------
 /** CSD for version 1.00 cards */
 typedef struct CSDV1 {
@@ -185,7 +185,7 @@ typedef struct CSDV1 {
   // byte 15
   unsigned char always1 : 1;
   unsigned char crc : 7;
-}csd1_t;
+}__attribute__((packed)) csd1_t;
 //------------------------------------------------------------------------------
 /** CSD for version 2.00 cards */
 typedef struct CSDV2 {
@@ -267,7 +267,7 @@ typedef struct CSDV2 {
   unsigned char always1 : 1;
   /** checksum */
   unsigned char crc : 7;
-}csd2_t;
+}__attribute__((packed)) csd2_t;
 //------------------------------------------------------------------------------
 /** union of old and new style CSD register */
 union csd_t {

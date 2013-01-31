@@ -94,7 +94,7 @@ void SdStreamBase::putch(char c) {
 }
 //------------------------------------------------------------------------------
 void SdStreamBase::putstr(const char* str) {
-  uint16_t n = 0;
+  size_t n = 0;
   while (1) {
     char c = str[n];
     if (c == '\0' || (c == '\n' && !(getmode() & ios::binary))) {
@@ -141,7 +141,7 @@ bool SdStreamBase::seekpos(pos_type pos) {
   return seekSet(pos);
 }
 //------------------------------------------------------------------------------
-int16_t SdStreamBase::write(const void* buf, uint16_t n) {
+int SdStreamBase::write(const void* buf, size_t n) {
   return SdBaseFile::write(buf, n);
 }
 //------------------------------------------------------------------------------

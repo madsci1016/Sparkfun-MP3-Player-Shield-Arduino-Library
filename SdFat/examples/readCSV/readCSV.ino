@@ -59,11 +59,15 @@ void writeFile() {
   // check for any errors
   if (!sdout) error("writeFile");
   
-  // file is closed by destructor when it goes out of scope.
+  sdout.close();
 }
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {} // wait for Leonardo
+  cout << pstr("Type any character to start\n");
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
   
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance
@@ -72,9 +76,11 @@ void setup() {
   // create test file
   writeFile();
   
+  cout << endl;
+
   // read and print test
   readFile();  
   
-  cout << "Done" << endl;
+  cout << "\nDone!" << endl;
 }
 void loop() {}

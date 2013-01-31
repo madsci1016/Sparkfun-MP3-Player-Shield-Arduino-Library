@@ -23,8 +23,7 @@
  * \file
  * \brief Useful utility functions.
  */
-#include <Arduino.h>
-#include <avr/pgmspace.h>
+#include <SdFat.h>
 /** Store and print a string in flash memory.*/
 #define PgmPrint(x) SerialPrint_P(PSTR(x))
 /** Store and print a string in flash memory followed by a CR/LF.*/
@@ -37,6 +36,5 @@ namespace SdFatUtil {
   void SerialPrint_P(PGM_P str);
   void SerialPrintln_P(PGM_P str);
 }
-
 using namespace SdFatUtil;  // NOLINT
 #endif  // #define SdFatUtil_h

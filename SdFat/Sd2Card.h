@@ -30,14 +30,20 @@
 // SPI speed is F_CPU/2^(1 + index), 0 <= index <= 6
 /** Set SCK to max rate of F_CPU/2. See Sd2Card::setSckRate(). */
 uint8_t const SPI_FULL_SPEED = 0;
+/** Set SCK rate to F_CPU/3 for Due */
+uint8_t const SPI_DIV3_SPEED = 1;
 /** Set SCK rate to F_CPU/4. See Sd2Card::setSckRate(). */
-uint8_t const SPI_HALF_SPEED = 1;
+uint8_t const SPI_HALF_SPEED = 2;
+/** Set SCK rate to F_CPU/6 for Due */
+uint8_t const SPI_DIV6_SPEED = 3;
 /** Set SCK rate to F_CPU/8. See Sd2Card::setSckRate(). */
-uint8_t const SPI_QUARTER_SPEED = 2;
+uint8_t const SPI_QUARTER_SPEED = 4;
 /** Set SCK rate to F_CPU/16. See Sd2Card::setSckRate(). */
-uint8_t const SPI_EIGHTH_SPEED = 3;
+uint8_t const SPI_EIGHTH_SPEED = 6;
 /** Set SCK rate to F_CPU/32. See Sd2Card::setSckRate(). */
-uint8_t const SPI_SIXTEENTH_SPEED = 4;
+uint8_t const SPI_SIXTEENTH_SPEED = 8;
+/** MAX rate test - see spiInit for a given chip for details */
+const uint8_t MAX_SCK_RATE_ID = 14;
 //------------------------------------------------------------------------------
 /** init timeout ms */
 uint16_t const SD_INIT_TIMEOUT = 2000;
@@ -103,6 +109,8 @@ uint8_t const SD_CARD_ERROR_INIT_NOT_CALLED = 0X19;
 uint8_t const SD_CARD_ERROR_CMD59 = 0X1A;
 /** invalid read CRC */
 uint8_t const SD_CARD_ERROR_READ_CRC = 0X1B;
+/** SPI DMA error */
+uint8_t const SD_CARD_ERROR_SPI_DMA = 0X1C;
 //------------------------------------------------------------------------------
 // card types
 /** Standard capacity V1 SD card */
@@ -214,7 +222,7 @@ class Sd2Card {
     return cardCommand(cmd, arg);
   }
   uint8_t cardCommand(uint8_t cmd, uint32_t arg);
-  bool readData(uint8_t* dst, uint16_t count);
+  bool readData(uint8_t* dst, size_t count);
   bool readRegister(uint8_t cmd, void* buf);
   void chipSelectHigh();
   void chipSelectLow();

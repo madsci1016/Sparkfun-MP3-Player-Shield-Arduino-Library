@@ -14,20 +14,21 @@ ArduinoInStream cin(Serial, cinBuf, sizeof(cinBuf));
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
 }
 //------------------------------------------------------------------------------
 void loop() {
   int32_t n;
 
-  cout << "enter an integer\n";
+  cout << "\nenter an integer\n";
 
   cin.readline();
 
   if (cin >> n) {
-    cout << "The number is: " << n << endl;
+    cout << "The number is: " << n;
   } else {
     // will fail if no digits or not in range [-2147483648, 2147483647]
-    cout << "Invalid input: " << cinBuf << endl;
+    cout << "Invalid input: " << cinBuf;
   }
   cout << endl;
 }

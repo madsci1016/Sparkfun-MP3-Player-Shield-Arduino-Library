@@ -14,8 +14,9 @@ SdFat sd;
 ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 void setup() {
-  char c;
+  int c;
   Serial.begin(9600);
+  while (!Serial) {}  // wait for Leonardo
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
@@ -31,7 +32,7 @@ void setup() {
   if (!file.is_open()) sd.errorHalt("open failed");
 
   // copy the file to Serial
-  while ((c = file.get()) >= 0) cout << c;
+  while ((c = file.get()) >= 0) cout << (char)c;
 
   cout << "Done" << endl;
 }

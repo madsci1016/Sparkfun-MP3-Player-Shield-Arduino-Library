@@ -18,23 +18,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <SdFat.h>
+#ifndef PSTR
+#define PSTR(x) x
+#define PGM_P const char*
+#endif
 //------------------------------------------------------------------------------
 #if USE_SERIAL_FOR_STD_OUT || !defined(UDR0)
 Print* SdFat::stdOut_ = &Serial;
 #else  // USE_SERIAL_FOR_STD_OUT
-class DefaultSerial : public Print {
- public:
-  size_t write(uint8_t b);
-};
-size_t DefaultSerial::write(uint8_t b) {
-  while (((1 << UDRIE0) & UCSR0B) || !(UCSR0A & (1 << UDRE0))) {}
-  UDR0 = b;
-  return 1;
-}
-//------------------------------------------------------------------------------
-static DefaultSerial defaultStdOut;
-
-Print* SdFat::stdOut_ = &defaultStdOut;
+#include <MinimumSerial.h>
+Print* SdFat::stdOut_ = &MiniSerial;
 #endif  // USE_SERIAL_FOR_STD_OUT
 //------------------------------------------------------------------------------
 static void pstrPrint(PGM_P str) {
@@ -44,6 +37,21 @@ static void pstrPrint(PGM_P str) {
 static void pstrPrintln(PGM_P str) {
   pstrPrint(str);
   SdFat::stdOut()->println();
+}
+//------------------------------------------------------------------------------
+/**
+ * Initialize an SdFat object.
+ *
+ * Initializes the SD card, SD volume, and root directory.
+ *
+ * \param[in] chipSelectPin SD chip select pin. See Sd2Card::init().
+ * \param[in] sckRateID value for SPI SCK rate. See Sd2Card::init().
+ *
+ * \return The value one, true, is returned for success and
+ * the value zero, false, is returned for failure.
+ */
+bool SdFat::begin(uint8_t chipSelectPin, uint8_t sckRateID) {
+  return card_.init(sckRateID, chipSelectPin) && vol_.init(&card_) && chdir(1);
 }
 //------------------------------------------------------------------------------
 /** Change a volume's working directory to root
@@ -137,7 +145,9 @@ void SdFat::errorHalt_P(PGM_P msg) {
 void SdFat::errorPrint() {
   if (!card_.errorCode()) return;
   pstrPrint(PSTR("SD errorCode: 0X"));
-  stdOut_->println(card_.errorCode(), HEX);
+  stdOut_->print(card_.errorCode(), HEX);
+  pstrPrint(PSTR(",0X"));
+  stdOut_->println(card_.errorData(), HEX);
 }
 //------------------------------------------------------------------------------
 /** %Print msg, any SD error code.
@@ -169,21 +179,6 @@ void SdFat::errorPrint_P(PGM_P msg) {
  */
 bool SdFat::exists(const char* name) {
   return vwd_.exists(name);
-}
-//------------------------------------------------------------------------------
-/**
- * Initialize an SdFat object.
- *
- * Initializes the SD card, SD volume, and root directory.
- *
- * \param[in] sckRateID value for SPI SCK rate. See Sd2Card::init().
- * \param[in] chipSelectPin SD chip select pin. See Sd2Card::init().
- *
- * \return The value one, true, is returned for success and
- * the value zero, false, is returned for failure.
- */
-bool SdFat::init(uint8_t sckRateID, uint8_t chipSelectPin) {
-  return card_.init(sckRateID, chipSelectPin) && vol_.init(&card_) && chdir(1);
 }
 //------------------------------------------------------------------------------
 /** %Print error details and halt after SdFat::init() fails. */

@@ -27,7 +27,7 @@
  * by the stream state.
  */
 int istream::get() {
-  int16_t c;
+  int c;
   gcount_ = 0;
   c = getch();
   if (c < 0) {
@@ -46,7 +46,7 @@ int istream::get() {
  * \return always returns *this. A failure is indicated by the stream state.
  */
 istream& istream::get(char& c) {
-  int16_t tmp = get();
+  int tmp = get();
   if (tmp >= 0) c = tmp;
   return *this;
 }
@@ -67,7 +67,7 @@ istream& istream::get(char& c) {
  */
 istream& istream::get(char *str, streamsize n, char delim) {
   int c;
-  fpos_t pos;
+  FatPos_t pos;
   gcount_ = 0;
   while ((gcount_ + 1)  < n) {
     c = getch(&pos);
@@ -91,15 +91,14 @@ void istream::getBool(bool *b) {
     return;
   }
   PGM_P truePtr = PSTR("true");
-  const uint8_t true_len = 4;
   PGM_P falsePtr = PSTR("false");
+  const uint8_t true_len = 4;
   const uint8_t false_len = 5;
   bool trueOk = true;
   bool falseOk = true;
   uint8_t i = 0;
   int c = readSkip();
   while (1) {
-//    if (c < 0) break;  // not required
     falseOk = falseOk && c == pgm_read_byte(falsePtr + i);
     trueOk = trueOk && c == pgm_read_byte(truePtr + i);
     if (trueOk == false && falseOk == false) break;
@@ -131,7 +130,7 @@ void istream::getChar(char* ch) {
 //
 int16_t const EXP_LIMIT = 100;
 static const uint32_t uint32_max = (uint32_t)-1;
-bool istream::getFloat(float* value) {
+bool istream::getDouble(double* value) {
   bool got_digit = false;
   bool got_dot = false;
   bool neg;
@@ -140,9 +139,9 @@ bool istream::getFloat(float* value) {
   int16_t exp = 0;
   int16_t fracExp = 0;
   uint32_t frac = 0;
-  fpos_t endPos;
-  float pow10;
-  float v;
+  FatPos_t endPos;
+  double pow10;
+  double v;
 
   getpos(&endPos);
   c = readSkip();
@@ -180,7 +179,7 @@ bool istream::getFloat(float* value) {
       c = getch(&endPos);
     }
   }
-  v = static_cast<float>(frac);
+  v = static_cast<double>(frac);
   exp = expNeg ? fracExp - exp : fracExp + exp;
   expNeg = exp < 0;
   if (expNeg) exp = -exp;
@@ -228,7 +227,7 @@ bool istream::getFloat(float* value) {
  * \return always returns *this. A failure is indicated by the stream state.
  */
 istream& istream::getline(char *str, streamsize n, char delim) {
-  fpos_t pos;
+  FatPos_t pos;
   int c;
   gcount_ = 0;
   if (n > 0) str[0] = '\0';
@@ -261,7 +260,7 @@ bool istream::getNumber(uint32_t posMax, uint32_t negMax, uint32_t* num) {
   uint32_t val = 0;
   uint32_t cutoff;
   uint8_t cutlim;
-  fpos_t endPos;
+  FatPos_t endPos;
   uint8_t f = flags() & basefield;
   uint8_t base = f == oct ? 8 : f != hex ? 10 : 16;
   getpos(&endPos);
@@ -320,7 +319,7 @@ bool istream::getNumber(uint32_t posMax, uint32_t negMax, uint32_t* num) {
  *
  */
 void istream::getStr(char *str) {
-  fpos_t pos;
+  FatPos_t pos;
   uint16_t i = 0;
   uint16_t m = width() ? width() - 1 : 0XFFFE;
   if (m != 0) {
@@ -381,7 +380,7 @@ istream& istream::ignore(streamsize n, int delim) {
  */
 int istream::peek() {
   int16_t c;
-  fpos_t pos;
+  FatPos_t pos;
   gcount_ = 0;
   getpos(&pos);
   c = getch();
@@ -404,7 +403,7 @@ int16_t istream::readSkip() {
 /** used to implement ws() */
 void istream::skipWhite() {
   int c;
-  fpos_t pos;
+  FatPos_t pos;
   do {
     c = getch(&pos);
   } while (isspace(c));

@@ -26,6 +26,50 @@
 #include <stdint.h>
 //------------------------------------------------------------------------------
 /**
+ * Set USE_SEPARATE_FAT_CACHE nonzero to use a second 512 byte cache
+ * for FAT table entries.  Improves performance for large writes that
+ * are not a multiple of 512 bytes.
+ */
+#ifdef __arm__
+#define USE_SEPARATE_FAT_CACHE 1
+#else  // __arm__
+#define USE_SEPARATE_FAT_CACHE 0
+#endif  // __arm__
+//------------------------------------------------------------------------------
+/**
+ * Don't use mult-block read/write on small AVR boards
+ */
+#if defined(RAMEND) && RAMEND < 3000
+#define USE_MULTI_BLOCK_SD_IO 0
+#else
+#define USE_MULTI_BLOCK_SD_IO 1
+#endif
+//------------------------------------------------------------------------------
+/**
+ *  Force use of Arduino Standard SPI library if USE_ARDUINO_SPI_LIBRARY
+ * is nonzero.
+ */
+#define USE_ARDUINO_SPI_LIBRARY 0
+//------------------------------------------------------------------------------
+/**
+ * Use native SPI on Teensy 3.0 if USE_NATIVE_MK20DX128-SPI is nonzero.
+ */
+#if defined(__arm__) && defined(CORE_TEENSY)
+#define USE_NATIVE_MK20DX128_SPI 1
+#else
+#define USE_NATIVE_MK20DX128_SPI 0
+#endif
+//------------------------------------------------------------------------------
+/**
+ * Use fast SAM3X SPI library if USE_NATIVE_SAM3X_SPI is nonzero.
+ */
+#if defined(__arm__) && !defined(CORE_TEENSY)
+#define USE_NATIVE_SAM3X_SPI 1
+#else
+#define USE_NATIVE_SAM3X_SPI 0
+#endif
+//------------------------------------------------------------------------------
+/**
  * To enable SD card CRC checking set USE_SD_CRC nonzero.
  *
  * Set USE_SD_CRC to 1 to use a smaller slower CRC-CCITT function.
@@ -44,6 +88,15 @@
 #define USE_MULTIPLE_CARDS 0
 //------------------------------------------------------------------------------
 /**
+ * Set DESTRUCTOR_CLOSES_FILE nonzero to close a file in its destructor.
+ *
+ * Causes use of lots of heap in ARM.
+ */
+#define DESTRUCTOR_CLOSES_FILE 0
+//------------------------------------------------------------------------------
+/**
+ * For AVR
+ *
  * Set nonzero to use Serial (the HardwareSerial class) for error messages
  * and output from print functions like ls().
  *
@@ -78,7 +131,7 @@
 /**
  * Allow use of deprecated functions if ALLOW_DEPRECATED_FUNCTIONS is nonzero
  */
-#define ALLOW_DEPRECATED_FUNCTIONS 1
+#define ALLOW_DEPRECATED_FUNCTIONS 0
 //------------------------------------------------------------------------------
 /**
  * Allow FAT12 volumes if FAT12_SUPPORT is nonzero.
@@ -87,16 +140,10 @@
 #define FAT12_SUPPORT 0
 //------------------------------------------------------------------------------
 /**
- * SPI init rate for SD initialization commands. Must be 5 (F_CPU/64)
- * or 6 (F_CPU/128).
+ * SPI init rate for SD initialization commands. Must be 10 (F_CPU/64)
+ * or greater
  */
-#define SPI_SD_INIT_RATE 5
-//------------------------------------------------------------------------------
-/**
- * Set the SS pin high for hardware SPI.  If SS is chip select for another SPI
- * device this will disable that device during the SD init phase.
- */
-#define SET_SPI_SS_HIGH 1
+#define SPI_SD_INIT_RATE 11
 //------------------------------------------------------------------------------
 /**
  * Define MEGA_SOFT_SPI nonzero to use software SPI on Mega Arduinos.
@@ -111,7 +158,7 @@
 //------------------------------------------------------------------------------
 /**
  * Define LEONARDO_SOFT_SPI nonzero to use software SPI on Leonardo Arduinos.
- * Derfault pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
+ * Default pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
  * Edit Software Spi pins to change pin numbers.
  *
  * LEONARDO_SOFT_SPI allows an unmodified Adafruit GPS Shield to be used
@@ -121,7 +168,7 @@
 #define LEONARDO_SOFT_SPI 0
 //------------------------------------------------------------------------------
 /**
- * Set USE_SOFTWARE_SPI nonzero to always use software SPI.
+ * Set USE_SOFTWARE_SPI nonzero to always use software SPI on AVR.
  */
 #define USE_SOFTWARE_SPI 0
 // define software SPI pins so Mega can use unmodified 168/328 shields

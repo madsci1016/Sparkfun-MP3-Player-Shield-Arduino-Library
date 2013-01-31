@@ -18,6 +18,9 @@ SdVolume vol;
 // serial output steam
 ArduinoOutStream cout(Serial);
 
+// global for card size
+uint32_t cardSize;
+
 // global for card erase size
 uint32_t eraseSize;
 //------------------------------------------------------------------------------
@@ -59,8 +62,7 @@ uint8_t cidDmp() {
 uint8_t csdDmp() {
   csd_t csd;
   uint8_t eraseSingleBlock;
-  uint32_t cardSize = card.cardSize();
-  if (cardSize == 0 || !card.readCSD(&csd)) {
+  if (!card.readCSD(&csd)) {
     sdErrorMsg("readCSD failed");
     return false;
   }
@@ -75,7 +77,9 @@ uint8_t csdDmp() {
     return false;
   }
   eraseSize++;
-  cout << pstr("cardSize: ") << cardSize << pstr(" (512 byte blocks)\n");
+  cout << pstr("cardSize: ") << 0.000512*cardSize;
+  cout << pstr(" MB (MB = 1,000,000 bytes)\n");
+
   cout << pstr("flashEraseSize: ") << int(eraseSize) << pstr(" blocks\n");
   cout << pstr("eraseSingleBlock: ");
   if (eraseSingleBlock) {
@@ -89,6 +93,10 @@ uint8_t csdDmp() {
 // print partition table
 uint8_t partDmp() {
   cache_t *p = vol.cacheClear();
+  if (!p) {
+    sdErrorMsg("cacheClear failed");
+    return false;
+  }
   if (!card.readBlock(0, p->data)) {
       sdErrorMsg("read MBR failed");
       return false;
@@ -107,7 +115,10 @@ void volDmp() {
   cout << pstr("\nVolume is FAT") << int(vol.fatType()) << endl;
   cout << pstr("blocksPerCluster: ") << int(vol.blocksPerCluster()) << endl;
   cout << pstr("clusterCount: ") << vol.clusterCount() << endl;
-  cout << pstr("freeClusters: ") << vol.freeClusterCount() << endl;
+  uint32_t volFree = vol.freeClusterCount();
+  cout << pstr("freeClusters: ") <<  volFree << endl;
+  float fs = 0.000512*volFree*vol.blocksPerCluster();
+  cout << pstr("freeSpace: ") << fs << pstr(" MB (MB = 1,000,000 bytes)\n");
   cout << pstr("fatStartBlock: ") << vol.fatStartBlock() << endl;
   cout << pstr("fatCount: ") << int(vol.fatCount()) << endl;
   cout << pstr("blocksPerFat: ") << vol.blocksPerFat() << endl;
@@ -121,10 +132,11 @@ void volDmp() {
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
+  while(!Serial) {}  // wait for Leonardo
 
   // use uppercase in hex and use 0X base prefix
   cout << uppercase << showbase << endl;
-  
+
   // pstr stores strings in flash to save RAM
   cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
 }
@@ -132,11 +144,12 @@ void setup() {
 void loop() {
   // read any existing Serial data
   while (Serial.read() >= 0) {}
-  
+
   // pstr stores strings in flash to save RAM
   cout << pstr("\ntype any character to start\n");
-  while (Serial.read() < 0) {}
-
+  while (Serial.read() <= 0) {}
+  delay(400);  // catch Due reset problem
+  
   uint32_t t = millis();
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.
@@ -145,6 +158,12 @@ void loop() {
     return;
   }
   t = millis() - t;
+  
+  cardSize = card.cardSize();
+  if (cardSize == 0) {
+    sdErrorMsg("cardSize failed");
+    return;
+  }
   cout << pstr("\ninit time: ") << t << " ms" << endl;
   cout << pstr("\nCard type: ");
   switch (card.type()) {
@@ -157,7 +176,11 @@ void loop() {
       break;
 
     case SD_CARD_TYPE_SDHC:
-      cout << pstr("SDHC\n");
+      if (cardSize < 70000000) {
+        cout << pstr("SDHC\n");
+      } else {
+        cout << pstr("SDXC\n");
+      }
       break;
 
     default:

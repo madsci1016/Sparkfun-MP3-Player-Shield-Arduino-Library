@@ -130,11 +130,35 @@ class ostream : public virtual ios {
     putDouble(arg);
     return *this;
   }
+  /** Output float
+   * \param[in] arg value to output
+   * \return the stream
+   */
+  ostream &operator<< (float arg) {
+    putDouble(arg);
+    return *this;
+  }
+  /** Output signed short
+   * \param[in] arg value to output
+   * \return the stream
+   */
+  ostream &operator<< (short arg) {  // NOLINT
+    putNum((int32_t)arg);
+    return *this;
+  }
+  /** Output unsigned short
+   * \param[in] arg value to output
+   * \return the stream
+   */
+  ostream &operator<< (unsigned short arg) {  // NOLINT
+    putNum((uint32_t)arg);
+    return *this;
+  }
   /** Output signed int
    * \param[in] arg value to output
    * \return the stream
    */
-  ostream &operator<< (int16_t arg) {
+  ostream &operator<< (int arg) {
     putNum((int32_t)arg);
     return *this;
   }
@@ -142,7 +166,7 @@ class ostream : public virtual ios {
    * \param[in] arg value to output
    * \return the stream
    */
-  ostream &operator<< (uint16_t arg) {
+  ostream &operator<< (unsigned int arg) {
     putNum((uint32_t)arg);
     return *this;
   }
@@ -150,15 +174,15 @@ class ostream : public virtual ios {
    * \param[in] arg value to output
    * \return the stream
    */
-  ostream &operator<< (int32_t arg) {
+  ostream &operator<< (long arg) {  // NOLINT
     putNum(arg);
     return *this;
   }
-  /** Output uint32_t
+  /** Output unsigned long
    * \param[in] arg value to output
    * \return the stream
    */
-  ostream &operator<< (uint32_t arg) {
+  ostream &operator<< (unsigned long arg) {  // NOLINT
     putNum(arg);
     return *this;
   }

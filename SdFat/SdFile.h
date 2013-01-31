@@ -33,13 +33,16 @@ class SdFile : public SdBaseFile, public Print {
  public:
   SdFile() {}
   SdFile(const char* name, uint8_t oflag);
+#if DESTRUCTOR_CLOSES_FILE
+  ~SdFile() {}
+#endif  // DESTRUCTOR_CLOSES_FILE
   /** \return value of writeError */
   bool getWriteError() {return SdBaseFile::getWriteError();}
   /** Set writeError to zero */
   void clearWriteError() {SdBaseFile::clearWriteError();}
   size_t write(uint8_t b);
-  int16_t write(const char* str);
-  int16_t write(const void* buf, uint16_t nbyte);
+  int write(const char* str);
+  int write(const void* buf, size_t nbyte);
   void write_P(PGM_P str);
   void writeln_P(PGM_P str);
 };

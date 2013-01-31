@@ -1,6 +1,9 @@
 Revision History
 ---------------
 
+## 1.02.00
+* Roll up of all below changes for release
+
 ## 1.01.01
 * added getState() as to report other possible states, such as paused but playing.
   * added check to enableRefill()

@@ -18,7 +18,7 @@
  * This is a table to decode the bitrate as per the MP3 file format,
  * as read by the SdCard
  *
- * \link http://www.mp3-tech.org/programmer/frame_header.html \endlink
+ * <A HREF = "http://www.mp3-tech.org/programmer/frame_header.html" > www.mp3-tech.org </A>
  * \note PROGMEM macro forces to Flash space.
  * \warning This consums 190 bytes of flash
  */
@@ -84,7 +84,7 @@ uint8_t  SFEMP3Shield::mp3DataBuffer[32];
  * \see
  * \ref Error_Codes
  * \warning Will disrupt playback, if issued while playing back.
- * \note The \c SdFat::begin() function is required to be executed prior, as to 
+ * \note The \c SdFat::begin() function is required to be executed prior, as to
  * define the volume for the tracks (aka files) to be operated on.
  */
 uint8_t  SFEMP3Shield::begin() {
@@ -110,7 +110,7 @@ if (int8_t(sd.vol()->fatType()) == 0) {
   cs_high();  //MP3_XCS, Init Control Select to deselected
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
-  
+
   playing_state = initialized;
 
   uint8_t result = vs_init();
@@ -439,7 +439,7 @@ uint16_t SFEMP3Shield::memoryTest() {
     Serial.println(F("Warning Tests are not available."));
     return -1;
   }
-  
+
   playing_state = testing_memory;
 
   vs_init();
@@ -684,7 +684,7 @@ uint8_t SFEMP3Shield::getDifferentialOutput() {
 /**
  * \brief Set the current SM_DIFF setting of the VS10xx chip
  *
- * \param[in] SM_DIFF integer value between 0 and 1.
+ * \param[in] DiffMode integer value between 0 and 1.
  *
  * The input value is mapped onto the SM_DIFF of the SCI_MODE register,
  *  preserving the remainder of SCI_MODE. For stereo playback streams this
@@ -785,7 +785,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  * \brief Begin playing a mp3 file by its filename.
  *
  * \param[out] fileName pointer of a char array (aka string), contianing the filename
- * \param[in] offset (optional) milliseconds from the begining of the file. 
+ * \param[in] timecode (optional) milliseconds from the begining of the file.
  *  Only works with mp3 files, otherwise do nothing.
  *
  * Skip, if already playing. Otherwise initialize the SdCard track to desired filehandle.
@@ -799,13 +799,13 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
  * \see
  * \ref Error_Codes
  *
- * \note 
- * - Currently bitrate to calculate time offset is determined by either 
+ * \note
+ * - Currently bitrate to calculate time offset is determined by either
  *   playing files or by reading MP3 headers. Hence only the later is doable
  *   without actually playing files. Hence other formats are not available, yet.
  * - enableRefill() will enable the appropiate interrupt to match the
  *   corresponding means selected.
- * - use \c SdFat::chvol() command prior, to select desired SdCard volume, if 
+ * - use \c SdFat::chvol() command prior, to select desired SdCard volume, if
  *   multiple cards are used.
  */
 uint8_t SFEMP3Shield::playMP3(char* fileName, uint32_t timecode) {
@@ -904,7 +904,7 @@ uint8_t SFEMP3Shield::isPlaying(){
  * \return the value held by SFEMP3Shield::playing_state
  */
 state_m SFEMP3Shield::getState(){
- return playing_state; 
+ return playing_state;
 }
 
 //------------------------------------------------------------------------------
@@ -959,7 +959,7 @@ void SFEMP3Shield::pauseMusic() {
 /**
  * \brief Resume music from pause at new location.
  *
- * \param[in] offset (optional) milliseconds from the begining of the file. 
+ * \param[in] timecode (optional) milliseconds from the begining of the file.
  *
  * Public method for resuming the play of music from a specific file location.
  *
@@ -973,7 +973,7 @@ void SFEMP3Shield::pauseMusic() {
  */
 uint8_t SFEMP3Shield::resumeMusic(uint32_t timecode) {
   if((playing_state == paused_playback) && digitalRead(MP3_RESET)) {
-  
+
     if(!track.seekSet(((timecode * Mp3ReadWRAM(para_byteRate))/1000) + start_of_music))    //if(!track.seekCur((uint32_t(timecode/1000 * Mp3ReadWRAM(para_byteRate)))))
       return 2;
 
@@ -1008,7 +1008,7 @@ bool SFEMP3Shield::resumeMusic() {
 /**
  * \brief Skips to a duration in the track
  *
- * \param[in] offset milliseconds from the current location of the file.
+ * \param[in] timecode offset milliseconds from the current location of the file.
  *
  * Repositions the filehandles track location to the requested offset.
  * As calculated by the bitrate multiplied by the desired ms offset.
@@ -1064,7 +1064,7 @@ uint8_t SFEMP3Shield::skip(int32_t timecode){
 /**
  * \brief Skips to a certain point in the track
  *
- * \param[in] offset milliseconds from the begining of the file.
+ * \param[in] timecode offset milliseconds from the begining of the file.
  *
  * Repositions the filehandles track location to the requested offset.
  * As calculated by the bitrate multiplied by the desired ms offset.
@@ -1389,7 +1389,7 @@ void SFEMP3Shield::getBitRateFromMP3File(char* fileName) {
 /**
  * \brief get the status of the VSdsp VU Meter
  *
- * \return responds with the current value of the SS_VU_ENABLE bit of the 
+ * \return responds with the current value of the SS_VU_ENABLE bit of the
  * SCI_STATUS register indicating if the VU meter is enabled.
  *
  * See data patches data sheet VU meter for details.
@@ -1430,8 +1430,8 @@ int8_t SFEMP3Shield::setVUmeter(int8_t enable) {
 /**
  * \brief get current measured VU Meter
  *
- * Returns the calculated peak sample values from both channels in 3 dB 
- * increaments through. Where the high byte represent the left channel, 
+ * Returns the calculated peak sample values from both channels in 3 dB
+ * increaments through. Where the high byte represent the left channel,
  * and the low bytes the right channel.
  *
  * Values from 0 to 31 are valid for both channels.
@@ -1852,13 +1852,13 @@ uint8_t SFEMP3Shield::ADMixerLoad(char* fileName){
   if(!digitalRead(MP3_RESET)) return 3;
   if(isPlaying() != FALSE)
     return 1;
-    
+
   playing_state = loading;
   if(VSLoadUserCode(fileName)) {
     playing_state = ready;
     return 2;
     // Serial.print(F("Error: ")); Serial.print(fileName); Serial.println(F(", file not found, skipping."));
-  } 
+  }
 
   // Set Input Mode to either Line1 or Microphone.
 #if defined(VS_LINE1_MODE)
@@ -1875,7 +1875,7 @@ uint8_t SFEMP3Shield::ADMixerLoad(char* fileName){
  * \brief Set ADMixer's attenuation of input to between -3 and -31 dB otherwise
  * disable.
  *
- * \param[in] -3 through -31 dB of attentuation.
+ * \param[in] ADM_volume -3 through -31 dB of attentuation.
  *
  * Will range check the requested value and for values out of range the VSdsp's
  * ADMixer will be disabled. While valid ranges will write to VSdsp's current
@@ -1930,4 +1930,29 @@ char* strip_nonalpha_inplace(char *s) {
   *++tail = '\0'; // truncate after the last alpha
 
   return s;
+}
+
+/**
+ * \brief is the filename music
+ *
+ * \param[in] filename inspects the end of the filename to be of the extension types
+ *            that VS10xx can decode.
+ *
+ * \return boolean true indicating that it is music
+ */
+bool isFnMusic(char* filename) {
+  int8_t len = strlen(filename);
+  bool result;
+  if (  strstr(strlwr(filename + (len - 4)), ".mp3")
+     || strstr(strlwr(filename + (len - 4)), ".aac")
+     || strstr(strlwr(filename + (len - 4)), ".wma")
+     || strstr(strlwr(filename + (len - 4)), ".wav")
+     || strstr(strlwr(filename + (len - 4)), ".fla")
+     || strstr(strlwr(filename + (len - 4)), ".mid")
+    ) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
 }

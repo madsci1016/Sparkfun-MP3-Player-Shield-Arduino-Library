@@ -43,9 +43,9 @@ enum state_m {
   }; //enum state_m
 
 /** \brief How to flush the VSdsp's buffer
- * 
- * For use with SFEMP3Shield::flush_cancel(flush_m) as to how to flush the 
- * VSdsp's buffer. 
+ *
+ * For use with SFEMP3Shield::flush_cancel(flush_m) as to how to flush the
+ * VSdsp's buffer.
  *
  * See Data sheet 9.5.2
  */
@@ -459,8 +459,8 @@ extern SdFat sd;
 /**
  * \brief A macro of the SS_VU_ENABLE bit mask of the SCI_STATUS register
  *
- * When SS_VU_ENABLE is set and patch 1.2 or greater is loaded the player the 
- * VU meter is enabled. 
+ * When SS_VU_ENABLE is set and patch 1.2 or greater is loaded the player the
+ * VU meter is enabled.
  * See data patches data sheet VU meter for details.
  * \see setVUmeter and getVUlevel
  */
@@ -754,6 +754,7 @@ class SFEMP3Shield {
  * Global Functions
  */
 char* strip_nonalpha_inplace(char *s);
+bool isFnMusic(char*);
 
 //------------------------------------------------------------------------------
 /*

@@ -1,5 +1,5 @@
 /**
- * \file MP3Shield_Library_Demo.ino
+ * \file FilePlayer.ino
  *
  * \brief Example sketch of using the MP3Shield Arduino driver
  * \remarks comments are implemented with Doxygen Markdown format
@@ -7,15 +7,20 @@
  * \author Bill Porter
  * \author Michael P. Flaga
  *
- * This sketch listens for commands from a serial terminal (like the Serial
- * Monitor in the Arduino IDE). If it sees 1-9 it will try to play an MP3 file
- * named track00x.mp3 where x is a number from 1 to 9. For eaxmple, pressing
- * 2 will play 'track002.mp3'. A lowe case 's' will stop playing the mp3.
- * 'f' will play an MP3 by calling it by it's filename as opposed to a track
- * number.
+ * This sketch listens for commands from a serial terminal (such as the Serial
+ * Monitor in the Arduino IDE). Listening for either a single character menu
+ * commands or an numeric strings of an index. Pointing to a music file, found
+ * in the root of the SdCard, to be played. A list of index's and corresponding
+ * files in the root can be listed out using the 'l' (little L) command.
  *
- * Sketch assumes you have MP3 files with filenames like "track001.mp3",
- * "track002.mp3", etc on an SD card loaded into the shield.
+ * This sketch allows the various file formats to be played: mp3, aac, wma, wav,
+ * fla & mid.
+ *
+ * This sketch behaves nearly identical to MP3Shield_Library_Demo.ino, but has
+ * extra complicated loop() as to recieve string of characters to create the
+ * file index. As the Serial Monitor is typically default with no CR or LF, this
+ * sketch uses intercharacter time out as to determine when a full string has
+ * has been entered to be processed.
  */
 
 #include <SPI.h>
@@ -47,6 +52,8 @@ SdFat sd;
  * principal object for handling all the attributes, members and functions for the library.
  */
 SFEMP3Shield MP3player;
+int16_t last_ms_char; // milliseconds of last recieved character from Serial port.
+int8_t buffer_pos; // next position to recieve character from Serial port.
 
 //------------------------------------------------------------------------------
 /**
@@ -62,6 +69,8 @@ SFEMP3Shield MP3player;
  * \see
  * \ref Error_Codes
  */
+  char buffer[6]; // 0-35K+null
+
 void setup() {
 
   uint8_t result; //result code from some function as to be tested at later time.
@@ -70,7 +79,7 @@ void setup() {
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1040, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1029, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
@@ -100,6 +109,10 @@ void setup() {
 #endif
 
   help();
+  last_ms_char = millis(); // stroke the inter character timeout.
+  buffer_pos = 0; // start the command string at zero length.
+  parse_menu('l'); // display the list of files to play
+
 }
 
 //------------------------------------------------------------------------------
@@ -126,8 +139,84 @@ void loop() {
   MP3player.available();
 #endif
 
-  if(Serial.available()) {
-    parse_menu(Serial.read()); // get command from serial input
+  char inByte;
+  if (Serial.available() > 0) {
+    inByte = Serial.read();
+    if (isDigit(inByte)) { // macro for ((inByte >= '0') && (inByte <= '9'))
+      // else if it is a number, add it to the string
+      buffer[buffer_pos++] = inByte;
+    } else {
+      // input char is a letter command
+      buffer_pos = 0;
+      parse_menu(inByte);
+    }
+    buffer[buffer_pos] = 0; // update end of line
+    last_ms_char = millis(); // stroke the inter character timeout.
+
+  } else if ((millis() - last_ms_char) > 500 && ( buffer_pos > 0 )) {
+    // ICT expired and have something
+    if (buffer_pos == 1) {
+      // look for single byte (non-number) menu commands
+      parse_menu(buffer[buffer_pos - 1]);
+
+    } else if (buffer_pos > 5) {
+      // dump if entered command is greater then uint16_t
+      Serial.println(F("Ignored, Number is Too Big!"));
+
+    } else {
+      // otherwise its a number, scan through files looking for matching index.
+      int16_t fn_index = atoi(buffer);
+      SdFile file;
+      char filename[13];
+      sd.chdir("/",true);
+      uint16_t count = 1;
+      while (file.openNext(sd.vwd(),O_READ))
+      {
+        file.getFilename(filename);
+        if ( isFnMusic(filename) ) {
+
+          if (count == fn_index) {
+            Serial.print(F("Index "));
+            SerialPrintPaddedNumber(count, 5 );
+            Serial.print(F(": "));
+            Serial.println(filename);
+            Serial.print(F("Playing filename: "));
+            Serial.println(filename);
+            int8_t result = MP3player.playMP3(filename);
+            //check result, see readme for error codes.
+            if(result != 0) {
+              Serial.print(F("Error code: "));
+              Serial.print(result);
+              Serial.println(F(" when trying to play track"));
+            }
+            char title[30]; // buffer to contain the extract the Title from the current filehandles
+            char artist[30]; // buffer to contain the extract the artist name from the current filehandles
+            char album[30]; // buffer to contain the extract the album name from the current filehandles
+            MP3player.trackTitle((char*)&title);
+            MP3player.trackArtist((char*)&artist);
+            MP3player.trackAlbum((char*)&album);
+
+            //print out the arrays of track information
+            Serial.write((byte*)&title, 30);
+            Serial.println();
+            Serial.print(F("by:  "));
+            Serial.write((byte*)&artist, 30);
+            Serial.println();
+            Serial.print(F("Album:  "));
+            Serial.write((byte*)&album, 30);
+            Serial.println();
+            break;
+          }
+          count++;
+        }
+        file.close();
+      }
+
+    }
+
+    //reset buffer to start over
+    buffer_pos = 0;
+    buffer[buffer_pos] = 0; // delimit
   }
 
   delay(100);
@@ -275,6 +364,31 @@ void parse_menu(byte key_command) {
       // something about SdFat and its 500byte cache.
       Serial.println(F("Files found (name date time size):"));
       sd.ls(LS_R | LS_DATE | LS_SIZE);
+    } else {
+      Serial.println(F("Busy Playing Files, try again later."));
+    }
+
+  /* List out music files on the SdCard */
+  } else if(key_command == 'l') {
+    if(!MP3player.isPlaying()) {
+      Serial.println(F("Music Files found :"));
+      SdFile file;
+      char filename[13];
+      sd.chdir("/",true);
+      uint16_t count = 1;
+      while (file.openNext(sd.vwd(),O_READ))
+      {
+        file.getFilename(filename);
+        if ( isFnMusic(filename) ) {
+          SerialPrintPaddedNumber(count, 5 );
+          Serial.print(F(": "));
+          Serial.println(filename);
+          count++;
+        }
+        file.close();
+      }
+      Serial.println(F("Enter Index of File to play"));
+
     } else {
       Serial.println(F("Busy Playing Files, try again later."));
     }
@@ -456,7 +570,7 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V :"));
+  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V,l,01-65534 :"));
 }
 
 //------------------------------------------------------------------------------
@@ -491,7 +605,18 @@ void help() {
   Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
   Serial.println(F(" [S] Show State of Device."));
   Serial.println(F(" [V] Enable VU meter Test."));
+  Serial.println(F(" [l] Display list of music files"));
+  Serial.println(F(" [###] Enter index of file to play, zero pad! e.g. 01-65534"));
   Serial.println(F(" [h] this help"));
 }
 
-
+void SerialPrintPaddedNumber(int16_t value, int8_t digits ) {
+  int currentMax = 10;
+  for (byte i=1; i<digits; i++){
+    if (value < currentMax) {
+      Serial.print("0");
+    }
+    currentMax *= 10;
+  }
+  Serial.print(value);
+}

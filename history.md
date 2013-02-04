@@ -1,13 +1,18 @@
 Revision History
 ---------------
 
+## 1.02.01
+* added new example FilePlayer.ino, more elaborate command to play all files.
+* updated ram usage prints.
+* added missing MinimumSerial files from new SdFatLib
+
 ## 1.02.00
 * Roll up of all below changes for release
 
 ## 1.01.01
 * added getState() as to report other possible states, such as paused but playing.
   * added check to enableRefill()
-* added GetDifferentialOutput() and SetDifferentialOutput() feature to change the output, 
+* added GetDifferentialOutput() and SetDifferentialOutput() feature to change the output,
      as to create a differential left/right output with a maximum output of 3V.
 * changed case of get.. and set.. functions all to lower case for consistency.
 * added VU meter support
@@ -34,7 +39,7 @@ Revision History
 
 ## 1.00.00
 * formatted comments with Doxygen markdown.
-* rearranged location of functions for organizing documentation 
+* rearranged location of functions for organizing documentation
 * extracted read of MP3 files bit-rate to member function.
 * cleaned up some type casting.
 * added history.md and license files

@@ -28,6 +28,7 @@ getState                 KEYWORD2
 getVolume                KEYWORD2
 getVUlevel               KEYWORD2
 getVUmeter               KEYWORD2
+isFnMusic                KEYWORD2
 isPlaying                KEYWORD2
 memoryTest               KEYWORD2
 pauseDataStream          KEYWORD2

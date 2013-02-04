@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.00</span>
+   &#160;<span id="projectnumber">1.02.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -134,7 +134,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  }; <span class="comment">//enum flush_m</span></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment"></span><span class="keyword">extern</span> SdFat <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment"></span><span class="keyword">extern</span> SdFat <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00116"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_8h.html#af7dc54392e24e95e8be62cea7896b926">  116</a></span>&#160;<span class="comment"></span><span class="preprocessor">#define SCI_MODE              0x00</span></div>
@@ -329,24 +329,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;<span class="comment"> * Global Functions</span></div>
 <div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;<span class="keywordtype">char</span>* <a class="code" href="_s_f_e_m_p3_shield_8cpp.html#a9ff77b026d5d353ff902b4787e8589aa" title="chomp non printable characters out of string.">strip_nonalpha_inplace</a>(<span class="keywordtype">char</span> *s);</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;<span class="comment"> * Global Unions</span></div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;</div>
-<div class="line"><a name="l00777"></a><span class="lineno"><a class="code" href="uniontwobyte.html">  777</a></span>&#160;<span class="keyword">union </span><a class="code" href="uniontwobyte.html" title="A handler for accessing bytes of a word.">twobyte</a> {</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;</div>
-<div class="line"><a name="l00784"></a><span class="lineno"><a class="code" href="uniontwobyte.html#a43edc27e9ba5632eed7d77f38ad1450f">  784</a></span>&#160;  uint16_t <a class="code" href="uniontwobyte.html#a43edc27e9ba5632eed7d77f38ad1450f" title="whole word value">word</a>;</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;</div>
-<div class="line"><a name="l00792"></a><span class="lineno"><a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593">  792</a></span>&#160;  uint8_t  <a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593" title="individual bytes">byte</a>[2];</div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;} ;</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;</div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;<span class="preprocessor">#endif // SFEMP3Shield_h</span></div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_s_f_e_m_p3_shield_8cpp.html#a71871e135b8b08ea601a3302fa4bbe91" title="is the filename music">isFnMusic</a>(<span class="keywordtype">char</span>*);</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="comment"> * Global Unions</span></div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;</div>
+<div class="line"><a name="l00778"></a><span class="lineno"><a class="code" href="uniontwobyte.html">  778</a></span>&#160;<span class="keyword">union </span><a class="code" href="uniontwobyte.html" title="A handler for accessing bytes of a word.">twobyte</a> {</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;</div>
+<div class="line"><a name="l00785"></a><span class="lineno"><a class="code" href="uniontwobyte.html#a43edc27e9ba5632eed7d77f38ad1450f">  785</a></span>&#160;  uint16_t <a class="code" href="uniontwobyte.html#a43edc27e9ba5632eed7d77f38ad1450f" title="whole word value">word</a>;</div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;</div>
+<div class="line"><a name="l00793"></a><span class="lineno"><a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593">  793</a></span>&#160;  uint8_t  <a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593" title="individual bytes">byte</a>[2];</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;} ;</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;<span class="preprocessor">#endif // SFEMP3Shield_h</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 20:38:55 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 3 2013 22:53:06 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.00</span>
+   &#160;<span id="projectnumber">1.02.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -195,7 +195,7 @@ Limitations.</h2>
 <li><b>Multi-Chip VS10xx support:</b> Not at this time. There are too many issues with member functions of the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> class requiring to be static.</li>
 </ul>
 <ul>
-<li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable.">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example <a class="el" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver.">MP3Shield_Library_Demo.ino</a> has these lines commented out in <a class="el" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup()</a>. As to reduce complications. To re-enable simply uncomment.</li>
+<li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode.">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable.">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example <a class="el" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver.">MP3Shield_Library_Demo.ino</a> has these lines commented out in <a class="el" href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup()</a>. As to reduce complications. To re-enable simply uncomment.</li>
 </ul>
 <ul>
 <li><b>Recording</b> As most commericially available shields do not support audio input this feature has not been implemented. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Support Audio Recording.</dd></dl>
@@ -252,16 +252,16 @@ Troubleshooting</h1>
 </li>
 </ul>
 <ul>
-<li>Is <b>MP3player.begin()</b> locking up, in <a class="el" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup()</a>?</li>
+<li>Is <b>MP3player.begin()</b> locking up, in <a class="el" href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup()</a>?</li>
 <li>Are you trying to update from a version prior to 1.01.00?</li>
 <li>Why does my Serial Monitor display: "<code>...do not have a sd.begin in the main sketch, See Trouble Shooting Guide.</code>"</li>
 <li>Compiler Error: "<code>...undefined reference to `sd'</code>"</li>
 <li>Is the last thing printed to the Serial Monitor: "<code>Free RAM = 1097 Should be a base line of 1095, on ATmega328 when using INTx</code>" then nothing...<ul>
 <li>Versions after 1.01.00 require the <code>SdFat::begin()</code> to be initialized in the main sketch.ino, as shown in the below example. This provides more immediate access to the SdCard's files by the main sketch. However, if not done there is no immediate compiler error and the sketch will lock up after as it attempts <a class="el" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">SFEMP3Shield::begin</a>. <div class="fragment"><div class="line">...</div>
-<div class="line">SdFat <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>; <span class="comment">// newly required in 1.01.00 and higher</span></div>
-<div class="line"><span class="keywordtype">void</span> <a class="code" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup</a>() {</div>
-<div class="line">  <span class="keywordflow">if</span>(!<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.begin(<a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aacbac5c44278a37aeeceffe01ccdda1b" title="A macro to configure the SdCard Chip Select for SFEMP3SHield library.">SD_SEL</a>, SPI_HALF_SPEED)) <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.initErrorHalt(); <span class="comment">// newly required in 1.01.00 and higher</span></div>
-<div class="line">  <span class="keywordflow">if</span>(<a class="code" href="_m_p3_shield___library___demo_8ino.html#ab3c96aa4b0f9d056464804cf754a889e" title="Object instancing the SFEMP3Shield library.">MP3player</a>.<a class="code" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">begin</a>() != 0) {Serial.print(F(<span class="stringliteral">&quot;ERROR&quot;</span>));</div>
+<div class="line">SdFat <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>; <span class="comment">// newly required in 1.01.00 and higher</span></div>
+<div class="line"><span class="keywordtype">void</span> <a class="code" href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a>() {</div>
+<div class="line">  <span class="keywordflow">if</span>(!<a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.begin(<a class="code" href="_s_f_e_m_p3_shield_config_8h.html#aacbac5c44278a37aeeceffe01ccdda1b" title="A macro to configure the SdCard Chip Select for SFEMP3SHield library.">SD_SEL</a>, SPI_HALF_SPEED)) <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.initErrorHalt(); <span class="comment">// newly required in 1.01.00 and higher</span></div>
+<div class="line">  <span class="keywordflow">if</span>(<a class="code" href="_file_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e" title="Object instancing the SFEMP3Shield library.">MP3player</a>.<a class="code" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield.">begin</a>() != 0) {Serial.print(F(<span class="stringliteral">&quot;ERROR&quot;</span>));</div>
 <div class="line">...</div>
 </div><!-- fragment --></li>
 </ul>
@@ -367,7 +367,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 20:38:56 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 3 2013 22:53:07 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

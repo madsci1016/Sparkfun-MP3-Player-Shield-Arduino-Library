@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.00</span>
+   &#160;<span id="projectnumber">1.02.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -144,7 +144,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment"> or whant to save 222 bytes of Flash space.</span></div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#if (1)</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span><span class="keywordflow">if</span> (int8_t(<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vol()-&gt;fatType()) == 0) {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor"></span><span class="keywordflow">if</span> (int8_t(<a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vol()-&gt;fatType()) == 0) {</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;If you get this error, you likely do not have a sd.begin in the main sketch, See Trouble Shooting Guide!&quot;</span>));</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;http://mpflaga.github.com/Sparkfun-MP3-Player-Shield-Arduino-Library/#Troubleshooting&quot;</span>));</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
@@ -1318,10 +1318,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l01931"></a><span class="lineno"> 1931</span>&#160;</div>
 <div class="line"><a name="l01932"></a><span class="lineno"> 1932</span>&#160;  <span class="keywordflow">return</span> s;</div>
 <div class="line"><a name="l01933"></a><span class="lineno"> 1933</span>&#160;}</div>
+<div class="line"><a name="l01934"></a><span class="lineno"> 1934</span>&#160;</div>
+<div class="line"><a name="l01943"></a><span class="lineno"><a class="code" href="_s_f_e_m_p3_shield_8h.html#aad4b5cd60700c37983748a6aa387f7f1"> 1943</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_s_f_e_m_p3_shield_8cpp.html#a71871e135b8b08ea601a3302fa4bbe91" title="is the filename music">isFnMusic</a>(<span class="keywordtype">char</span>* filename) {   </div>
+<div class="line"><a name="l01944"></a><span class="lineno"> 1944</span>&#160;  int8_t len = strlen(filename);</div>
+<div class="line"><a name="l01945"></a><span class="lineno"> 1945</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l01946"></a><span class="lineno"> 1946</span>&#160;  <span class="keywordflow">if</span> (  strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.mp3&quot;</span>)</div>
+<div class="line"><a name="l01947"></a><span class="lineno"> 1947</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.aac&quot;</span>)</div>
+<div class="line"><a name="l01948"></a><span class="lineno"> 1948</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.wma&quot;</span>)</div>
+<div class="line"><a name="l01949"></a><span class="lineno"> 1949</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.wav&quot;</span>)</div>
+<div class="line"><a name="l01950"></a><span class="lineno"> 1950</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.fla&quot;</span>)</div>
+<div class="line"><a name="l01951"></a><span class="lineno"> 1951</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.mid&quot;</span>)</div>
+<div class="line"><a name="l01952"></a><span class="lineno"> 1952</span>&#160;    ) {</div>
+<div class="line"><a name="l01953"></a><span class="lineno"> 1953</span>&#160;    result = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01954"></a><span class="lineno"> 1954</span>&#160;  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l01955"></a><span class="lineno"> 1955</span>&#160;    result = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01956"></a><span class="lineno"> 1956</span>&#160;  }</div>
+<div class="line"><a name="l01957"></a><span class="lineno"> 1957</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l01958"></a><span class="lineno"> 1958</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 20:38:55 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 3 2013 22:53:06 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

@@ -8,7 +8,7 @@ var searchData=
   ['mp3_5fxcs',['MP3_XCS',['../_s_f_e_m_p3_shield_config_8h.html#aa37859adf05cbfc9aa03bbd4fdbc4f20',1,'SFEMP3ShieldConfig.h']]],
   ['mp3_5fxdcs',['MP3_XDCS',['../_s_f_e_m_p3_shield_config_8h.html#aafbb2c3ede0f64728c04d7e835d25423',1,'SFEMP3ShieldConfig.h']]],
   ['mp3databuffer',['mp3DataBuffer',['../class_s_f_e_m_p3_shield.html#ab1027c13d5feef5d3b928f4d53e1f602',1,'SFEMP3Shield']]],
-  ['mp3player',['MP3player',['../_m_p3_shield___library___demo_8ino.html#ab3c96aa4b0f9d056464804cf754a889e',1,'MP3player():&#160;MP3Shield_Library_Demo.ino'],['../_web_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e',1,'MP3player():&#160;WebPlayer.ino']]],
+  ['mp3player',['MP3player',['../_file_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e',1,'MP3player():&#160;FilePlayer.ino'],['../_m_p3_shield___library___demo_8ino.html#ab3c96aa4b0f9d056464804cf754a889e',1,'MP3player():&#160;MP3Shield_Library_Demo.ino'],['../_web_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e',1,'MP3player():&#160;WebPlayer.ino']]],
   ['mp3readregister',['Mp3ReadRegister',['../class_s_f_e_m_p3_shield.html#a63496f15a18d3f39a49c58699111078c',1,'SFEMP3Shield']]],
   ['mp3readwram',['Mp3ReadWRAM',['../class_s_f_e_m_p3_shield.html#ae21524d33ede24fd0cea7f0cbe108d59',1,'SFEMP3Shield']]],
   ['mp3shield_5flibrary_5fdemo_2eino',['MP3Shield_Library_Demo.ino',['../_m_p3_shield___library___demo_8ino.html',1,'']]],

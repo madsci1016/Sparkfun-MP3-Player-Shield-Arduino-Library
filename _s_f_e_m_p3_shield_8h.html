@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.00</span>
+   &#160;<span id="projectnumber">1.02.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -115,7 +115,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="_s_f_e_m_p3_shield_8h__dep__incl.png" border="0" usemap="#_s_f_e_m_p3_shield_2_s_f_e_m_p3_shield_8hdep" alt=""/></div>
 <map name="_s_f_e_m_p3_shield_2_s_f_e_m_p3_shield_8hdep" id="_s_f_e_m_p3_shield_2_s_f_e_m_p3_shield_8hdep">
-<area shape="rect" id="node3" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver." alt="" coords="5,80,203,136"/><area shape="rect" id="node5" href="_web_player_8ino.html" title="Example sketch of using the MP3Shield Arduino driver to create a webserver." alt="" coords="227,87,405,129"/><area shape="rect" id="node7" href="_s_f_e_m_p3_shield_8cpp.html" title="Code file for the SFEMP3Shield library." alt="" coords="429,95,659,121"/></map>
+<area shape="rect" id="node3" href="_file_player_8ino.html" title="Example sketch of using the MP3Shield Arduino driver." alt="" coords="5,87,179,129"/><area shape="rect" id="node5" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver." alt="" coords="203,80,400,136"/><area shape="rect" id="node7" href="_web_player_8ino.html" title="Example sketch of using the MP3Shield Arduino driver to create a webserver." alt="" coords="424,87,603,129"/><area shape="rect" id="node9" href="_s_f_e_m_p3_shield_8cpp.html" title="Code file for the SFEMP3Shield library." alt="" coords="627,95,856,121"/></map>
 </div>
 </div>
 <p><a href="_s_f_e_m_p3_shield_8h_source.html">Go to the source code of this file.</a></p>
@@ -326,6 +326,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a9ff77b026d5d353ff902b4787e8589aa"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#a9ff77b026d5d353ff902b4787e8589aa">strip_nonalpha_inplace</a> (char *s)</td></tr>
 <tr class="memdesc:a9ff77b026d5d353ff902b4787e8589aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">chomp non printable characters out of string.  <a href="#a9ff77b026d5d353ff902b4787e8589aa"></a><br/></td></tr>
 <tr class="separator:a9ff77b026d5d353ff902b4787e8589aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad4b5cd60700c37983748a6aa387f7f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_8h.html#aad4b5cd60700c37983748a6aa387f7f1">isFnMusic</a> (char *)</td></tr>
+<tr class="memdesc:aad4b5cd60700c37983748a6aa387f7f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">is the filename music  <a href="#aad4b5cd60700c37983748a6aa387f7f1"></a><br/></td></tr>
+<tr class="separator:aad4b5cd60700c37983748a6aa387f7f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -1296,6 +1299,33 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="aad4b5cd60700c37983748a6aa387f7f1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool isFnMusic </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>is the filename music </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>inspects the end of the filename to be of the extension types that VS10xx can decode.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>boolean true indicating that it is music </dd></dl>
+
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01943">1943</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a9ff77b026d5d353ff902b4787e8589aa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1340,14 +1370,14 @@ Variables</h2></td></tr>
 <p>SdFat sd;.</p>
 <p>principal object for handling all SdCard functions. </p>
 
-<p>Definition at line <a class="el" href="_m_p3_shield___library___demo_8ino_source.html#l00042">42</a> of file <a class="el" href="_m_p3_shield___library___demo_8ino_source.html">MP3Shield_Library_Demo.ino</a>.</p>
+<p>Definition at line <a class="el" href="_file_player_8ino_source.html#l00047">47</a> of file <a class="el" href="_file_player_8ino_source.html">FilePlayer.ino</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 20:38:56 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 3 2013 22:53:06 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

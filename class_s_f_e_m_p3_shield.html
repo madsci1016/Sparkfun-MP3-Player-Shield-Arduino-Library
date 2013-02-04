@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.00</span>
+   &#160;<span id="projectnumber">1.02.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -385,7 +385,7 @@ Static Private Attributes</h2></td></tr>
 <p>Set ADMixer's attenuation of input to between -3 and -31 dB otherwise disable. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">-3</td><td>through -31 dB of attentuation.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ADM_volume</td><td>-3 through -31 dB of attentuation.</td></tr>
   </table>
   </dd>
 </dl>
@@ -438,7 +438,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initialize the MP3 Player shield. </p>
-<p>Execute this function before anything else, typically during <a class="el" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup()</a>. It will bring the VS10xx out of reset, initialize the connected pins and then ready the VSdsp for playback, with <a class="el" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a" title="Initialize the VS10xx Audio Decoder Chip.">vs_init()</a>.</p>
+<p>Execute this function before anything else, typically during <a class="el" href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup()</a>. It will bring the VS10xx out of reset, initialize the connected pins and then ready the VSdsp for playback, with <a class="el" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a" title="Initialize the VS10xx Audio Decoder Chip.">vs_init()</a>.</p>
 <dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="class_s_f_e_m_p3_shield.html#aae71cdf0e515efa11d2dba5a1be0036a" title="Disables the MP3 Player shield.">end()</a> for low power mode </dd>
 <dd>
@@ -1395,7 +1395,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">fileName</td><td>pointer of a char array (aka string), contianing the filename </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>(optional) milliseconds from the begining of the file. Only works with mp3 files, otherwise do nothing.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timecode</td><td>(optional) milliseconds from the begining of the file. Only works with mp3 files, otherwise do nothing.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1534,7 +1534,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Resume music from pause at new location. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>(optional) milliseconds from the begining of the file.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timecode</td><td>(optional) milliseconds from the begining of the file.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1595,7 +1595,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Set the current SM_DIFF setting of the VS10xx chip. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">SM_DIFF</td><td>integer value between 0 and 1.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">DiffMode</td><td>integer value between 0 and 1.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1793,7 +1793,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Skips to a duration in the track. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>milliseconds from the current location of the file.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timecode</td><td>offset milliseconds from the current location of the file.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1827,7 +1827,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Skips to a certain point in the track. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>milliseconds from the begining of the file.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timecode</td><td>offset milliseconds from the begining of the file.</td></tr>
   </table>
   </dd>
 </dl>
@@ -2228,7 +2228,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 20:38:56 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 3 2013 22:53:07 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

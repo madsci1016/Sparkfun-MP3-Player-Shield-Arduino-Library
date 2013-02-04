@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.00</span>
+   &#160;<span id="projectnumber">1.02.01</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -106,7 +106,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="_s_f_e_m_p3_shield_8h.html" title="Header file for the SFEMP3Shield library.">SFEMP3Shield.h</a>&gt;</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">//create and name the library object</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e">   35</a></span>&#160;<a class="code" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> <a class="code" href="_m_p3_shield___library___demo_8ino.html#ab3c96aa4b0f9d056464804cf754a889e" title="Object instancing the SFEMP3Shield library.">MP3player</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e">   35</a></span>&#160;<a class="code" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI.">SFEMP3Shield</a> <a class="code" href="_file_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e" title="Object instancing the SFEMP3Shield library.">MP3player</a>;</div>
 <div class="line"><a name="l00036"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">   36</a></span>&#160;<a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593" title="individual bytes">byte</a> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/************ ETHERNET STUFF ************/</span></div>
@@ -116,11 +116,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;EthernetServer <a class="code" href="_web_player_8ino.html#aa26bd0f0bdc5e4c3948e403b7ba4c084">server</a>(80);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">/************ SDCARD STUFF ************/</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302">   45</a></span>&#160;SdFat <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302">   45</a></span>&#160;SdFat <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>;</div>
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#a31c2191bba86f51dee529f998dd5e764">   46</a></span>&#160;SdFile <a class="code" href="_web_player_8ino.html#a31c2191bba86f51dee529f998dd5e764">file</a>;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">   55</a></span>&#160;<span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="_m_p3_shield___library___demo_8ino.html#a4fc01d736fe50cf5b977f755b675f11d" title="Setup the Arduino Chip&#39;s feature for our use.">setup</a>() {</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">   55</a></span>&#160;<span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a>() {</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  Serial.begin(115200);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  Serial.print(F(<span class="stringliteral">&quot;Free RAM: &quot;</span>));</div>
@@ -134,16 +134,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  pinMode(8, OUTPUT);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  digitalWrite(8, LOW); <span class="comment">// put VS1053 into reset</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordflow">if</span>(!<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.begin(9, SPI_HALF_SPEED)) <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.initErrorHalt();</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">if</span> (!<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.chdir(<span class="stringliteral">&quot;/&quot;</span>)) <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.errorHalt(<span class="stringliteral">&quot;sd.chdir&quot;</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordflow">if</span>(!<a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.begin(9, SPI_HALF_SPEED)) <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.initErrorHalt();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">if</span> (!<a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.chdir(<span class="stringliteral">&quot;/&quot;</span>)) <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.errorHalt(<span class="stringliteral">&quot;sd.chdir&quot;</span>);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  Serial.print(F(<span class="stringliteral">&quot;Volume is FAT&quot;</span>));</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  Serial.println(<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vol()-&gt;fatType(),DEC);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  Serial.println(<a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vol()-&gt;fatType(),DEC);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  Serial.println();</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="comment">// list file in root with date and size</span></div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  Serial.println(F(<span class="stringliteral">&quot;Files found in root:&quot;</span>));</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.ls(LS_DATE | LS_SIZE);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.ls(LS_DATE | LS_SIZE);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  Serial.println();</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">//  // Recursive list of all directories</span></div>
@@ -174,9 +174,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  <span class="comment">// and tweaked to print to the client output in html!</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  dir_t p;</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;rewind();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;rewind();</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  client.println(F(<span class="stringliteral">&quot;&lt;ul&gt;&quot;</span>));</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="keywordflow">while</span> (<a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;readDir(&amp;p) &gt; 0) {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="keywordflow">while</span> (<a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;readDir(&amp;p) &gt; 0) {</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="comment">// done if past last used entry</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">if</span> (p.name[0] == DIR_NAME_FREE) <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
@@ -214,9 +214,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="comment">// print modify date/time if requested</span></div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordflow">if</span> (flags &amp; LS_DATE) {</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;       <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;printFatDate(p.lastWriteDate);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;       <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;printFatDate(p.lastWriteDate);</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;       client.print(<span class="charliteral">&#39; &#39;</span>);</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;       <a class="code" href="_m_p3_shield___library___demo_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;printFatTime(p.lastWriteTime);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;       <a class="code" href="_file_player_8ino.html#a15e6b7e1f0fb2d1e0fe1654721bb5302" title="Object instancing the SdFat library.">sd</a>.vwd()-&gt;printFatTime(p.lastWriteTime);</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="comment">// print size if requested</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordflow">if</span> (!DIR_IS_SUBDIR(&amp;p) &amp;&amp; (flags &amp; LS_SIZE)) {</div>
@@ -232,7 +232,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00170"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#a72a591cf0a96cf23c63df5c78712dabe">  170</a></span>&#160;<span class="preprocessor">#define BUFSIZ 100</span></div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#afe461d27b9c48d5921c00d521181f12f">  183</a></span>&#160;<span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="_m_p3_shield___library___demo_8ino.html#afe461d27b9c48d5921c00d521181f12f" title="Main Loop the Arduino Chip.">loop</a>()</div>
+<div class="line"><a name="l00183"></a><span class="lineno"><a class="code" href="_web_player_8ino.html#afe461d27b9c48d5921c00d521181f12f">  183</a></span>&#160;<span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="_file_player_8ino.html#afe461d27b9c48d5921c00d521181f12f" title="Main Loop the Arduino Chip.">loop</a>()</div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;{</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;  <span class="keywordtype">char</span> clientline[<a class="code" href="_web_player_8ino.html#a72a591cf0a96cf23c63df5c78712dabe">BUFSIZ</a>];</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;  <span class="keywordtype">int</span> index = 0;</div>
@@ -484,7 +484,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 30 2013 20:38:55 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 3 2013 22:53:06 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.2
 </small></address>

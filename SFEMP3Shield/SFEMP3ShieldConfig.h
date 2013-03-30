@@ -86,6 +86,20 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  */
 #define GRAVITECH 0 // uncomment if using the Gravitech's MP3-4NANO shield
 
+/**
+ * \def TEENSY2
+ * \brief Macro to configure pins for connecting the Sparkfun shield to a Teensy 2
+ *
+ * You can connect the Sparkfun Mp3 shield to a Teensy 2 with jumper cables on a
+ * breadboard. Teensy SDI pins are CS=0, SCK=1, MOSI=2, MISO=3. If you are using
+ * a Teensy 2 then set TEENSY2 to 1 below and scroll down for pin assignments.
+ *
+ * Set \c TEENSY2 to \c 0 to use on a Gravitech's MP3-4NANO shield
+ *
+ * Set \c TEENSY2 to \c 1 to use on a Gravitech's MP3-4NANO
+ */
+#define TEENSY2 0 // set to 1 if using the Sparkfun Mp3 shield with Teensy 2
+
 //------------------------------------------------------------------------------
 /*
  * MP3 Player Shield pin mapping. See the appropiate schematic
@@ -152,6 +166,17 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
   //#define MP3_DREQINT        0 // There is no IRQ used on Seeduino
   #define MP3_RESET           A0 //Reset is active low
   #define SD_SEL              10 //select pin for SD card
+#elif ( TEENSY2 == 1 )
+  #define MP3_XCS              7
+  #define MP3_XDCS             8
+  #define MP3_DREQ             4
+  #define MP3_DREQINT          1
+  #define MP3_RESET            9
+  #define SD_SEL               0 // Teensy SDI CS on pin 0
+  // Connect SDI pins as follows:
+  // Sparkfun shield 11 -> Teensy 2 (mosi)
+  // Sparkfun shield 12 -> Teensy 3 (miso)
+  // Sparkfun shield 13 -> Teensy 1 (sck)
 #else // otherwise use pinout of typical Sparkfun MP3 Player Shield.
   #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
   #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin

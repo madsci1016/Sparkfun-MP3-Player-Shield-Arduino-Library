@@ -11,7 +11,7 @@ var searchData=
   ['para_5fpositionmsec_5f1',['para_positionMsec_1',['../_s_f_e_m_p3_shield_8h.html#af1e9ff94ad9a684e10252866f0097480',1,'SFEMP3Shield.h']]],
   ['para_5fresync',['para_resync',['../_s_f_e_m_p3_shield_8h.html#ab709a4c7ea09adabf0dbe1b100e2874d',1,'SFEMP3Shield.h']]],
   ['para_5fversion',['para_version',['../_s_f_e_m_p3_shield_8h.html#ad9d42f71b6e9f419f395e62957f065f0',1,'SFEMP3Shield.h']]],
-  ['parse_5fmenu',['parse_menu',['../_file_player_8ino.html#a5cf3f5b5058bbd17aa0201c371163fb0',1,'parse_menu(byte key_command):&#160;FilePlayer.ino'],['../_m_p3_shield___library___demo_8ino.html#a5cf3f5b5058bbd17aa0201c371163fb0',1,'parse_menu(byte key_command):&#160;MP3Shield_Library_Demo.ino']]],
+  ['parse_5fmenu',['parse_menu',['../_file_player_8ino.html#a5cf3f5b5058bbd17aa0201c371163fb0',1,'parse_menu(byte key_command):&#160;FilePlayer.ino'],['../_m_p3_shield___library___demo_8ino.html#a5cf3f5b5058bbd17aa0201c371163fb0',1,'parse_menu(byte key_command):&#160;MP3Shield_Library_Demo.ino'],['../_track_player_8ino.html#a5cf3f5b5058bbd17aa0201c371163fb0',1,'parse_menu(byte key_command):&#160;TrackPlayer.ino']]],
   ['paused_5fplayback',['paused_playback',['../_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73ad6fb9fe07b40336b61440664404f2c37',1,'SFEMP3Shield.h']]],
   ['pausedatastream',['pauseDataStream',['../class_s_f_e_m_p3_shield.html#a077360a1036cf9c5cea1c1fe0657fec3',1,'SFEMP3Shield']]],
   ['pausemusic',['pauseMusic',['../class_s_f_e_m_p3_shield.html#a74a4d899de677cc4f7d1be837a321857',1,'SFEMP3Shield']]],

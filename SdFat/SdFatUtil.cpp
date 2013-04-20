@@ -17,11 +17,14 @@
  * along with the Arduino SdFat Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
+#include <stdlib.h>
 #include <SdFat.h>
 #include <SdFatUtil.h>
 #ifdef __arm__
 // should use uinstd.h to define sbrk but Due causes a conflict
 extern "C" char* sbrk(int incr);
+#else  // __ARM__
+extern char *__brkval;
 #endif  // __arm__
 //------------------------------------------------------------------------------
 /** Amount of free RAM
@@ -31,9 +34,9 @@ int SdFatUtil::FreeRam() {
   char top;
 #ifdef __arm__
   return &top - reinterpret_cast<char*>(sbrk(0));
+#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
+  return &top - __brkval;
 #else  // __arm__
-  extern char *__malloc_heap_start;
-  extern char *__brkval;
   return __brkval ? &top - __brkval : &top - __malloc_heap_start;
 #endif  // __arm__
 }

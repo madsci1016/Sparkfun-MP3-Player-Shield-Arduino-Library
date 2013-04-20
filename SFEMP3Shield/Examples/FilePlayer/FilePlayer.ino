@@ -142,17 +142,18 @@ void loop() {
   char inByte;
   if (Serial.available() > 0) {
     inByte = Serial.read();
-    if (isDigit(inByte)) { // macro for ((inByte >= '0') && (inByte <= '9'))
-      // else if it is a number, add it to the string
-      buffer[buffer_pos++] = inByte;
-    } else {
-      // input char is a letter command
-      buffer_pos = 0;
-      parse_menu(inByte);
+    if ((0x20 <= inByte) && (inByte <= 0x126)) { // strip off non-ASCII, such as CR or LF
+      if (isDigit(inByte)) { // macro for ((inByte >= '0') && (inByte <= '9'))
+        // else if it is a number, add it to the string
+        buffer[buffer_pos++] = inByte;
+      } else {
+        // input char is a letter command
+        buffer_pos = 0;
+        parse_menu(inByte);
+      }
+      buffer[buffer_pos] = 0; // update end of line
+      last_ms_char = millis(); // stroke the inter character timeout.
     }
-    buffer[buffer_pos] = 0; // update end of line
-    last_ms_char = millis(); // stroke the inter character timeout.
-
   } else if ((millis() - last_ms_char) > 500 && ( buffer_pos > 0 )) {
     // ICT expired and have something
     if (buffer_pos == 1) {

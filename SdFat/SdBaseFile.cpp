@@ -1233,6 +1233,75 @@ void SdBaseFile::printFatTime(Print* pr, uint16_t fatTime) {
   print2u(pr, FAT_SECOND(fatTime));
 }
 //------------------------------------------------------------------------------
+/** Template for SdBaseFile::printField() */
+template <typename Type>
+static int printFieldT(SdBaseFile* file, char sign, Type value, char term) {
+  char buf[3*sizeof(Type) + 3];
+  char* str = &buf[sizeof(buf)];
+
+  if (term) {
+    *--str = term;
+    if (term == '\n') {
+      *--str = '\r';
+    }
+  }
+  do {
+    Type m = value;
+    value /= 10;
+    *--str = '0' + m - 10*value;
+  } while (value);
+  if (sign) {
+    *--str = sign;
+  }
+  return file->write(str, &buf[sizeof(buf)] - str);
+}
+//------------------------------------------------------------------------------
+/** Print a number followed by a field terminator.
+ * \param[in] value The number to be printed.
+ * \param[in] term The field terminator.  Use '\\n' for CR LF.
+ * \return The number of bytes written or -1 if an error occurs.
+ */
+int SdBaseFile::printField(uint16_t value, char term) {
+  return printFieldT(this, 0, value, term);
+}
+//------------------------------------------------------------------------------
+/** Print a number followed by a field terminator.
+ * \param[in] value The number to be printed.
+ * \param[in] term The field terminator.  Use '\\n' for CR LF.
+ * \return The number of bytes written or -1 if an error occurs.
+ */
+int SdBaseFile::printField(int16_t value, char term) {
+  char sign = 0;
+  if (value < 0) {
+    sign = '-';
+    value = -value;
+  }
+  return printFieldT(this, sign, (uint16_t)value, term);
+}
+//------------------------------------------------------------------------------
+/** Print a number followed by a field terminator.
+ * \param[in] value The number to be printed.
+ * \param[in] term The field terminator.  Use '\\n' for CR LF.
+ * \return The number of bytes written or -1 if an error occurs.
+ */
+int SdBaseFile::printField(uint32_t value, char term) {
+  return printFieldT(this, 0, value, term);
+}
+//------------------------------------------------------------------------------
+/** Print a number followed by a field terminator.
+ * \param[in] value The number to be printed.
+ * \param[in] term The field terminator.  Use '\\n' for CR LF.
+ * \return The number of bytes written or -1 if an error occurs.
+ */
+int SdBaseFile::printField(int32_t value, char term) {
+  char sign = 0;
+  if (value < 0) {
+    sign = '-';
+    value = -value;
+  }
+  return printFieldT(this, sign, (uint32_t)value, term);
+}
+//------------------------------------------------------------------------------
 /** Print a file's modify date and time
  *
  * \param[in] pr Print stream for output.

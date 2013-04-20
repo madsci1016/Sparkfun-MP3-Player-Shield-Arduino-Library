@@ -25,7 +25,7 @@
  */
 //------------------------------------------------------------------------------
 /** SdFat version YYYYMMDD */
-#define SD_FAT_VERSION 20121219
+#define SD_FAT_VERSION 20130313
 //------------------------------------------------------------------------------
 /** error if old IDE */
 #if !defined(ARDUINO) || ARDUINO < 100
@@ -75,12 +75,10 @@ class SdFat {
   void errorHalt();
   void errorHalt(char const *msg);
   void errorPrint();
-
   void errorPrint(char const *msg);
   bool exists(const char* name);
   bool begin(uint8_t chipSelectPin = SD_CHIP_SELECT_PIN,
     uint8_t sckRateID = SPI_FULL_SPEED);
-    
   void initErrorHalt();
   void initErrorHalt(char const *msg);
   void initErrorPrint();

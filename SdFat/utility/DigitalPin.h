@@ -1,7 +1,7 @@
-/* Arduino DigitalPin Library
- * Copyright (C) 2012 by William Greiman
+/* Arduino DigitalIO Library
+ * Copyright (C) 2013 by William Greiman
  *
- * This file is part of the Arduino DigitalPin Library
+ * This file is part of the Arduino DigitalIO Library
  *
  * This Library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,24 +14,25 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with the Arduino DigitalPin Library.  If not, see
+ * along with the Arduino DigitalIO Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
 /**
- * \file
- * \brief DigitalPin class
+ * @file
+ * @brief Fast Digital Pin functions
+ *
+ * @defgroup digitalPin Fast Pin I/O
+ * @details  Fast Digital I/O functions and template class.
+ * @{
  */
 #ifndef DigitalPin_h
 #define DigitalPin_h
 #include <avr/io.h>
 #include <util/atomic.h>
 //------------------------------------------------------------------------------
-/** DigitalPin version YYYYMMDD */
-#define DIGITAL_PIN_VERSION 20120719
-//------------------------------------------------------------------------------
 /**
- * \class pin_map_t
- * \brief struct for mapping digital pins
+ * @class pin_map_t
+ * @brief struct for mapping digital pins
  */
 struct pin_map_t {
   volatile uint8_t* ddr;   /**< address of DDR for this pin */
@@ -143,10 +144,15 @@ static const pin_map_t pinMap[] = {
   {&DDRK, &PINK, &PORTK, 7}   // K7 69
 };
 //------------------------------------------------------------------------------
-#elif defined(__AVR_ATmega644P__)\
+#elif defined(__AVR_ATmega1284P__)\
+|| defined(__AVR_ATmega1284__)\
+|| defined(__AVR_ATmega644P__)\
 || defined(__AVR_ATmega644__)\
-|| defined(__AVR_ATmega1284P__)
-// Sanguino
+|| defined(__AVR_ATmega64__)\
+|| defined(__AVR_ATmega32__)\
+|| defined(__AVR_ATmega324__)\
+|| defined(__AVR_ATmega16__)
+// Mighty Layout
 static const pin_map_t pinMap[] = {
   {&DDRB, &PINB, &PORTB, 0},  // B0  0
   {&DDRB, &PINB, &PORTB, 1},  // B1  1
@@ -172,14 +178,14 @@ static const pin_map_t pinMap[] = {
   {&DDRC, &PINC, &PORTC, 5},  // C5 21
   {&DDRC, &PINC, &PORTC, 6},  // C6 22
   {&DDRC, &PINC, &PORTC, 7},  // C7 23
-  {&DDRA, &PINA, &PORTA, 7},  // A7 24
-  {&DDRA, &PINA, &PORTA, 6},  // A6 25
-  {&DDRA, &PINA, &PORTA, 5},  // A5 26
-  {&DDRA, &PINA, &PORTA, 4},  // A4 27
-  {&DDRA, &PINA, &PORTA, 3},  // A3 28
-  {&DDRA, &PINA, &PORTA, 2},  // A2 29
-  {&DDRA, &PINA, &PORTA, 1},  // A1 30
-  {&DDRA, &PINA, &PORTA, 0}   // A0 31
+  {&DDRA, &PINA, &PORTA, 0},  // A0 24
+  {&DDRA, &PINA, &PORTA, 1},  // A1 25
+  {&DDRA, &PINA, &PORTA, 2},  // A2 26
+  {&DDRA, &PINA, &PORTA, 3},  // A3 27
+  {&DDRA, &PINA, &PORTA, 4},  // A4 28
+  {&DDRA, &PINA, &PORTA, 5},  // A5 29
+  {&DDRA, &PINA, &PORTA, 6},  // A6 30
+  {&DDRA, &PINA, &PORTA, 7}   // A7 31
 };
 //------------------------------------------------------------------------------
 #elif defined(__AVR_ATmega32U4__)
@@ -307,197 +313,206 @@ static const pin_map_t pinMap[] = {
 /** count of pins */
 static const uint8_t digitalPinCount = sizeof(pinMap)/sizeof(pin_map_t);
 //==============================================================================
-/** generate bad pin number error
- * \return Never called so never returns
- */
-uint8_t badPinNumber(void)
+/** generate bad pin number error */
+void badPinNumber(void)
   __attribute__((error("Pin number is too large or not a constant")));
 //------------------------------------------------------------------------------
-/** fast write helper
- * \param[in] address I/O register address
- * \param[in] bit bit number to write
- * \param[in] level value for bit
+/** Check for valid pin number
+ * @param[in] pin Number of pin to be checked.
  */
 static inline __attribute__((always_inline))
-  void fastBitWrite(volatile uint8_t* address, uint8_t bit, bool level) {
-  if (level) {
-    *address |= 1 << bit;
-  } else {
-    *address &= ~(1 << bit);
+void badPinCheck(uint8_t pin) {
+  if (!__builtin_constant_p(pin) || pin >= digitalPinCount) {
+     badPinNumber();
   }
 }
 //------------------------------------------------------------------------------
 /** fast write helper
- * \param[in] address I/O register address
- * \param[in] bit bit number to write
- * \param[in] level value for bit
+ * @param[in] address I/O register address
+ * @param[in] bit bit number to write
+ * @param[in] level value for bit
  */
 static inline __attribute__((always_inline))
-  void fastBitWriteSafe(volatile uint8_t* address, uint8_t bit, bool level) {
+void fastBitWriteSafe(volatile uint8_t* address, uint8_t bit, bool level) {
   uint8_t oldSREG;
   if (address > (uint8_t*)0X5F) {
     oldSREG = SREG;
     cli();
   }
-  fastBitWrite(address, bit, level);
+  if (level) {
+    *address |= 1 << bit;
+  } else {
+    *address &= ~(1 << bit);
+  }
   if (address > (uint8_t*)0X5F) {
     SREG = oldSREG;
   }
 }
 //------------------------------------------------------------------------------
-/** set pin mode
- * \param[in] pin Arduino pin number
- * \param[in] mode if true set write mode else read mode
+/** read pin value
+ * @param[in] pin Arduino pin number
+ * @return value read
  */
 static inline __attribute__((always_inline))
-  void fastPinMode(uint8_t pin, bool mode) {
-  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
-    fastBitWriteSafe(pinMap[pin].ddr,
-      pinMap[pin].bit, mode);
-  } else {
-    badPinNumber();
-  }
+bool fastDigitalRead(uint8_t pin) {
+  badPinCheck(pin);
+  return (*pinMap[pin].pin >> pinMap[pin].bit) & 1;
 }
 //------------------------------------------------------------------------------
-/** read pin value
- * \param[in] pin Arduino pin number
- * \return value read
+/** toggle a pin
+ * @param[in] pin Arduino pin number
+ *
+ * If the pin is in output mode toggle the pin level.
+ * If the pin is in input mode toggle the state of the 20K pullup.
  */
 static inline __attribute__((always_inline))
-  bool fastDigitalRead(uint8_t pin) {
-  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
-    return (*pinMap[pin].pin >> pinMap[pin].bit) & 1;
-  } else {
-    return badPinNumber();
-  }
+void fastDigitalToggle(uint8_t pin) {
+  badPinCheck(pin);
+    if (pinMap[pin].pin > (uint8_t*)0X5F) {
+      // must write bit to high address port
+      *pinMap[pin].pin = 1 << pinMap[pin].bit;
+    } else {
+      // will compile to sbi and PIN register will not be read.
+      *pinMap[pin].pin |= 1 << pinMap[pin].bit;
+    }
 }
 //------------------------------------------------------------------------------
 /** Set pin value
- * \param[in] pin Arduino pin number
- * \param[in] level value to write
+ * @param[in] pin Arduino pin number
+ * @param[in] level value to write
  */
 static inline __attribute__((always_inline))
-  void fastDigitalWrite(uint8_t pin, bool level) {
-  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
-    fastBitWriteSafe(pinMap[pin].port, pinMap[pin].bit, level);
-  } else {
-    badPinNumber();
-  }
+void fastDigitalWrite(uint8_t pin, bool level) {
+  badPinCheck(pin);
+  fastBitWriteSafe(pinMap[pin].port, pinMap[pin].bit, level);
 }
 //------------------------------------------------------------------------------
-/** Set pin value in ISR
- * \param[in] pin Arduino pin number
- * \param[in] level value to write
+/** set pin mode
+ * @param[in] pin Arduino pin number
+ * @param[in] mode if true set output mode else input mode
+ *
+ * fastPinMode does not enable or disable the 20K pullup for input mode.
  */
 static inline __attribute__((always_inline))
-  void fastDigitalWriteISR(uint8_t pin, bool level) {
-  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
-    fastBitWrite(pinMap[pin].port, pinMap[pin].bit, level);
-  } else {
-    badPinNumber();
-  }
+void fastPinMode(uint8_t pin, bool mode) {
+  badPinCheck(pin);
+  fastBitWriteSafe(pinMap[pin].ddr, pinMap[pin].bit, mode);
+}
+//------------------------------------------------------------------------------
+/** set pin configuration
+ * @param[in] pin Arduino pin number
+ * @param[in] mode If true set output mode else input mode
+ * @param[in] level If mode is output, set level high/low.
+ *                  If mode is input, enable or disable the pin's 20K pullup.
+ */
+static inline __attribute__((always_inline))
+void fastPinConfig(uint8_t pin, bool mode, bool level) {
+  fastPinMode(pin, mode);
+  fastDigitalWrite(pin, level);
 }
 //==============================================================================
 /**
- * \class DigitalPin
- * \brief digital avr port I/O
+ * @class DigitalPin
+ * @brief Fast AVR digital port I/O
  */
 template<uint8_t PinNumber>
 class DigitalPin {
  public:
   //----------------------------------------------------------------------------
+  /** Constructor */
+  DigitalPin() {}
+  //----------------------------------------------------------------------------
+  /** Constructor
+   * @param[in] pinMode if true set output mode else input mode.
+   */
+  explicit DigitalPin(bool pinMode) {
+    mode(pinMode);
+  }
+  //----------------------------------------------------------------------------
+  /** Constructor
+   * @param[in] mode If true set output mode else input mode
+   * @param[in] level If mode is output, set level high/low.
+   *                  If mode is input, enable or disable the pin's 20K pullup.
+   */
+  DigitalPin(bool mode, bool level) {
+    config(mode, level);
+  }
+  //----------------------------------------------------------------------------
+  /** Asignment operator
+   * @param[in] value If true set the pin's level high else set the
+   *  pin's level low.
+   *
+   * @return This DigitalPin instance.
+   */
+  inline DigitalPin & operator = (bool value) __attribute__((always_inline)) {
+    write(value);
+    return *this;
+  }
+  //----------------------------------------------------------------------------
+  /** Parenthesis operator
+   * @return Pin's level
+   */
+	inline operator bool () const __attribute__((always_inline)) {
+    return read();
+  }
+  //----------------------------------------------------------------------------
+  /** set pin configuration
+   * @param[in] mode If true set output mode else input mode
+   * @param[in] level If mode is output, set level high/low.
+   *                  If mode is input, enable or disable the pin's 20K pullup.
+   */
+  inline __attribute__((always_inline))
+  void config(bool mode, bool level) {
+    fastPinConfig(PinNumber, mode, level);
+  }
+  //----------------------------------------------------------------------------
   /**
    * Set pin level high if output mode or enable 20K pullup if input mode.
    */
+  inline __attribute__((always_inline))
   void high() {write(true);}
-  //----------------------------------------------------------------------------
-  /** Set the pin mode to input. */
-  void inputMode() {
-    if ((uint16_t)pinMap[PinNumber].ddr > 0X5F) {
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        isrInputMode();
-      }
-    } else {
-      isrInputMode();
-    }
-  }
-  //----------------------------------------------------------------------------
-  /** Set the pin mode to input.
-   * \param[in] pullup If true enable the pin's pullup else disable the pullup.
-   */
-  void inputMode(bool pullup) {
-    if ((uint16_t)pinMap[PinNumber].ddr > 0X5F) {
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        isrInputMode(pullup);
-      }
-    } else {
-      isrInputMode(pullup);
-    }
-  }
   //----------------------------------------------------------------------------
   /**
    * Set pin level low if output mode or disable 20K pullup if input mode.
    */
+  inline __attribute__((always_inline))
   void low() {write(false);}
   //----------------------------------------------------------------------------
-  /** Set the pin's mode to output */
-  void outputMode() {
-    if ((uint16_t)pinMap[PinNumber].ddr > 0X5F) {
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        isrOutputMode();
-      }
-    } else {
-      isrOutputMode();
-    }
+  /**
+   * Set pin mode
+   * @param[in] pinMode if true set output mode else input mode.
+   *
+   * mode() does not enable or disable the 20K pullup for input mode.
+   */
+  inline __attribute__((always_inline))
+  void mode(bool pinMode) {
+    fastPinMode(PinNumber, pinMode);
   }
   //----------------------------------------------------------------------------
-  /** \return Pin's level */
-  bool read() {
-    return *pinMap[PinNumber].pin & (1 << pinMap[PinNumber].bit);
+  /** @return Pin's level */
+  inline __attribute__((always_inline))
+  bool read() const {
+    return fastDigitalRead(PinNumber);
+  }
+  //----------------------------------------------------------------------------
+  /** toggle a pin
+   *
+   * If the pin is in output mode toggle the pin's level.
+   * If the pin is in input mode toggle the state of the 20K pullup.
+   */
+  inline __attribute__((always_inline))
+  void toggle() {
+    fastDigitalToggle(PinNumber);
   }
   //----------------------------------------------------------------------------
   /** Write the pin's level.
-   * \param[in] value If true set the pin's level high else set the
+   * @param[in] value If true set the pin's level high else set the
    *  pin's level low.
    */
+  inline __attribute__((always_inline))
   void write(bool value) {
-    if ((uint16_t)pinMap[PinNumber].port > 0X5F) {
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        isrWrite(value);
-      }
-    } else {
-      isrWrite(value);
-    }
-  }
- private:
-  //----------------------------------------------------------------------------
-  void isrHigh() {
-    *pinMap[PinNumber].port |= 1 << pinMap[PinNumber].bit;
-  }
-  //----------------------------------------------------------------------------
-  void isrInputMode() {
-    *pinMap[PinNumber].ddr &= ~(1 << pinMap[PinNumber].bit);
-  }
-  //----------------------------------------------------------------------------
-  void isrInputMode(bool pullup) {
-    isrInputMode();
-    isrWrite(pullup);
-  }
-  //----------------------------------------------------------------------------
-  void isrLow() {
-    *pinMap[PinNumber].port &= ~(1 << pinMap[PinNumber].bit);
-  }
-  //----------------------------------------------------------------------------
-  void isrOutputMode() {
-    *pinMap[PinNumber].ddr |= 1 << pinMap[PinNumber].bit;
-  }
-  //----------------------------------------------------------------------------
-  void isrWrite(bool value) {
-    if (value) {
-      isrHigh();
-    } else {
-      isrLow();
-    }
+    fastDigitalWrite(PinNumber, value);
   }
 };
 #endif  // DigitalPin_h
+/** @} */

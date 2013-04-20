@@ -296,49 +296,60 @@ static void spiSend(const uint8_t* buf, size_t len) {
 #ifndef SPI_PUSHR_CTAS
 #define SPI_PUSHR_CTAS(n) (((n) & 7) << 28)
 #endif  // SPI_PUSHR_CTAS
+
 //------------------------------------------------------------------------------
 /**
  * initialize SPI pins
  */
 static void spiBegin() {
-  // dummy - all is done in spiInit()
+  SIM_SCGC6 |= SIM_SCGC6_SPI0;
 }
 //------------------------------------------------------------------------------
 /**
  * Initialize hardware SPI
- * Set SCK rate to F_CPU/pow(2, 1 + spiRate) for spiRate [0,6]
+ *
  */
 static void spiInit(uint8_t spiRate) {
-  SIM_SCGC6 |= SIM_SCGC6_SPI0;
-  SPI0_MCR = SPI_MCR_MDIS | SPI_MCR_HALT;
   // spiRate = 0 or 1 : 24 or 12 Mbit/sec
   // spiRate = 2 or 3 : 12 or 6 Mbit/sec
   // spiRate = 4 or 5 : 6 or 3 Mbit/sec
-  // spiRate = 6 or 7 : 3 or 1.5 Mbit/sec
-  // spiRate = 8 or 9 : 1.5 or 0.75 Mbit/sec
+  // spiRate = 6 or 7 : 4 or 2.0 Mbit/sec
+  // spiRate = 8 or 9 : 3 or 1.5 Mbit/sec
   // spiRate = 10 or 11 : 250 kbit/sec
   // spiRate = 12 or more : 125 kbit/sec
-  uint32_t ctar;
+  uint32_t ctar, ctar0, ctar1;
   switch (spiRate/2) {
-    case 0: ctar = SPI_CTAR_DBR | SPI_CTAR_BR(0); break;
-    case 1: ctar = SPI_CTAR_BR(0); break;
-    case 2: ctar = SPI_CTAR_BR(1); break;
-    case 3: ctar = SPI_CTAR_BR(2); break;
-    case 4: ctar = SPI_CTAR_BR(3); break;
+    // 1/2 speed
+    case 0: ctar = SPI_CTAR_DBR | SPI_CTAR_BR(0) | SPI_CTAR_CSSCK(0); break;
+    // 1/4 speed
+    case 1: ctar = SPI_CTAR_BR(0) | SPI_CTAR_CSSCK(0); break;
+    // 1/8 speed
+    case 2: ctar = SPI_CTAR_BR(1) | SPI_CTAR_CSSCK(1); break;
+    // 1/12 speed
+    case 3: ctar = SPI_CTAR_BR(2) | SPI_CTAR_CSSCK(2); break;
+    // 1/16 speed
+    case 4: ctar = SPI_CTAR_BR(3) | SPI_CTAR_CSSCK(3); break;
 #if F_BUS == 48000000
-    case 5: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(5); break;
-    default: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(6);
+    case 5: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(5) | SPI_CTAR_CSSCK(5); break;
+    default: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(6) | SPI_CTAR_CSSCK(6);
 #elif F_BUS == 24000000
-    case 5: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(4); break;
-    default: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(5);
+    case 5: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(4) | SPI_CTAR_CSSCK(4); break;
+    default: ctar = SPI_CTAR_PBR(1) | SPI_CTAR_BR(5) | SPI_CTAR_CSSCK(5);
 #else
 #error "MK20DX128 bus frequency must be 48 or 24 MHz"
 #endif
   }
+
   // CTAR0 - 8 bit transfer
-  SPI0_CTAR0 = ctar | SPI_CTAR_FMSZ(7);
+  ctar0 = ctar | SPI_CTAR_FMSZ(7);
   // CTAR1 - 16 bit transfer
-  SPI0_CTAR1 = ctar | SPI_CTAR_FMSZ(15);
+  ctar1 = ctar | SPI_CTAR_FMSZ(15);
+
+  if (SPI0_CTAR0 != ctar0 || SPI0_CTAR1 != ctar1) {
+    SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_MDIS | SPI_MCR_HALT;
+    SPI0_CTAR0 = ctar0;
+    SPI0_CTAR1 = ctar1;
+  }
   SPI0_MCR = SPI_MCR_MSTR;
   CORE_PIN11_CONFIG = PORT_PCR_DSE | PORT_PCR_MUX(2);
   CORE_PIN12_CONFIG = PORT_PCR_MUX(2);
@@ -347,9 +358,10 @@ static void spiInit(uint8_t spiRate) {
 //------------------------------------------------------------------------------
 /** SPI receive a byte */
 static  uint8_t spiRec() {
-  SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_CLR_RXF;
+  SPI0_MCR |= SPI_MCR_CLR_RXF;
+  SPI0_SR = SPI_SR_TCF;
   SPI0_PUSHR = 0xFF;
-  while (!(SPI0_SR & SPI_SR_RXCTR)) {}
+  while (!(SPI0_SR & SPI_SR_TCF)) {}
   return SPI0_POPR;
 }
 //------------------------------------------------------------------------------
@@ -410,10 +422,10 @@ static uint8_t spiRec(uint8_t* buf, size_t len) {
 //------------------------------------------------------------------------------
 /** SPI send a byte */
 static void spiSend(uint8_t b) {
-  SPI0_MCR = SPI_MCR_MSTR | SPI_MCR_CLR_RXF;
+  SPI0_MCR |= SPI_MCR_CLR_RXF;
+  SPI0_SR = SPI_SR_TCF;
   SPI0_PUSHR = b;
-  while (!(SPI0_SR & SPI_SR_RXCTR)) {}
-  SPI0_POPR;  // not required?
+  while (!(SPI0_SR & SPI_SR_TCF)) {}
 }
 //------------------------------------------------------------------------------
 /** SPI send multiple bytes */
@@ -1084,7 +1096,6 @@ bool Sd2Card::writeBlock(uint32_t blockNumber, const uint8_t* src) {
     goto fail;
   }
   if (!writeData(DATA_START_BLOCK, src)) goto fail;
-
   // wait for flash programming to complete
   if (!waitNotBusy(SD_WRITE_TIMEOUT)) {
     error(SD_CARD_ERROR_WRITE_TIMEOUT);

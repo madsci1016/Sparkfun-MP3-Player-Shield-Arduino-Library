@@ -8,9 +8,7 @@
 const uint8_t chipSelect = SS;
 
 // number of lines to print
-#define N_PRINT 20000
-
-#define PRINT_DOUBLE false
+const uint16_t N_PRINT = 20000;
 
 // file system
 SdFat sd;
@@ -26,7 +24,9 @@ ArduinoOutStream cout(Serial);
 //------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
-  while (!Serial) {}  // wait for Leonardo
+  while (!Serial) {
+    // wait for Leonardo
+  }
 }
 //------------------------------------------------------------------------------
 void loop() {
@@ -34,10 +34,12 @@ void loop() {
   uint32_t minLatency;
   uint32_t totalLatency;
 
-  while (Serial.read() >= 0) {}
+  while (Serial.read() >= 0) {
+  }
   // pstr stores strings in flash to save RAM
   cout << pstr("Type any character to start\n");
-  while (Serial.read() <= 0) {}
+  while (Serial.read() <= 0) {
+  }
   delay(400);  // catch Due reset problem
 
   cout << pstr("Free RAM: ") << FreeRam() << endl;
@@ -51,40 +53,67 @@ void loop() {
   // open or create file - truncate existing file.
   if (!file.open("BENCH.TXT", O_CREAT | O_TRUNC | O_RDWR)) {
     error("open failed");
-  }  
-  cout << pstr("Starting print test.  Please wait.\n");
+  }
+  cout << pstr("Starting print test.  Please wait.\n\n");
 
   // do write test
+  for (int test = 0; test < 3; test++) {
 
-  maxLatency = 0;
-  minLatency = 999999;
-  totalLatency = 0;
-  uint32_t t = millis();
-  for (uint32_t i = 0; i < N_PRINT; i++) {
-    uint32_t m = micros();
-#if PRINT_DOUBLE
-    file.println((double)0.01*i);
-#else  // PRINT_DOUBLE
-    file.println(i);
-#endif  // PRINT_DOUBLW
-   if (file.writeError) {
-      error("write failed");
+    switch(test) {
+    case 0:
+      cout << pstr("Test of println(uint16_t)\n");
+      break;
+
+    case 1:
+      cout << pstr("Test of printField(uint16_t, char)\n");
+      break;
+
+    case 2:
+      cout << pstr("Test of println(double)\n");
+      break;
     }
-    m = micros() - m;
-    if (maxLatency < m) maxLatency = m;
-    if (minLatency > m) minLatency = m;
-    totalLatency += m;
+    file.truncate(0);
+    maxLatency = 0;
+    minLatency = 999999;
+    totalLatency = 0;
+    uint32_t t = millis();
+    for (uint16_t i = 0; i < N_PRINT; i++) {
+      uint32_t m = micros();
+
+      switch(test) {
+      case 0:
+        file.println(i);
+        break;
+
+      case 1:
+        file.printField(i, '\n');
+        break;
+
+      case 2:
+        file.println((double)0.01*i);
+        break;
+      }
+
+      if (file.writeError) {
+        error("write failed");
+      }
+      m = micros() - m;
+      if (maxLatency < m) maxLatency = m;
+      if (minLatency > m) minLatency = m;
+      totalLatency += m;
+    }
+    file.sync();
+    t = millis() - t;
+    double s = file.fileSize();
+    cout << pstr("Time ") << 0.001*t << pstr(" sec\n");
+    cout << pstr("File size ") << 0.001*s << pstr(" KB\n");
+    cout << pstr("Write ") << s/t << pstr(" KB/sec\n");
+    cout << pstr("Maximum latency: ") << maxLatency;
+    cout << pstr(" usec, Minimum Latency: ") << minLatency;
+    cout << pstr(" usec, Avg Latency: ");
+    cout << totalLatency/N_PRINT << pstr(" usec\n\n");
   }
-  file.sync();
-  t = millis() - t;
-  double s = file.fileSize();
-  cout << pstr("Time ") << 0.001*t << pstr(" sec\n");
-  cout << pstr("File size ") << 0.001*s << pstr("KB\n");
-  cout << pstr("Write ") << s/t << pstr(" KB/sec\n");
-  cout << pstr("Maximum latency: ") << maxLatency;
-  cout << pstr(" usec, Minimum Latency: ") << minLatency;
-  cout << pstr(" usec, Avg Latency: ") << totalLatency/N_PRINT << pstr(" usec\n\n");
- 
   file.close();
   cout << pstr("Done!\n\n");
 }
+

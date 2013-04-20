@@ -313,6 +313,10 @@ class SdBaseFile {
   static void printFatDate(Print* pr, uint16_t fatDate);
   static void printFatTime(uint16_t fatTime);
   static void printFatTime(Print* pr, uint16_t fatTime);
+  int printField(int16_t value, char term);
+  int printField(uint16_t value, char term);
+  int printField(int32_t value, char term);
+  int printField(uint32_t value, char term);
   bool printModifyDateTime(Print* pr);
   bool printName();
   bool printName(Print* pr);
@@ -515,7 +519,7 @@ class SdBaseFile {
     *date = d;
     *time = t;
   }
-#elif !defined(DOXYGEN) // ALLOW_DEPRECATED_FUNCTIONS
+#elif !defined(DOXYGEN)  // ALLOW_DEPRECATED_FUNCTIONS
 
  public:
   bool contiguousRange(uint32_t& bgnBlock, uint32_t& endBlock)  // NOLINT

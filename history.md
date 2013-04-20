@@ -1,6 +1,11 @@
 Revision History
 ---------------
 
+## 1.02.02
+* updated SdFatLib to sdfatlib20130313
+* added const to PROGMEM uint16_t bitrate_table for avr-gcc 4.7.2 compatibility
+* added ASCII range check to strip off non-ASCII, such as CR or LF, on FilePlayer.ino
+
 ## 1.02.01
 * added new example FilePlayer.ino, more elaborate command to play all files.
 * updated ram usage prints.

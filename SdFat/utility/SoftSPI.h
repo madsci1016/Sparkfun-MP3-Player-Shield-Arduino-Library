@@ -1,29 +1,66 @@
+/* Arduino DigitalIO Library
+ * Copyright (C) 2013 by William Greiman
+ *
+ * This file is part of the Arduino DigitalIO Library
+ *
+ * This Library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the Arduino DigitalIO Library.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+/**
+ * @file 
+ * @brief  Software SPI.
+ *
+ * @defgroup softSPI Software SPI
+ * @details  Software SPI Template Class.
+ * @{
+ */
+
 #ifndef SoftSPI_h
 #define SoftSPI_h
 #include <DigitalPin.h>
-
-/** nop for timing */
+//------------------------------------------------------------------------------
+/** Nop for timing. */
 #define nop asm volatile ("nop\n\t")
 //------------------------------------------------------------------------------
+/** Pin Mode for MISO is input.*/
+const bool MISO_MODE  = false;
+/** Pullups disabled for MISO are disabled. */
+const bool MISO_LEVEL = false;
+/** Pin Mode for MOSI is output.*/
+const bool MOSI_MODE  = true;
+/** Pin Mode for SCK is output. */
+const bool SCK_MODE   = true;
+//------------------------------------------------------------------------------
 /**
- * \class SoftSPI
- * \brief fast bit-bang SPI
+ * @class SoftSPI
+ * @brief Fast software SPI.
  */
 template<uint8_t MisoPin, uint8_t MosiPin, uint8_t SckPin, uint8_t Mode = 0>
 class SoftSPI {
  public:
  //-----------------------------------------------------------------------------
- /** initialize SoftSpi */
+ /** Initialize SoftSPI pins. */
   void begin() {
-    fastPinMode(MisoPin, false);
-    fastPinMode(MosiPin, true);
-    fastPinMode(SckPin, true);
-    fastDigitalWrite(SckPin, MODE_CPOL(Mode));
+    fastPinConfig(MisoPin, MISO_MODE, MISO_LEVEL);
+    fastPinConfig(MosiPin, MOSI_MODE, !MODE_CPHA(Mode));
+    fastPinConfig(SckPin, SCK_MODE, MODE_CPOL(Mode));
   }
   //----------------------------------------------------------------------------
-  /** Soft SPI receive byte
-   * \return byte received
+  /** Soft SPI receive byte.
+   * @return Data byte received.
    */
+  inline __attribute__((always_inline))
   uint8_t receive() {
     uint8_t data = 0;
     receiveBit(7, &data);
@@ -37,9 +74,10 @@ class SoftSPI {
     return data;
   }
   //----------------------------------------------------------------------------
-  /** Soft SPI send byte
-   * \param[in] data byte to send
+  /** Soft SPI send byte.
+   * @param[in] data Data byte to send.
    */
+  inline __attribute__((always_inline))
   void send(uint8_t data) {
     sendBit(7, data);
     sendBit(6, data);
@@ -51,9 +89,9 @@ class SoftSPI {
     sendBit(0, data);
   }
   //----------------------------------------------------------------------------
-  /** Soft SPI transfer byte
-   * \param[in] txData byte to send
-   * \return byte received
+  /** Soft SPI transfer byte.
+   * @param[in] txData Data byte to send.
+   * @return Data byte received.
    */
   inline __attribute__((always_inline))
   uint8_t transfer(uint8_t txData) {
@@ -118,3 +156,4 @@ class SoftSPI {
   //----------------------------------------------------------------------------
 };
 #endif  // SoftSPI_h
+/** @} */

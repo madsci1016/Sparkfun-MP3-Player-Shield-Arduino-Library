@@ -506,6 +506,21 @@ void SFEMP3Shield::setVolume(uint16_t data) {
 
 //------------------------------------------------------------------------------
 /**
+ * \brief Overload function of SFEMP3Shield::setVolume(leftchannel, rightchannel)
+ *
+ * \param[in] uint8_t to be placed into both Left and Right
+ *
+ * calls SFEMP3Shield::setVolume placing the input into both the left channel
+ * and right channels.
+ *
+ * As specified by Data Sheet Section 8.7.11
+ */
+void SFEMP3Shield::setVolume(uint8_t data) {
+  setVolume(data, data);
+}
+
+//------------------------------------------------------------------------------
+/**
  * \brief Store and Push member volume to VS10xx chip
  *
  * \param[in] leftchannel writes the left channel master volume

@@ -669,6 +669,7 @@ class SFEMP3Shield {
     uint8_t vs_init();
     void setVolume(uint8_t, uint8_t);
     void setVolume(uint16_t);
+    void setVolume(uint8_t);
     void setPlaySpeed(uint16_t);
     uint16_t getPlaySpeed();
     uint16_t getVolume();

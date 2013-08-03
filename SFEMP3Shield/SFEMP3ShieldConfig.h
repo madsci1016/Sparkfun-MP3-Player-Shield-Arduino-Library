@@ -158,8 +158,16 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * This pin should be the same pin assigned in SdFat Library.
  * as seen by the the Arduino */
 
-// if SEEDUINO use the following pin outs
-#if ( SEEEDUINO == 1 )
+#include <pins_arduino.h>
+
+#if defined(__BIOFEEDBACK_MEGA__)
+  #define MP3_XCS             67      //PK5 Output, Active Low,  Control Chip Select Pin (for accessing SPI Control/Status registers)
+  #define MP3_XDCS            68      //PK6 Output, Active Low,  Data Chip Select / BSYNC Pin
+  #define MP3_DREQ            66      //PK4 Input , Active High, Data Request Pin: Player asks for more data
+  #define MP3_RESET           65      //PK3 Output, Active Low,  Reset is active low
+  #define SD_SEL              76      //PJ6 Output, Active Low
+  #define MP3_DREQINT          5 //Corresponding INTx for DREQ pin
+#elif ( SEEEDUINO == 1 ) // if SEEDUINO use the following pin outs
   #define MP3_XCS             A3 //Control Chip Select Pin (for accessing SPI Control/Status registers)
   #define MP3_XDCS            A2 //Data Chip Select / BSYNC Pin
   #define MP3_DREQ            A1 //Data Request Pin: Player asks for more data

@@ -90,7 +90,7 @@ void setup() {
     }
   }
 
-#if (0)
+#if defined(__BIOFEEDBACK_MEGA__) // or other reasons, of your choosing.
   // Typically not used by most shields, hence commented out.
   Serial.println(F("Applying ADMixer patch."));
   if(MP3player.ADMixerLoad("admxster.053") == 0) {

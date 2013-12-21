@@ -1712,6 +1712,11 @@ void SFEMP3Shield::refill() {
 
   //Serial.println(F("filling"));
 
+  // no need to keep interrupts blocked, allow other ISR such as timer0 to continue
+#if !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+  sei();
+#endif
+
   while(digitalRead(MP3_DREQ)){
 
     if(!track.read(mp3DataBuffer, sizeof(mp3DataBuffer))) { //Go out to SD card and try reading 32 new bytes of the song
@@ -1730,6 +1735,9 @@ void SFEMP3Shield::refill() {
 
 
     //Once DREQ is released (high) we now feed 32 bytes of data to the VS1053 from our SD read buffer
+#if !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+    cli(); // allow transfer to occur with out interruption.
+#endif
     dcs_low(); //Select Data
     for(uint8_t y = 0 ; y < sizeof(mp3DataBuffer) ; y++) {
       //while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high // turns out it is not needed.
@@ -1738,6 +1746,9 @@ void SFEMP3Shield::refill() {
 
     dcs_high(); //Deselect Data
     //We've just dumped 32 bytes into VS1053 so our SD read buffer is empty. go get more data
+#if !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+    sei();
+#endif
   }
 }
 

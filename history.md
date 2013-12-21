@@ -1,6 +1,10 @@
 Revision History
 ---------------
 
+## 1.02.03
+* cleared interrupt during refill, if used. As to allow others. Such as timer0 was falling behind during the SdCard track.read(). 
+* Along with displaying current second at command prompt, for verifying time.
+
 ## 1.02.02
 * updated SdFatLib to sdfatlib20130313
 * added const to PROGMEM uint16_t bitrate_table for avr-gcc 4.7.2 compatibility

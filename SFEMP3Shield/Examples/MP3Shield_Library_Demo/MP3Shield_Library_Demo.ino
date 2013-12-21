@@ -70,7 +70,7 @@ void setup() {
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1040, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1030, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
@@ -132,6 +132,8 @@ void loop() {
 
   delay(100);
 }
+
+uint32_t  millis_prv;
 
 //------------------------------------------------------------------------------
 /**
@@ -456,6 +458,10 @@ void parse_menu(byte key_command) {
   }
 
   // print prompt after key stroke has been processed.
+  
+  Serial.print(F("Time since last command: "));  
+  Serial.println((float) (millis() -  millis_prv)/1000, 2);  
+  millis_prv = millis();
   Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V :"));
 }
 

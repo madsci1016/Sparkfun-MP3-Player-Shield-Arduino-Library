@@ -25,6 +25,7 @@
 extern "C" char* sbrk(int incr);
 #else  // __ARM__
 extern char *__brkval;
+extern char __bss_end;
 #endif  // __arm__
 //------------------------------------------------------------------------------
 /** Amount of free RAM
@@ -34,10 +35,8 @@ int SdFatUtil::FreeRam() {
   char top;
 #ifdef __arm__
   return &top - reinterpret_cast<char*>(sbrk(0));
-#elif defined(CORE_TEENSY) || (ARDUINO > 103 && ARDUINO != 151)
-  return &top - __brkval;
 #else  // __arm__
-  return __brkval ? &top - __brkval : &top - __malloc_heap_start;
+  return __brkval ? &top - __brkval : &top - &__bss_end;
 #endif  // __arm__
 }
 //------------------------------------------------------------------------------

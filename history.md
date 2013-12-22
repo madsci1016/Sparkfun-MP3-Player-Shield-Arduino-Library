@@ -1,6 +1,10 @@
 Revision History
 ---------------
 
+## 1.02.05
+* implemented sdfatlib20130629 into repo
+  * minor corrects of SdFatUtil's FreeRam() reporting correct value.
+
 ## 1.02.04
 * improved SPI handling to guard against other SPI effects and speed
 * increased SPI rate for 16Mg vs 8Mg FCPU, as to read at correct speeds.

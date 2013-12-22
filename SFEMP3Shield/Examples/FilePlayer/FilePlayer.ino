@@ -79,7 +79,7 @@ void setup() {
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1029, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1035, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.

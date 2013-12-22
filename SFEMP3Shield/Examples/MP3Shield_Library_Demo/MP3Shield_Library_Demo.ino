@@ -68,13 +68,16 @@ void setup() {
 
   Serial.begin(115200);
 
+  Serial.print(F("F_CPU = "));
+  Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1030, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
-  if(!sd.begin(SD_SEL, SPI_HALF_SPEED)) sd.initErrorHalt();
+  if(!sd.begin(SD_SEL, SPI_FULL_SPEED)) sd.initErrorHalt();
+  // depending upon your SdCard environment, SPI_HAVE_SPEED may work better.
   if(!sd.chdir("/")) sd.errorHalt("sd.chdir");
 
   //Initialize the MP3 Player Shield

@@ -57,7 +57,8 @@ state_m  SFEMP3Shield::playing_state;
 /**
  * \brief Initializer for the instance of the SdCard's static member.
  */
-uint16_t SFEMP3Shield::spiRate;
+uint16_t SFEMP3Shield::spi_Read_Rate;
+uint16_t SFEMP3Shield::spi_Write_Rate;
 
 // only needed for specific means of refilling
 #if defined(USE_MP3_REFILL_MEANS) && USE_MP3_REFILL_MEANS == USE_MP3_SimpleTimer
@@ -195,7 +196,8 @@ uint8_t SFEMP3Shield::vs_init() {
   //faster than initial allowed spi rate of 1.8MgHz.
 
   // set initial mp3's spi to safe rate
-  spiRate = SPI_CLOCK_DIV16; // initial contact with VS10xx at slow rate
+  spi_Read_Rate  = SPI_CLOCK_DIV16;
+  spi_Write_Rate = SPI_CLOCK_DIV16;
   delay(10);
 
    //Let's check the status of the VS1053
@@ -220,7 +222,16 @@ uint8_t SFEMP3Shield::vs_init() {
   Mp3WriteRegister(SCI_CLOCKF, 0x6000); //Set multiplier to 3.0x
   //Internal clock multiplier is now 3x.
   //Therefore, max SPI speed is 52MgHz.
-  spiRate = SPI_CLOCK_DIV4; //use safe SPI rate of (16MHz / 4 = 4MHz)
+
+#if (F_CPU == 16000000 )
+  spi_Read_Rate  = SPI_CLOCK_DIV4; //use safe SPI rate of (16MHz / 4 = 4MHz)
+  spi_Write_Rate = SPI_CLOCK_DIV2; //use safe SPI rate of (16MHz / 2 = 8MHz)
+#else
+  // must be 8000000
+  spi_Read_Rate  = SPI_CLOCK_DIV2; //use safe SPI rate of (8MHz / 2 = 4MHz)
+  spi_Write_Rate = SPI_CLOCK_DIV2; //use safe SPI rate of (8MHz / 2 = 4MHz)
+#endif
+
   delay(10); // settle time
 
   //test reading after data rate change
@@ -394,7 +405,8 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
 
   //Wait for DREQ to go high indicating IC is available
   while(!digitalRead(MP3_DREQ)) ;
-  //Select control
+
+  //Select SPI Control channel
   dcs_low();
 
   //SDI consists of instruction byte, address byte, and 16-bit data word.
@@ -408,7 +420,8 @@ uint8_t SFEMP3Shield::disableTestSineWave() {
   SPI.transfer(0x00);
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
 
-  dcs_high(); //Deselect Control
+  //Deselect SPI Control channel
+  dcs_high();
 
   // turn test mode bit off
   Mp3WriteRegister(SCI_MODE, Mp3ReadRegister(SCI_MODE) & ~SM_TESTS);
@@ -455,8 +468,10 @@ uint16_t SFEMP3Shield::memoryTest() {
 //  for(int y = 0 ; y <= 1 ; y++) { // need to do it twice if it was already done once before
     //Wait for DREQ to go high indicating IC is available
     while(!digitalRead(MP3_DREQ)) ;
-    //Select control
+
+    //Select SPI Control channel
     dcs_low();
+
     //SCI consists of instruction byte, address byte, and 16-bit data word.
     SPI.transfer(0x4D);
     SPI.transfer(0xEA);
@@ -467,7 +482,9 @@ uint16_t SFEMP3Shield::memoryTest() {
     SPI.transfer(0x00);
     SPI.transfer(0x00);
     while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating command is complete
-    dcs_high(); //Deselect Control
+
+    //Deselect SPI Control channel
+    dcs_high();
 //  }
   delay(250);
 
@@ -1477,15 +1494,32 @@ void SFEMP3Shield::setBitRate(uint16_t bitr){
 
 //------------------------------------------------------------------------------
 /**
+ * \brief Initialize the SPI for VS10xx use.
+ *
+ * Primative function to configure the SPI's BitOrder, DataMode and ClockDivider to that of
+ * the current VX10xx.
+ *
+ * \warning This sets the rate fast for write, too fast for reading. In the case of a subsequent SPI.transfer that is reading back data followup with a SPI.setClockDivider(spi_Read_Rate); as not to get gibberish.
+*/
+void SFEMP3Shield::spiInit() {
+  //Set SPI bus for write
+  SPI.setBitOrder(MSBFIRST);
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setClockDivider(spi_Write_Rate);
+}
+
+//------------------------------------------------------------------------------
+/**
  * \brief Select Control Channel
  *
  * Primative function to configure the SPI's Mode and rate control to that of
  * the current VX10xx. Then select the VS10xx's Control Chip Select as per
  * defined by MP3_XCS.
+ *
+ * \warning This uses spiInit() which sets the rate fast for write, too fast for reading. In the case of a subsequent SPI.transfer that is reading back data followup with a SPI.setClockDivider(spi_Read_Rate); as not to get gibberish.
  */
 void SFEMP3Shield::cs_low() {
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setClockDivider(spiRate); //Set SPI bus speed to 1MHz (16MHz / 16 = 1MHz)
+  spiInit();
   digitalWrite(MP3_XCS, LOW);
 }
 
@@ -1507,10 +1541,11 @@ void SFEMP3Shield::cs_high() {
  * Primative function to configure the SPI's Mode and rate control to that of
  * the current VX10xx. Then select the VS10xx's Data Chip Select as per
  * defined by MP3_XDCS.
+ *
+ * \warning This uses spiInit() which sets the rate fast for write, too fast for reading. In the case of a subsequent SPI.transfer that is reading back data followup with a SPI.setClockDivider(spi_Read_Rate); as not to get gibberish.
  */
 void SFEMP3Shield::dcs_low() {
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setClockDivider(spiRate); //Set SPI bus speed to 1MHz (16MHz / 16 = 1MHz)
+  spiInit();
   digitalWrite(MP3_XDCS, LOW);
 }
 
@@ -1563,8 +1598,8 @@ void SFEMP3Shield::Mp3WriteRegister(uint8_t addressbyte, uint8_t highbyte, uint8
 
   //Wait for DREQ to go high indicating IC is available
   while(!digitalRead(MP3_DREQ)) ;
-  //Select control
-  cs_low();
+
+  cs_low(); //Select control
 
   //SCI consists of instruction byte, address byte, and 16-bit data word.
   SPI.transfer(0x02); //Write instruction
@@ -1607,7 +1642,9 @@ uint16_t SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
     disableRefill();
 
   while(!digitalRead(MP3_DREQ)) ; //Wait for DREQ to go high indicating IC is available
+
   cs_low(); //Select control
+  SPI.setClockDivider(spi_Read_Rate); // correct the clock speed as from cs_low()
 
   //SCI consists of instruction byte, address byte, and 16-bit data word.
   SPI.transfer(0x03);  //Read instruction
@@ -1644,6 +1681,10 @@ uint16_t SFEMP3Shield::Mp3ReadRegister (uint8_t addressbyte){
 uint16_t SFEMP3Shield::Mp3ReadWRAM (uint16_t addressbyte){
 
   unsigned short int tmp1,tmp2;
+
+  //Set SPI bus for write
+  spiInit();
+  SPI.setClockDivider(spi_Read_Rate);
 
   Mp3WriteRegister(SCI_WRAMADDR, addressbyte);
   tmp1 = Mp3ReadRegister(SCI_WRAM);
@@ -1809,6 +1850,7 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
   int8_t endFillByte = (int8_t) (Mp3ReadWRAM(para_endFillByte) & 0xFF);
 
   if((mode == post) || (mode == both)) {
+
     dcs_low(); //Select Data
     for(int y = 0 ; y < 2052 ; y++) {
       while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high
@@ -1821,6 +1863,7 @@ void SFEMP3Shield::flush_cancel(flush_m mode) {
   {
 //    Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_CANCEL); // old way of SCI_MODE WRITE.
     Mp3WriteRegister(SCI_MODE, (Mp3ReadRegister(SCI_MODE) | SM_CANCEL));
+
     dcs_low(); //Select Data
     for(int y = 0 ; y < 32 ; y++) {
       while(!digitalRead(MP3_DREQ)); // wait until DREQ is or goes high

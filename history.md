@@ -1,6 +1,10 @@
 Revision History
 ---------------
 
+## 1.02.04
+* improved SPI handling to guard against other SPI effects and speed
+* increased SPI rate for 16Mg vs 8Mg FCPU, as to read at correct speeds.
+
 ## 1.02.03
 * cleared interrupt during refill, if used. As to allow others. Such as timer0 was falling behind during the SdCard track.read(). 
 * Along with displaying current second at command prompt, for verifying time.

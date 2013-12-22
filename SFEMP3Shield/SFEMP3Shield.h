@@ -711,6 +711,7 @@ class SFEMP3Shield {
     static SdFile track;
     static void refill();
     static void flush_cancel(flush_m);
+    static void spiInit();
     static void cs_low();
     static void cs_high();
     static void dcs_low();
@@ -732,7 +733,8 @@ class SFEMP3Shield {
     static state_m playing_state;
 
 /** \brief Rate of the SPI to be used with communicating to the VSdsp.*/
-    static uint16_t spiRate;
+    static uint16_t spi_Read_Rate;
+    static uint16_t spi_Write_Rate;
 
 /** \brief Buffer for moving data between Filehandle and VSdsp.*/
     static uint8_t mp3DataBuffer[32];

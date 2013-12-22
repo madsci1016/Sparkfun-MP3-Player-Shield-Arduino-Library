@@ -12,6 +12,7 @@ var searchData=
   ['setvumeter',['setVUmeter',['../class_s_f_e_m_p3_shield.html#ad7a26485b80f56bfafb5daaf0413b118',1,'SFEMP3Shield']]],
   ['skip',['skip',['../class_s_f_e_m_p3_shield.html#a0f49dff806f128aff421ed076c4c25cd',1,'SFEMP3Shield']]],
   ['skipto',['skipTo',['../class_s_f_e_m_p3_shield.html#a0eddebff39b7061f863885ab39b97b4b',1,'SFEMP3Shield']]],
+  ['spiinit',['spiInit',['../class_s_f_e_m_p3_shield.html#a6da20f12a99f933cffe6327f5a55eb26',1,'SFEMP3Shield']]],
   ['stoptrack',['stopTrack',['../class_s_f_e_m_p3_shield.html#a7e7418545b611db637b11019ec22f32c',1,'SFEMP3Shield']]],
   ['strip_5fnonalpha_5finplace',['strip_nonalpha_inplace',['../_s_f_e_m_p3_shield_8cpp.html#a9ff77b026d5d353ff902b4787e8589aa',1,'strip_nonalpha_inplace(char *s):&#160;SFEMP3Shield.cpp'],['../_s_f_e_m_p3_shield_8h.html#a9ff77b026d5d353ff902b4787e8589aa',1,'strip_nonalpha_inplace(char *s):&#160;SFEMP3Shield.cpp']]]
 ];

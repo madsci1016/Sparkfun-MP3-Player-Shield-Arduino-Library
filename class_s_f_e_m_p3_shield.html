@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.02</span>
+   &#160;<span id="projectnumber">1.02.04</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -234,6 +234,9 @@ Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a294e274b4b02f41b5bb635400455ec29"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a294e274b4b02f41b5bb635400455ec29">flush_cancel</a> (<a class="el" href="_s_f_e_m_p3_shield_8h.html#ad701087b7fa2b683f9da6cdb04c9ecbf">flush_m</a>)</td></tr>
 <tr class="memdesc:a294e274b4b02f41b5bb635400455ec29"><td class="mdescLeft">&#160;</td><td class="mdescRight">flush the VSdsp buffer and cancel  <a href="#a294e274b4b02f41b5bb635400455ec29">More...</a><br/></td></tr>
 <tr class="separator:a294e274b4b02f41b5bb635400455ec29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6da20f12a99f933cffe6327f5a55eb26"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a6da20f12a99f933cffe6327f5a55eb26">spiInit</a> ()</td></tr>
+<tr class="memdesc:a6da20f12a99f933cffe6327f5a55eb26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the SPI for VS10xx use.  <a href="#a6da20f12a99f933cffe6327f5a55eb26">More...</a><br/></td></tr>
+<tr class="separator:a6da20f12a99f933cffe6327f5a55eb26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad3f8eca2f1b2ac1d3bef3ae82af717"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a1ad3f8eca2f1b2ac1d3bef3ae82af717">cs_low</a> ()</td></tr>
 <tr class="memdesc:a1ad3f8eca2f1b2ac1d3bef3ae82af717"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select Control Channel.  <a href="#a1ad3f8eca2f1b2ac1d3bef3ae82af717">More...</a><br/></td></tr>
 <tr class="separator:a1ad3f8eca2f1b2ac1d3bef3ae82af717"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -291,9 +294,11 @@ Static Private Attributes</h2></td></tr>
 <tr class="memitem:a90bd9c746e5707d3f73197ec12d9721f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73">state_m</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a90bd9c746e5707d3f73197ec12d9721f">playing_state</a></td></tr>
 <tr class="memdesc:a90bd9c746e5707d3f73197ec12d9721f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Boolean flag indicating if filehandle is streaming.  <a href="#a90bd9c746e5707d3f73197ec12d9721f">More...</a><br/></td></tr>
 <tr class="separator:a90bd9c746e5707d3f73197ec12d9721f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4d11ba93dae4cb612cdbcb8ea2299d7"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ab4d11ba93dae4cb612cdbcb8ea2299d7">spiRate</a></td></tr>
-<tr class="memdesc:ab4d11ba93dae4cb612cdbcb8ea2299d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rate of the SPI to be used with communicating to the VSdsp.  <a href="#ab4d11ba93dae4cb612cdbcb8ea2299d7">More...</a><br/></td></tr>
-<tr class="separator:ab4d11ba93dae4cb612cdbcb8ea2299d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c0b0565a0568d6bbe85617f8d398905"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a3c0b0565a0568d6bbe85617f8d398905">spi_Read_Rate</a></td></tr>
+<tr class="memdesc:a3c0b0565a0568d6bbe85617f8d398905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rate of the SPI to be used with communicating to the VSdsp.  <a href="#a3c0b0565a0568d6bbe85617f8d398905">More...</a><br/></td></tr>
+<tr class="separator:a3c0b0565a0568d6bbe85617f8d398905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c2b91753ca11fc91d8018ff5f9fb47"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#a68c2b91753ca11fc91d8018ff5f9fb47">spi_Write_Rate</a></td></tr>
+<tr class="separator:a68c2b91753ca11fc91d8018ff5f9fb47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1027c13d5feef5d3b928f4d53e1f602"><td class="memItemLeft" align="right" valign="top">static uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_f_e_m_p3_shield.html#ab1027c13d5feef5d3b928f4d53e1f602">mp3DataBuffer</a> [32]</td></tr>
 <tr class="memdesc:ab1027c13d5feef5d3b928f4d53e1f602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Buffer for moving data between Filehandle and VSdsp.  <a href="#ab1027c13d5feef5d3b928f4d53e1f602">More...</a><br/></td></tr>
 <tr class="separator:ab1027c13d5feef5d3b928f4d53e1f602"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -368,7 +373,7 @@ Static Private Attributes</h2></td></tr>
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01876">1876</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01919">1919</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -396,7 +401,7 @@ Static Private Attributes</h2></td></tr>
 <p>Will range check the requested value and for values out of range the VSdsp's ADMixer will be disabled. While valid ranges will write to VSdsp's current operating volume and enable the the ADMixer.</p>
 <dl class="section warning"><dt>Warning</dt><dd>If file patch not applied this call will lock up the VS10xx. need to add interlock to avoid. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01913">1913</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01956">1956</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -424,7 +429,7 @@ Static Private Attributes</h2></td></tr>
 <p>Public interface of refill. </p>
 <p>Serves as a helper as to correspondingly run either the timer service or run the <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data. ">refill()</a> direclty, depending upon the configured means for refilling. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01689">1689</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01730">1730</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -450,7 +455,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section warning"><dt>Warning</dt><dd>Will disrupt playback, if issued while playing back. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The <code>SdFat::begin()</code> function is required to be executed prior, as to define the volume for the tracks (aka files) to be operated on. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00090">90</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00091">91</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -478,7 +483,7 @@ Static Private Attributes</h2></td></tr>
 <p>Deselect Control Channel. </p>
 <p>Primative function to Deselect the VS10xx's Control Chip Select as per defined by MP3_XCS. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01499">1499</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01533">1533</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -504,9 +509,10 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Select Control Channel. </p>
-<p>Primative function to configure the SPI's Mode and rate control to that of the current VX10xx. Then select the VS10xx's Control Chip Select as per defined by MP3_XCS. </p>
+<p>Primative function to configure the SPI's Mode and rate control to that of the current VX10xx. Then select the VS10xx's Control Chip Select as per defined by MP3_XCS.</p>
+<dl class="section warning"><dt>Warning</dt><dd>This uses <a class="el" href="class_s_f_e_m_p3_shield.html#a6da20f12a99f933cffe6327f5a55eb26" title="Initialize the SPI for VS10xx use. ">spiInit()</a> which sets the rate fast for write, too fast for reading. In the case of a subsequent SPI.transfer that is reading back data followup with a SPI.setClockDivider(spi_Read_Rate); as not to get gibberish. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01486">1486</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01521">1521</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -529,7 +535,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>SCI_DECODE_TIME is cleared during <a class="el" href="class_s_f_e_m_p3_shield.html#aa0f78c569478259a1d8a7ed96a4c4167" title="Begin playing a mp3 file by its filename. ">SFEMP3Shield::playMP3</a>, as to restart the position for each file stream. Erasing prior streams weight.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Not very accurate, rounded off to second. And Variable Bit-Rates are completely inaccurate. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01150">1150</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01167">1167</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -557,7 +563,7 @@ Static Private Attributes</h2></td></tr>
 <p>Deselect Data Channel. </p>
 <p>Primative function to Deselect the VS10xx's Control Data Select as per defined by MP3_XDCS. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01524">1524</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01559">1559</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -583,9 +589,10 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Select Data Channel. </p>
-<p>Primative function to configure the SPI's Mode and rate control to that of the current VX10xx. Then select the VS10xx's Data Chip Select as per defined by MP3_XDCS. </p>
+<p>Primative function to configure the SPI's Mode and rate control to that of the current VX10xx. Then select the VS10xx's Data Chip Select as per defined by MP3_XDCS.</p>
+<dl class="section warning"><dt>Warning</dt><dd>This uses <a class="el" href="class_s_f_e_m_p3_shield.html#a6da20f12a99f933cffe6327f5a55eb26" title="Initialize the SPI for VS10xx use. ">spiInit()</a> which sets the rate fast for write, too fast for reading. In the case of a subsequent SPI.transfer that is reading back data followup with a SPI.setClockDivider(spi_Read_Rate); as not to get gibberish. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01511">1511</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01547">1547</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -613,7 +620,7 @@ Static Private Attributes</h2></td></tr>
 <p>Disable the Interrupts for refill. </p>
 <p>Depending upon the means selected to request refill of the VSdsp's data stream buffer, this routine will disable the corresponding service. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01781">1781</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01822">1822</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -640,7 +647,7 @@ Static Private Attributes</h2></td></tr>
 </dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00383">383</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00394">394</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -668,7 +675,7 @@ Static Private Attributes</h2></td></tr>
 <p>Enable the Interrupts for refill. </p>
 <p>Depending upon the means selected to request refill of the VSdsp's data stream buffer, this routine will enable the corresponding service. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01762">1762</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01803">1803</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -703,7 +710,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>9.12.5 New Sine and Sweep Tests was not implemented. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00332">332</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00343">343</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -725,7 +732,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section warning"><dt>Warning</dt><dd>Will stop any playing tracks. Check <a class="el" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980" title="Inidicate if a song is playing? ">isPlaying()</a> prior to executing, as not to stop on a track. </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>use <a class="el" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9" title="Initialize the MP3 Player shield. ">begin()</a> to reinitialize the VS10xx, for use. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00140">140</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00141">141</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -767,7 +774,7 @@ Static Private Attributes</h2></td></tr>
 </ul>
 <dl class="section note"><dt>Note</dt><dd>if cancel fails the vs10xx will be reset and initialized to current values. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01808">1808</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01849">1849</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -789,7 +796,7 @@ Static Private Attributes</h2></td></tr>
 <p>This may be called while playing a current stream.</p>
 <dl class="section note"><dt>Note</dt><dd>this suspends currently playing streams and returns afterwards. Restoring the file position to where it left off, before resuming. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01262">1262</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01279">1279</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -827,7 +834,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section warning"><dt>Warning</dt><dd>This feature only works on MP3 files. It will <b>LOCK-UP</b> on other file formats, looking for the MP3 header. </dd></dl>
 <p>true if Version 1, !false version 2 and 2.5 </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01347">1347</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01364">1364</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -855,7 +862,7 @@ Static Private Attributes</h2></td></tr>
 </dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="class_s_f_e_m_p3_shield.html#ad2db48942974d3f4b02e8e7feb78bee6" title="Set the current SM_DIFF setting of the VS10xx chip. ">setDifferentialOutput()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00688">688</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00705">705</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -876,7 +883,7 @@ Static Private Attributes</h2></td></tr>
 <p>Read the VS10xx SCI_MODE register bits SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH for current EarSpeaker and return its results as a composite integer. As specified by Data Sheet Section 8.7.1 and 8.4</p>
 <dl class="section return"><dt>Returns</dt><dd>result between 0 and 3. Where 0 is OFF and 3 is maximum. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00624">624</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00641">641</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -898,7 +905,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>result between 0 and 3. Where 0 is OFF and 3 is maximum.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>This feature is only available when composite patch 1.7 or higher is loaded into the VSdsp. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00742">742</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00759">759</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -920,7 +927,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>multipler of current playspeed versus normal speed. Where 0 and/or 1 are normal 1x speed. e.g. 4 to playSpeed will play the song four times as fast as normal, if you are able to feed the data with that speed.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Excessive playspeed beyond the ability to stream data between the SdCard, Arduino and VS10xx may result in erratic behavior. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00584">584</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00601">601</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -941,7 +948,7 @@ Static Private Attributes</h2></td></tr>
 <p>Reports the current operational status of the device from the list of possible states enumerated by state_m</p>
 <dl class="section return"><dt>Returns</dt><dd>the value held by <a class="el" href="class_s_f_e_m_p3_shield.html#a90bd9c746e5707d3f73197ec12d9721f" title="Boolean flag indicating if filehandle is streaming. ">SFEMP3Shield::playing_state</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00921">921</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00938">938</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -988,7 +995,7 @@ Static Private Attributes</h2></td></tr>
 <p>Read current filehandles offset of track ID3 tag information. Then strip all non readible (ascii) characters.</p>
 <dl class="section note"><dt>Note</dt><dd>this suspends currently playing streams and returns afterwards. Restoring the file position to where it left off, before resuming. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01223">1223</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01240">1240</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1012,7 +1019,7 @@ Static Private Attributes</h2></td></tr>
 <dd>
 Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9ba5632eed7d77f38ad1450f" title="whole word value ">twobyte.word</a> to access individual channels, with <a class="el" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593" title="individual bytes ">twobyte.byte</a>[1] and [0]. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00557">557</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00574">574</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1034,7 +1041,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Values from 0 to 31 are valid for both channels.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This feature is only available with patches that support VU meter. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01456">1456</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01473">1473</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1056,7 +1063,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>See data patches data sheet VU meter for details. </p>
 <dl class="section warning"><dt>Warning</dt><dd>This feature is only available with patches that support VU meter. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01413">1413</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01430">1430</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1082,7 +1089,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00898">898</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00915">915</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1109,7 +1116,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00436">436</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00449">449</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1145,7 +1152,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <dl class="section return"><dt>Returns</dt><dd>result read from the register</dd></dl>
 <p>Primative function to suspend playing and directly communicate over the SPI to the VSdsp's registers. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01598">1598</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01633">1633</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1181,7 +1188,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <dl class="section return"><dt>Returns</dt><dd>result read from the WRAM</dd></dl>
 <p>Function to communicate to the VSdsp's registers, indirectly accessing the WRAM. As per data sheet the result is read back twice to verify. As it is not buffered. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01644">1644</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01681">1681</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1234,7 +1241,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>Primative function to suspend playing and directly communicate over the SPI to the VSdsp's registers. Where the value write is Big Endian (MSB first). </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01555">1555</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01590">1590</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1280,7 +1287,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>Forces the input value into the Big Endian Corresponding positions of Mp3WriteRegister as to be written to the addressed VSdsp's registers. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01538">1538</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01573">1573</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1326,7 +1333,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>Function to communicate to the VSdsp's registers, indirectly accessing the WRAM. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01676">1676</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01717">1717</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1346,7 +1353,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Pause streaming data to the VSdsp. </p>
 <p>Public method for disabling the refill with <a class="el" href="class_s_f_e_m_p3_shield.html#ad9434b81a621d100d86f4c6308d24f1c" title="Disable the Interrupts for refill. ">disableRefill()</a>. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00931">931</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00948">948</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1367,7 +1374,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Public method for pausing the play of music.</p>
 <dl class="section note"><dt>Note</dt><dd>This is currently equal to <a class="el" href="class_s_f_e_m_p3_shield.html#a077360a1036cf9c5cea1c1fe0657fec3" title="Pause streaming data to the VSdsp. ">pauseDataStream()</a> and is a place holder to pausing the VSdsp's playing and DREQ's. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00969">969</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00986">986</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1413,7 +1420,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00826">826</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00843">843</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1442,7 +1449,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <dl class="section return"><dt>Returns</dt><dd>Any Value other than zero indicates a problem occured. where value indicates specific error</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00785">785</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00802">802</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1471,7 +1478,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>This the primative function to refilling the VSdsp's buffers. And is typically called as an interrupt to the rising edge of the VS10xx's DREQ. Where if the DREQ is indicating not full, it will read 32 bytes from the filehandle's track and send them via SPI to the VSdsp's data stream buffer. Repeating until the DREQ indicates it is full.</p>
 <p>When the filehandle's track indicates it is at the end of file. The track is closed, the playing indicator is set to false, interrupts for refilling are disabled and the VSdsp's data stream buffer is flushed appropiately. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01711">1711</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01752">1752</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1491,7 +1498,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Unpause streaming data to the VSdsp. </p>
 <p>Public method for re-enabling the refill with <a class="el" href="class_s_f_e_m_p3_shield.html#abade08481dcb154690acbc62869013a9" title="Enable the Interrupts for refill. ">enableRefill()</a>. Where skipped if not currently playing. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00948">948</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00965">965</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1517,7 +1524,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>This is effectively equal to <a class="el" href="class_s_f_e_m_p3_shield.html#a95f8a01afbb9d7fb274c534ae5594b1b" title="Unpause streaming data to the VSdsp. ">resumeDataStream()</a> and is a place holder to resuming the VSdsp's playing and DREQ's. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01014">1014</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01031">1031</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1551,7 +1558,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>This is effectively equal to <a class="el" href="class_s_f_e_m_p3_shield.html#a95f8a01afbb9d7fb274c534ae5594b1b" title="Unpause streaming data to the VSdsp. ">resumeDataStream()</a> and is a place holder to resuming the VSdsp's playing and DREQ's. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00989">989</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01006">1006</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1578,7 +1585,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>Public method for forcing the percieved bit-rate to a desired value. Useful if auto-detect failed </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01472">1472</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01489">1489</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1607,7 +1614,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>As specified by Data Sheet Section 8.7.1 </p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="class_s_f_e_m_p3_shield.html#af6e6d6bae7e379644b0ab8fdeb9b4a34" title="Get the current SM_DIFF setting from the VS10xx chip. ">getDifferentialOutput()</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00712">712</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00729">729</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1634,7 +1641,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dl>
 <p>The input value is mapped onto SM_EARSPEAKER_LO and SM_EARSPEAKER_HIGH bits and written the VS10xx SCI_MODE register, preserving the remainder of SCI_MODE. As specified by Data Sheet Section 8.7.1 and 8.4 </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00648">648</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00665">665</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1656,7 +1663,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Write the VS10xx WRAMADDR para_MonoOutput bit 0 to configure the current Stereo/Mono. As specified by VS1053B PATCHES AND FLAC DECODER Data Sheet Section 1.2 Mono output mode. While preserving the other bits.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This feature is only available when composite patch 1.7 or higher is loaded into the VSdsp. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00758">758</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00775">775</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1679,7 +1686,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Where 0 and/or 1 are normal 1x speed. e.g. 4 to playSpeed will play the song four times as fast as normal, if you are able to feed the data with that speed. As specified by Data Sheet Section 9.11.1</p>
 <dl class="section warning"><dt>Warning</dt><dd>Excessive playspeed beyond the ability to stream data between the SdCard, Arduino and VS10xx may result in erratic behavior. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00604">604</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00621">621</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1718,7 +1725,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Updates the VS10xx SCI_VOL register's left and right master volume level in -0.5 dB Steps. Where maximum volume is 0x0000 and total silence is 0xFEFE. As specified by Data Sheet Section 8.7.11</p>
 <dl class="section note"><dt>Note</dt><dd>input values are -1/2dB. e.g. 40 results in -20dB. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00535">535</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00552">552</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1746,7 +1753,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>calls <a class="el" href="class_s_f_e_m_p3_shield.html#a8f1059a570e7bef1c132f2857dd0fd8a" title="Store and Push member volume to VS10xx chip. ">SFEMP3Shield::setVolume</a> expecting the left channel in the upper byte and right channel in the lower byte.</p>
 <p>As specified by Data Sheet Section 8.7.11 </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00501">501</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00518">518</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1774,7 +1781,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>calls <a class="el" href="class_s_f_e_m_p3_shield.html#a8f1059a570e7bef1c132f2857dd0fd8a" title="Store and Push member volume to VS10xx chip. ">SFEMP3Shield::setVolume</a> placing the input into both the left channel and right channels.</p>
 <p>As specified by Data Sheet Section 8.7.11 </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00518">518</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00535">535</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1804,7 +1811,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <dl class="section warning"><dt>Warning</dt><dd>This feature is only available with patches that support VU meter. <br/>
  The VU meter takes about 0.2MHz of processing power with 48 kHz samplerate. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01433">1433</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01450">1450</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1838,7 +1845,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Limited to +/- 32768ms, since SdFile::seekCur(int32_t); </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01038">1038</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01055">1055</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1872,7 +1879,36 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Limited to first 65535ms, since SdFile::seekSet(int32_t); </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01094">1094</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01111">1111</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6da20f12a99f933cffe6327f5a55eb26"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SFEMP3Shield::spiInit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize the SPI for VS10xx use. </p>
+<p>Primative function to configure the SPI's BitOrder, DataMode and ClockDivider to that of the current VX10xx.</p>
+<dl class="section warning"><dt>Warning</dt><dd>This sets the rate fast for write, too fast for reading. In the case of a subsequent SPI.transfer that is reading back data followup with a SPI.setClockDivider(spi_Read_Rate); as not to get gibberish. </dd></dl>
+
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01504">1504</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1892,7 +1928,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Gracefully close track and cancel refill. </p>
 <p>Skip if already not playing. Otherwise Disable the refill means, then set playing to false, close the filehandle track instance. And finally flush the VSdsp's stream buffer. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00870">870</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00887">887</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1920,7 +1956,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Extract the Album from the current filehandles track ID3 tag information.</p>
 <dl class="section warning"><dt>Warning</dt><dd>ID3 Tag information may not be present on all source files. Otherwise may result in non-sense. It is possible to add it with common tools outside of this project. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01206">1206</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01223">1223</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1948,7 +1984,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Extract the Artist from the current filehandles track ID3 tag information.</p>
 <dl class="section warning"><dt>Warning</dt><dd>ID3 Tag information may not be present on all source files. Otherwise may result in non-sense. It is possible to add it with common tools outside of this project. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01174">1174</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01191">1191</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -1976,7 +2012,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Extract the Title from the current filehandles track ID3 tag information.</p>
 <dl class="section warning"><dt>Warning</dt><dd>ID3 Tag information may not be present on all source files. Otherwise may result in non-sense. It is possible to add it with common tools outside of this project. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01190">1190</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l01207">1207</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -2005,7 +2041,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <dl class="section note"><dt>Note</dt><dd>returned Error codes are typically passed and therefore need to avoid overlap.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="index.html#Error_Codes">Error Codes</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00173">173</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00174">174</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -2054,7 +2090,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00270">270</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html#l00281">281</a> of file <a class="el" href="_s_f_e_m_p3_shield_8cpp_source.html">SFEMP3Shield.cpp</a>.</p>
 
 </div>
 </div>
@@ -2079,7 +2115,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 
 <p>contains a local value of the beleived current bit-rate. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00741">741</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00743">743</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -2103,7 +2139,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 
 <p>Buffer for moving data between Filehandle and VSdsp. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00738">738</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00740">740</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -2128,11 +2164,11 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Boolean flag indicating if filehandle is streaming. </p>
 <p>Initializer for the instance of the SdCard's static member. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00732">732</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00733">733</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab4d11ba93dae4cb612cdbcb8ea2299d7"></a>
+<a class="anchor" id="a3c0b0565a0568d6bbe85617f8d398905"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -2140,7 +2176,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t SFEMP3Shield::spiRate</td>
+          <td class="memname">uint16_t SFEMP3Shield::spi_Read_Rate</td>
         </tr>
       </table>
   </td>
@@ -2153,7 +2189,29 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 <p>Rate of the SPI to be used with communicating to the VSdsp. </p>
 <p>Initializer for the instance of the SdCard's static member. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00735">735</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00736">736</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a68c2b91753ca11fc91d8018ff5f9fb47"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t SFEMP3Shield::spi_Write_Rate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00737">737</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -2177,7 +2235,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 
 <p>contains a filehandles offset to the begining of the current file. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00744">744</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00746">746</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -2225,7 +2283,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 
 <p>contains a local value of the VSdsp's master volume left channels </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00747">747</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00749">749</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -2249,7 +2307,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 
 <p>contains a local value of the VSdsp's master volume Right channels </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00750">750</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_8h_source.html#l00752">752</a> of file <a class="el" href="_s_f_e_m_p3_shield_8h_source.html">SFEMP3Shield.h</a>.</p>
 
 </div>
 </div>
@@ -2260,7 +2318,7 @@ Cast the output to the union of <a class="el" href="uniontwobyte.html#a43edc27e9
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 21 2013 18:18:29 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 21 2013 19:09:04 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

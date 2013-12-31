@@ -77,7 +77,7 @@ Support for Gravitech MP3-4NANO shield please see \ref GRAVITECH
 \subsection limitation Limitations.
 
 - <b>The SPI Bus:</b>
-The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.
+The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. See \ref Performance
 
 - <b>Non-Blocking:</b>
 The controlling sketch needs to enquire via SFEMP3Shield::isPlaying as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.
@@ -92,6 +92,25 @@ Most commericially available shields at this time do not support either Line Lev
 As most commericially available shields do not support audio input this feature has not been implemented.
 \todo
 Support Audio Recording.
+
+\section Performance Performance
+
+Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, resulting in the SPI bus being less than half as efficient. Along with overhead. Depending upon the Bitrate of the file being streamed to the VSdsp, there is only so much Real Time available. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly. Where on a typical UNO there is plenty of real-time to transfer good quality files, with CPU to spare for other tasks, assuming they do not consume too much time either.
+
+The available CPU can be increased by either or both increasing the speed of the SPI and or the Arduino F_CPU. Where the Speed of the SPI is individually maintained by both this driver and SdFatLib. As not to or be interfered with each other and or other libraries using the same SPI bus. The SdCard can be increased from SPI_HALF_SPEED to SPI_FULL_SPEED argument in the SD.begin. Where this library will set the Read and Write speeds to the VSdsp correspondingly, based on F_CPU of the Arduino.
+
+The actual consumed CPU utilization can be measured by defining the \ref PERF_MON_PIN to a valid pin, which generates a low signal on configured pin while servicing the VSdsp. This is inclusive of the SdCard reads.
+
+The below table show's typical average CPU utilizations of the same MP3 file that has been resampled to various bit rates and using different configurations. Where a significant difference is observed in performance.
+
+| BitRate | SdCard | Refilling | IDLE |
+| :-----: | :----: | :-------: | :--: |
+|    128K |   Half |       12% |  88% | 
+|    128K |   Full |       10% |  90% | 
+|     96K |   Full |        7% |  93% | 
+|     56K |   Full |        4% |  96% | 
+
+\note Only F_CPU of 8MgHz and 16Hz are suppored. Others will default to SPI_CLOCK_DIV2, assuming 4MgHz.
 
 \section Plug_Ins Plug Ins and Patches
 

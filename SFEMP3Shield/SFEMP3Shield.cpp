@@ -108,6 +108,11 @@ if (int8_t(sd.vol()->fatType()) == 0) {
   pinMode(MP3_XDCS, OUTPUT);
   pinMode(MP3_RESET, OUTPUT);
 
+#if PERF_MON_PIN != -1
+  pinMode(PERF_MON_PIN, OUTPUT);
+  digitalWrite(PERF_MON_PIN,HIGH);
+#endif
+
   cs_high();  //MP3_XCS, Init Control Select to deselected
   dcs_high(); //MP3_XDCS, Init Data Select to deselected
   digitalWrite(MP3_RESET, LOW); //Put VS1053 into hardware reset
@@ -1752,6 +1757,9 @@ void SFEMP3Shield::available() {
 void SFEMP3Shield::refill() {
 
   //Serial.println(F("filling"));
+#if PERF_MON_PIN != -1
+  digitalWrite(PERF_MON_PIN,LOW);
+#endif
 
   // no need to keep interrupts blocked, allow other ISR such as timer0 to continue
 #if !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
@@ -1791,6 +1799,10 @@ void SFEMP3Shield::refill() {
     sei();
 #endif
   }
+
+#if PERF_MON_PIN != -1
+  digitalWrite(PERF_MON_PIN,HIGH);
+#endif
 }
 
 //------------------------------------------------------------------------------

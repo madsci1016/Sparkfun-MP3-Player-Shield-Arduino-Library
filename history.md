@@ -1,6 +1,9 @@
 Revision History
 ---------------
 
+## 1.02.06
+* added PERF_MON_PIN to enable allowing measurement of the CPU utilization and description of performance document
+
 ## 1.02.05
 * implemented sdfatlib20130629 into repo
   * minor corrects of SdFatUtil's FreeRam() reporting correct value.

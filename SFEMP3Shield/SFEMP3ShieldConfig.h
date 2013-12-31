@@ -148,7 +148,8 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * \brief A macro to configure the RESET pin
  *
  * VS10xx's RESET Pin
- * as seen by the the Arduino */
+ * as seen by the the Arduino
+ */
 
 /**
  * \def SD_SEL
@@ -156,7 +157,20 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  *
  * This is the pin of the Arduino that is connected to the SdCards Chip select pin.
  * This pin should be the same pin assigned in SdFat Library.
- * as seen by the the Arduino */
+ * as seen by the the Arduino
+ */
+
+/**
+ * \def PERF_MON_PIN
+ * \brief A macro to configure a Pin to analyze performance
+ *
+ * The output of this pin will be low, during the refill of the VSdsp, allowing measurement of the CPU utilization, required to sustain playing.
+ *
+ * Set value to any available digital output, including A0-5...
+ *
+ * Set value to negative to disable.
+ */
+#define PERF_MON_PIN          -1 //  example of A5
 
 #include <pins_arduino.h>
 

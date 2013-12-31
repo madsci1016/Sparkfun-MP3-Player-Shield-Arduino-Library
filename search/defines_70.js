@@ -10,5 +10,6 @@ var searchData=
   ['para_5fpositionmsec_5f0',['para_positionMsec_0',['../_s_f_e_m_p3_shield_8h.html#a003ddc3f8e3f2a4180945c9a6fec4159',1,'SFEMP3Shield.h']]],
   ['para_5fpositionmsec_5f1',['para_positionMsec_1',['../_s_f_e_m_p3_shield_8h.html#af1e9ff94ad9a684e10252866f0097480',1,'SFEMP3Shield.h']]],
   ['para_5fresync',['para_resync',['../_s_f_e_m_p3_shield_8h.html#ab709a4c7ea09adabf0dbe1b100e2874d',1,'SFEMP3Shield.h']]],
-  ['para_5fversion',['para_version',['../_s_f_e_m_p3_shield_8h.html#ad9d42f71b6e9f419f395e62957f065f0',1,'SFEMP3Shield.h']]]
+  ['para_5fversion',['para_version',['../_s_f_e_m_p3_shield_8h.html#ad9d42f71b6e9f419f395e62957f065f0',1,'SFEMP3Shield.h']]],
+  ['perf_5fmon_5fpin',['PERF_MON_PIN',['../_s_f_e_m_p3_shield_config_8h.html#a0708087e3f3e698da84621b6184c824d',1,'SFEMP3ShieldConfig.h']]]
 ];

@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.05</span>
+   &#160;<span id="projectnumber">1.02.06</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -95,6 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li class="level2"><a href="#limitation">Limitations.</a></li>
 </ul>
 </li>
+<li class="level1"><a href="#Performance">Performance</a></li>
 <li class="level1"><a href="#Plug_Ins">Plug Ins and Patches</a></li>
 <li class="level1"><a href="#Troubleshooting">Troubleshooting</a></li>
 <li class="level1"><a href="#Error_Codes">Error Codes</a><ul><li class="level2"><a href="#beginfunc">begin function:</a></li>
@@ -187,13 +188,32 @@ MP3-4NANO Shield</h2>
 <h2><a class="anchor" id="limitation"></a>
 Limitations.</h2>
 <ul>
-<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, results in the SPI bus being less than half as efficient. Along with overhead. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly.</li>
+<li><b>The SPI Bus:</b> The configuration of the VS10xx chip as a Slave on the SPI bus, along with the SdCard on that same bus master hosted by the Arduino. See <a class="el" href="index.html#Performance">Performance</a></li>
 <li><b>Non-Blocking:</b> The controlling sketch needs to enquire via <a class="el" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980" title="Inidicate if a song is playing? ">SFEMP3Shield::isPlaying</a> as to determine if the current audio stream is finished or still playing. This is actually good and a result of the library being non-blocking, allowing the calling sketch to simply initiate the play of a desired audio stream from SdCard by simply calling playTrack or playMP3, of the desired file, and move on with other RealTime issues.</li>
 <li><b>Multi-Chip VS10xx support:</b> Not at this time. There are too many issues with member functions of the <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI. ">SFEMP3Shield</a> class requiring to be static.</li>
 <li><b>Audio Input</b> Most commericially available shields at this time do not support either Line Level or Microphone Input. With the exception of the Seeeduino MP3 Shield and other home made shields. Where as the below admx____.053 and <a class="el" href="class_s_f_e_m_p3_shield.html#a40c1c5874c8edc63c3e2eb4d346fd2e3" title="Initially load ADMixer patch and configure line/mic mode. ">SFEMP3Shield::ADMixerLoad</a> and <a class="el" href="class_s_f_e_m_p3_shield.html#a3b1696f32ac61f8d78d538cb5b5ee2db" title="Set ADMixer&#39;s attenuation of input to between -3 and -31 dB otherwise disable. ">SFEMP3Shield::ADMixerVol</a> are provided for such devices. Otherwise the example <a class="el" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver. ">MP3Shield_Library_Demo.ino</a> has these lines commented out in <a class="el" href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup()</a>. As to reduce complications. To re-enable simply uncomment.</li>
 <li><b>Recording</b> As most commericially available shields do not support audio input this feature has not been implemented. <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd>Support Audio Recording.</dd></dl>
 </li>
 </ul>
+<h1><a class="anchor" id="Performance"></a>
+Performance</h1>
+<p>Understanding that every byte streamed to the VS10xx needs also to be read from the SdCard over the same shared SPI bus, resulting in the SPI bus being less than half as efficient. Along with overhead. Depending upon the Bitrate of the file being streamed to the VSdsp, there is only so much Real Time available. This may impact the performance of high bit-rate audio files being streamed. Additionally the Play Speed Multiplier feature can be exhausted quickly. Where on a typical UNO there is plenty of real-time to transfer good quality files, with CPU to spare for other tasks, assuming they do not consume too much time either.</p>
+<p>The available CPU can be increased by either or both increasing the speed of the SPI and or the Arduino F_CPU. Where the Speed of the SPI is individually maintained by both this driver and SdFatLib. As not to or be interfered with each other and or other libraries using the same SPI bus. The SdCard can be increased from SPI_HALF_SPEED to SPI_FULL_SPEED argument in the SD.begin. Where this library will set the Read and Write speeds to the VSdsp correspondingly, based on F_CPU of the Arduino.</p>
+<p>The actual consumed CPU utilization can be measured by defining the <a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a0708087e3f3e698da84621b6184c824d">PERF_MON_PIN</a> to a valid pin, which generates a low signal on configured pin while servicing the VSdsp. This is inclusive of the SdCard reads.</p>
+<p>The below table show's typical average CPU utilizations of the same MP3 file that has been resampled to various bit rates and using different configurations. Where a significant difference is observed in performance.</p>
+<table class="doxtable">
+<tr>
+<th align="center">BitRate </th><th align="center">SdCard </th><th align="center">Refilling </th><th align="center">IDLE  </th></tr>
+<tr>
+<td align="center">128K </td><td align="center">Half </td><td align="center">12% </td><td align="center">88% </td></tr>
+<tr>
+<td align="center">128K </td><td align="center">Full </td><td align="center">10% </td><td align="center">90% </td></tr>
+<tr>
+<td align="center">96K </td><td align="center">Full </td><td align="center">7% </td><td align="center">93% </td></tr>
+<tr>
+<td align="center">56K </td><td align="center">Full </td><td align="center">4% </td><td align="center">96% </td></tr>
+</table>
+<dl class="section note"><dt>Note</dt><dd>Only F_CPU of 8MgHz and 16Hz are suppored. Others will default to SPI_CLOCK_DIV2, assuming 4MgHz.</dd></dl>
 <h1><a class="anchor" id="Plug_Ins"></a>
 Plug Ins and Patches</h1>
 <p>The VS10xx chips are DSP's that run firmware out of ROM, that is internal to the VS10xx chip itself. Where the VSdsp's RAM can additionally be loaded with externally provided firmware and executed, also known as patches or plug-ins, over the SPI port and executed. This allows the VSdsp to have a method for both fixing problems that may exist in the factory ROM's firmware and or add new features provided by <a href="http://www.vlsi.fi/en/support/software.html">VLSI's website</a>. It is even possible to write your own custom VSdsp code, using there Integrated Development Tools (VSIDE).</p>
@@ -342,7 +362,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Dec 21 2013 19:44:42 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 31 2013 17:40:24 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

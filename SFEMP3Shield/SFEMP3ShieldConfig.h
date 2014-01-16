@@ -70,7 +70,7 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  *
  * Set \c SEEEDUINO to \c 1 to use on a Seeeduino MP3 player shield
  */
-#define SEEEDUINO 0 // uncomment if using the Seeeduino Music Shield
+#define SEEEDUINO 0 // set to 1 if using the Seeeduino Music Shield
 
 /**
  * \def GRAVITECH
@@ -84,7 +84,21 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  *
  * Set \c GRAVITECH to \c 1 to use on a Gravitech's MP3-4NANO
  */
-#define GRAVITECH 0 // uncomment if using the Gravitech's MP3-4NANO shield
+#define GRAVITECH 0 // set to 1 if using the Gravitech's MP3-4NANO shield
+
+/**
+ * \def BARETOUCH
+ * \brief A macro to configure use with the Bare Conductive Touch Board
+ *
+ * Bare Conductive's Touch Board is supported. However, its pin mapping is 
+ * significantly different to the SparkFun MP3 player shield. Setting
+ * BARETOUCH to 1 below handles this for you.
+ *
+ * Set \c BARETOUCH to \c 0 to use on a SparkFun MP3 player shield
+ *
+ * Set \c BARETOUCH to \c 1 to use with a Bare Touch Board
+ */
+#define BARETOUCH 0 // set to 1 if using the Bare Conductive Touch Board
 
 //------------------------------------------------------------------------------
 /*
@@ -152,7 +166,16 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
   //#define MP3_DREQINT        0 // There is no IRQ used on Seeduino
   #define MP3_RESET           A0 //Reset is active low
   #define SD_SEL              10 //select pin for SD card
-#else // otherwise use pinout of typical Sparkfun MP3 Player Shield.
+// if BARETOUCH use the following pin map
+#elif ( BARETOUCH == 1 ) 	
+  #define MP3_XCS             9  //Control Chip Select Pin (for accessing SPI Control/Status registers)
+  #define MP3_XDCS            6  //Data Chip Select / BSYNC Pin
+  #define MP3_DREQ            7  //Data Request Pin: Player asks for more data
+  #define MP3_DREQINT         4  //Corresponding INTx for DREQ pin
+  #define MP3_RESET           8  //Reset is active low
+  #define SD_SEL              5  //select pin for SD card	
+// otherwise use pinout of typical Sparkfun MP3 Player Shield.
+#else 
   #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
   #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin
   #define MP3_DREQ             2 //Data Request Pin: Player asks for more data

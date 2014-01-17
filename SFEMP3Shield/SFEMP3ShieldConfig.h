@@ -91,14 +91,25 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * \brief A macro to configure use with the Bare Conductive Touch Board
  *
  * Bare Conductive's Touch Board is supported. However, its pin mapping is 
- * significantly different to the SparkFun MP3 player shield. Setting
- * BARETOUCH to 1 below handles this for you.
+ * significantly different to the SparkFun MP3 player shield.
  *
- * Set \c BARETOUCH to \c 0 to use on a SparkFun MP3 player shield
+ * To automatically adjust the pin mapping, do the following:
  *
- * Set \c BARETOUCH to \c 1 to use with a Bare Touch Board
+ * 1. Download the Bare Conductive board definitions file (boards.txt) from
+ *    their Github (https://github.com/bareconductive).
+ * 2. Extract the Bare Conductive folder into your Documents/Arduino/Hardware
+ *    folder (My Documents\Arduino\Hardware on Windows). If the folder does
+ *    not already exist, create it.
+ * 3. Restart Arduino if it is currently running.
+ * 4. In the Arduino menu, select Tools -> Board -> Bare Conductive Touch Board
+ * 
+ * This will automatically set up this library when the board is selected, and
+ * revert back to the setting for the Sparkfun MP3 shield when it is not. If you
+ * would like to override this, set the BARETOUCH value below: 0 to use the
+ * Sparkfun MP3 shield, 1 to use the Bare Conductive Touch Board.
  */
-#define BARETOUCH 0 // set to 1 if using the Bare Conductive Touch Board
+ 
+#define BARETOUCH 0 // set to 1 to force Bare Conductive Touch Board settings on
 
 //------------------------------------------------------------------------------
 /*
@@ -166,8 +177,8 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
   //#define MP3_DREQINT        0 // There is no IRQ used on Seeduino
   #define MP3_RESET           A0 //Reset is active low
   #define SD_SEL              10 //select pin for SD card
-// if BARETOUCH use the following pin map
-#elif ( BARETOUCH == 1 ) 	
+// if BARETOUCH or ARDUINO_AVR_BARETOUCH use the following pin map
+#elif (( BARETOUCH == 1 ) || ( ARDUINO_AVR_BARETOUCH == 1 )) 	
   #define MP3_XCS             9  //Control Chip Select Pin (for accessing SPI Control/Status registers)
   #define MP3_XDCS            6  //Data Chip Select / BSYNC Pin
   #define MP3_DREQ            7  //Data Request Pin: Player asks for more data

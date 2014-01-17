@@ -93,7 +93,8 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * Bare Conductive's Touch Board is supported. However, its pin mapping is 
  * significantly different to the SparkFun MP3 player shield.
  *
- * To automatically adjust the pin mapping, do the following:
+ * If you are using Arduino 1.5.0+ then automatic pin remapping can be enabled
+ * as follows:
  *
  * 1. Download the Bare Conductive board definitions file (boards.txt) from
  *    their Github (https://github.com/bareconductive).
@@ -107,6 +108,14 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * revert back to the setting for the Sparkfun MP3 shield when it is not. If you
  * would like to override this, set the BARETOUCH value below: 0 to use the
  * Sparkfun MP3 shield, 1 to use the Bare Conductive Touch Board.
+ *
+ * If you are using an earlier version of Arduino, you will have to manage the
+ * pin remapping manually. Setting BARETOUCH below to 0 will leave the pin map
+ * as normal - i.e. for the Sparkfun MP3 shield. Setting it to 1 will map the 
+ * pins correctly for the Bare Conductive Touch Board. If you decide to then
+ * use a different board, you'll have to remember to come back here and adjust 
+ * the settings accordingly.
+ * 
  */
  
 #define BARETOUCH 0 // set to 1 to force Bare Conductive Touch Board settings on

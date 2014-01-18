@@ -70,7 +70,7 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  *
  * Set \c SEEEDUINO to \c 1 to use on a Seeeduino MP3 player shield
  */
-#define SEEEDUINO 0 // uncomment if using the Seeeduino Music Shield
+#define SEEEDUINO 0 // set to 1 if using the Seeeduino Music Shield
 
 /**
  * \def GRAVITECH
@@ -84,7 +84,41 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  *
  * Set \c GRAVITECH to \c 1 to use on a Gravitech's MP3-4NANO
  */
-#define GRAVITECH 0 // uncomment if using the Gravitech's MP3-4NANO shield
+#define GRAVITECH 0 // set to 1 if using the Gravitech's MP3-4NANO shield
+
+/**
+ * \def BARETOUCH
+ * \brief A macro to configure use with the Bare Conductive Touch Board
+ *
+ * Bare Conductive's Touch Board is supported. However, its pin mapping is 
+ * significantly different to the SparkFun MP3 player shield.
+ *
+ * If you are using Arduino 1.5.0+ then automatic pin remapping can be enabled
+ * as follows:
+ *
+ * 1. Download the Bare Conductive board definitions file (boards.txt) from
+ *    their Github (https://github.com/bareconductive).
+ * 2. Extract the Bare Conductive folder into your Documents/Arduino/Hardware
+ *    folder (My Documents\Arduino\Hardware on Windows). If the folder does
+ *    not already exist, create it.
+ * 3. Restart Arduino if it is currently running.
+ * 4. In the Arduino menu, select Tools -> Board -> Bare Conductive Touch Board
+ * 
+ * This will automatically set up this library when the board is selected, and
+ * revert back to the setting for the Sparkfun MP3 shield when it is not. If you
+ * would like to override this, set the BARETOUCH value below: 0 to use the
+ * Sparkfun MP3 shield, 1 to use the Bare Conductive Touch Board.
+ *
+ * If you are using an earlier version of Arduino, you will have to manage the
+ * pin remapping manually. Setting BARETOUCH below to 0 will leave the pin map
+ * as normal - i.e. for the Sparkfun MP3 shield. Setting it to 1 will map the 
+ * pins correctly for the Bare Conductive Touch Board. If you decide to then
+ * use a different board, you'll have to remember to come back here and adjust 
+ * the settings accordingly.
+ * 
+ */
+ 
+#define BARETOUCH 0 // set to 1 to force Bare Conductive Touch Board settings on
 
 //------------------------------------------------------------------------------
 /*
@@ -152,7 +186,16 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
   //#define MP3_DREQINT        0 // There is no IRQ used on Seeduino
   #define MP3_RESET           A0 //Reset is active low
   #define SD_SEL              10 //select pin for SD card
-#else // otherwise use pinout of typical Sparkfun MP3 Player Shield.
+// if BARETOUCH or ARDUINO_AVR_BARETOUCH use the following pin map
+#elif (( BARETOUCH == 1 ) || ( ARDUINO_AVR_BARETOUCH == 1 )) 	
+  #define MP3_XCS             9  //Control Chip Select Pin (for accessing SPI Control/Status registers)
+  #define MP3_XDCS            6  //Data Chip Select / BSYNC Pin
+  #define MP3_DREQ            7  //Data Request Pin: Player asks for more data
+  #define MP3_DREQINT         4  //Corresponding INTx for DREQ pin
+  #define MP3_RESET           8  //Reset is active low
+  #define SD_SEL              5  //select pin for SD card	
+// otherwise use pinout of typical Sparkfun MP3 Player Shield.
+#else 
   #define MP3_XCS              6 //Control Chip Select Pin (for accessing SPI Control/Status registers)
   #define MP3_XDCS             7 //Data Chip Select / BSYNC Pin
   #define MP3_DREQ             2 //Data Request Pin: Player asks for more data

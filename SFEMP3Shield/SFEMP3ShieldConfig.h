@@ -117,7 +117,6 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
  * the settings accordingly.
  * 
  */
- 
 #define BARETOUCH 0 // set to 1 to force Bare Conductive Touch Board settings on
 
 //------------------------------------------------------------------------------

@@ -1,6 +1,9 @@
 Revision History
 ---------------
 
+## 1.02.08
+* added support for BareTouch pinout in config
+
 ## 1.02.07
 * added SendSingleMIDInote() that sends a MIDI beep. It will suspend current playing stream to send beep and then resume prior stream
 

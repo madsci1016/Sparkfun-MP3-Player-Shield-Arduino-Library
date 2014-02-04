@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.07</span>
+   &#160;<span id="projectnumber">1.02.08</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -123,6 +123,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a8df016646975c4e31e345abc3d432fe9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a8df016646975c4e31e345abc3d432fe9">TEENSY2</a>&#160;&#160;&#160;0</td></tr>
 <tr class="memdesc:a8df016646975c4e31e345abc3d432fe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro to configure pins for connecting the Sparkfun shield to a Teensy 2.  <a href="#a8df016646975c4e31e345abc3d432fe9">More...</a><br/></td></tr>
 <tr class="separator:a8df016646975c4e31e345abc3d432fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5649127c062be5324d8ed4a3b7fa2617"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a5649127c062be5324d8ed4a3b7fa2617">BARETOUCH</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a5649127c062be5324d8ed4a3b7fa2617"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro to configure use with the Bare Conductive Touch Board.  <a href="#a5649127c062be5324d8ed4a3b7fa2617">More...</a><br/></td></tr>
+<tr class="separator:a5649127c062be5324d8ed4a3b7fa2617"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0708087e3f3e698da84621b6184c824d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a0708087e3f3e698da84621b6184c824d">PERF_MON_PIN</a>&#160;&#160;&#160;-1</td></tr>
 <tr class="memdesc:a0708087e3f3e698da84621b6184c824d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A macro to configure a Pin to analyze performance.  <a href="#a0708087e3f3e698da84621b6184c824d">More...</a><br/></td></tr>
 <tr class="separator:a0708087e3f3e698da84621b6184c824d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +202,32 @@ Macros</h2></td></tr>
 
 <p>Definition in file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a5649127c062be5324d8ed4a3b7fa2617"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BARETOUCH&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A macro to configure use with the Bare Conductive Touch Board. </p>
+<p>Bare Conductive's Touch Board is supported. However, its pin mapping is significantly different to the SparkFun MP3 player shield.</p>
+<p>If you are using Arduino 1.5.0+ then automatic pin remapping can be enabled as follows:</p>
+<ol type="1">
+<li>Download the Bare Conductive board definitions file (boards.txt) from their Github (<a href="https://github.com/bareconductive">https://github.com/bareconductive</a>).</li>
+<li>Extract the Bare Conductive folder into your Documents/Arduino/Hardware folder (My Documents on Windows). If the folder does not already exist, create it.</li>
+<li>Restart Arduino if it is currently running.</li>
+<li>In the Arduino menu, select Tools -&gt; Board -&gt; Bare Conductive Touch Board</li>
+</ol>
+<p>This will automatically set up this library when the board is selected, and revert back to the setting for the Sparkfun MP3 shield when it is not. If you would like to override this, set the BARETOUCH value below: 0 to use the Sparkfun MP3 shield, 1 to use the Bare Conductive Touch Board.</p>
+<p>If you are using an earlier version of Arduino, you will have to manage the pin remapping manually. Setting BARETOUCH below to 0 will leave the pin map as normal - i.e. for the Sparkfun MP3 shield. Setting it to 1 will map the pins correctly for the Bare Conductive Touch Board. If you decide to then use a different board, you'll have to remember to come back here and adjust the settings accordingly. </p>
+
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00134">134</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a36ca8260c1ba2bc253b2da84cf27ce6a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -232,7 +261,7 @@ Macros</h2></td></tr>
 <p>Where used in the SingleMIDInoteFile array for sending quick beeps with function <a class="el" href="class_s_f_e_m_p3_shield.html#af4a83e412128e4c23c8b04dc6c91975c" title="Play hardcoded MIDI file. ">SFEMP3Shield::SendSingleMIDInote()</a></p>
 <dl class="section note"><dt>Note</dt><dd>Where Ch9 is reserved for Percussion Instruments with single note </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00340">340</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00382">382</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -249,7 +278,7 @@ Macros</h2></td></tr>
 <p>A macro used to specify the intensity of the MIDI note. </p>
 <p>Value ranges from 0 to 127(full scale). Where used in the SingleMIDInoteFile array for sending both the ON and off of the quick beep with function <a class="el" href="class_s_f_e_m_p3_shield.html#af4a83e412128e4c23c8b04dc6c91975c" title="Play hardcoded MIDI file. ">SFEMP3Shield::SendSingleMIDInote()</a> </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00369">369</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00411">411</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -267,7 +296,7 @@ Macros</h2></td></tr>
 <p>Where used in the SingleMIDInoteFile array for sending quick beeps with function <a class="el" href="class_s_f_e_m_p3_shield.html#af4a83e412128e4c23c8b04dc6c91975c" title="Play hardcoded MIDI file. ">SFEMP3Shield::SendSingleMIDInote()</a></p>
 <dl class="section warning"><dt>Warning</dt><dd>format is variable length, must keep it small. As not to break hardcoded header format </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00360">360</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00402">402</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -285,7 +314,7 @@ Macros</h2></td></tr>
 <p>Where used in the SingleMIDInoteFile array for sending quick beeps with function <a class="el" href="class_s_f_e_m_p3_shield.html#af4a83e412128e4c23c8b04dc6c91975c" title="Play hardcoded MIDI file. ">SFEMP3Shield::SendSingleMIDInote()</a></p>
 <dl class="section note"><dt>Note</dt><dd>So for Ch9's the note is GM Bank Percussion Instrument, not actual note. e.g 56 is cowbell. This removes the necassasity to send other commands. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00350">350</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00392">392</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -302,7 +331,7 @@ Macros</h2></td></tr>
 <p>A macro to configure the DREQ pin. </p>
 <p>VS10xx's DREQ pin that indicates when it is clear to send more data. aka Data REQuest. as seen by the the Arduino </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00205">205</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00247">247</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -321,7 +350,7 @@ Macros</h2></td></tr>
 <p>This may not be needed when USE_MP3_REFILL_MEANS is not equal to USE_MP3_REFILL_MEANS</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a4c60fb7c286789d19f9ed13a19891653" title="The selection of DREQ&#39;ss refilling method. ">USE_MP3_REFILL_MEANS</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00209">209</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00251">251</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -338,7 +367,7 @@ Macros</h2></td></tr>
 <p>A macro to configure the RESET pin. </p>
 <p>VS10xx's RESET Pin as seen by the the Arduino </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00211">211</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00253">253</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -355,7 +384,7 @@ Macros</h2></td></tr>
 <p>A macro to configure the XCS pin. </p>
 <p>VS10xx's Control Chip Select Pin (for accessing SPI Control/Status registers) as seen by the the Arduino </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00203">203</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00245">245</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -372,7 +401,7 @@ Macros</h2></td></tr>
 <p>A macro to configure the XDCS pin. </p>
 <p>VS10xx's Data Chip Select Pin (for streaming data back and forth) as seen by the the Arduino </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00204">204</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00246">246</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -391,7 +420,7 @@ Macros</h2></td></tr>
 <p>Set value to any available digital output, including A0-5...</p>
 <p>Set value to negative to disable. </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00173">173</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00206">206</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -408,7 +437,7 @@ Macros</h2></td></tr>
 <p>A macro to configure the SdCard Chip Select for SFEMP3SHield library. </p>
 <p>This is the pin of the Arduino that is connected to the SdCards Chip select pin. This pin should be the same pin assigned in SdFat Library. as seen by the the Arduino </p>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00215">215</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00257">257</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -468,7 +497,7 @@ Macros</h2></td></tr>
 <dd>
 INT(x) may be relocated or not be available on some base systems depending upon design. Such as with the Lenoardo, which have pins D2/D3 and there corresponding INT0/INT1 swapped, versus the UNO. See <a href="http://arduino.cc/en/Reference/AttachInterrupt">attachInterrupt() </a> Where SFE MP3 Player can use USE_MP3_INTx as DREQ is connected to D2 aka INT0. Noting that MP3_DREQINT vector is defined above, in pin assignments. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00264">264</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00306">306</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -486,7 +515,7 @@ INT(x) may be relocated or not be available on some base systems depending upon 
 <p>Where Main loop uses <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill. ">SFEMP3Shield::available()</a> to check if DREQ needs refilling on a periodic basis.</p>
 <dl class="section note"><dt>Note</dt><dd>In this means <a class="el" href="class_s_f_e_m_p3_shield.html#a6a0a8fdb064732ff6e98cc4a717600a5" title="Public interface of refill. ">SFEMP3Shield::available()</a> is simply <a class="el" href="class_s_f_e_m_p3_shield.html#adcb213e29ec8504303fa7299ac93005b" title="Refill the VS10xx buffer with new data. ">SFEMP3Shield::refill()</a> and MP3_REFILL_PERIOD is <em>NOT</em> used with this means. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00274">274</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00316">316</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -510,7 +539,7 @@ INT(x) may be relocated or not be available on some base systems depending upon 
  Assuming resources are not committed else where.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Remember to restart Arduino IDE for new Libraries to be available. Coping the file is not enough. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00242">242</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00284">284</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -531,7 +560,7 @@ INT(x) may be relocated or not be available on some base systems depending upon 
 The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more bytes.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd>The use of <a class="el" href="_s_f_e_m_p3_shield_config_8h.html#af051296056aad0d0c1c11eb173f42d63" title="A macro of the enumerated value used to select Soft SimpleTimer period as the means to refill the VS1...">USE_MP3_SimpleTimer</a> interrupt requires the TimerOne.h library can be downloaded from <a href="http://www.arduino.cc/playground/Code/SimpleTimer#GetTheCode">http://www.arduino.cc/playground/Code/SimpleTimer#GetTheCode</a> for library. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00302">302</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00344">344</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
@@ -550,14 +579,14 @@ The associated &lt;SimpleTimer.h&gt; library is required and utilizes 170 more b
 <dl class="section note"><dt>Note</dt><dd>MP3_REFILL_PERIOD is required when using this means.</dd></dl>
 <dl class="section see"><dt>See Also</dt><dd>The use of <a class="el" href="_s_f_e_m_p3_shield_config_8h.html#a95aa08c3b9f0124c89535b4fa0e0b502" title="A macro of the enumerated value used to select Timer1&#39;s interrupt as the means to refill the VS10xx...">USE_MP3_Timer1</a> interrupt requires the TimerOne.h library can be downloaded from <a href="http://code.google.com/p/arduino-timerone/">http://code.google.com/p/arduino-timerone/</a> for library. </dd></dl>
 
-<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00286">286</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
+<p>Definition at line <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html#l00328">328</a> of file <a class="el" href="_s_f_e_m_p3_shield_config_8h_source.html">SFEMP3ShieldConfig.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 4 2014 11:01:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Feb 4 2014 11:37:56 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

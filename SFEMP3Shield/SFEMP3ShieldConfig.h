@@ -102,7 +102,7 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
 
 /**
  * \def BARETOUCH
- * \brief A macro to configure use with the Bare Conductive Touch Board
+ * \brief A macro to explicitly configure use with the Bare Conductive Touch Board
  *
  * Bare Conductive's Touch Board is supported. However, its pin mapping is 
  * significantly different to the SparkFun MP3 player shield.

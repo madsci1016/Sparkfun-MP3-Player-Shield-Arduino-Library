@@ -56,6 +56,9 @@ An example is provided in the SFEMP3Shield/examples folder.  Which is developed 
 
 As mentioned the initial and principal support of this library is with Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Although various other boards and shields may be implemented by customing the \ref SFEMP3ShieldConfig.h file.
 
+\subsection ArduinoBareTouch Arduino Bare Touch
+Support for Bare Conductive's Touch Board is provided and documented in \ref SFEMP3ShieldConfig.h.
+
 \subsection ArduinoMega Arduino Mega Board
 Support for Arduino and Seeeduino Mega's are documented in \ref SFEMP3ShieldConfig.h, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove.
 

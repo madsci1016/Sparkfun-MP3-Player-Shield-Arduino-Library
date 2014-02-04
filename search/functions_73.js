@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['sendsinglemidinote',['SendSingleMIDInote',['../class_s_f_e_m_p3_shield.html#af4a83e412128e4c23c8b04dc6c91975c',1,'SFEMP3Shield']]],
   ['serialprintpaddednumber',['SerialPrintPaddedNumber',['../_file_player_8ino.html#a0b27482093b235d665dda63af14295b0',1,'FilePlayer.ino']]],
   ['server',['server',['../_web_player_8ino.html#aa26bd0f0bdc5e4c3948e403b7ba4c084',1,'WebPlayer.ino']]],
   ['setbitrate',['setBitRate',['../class_s_f_e_m_p3_shield.html#a5ac4bf6a2eb42f50e2472530f5842687',1,'SFEMP3Shield']]],

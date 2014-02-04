@@ -38,7 +38,7 @@ PROJECT_NAME           = SFEMP3Shield
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 1.02.06
+PROJECT_NUMBER         = 1.02.07
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -2267,7 +2267,7 @@ INTERACTIVE_SVG        = NO
 # found. If left blank, it is assumed the dot tool can be found in the path.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-DOT_PATH               = c:\PROGRA~2\GRAPHV~1.30\bin
+DOT_PATH               = c:\PROGRA~2\Graphviz\bin
 
 # The DOTFILE_DIRS tag can be used to specify one or more directories that
 # contain dot files that are included in the documentation (see the \dotfile

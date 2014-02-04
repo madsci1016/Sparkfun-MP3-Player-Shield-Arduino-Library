@@ -79,7 +79,7 @@ void setup() {
 
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1035, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1040, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
@@ -566,12 +566,17 @@ void parse_menu(byte key_command) {
     Serial.print(F("VU meter = "));
     Serial.println(MP3player.getVUmeter());
 
+   } else if(key_command == 'b') {
+    Serial.println(F("Playing Static MIDI file."));
+    MP3player.SendSingleMIDInote();
+    Serial.println(F("Ended Static MIDI file."));
+
   } else if(key_command == 'h') {
     help();
   }
 
   // print prompt after key stroke has been processed.
-  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V,l,01-65534 :"));
+  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V,l,b,01-65534 :"));
 }
 
 //------------------------------------------------------------------------------
@@ -607,6 +612,7 @@ void help() {
   Serial.println(F(" [S] Show State of Device."));
   Serial.println(F(" [V] Enable VU meter Test."));
   Serial.println(F(" [l] Display list of music files"));
+  Serial.println(F(" [b] Play a MIDI File Beep"));
   Serial.println(F(" [###] Enter index of file to play, zero pad! e.g. 01-65534"));
   Serial.println(F(" [h] this help"));
 }

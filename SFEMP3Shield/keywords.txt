@@ -51,6 +51,7 @@ trackAlbum               KEYWORD2
 trackArtist              KEYWORD2
 trackTitle               KEYWORD2
 vs_init                  KEYWORD2
+SendSingleMIDInote       KEYWORD2
 
 
 #######################################

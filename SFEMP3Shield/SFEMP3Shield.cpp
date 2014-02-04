@@ -40,6 +40,47 @@ PROGMEM const uint16_t bitrate_table[15][6] = {
                  {448,384,320,256,160,160}  //1110
                };
 
+/*
+ * Format of a MIDI file into a char arrar. Simply one note on and then off.
+*/
+// MIDI Event Specifics
+#define MIDI_NOTE_ON             9
+#define MIDI_NOTE_OFF            8
+
+// MIDI File structure
+// Header Chunk
+#define MIDI_HDR_CHUNK_ID     0x4D, 0x54, 0x68, 0x64  // const for MIDI
+#define MIDI_CHUNKSIZE           0,    0,    0,    6
+#define MIDI_FORMAT              0,    0              // VSdsp only support Format 0!
+#define MIDI_NUMBER_OF_TRACKS    0,    1              // ergo must be 1 track
+#define MIDI_TIME_DIVISION       0,   96
+// Track Chunk
+#define MIDI_TRACK_CHUNK_ID   0x4D, 0x54, 0x72, 0x6B  // const for MIDI
+#define MIDI_CHUNK_SIZE          0,    0,    0, sizeof(MIDI_EVENT_NOTE_ON) + sizeof(MIDI_EVENT_NOTE_OFF) + sizeof(MIDI_END_OF_TRACK) // hard coded with zero padded
+// Events
+#define MIDI_EVENT_NOTE_ON       0, (MIDI_NOTE_ON<<4) + MIDI_CHANNEL, MIDI_NOTE_NUMBER, MIDI_INTENSITY
+#define MIDI_EVENT_NOTE_OFF   MIDI_NOTE_DURATION, (MIDI_NOTE_OFF<<4) + MIDI_CHANNEL, MIDI_NOTE_NUMBER, MIDI_INTENSITY
+//
+#define MIDI_END_OF_TRACK        0, 0xFF, 0x2F,    0
+
+/**
+ * \brief a MIDI File of one Note
+ *
+ * This is string containing a complete MIDI format 0 file of one Note ON and then Off.
+ *
+ * <A HREF = "http://www.sonicspot.com/guide/midifiles.html" > Description of MIDI file parsing </A>
+ * \note PROGMEM macro forces to Flash space.
+ * \warning This should consume 34 bytes of flash
+ *
+ *
+ * An inline equation @f$ e^{\pi i}+1 = 0 @f$
+ *
+ * A displayed equation: @f[ e^{\pi i}+1 = 0 @f]
+ *
+ *
+ */
+PROGMEM const uint8_t SingleMIDInoteFile[] = {MIDI_HDR_CHUNK_ID, MIDI_CHUNKSIZE, MIDI_FORMAT, MIDI_NUMBER_OF_TRACKS, MIDI_TIME_DIVISION, MIDI_TRACK_CHUNK_ID, MIDI_CHUNK_SIZE, MIDI_EVENT_NOTE_ON, MIDI_EVENT_NOTE_OFF, MIDI_END_OF_TRACK};
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /* Initialize static classes and variables
  */
@@ -1766,7 +1807,7 @@ void SFEMP3Shield::refill() {
   sei();
 #endif
 
-  while(digitalRead(MP3_DREQ)){
+  while(digitalRead(MP3_DREQ)) {
 
     if(!track.read(mp3DataBuffer, sizeof(mp3DataBuffer))) { //Go out to SD card and try reading 32 new bytes of the song
       track.close(); //Close out this track
@@ -1803,6 +1844,55 @@ void SFEMP3Shield::refill() {
 #if PERF_MON_PIN != -1
   digitalWrite(PERF_MON_PIN,HIGH);
 #endif
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Play hardcoded MIDI file
+ *
+ * This the primative function to fill the VSdsp's buffers quicly. The intention
+ * is to send a quick MIDI file of a single note on and off. This can be used 
+ * responses to buttons and such. Where the MIDI file is short enough to be 
+ * stored into an array that can be delivered via SPI to the VSdsp's data stream 
+ * buffer. Waiting for DREQ every 32 bytes.
+ */
+void SFEMP3Shield::SendSingleMIDInote() {
+
+  if(!digitalRead(MP3_RESET))
+    return;
+
+  //cancel and store current state to restore after
+  disableRefill();
+  state_m prv_state = playing_state;
+  playing_state = playMIDIbeep;
+  
+  // need to quickly purge the exiting formate of decoder.
+  flush_cancel(none);
+
+  // wait for VS1053 to be available.
+  while(!digitalRead(MP3_DREQ)); 
+
+#if !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+  cli(); // allow transfer to occur with out interruption.
+#endif
+
+  dcs_low(); //Select Data
+  for(uint8_t y = 0 ; y < sizeof(SingleMIDInoteFile) ; y++) { // sizeof(mp3DataBuffer)
+    // Every 32 check if not ready for next buffer chunk.
+    if ( !(y % 32) ) {
+      while(!digitalRead(MP3_DREQ));
+    }
+    SPI.transfer( pgm_read_byte_near( &(SingleMIDInoteFile[y]))); // Send next byte
+  }
+  dcs_high(); //Deselect Data
+
+#if !defined(USE_MP3_REFILL_MEANS) || USE_MP3_REFILL_MEANS == USE_MP3_INTx
+  sei();  // renable interrupts for other processes
+#endif
+
+  flush_cancel(none); // need to quickly purge the exiting format of decoder.
+  playing_state = prv_state;
+  enableRefill();
 }
 
 //------------------------------------------------------------------------------

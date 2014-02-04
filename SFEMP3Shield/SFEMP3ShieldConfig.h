@@ -328,4 +328,47 @@ Support for Arduino Leonardo is afflicted by having the SPI pins not routing the
 #define MP3_REFILL_PERIOD 100
 #endif
 
+//------------------------------------------------------------------------------
+/**
+ * \def MIDI_CHANNEL
+ * \brief A macro used to specify the MIDI channel
+ *
+ * Where used in the SingleMIDInoteFile array for sending quick beeps with function SFEMP3Shield::SendSingleMIDInote()
+ *
+ * \note Where Ch9 is reserved for Percussion Instruments with single note
+ */
+#define MIDI_CHANNEL             9 
+
+/**
+ * \def MIDI_NOTE_NUMBER
+ * \brief A macro used to specify the MIDI note
+ *
+ * Where used in the SingleMIDInoteFile array for sending quick beeps with function SFEMP3Shield::SendSingleMIDInote()
+ *
+ * \note So for Ch9's the note is GM Bank Percussion Instrument, not actual note. e.g 56 is cowbell. This removes the necassasity to send other commands.
+ */
+#define MIDI_NOTE_NUMBER        56
+
+/**
+ * \def MIDI_NOTE_DURATION
+ * \brief A macro used to specify the duration of the MIDI note
+ *
+ * Where used in the SingleMIDInoteFile array for sending quick beeps with function SFEMP3Shield::SendSingleMIDInote()
+ *
+ * \warning format is variable length, must keep it small. As not to break hardcoded header format
+ */
+#define MIDI_NOTE_DURATION     100
+
+
+/**
+ * \def MIDI_INTENSITY
+ * \brief A macro used to specify the intensity of the MIDI note
+ *
+ * Value ranges from 0 to 127(full scale). Where used in the SingleMIDInoteFile array for sending both the ON and off of the quick beep with function SFEMP3Shield::SendSingleMIDInote()
+ */
+#define MIDI_INTENSITY         127 // Full scale.
+
+
+
+
 #endif  // SFEMP3ShieldConfig_h

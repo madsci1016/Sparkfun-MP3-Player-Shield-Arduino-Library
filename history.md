@@ -1,6 +1,9 @@
 Revision History
 ---------------
 
+## 1.02.07
+* added SendSingleMIDInote() that sends a MIDI beep. It will suspend current playing stream to send beep and then resume prior stream
+
 ## 1.02.06
 * added PERF_MON_PIN to enable allowing measurement of the CPU utilization and description of performance document
 

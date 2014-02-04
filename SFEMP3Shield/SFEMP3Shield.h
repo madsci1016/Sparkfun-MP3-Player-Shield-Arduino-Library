@@ -37,6 +37,7 @@ enum state_m {
   loading,
   ready,
   playback,
+  playMIDIbeep,
   paused_playback,
   testing_memory,
   testing_sinewave,
@@ -706,6 +707,7 @@ class SFEMP3Shield {
     int8_t getVUmeter();
     int8_t setVUmeter(int8_t);
     int16_t getVUlevel();
+    void SendSingleMIDInote();
 
   private:
     static SdFile track;

@@ -72,7 +72,7 @@ void setup() {
   Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
   Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
-  Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
+  Serial.println(F(" Should be a base line of 1033, on ATmega328 when using INTx"));
 
 
   //Initialize the SdCard.
@@ -456,6 +456,11 @@ void parse_menu(byte key_command) {
     Serial.print(F("VU meter = "));
     Serial.println(MP3player.getVUmeter());
 
+   } else if(key_command == 'b') {
+    Serial.println(F("Playing Static MIDI file."));
+    MP3player.SendSingleMIDInote();
+    Serial.println(F("Ended Static MIDI file."));
+
   } else if(key_command == 'h') {
     help();
   }
@@ -465,7 +470,7 @@ void parse_menu(byte key_command) {
   Serial.print(F("Time since last command: "));  
   Serial.println((float) (millis() -  millis_prv)/1000, 2);  
   millis_prv = millis();
-  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V :"));
+  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V,b :"));
 }
 
 //------------------------------------------------------------------------------
@@ -500,6 +505,7 @@ void help() {
   Serial.println(F(" [D] to toggle SM_DIFF between inphase and differential output"));
   Serial.println(F(" [S] Show State of Device."));
   Serial.println(F(" [V] Enable VU meter Test."));
+  Serial.println(F(" [b] Play a MIDI File Beep"));
   Serial.println(F(" [h] this help"));
 }
 

@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.08</span>
+   &#160;<span id="projectnumber">1.02.09</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -108,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">//create and name the library object</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="_web_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e">   35</a></span>&#160;<a class="code" href="class_s_f_e_m_p3_shield.html">SFEMP3Shield</a> <a class="code" href="_file_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e">MP3player</a>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">   36</a></span>&#160;<a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593">byte</a> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">   36</a></span>&#160;<a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593">byte</a> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/************ ETHERNET STUFF ************/</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="_web_player_8ino.html#aea3f7775fecafb66a619eb2dcb0357bd">   39</a></span>&#160;<a class="code" href="uniontwobyte.html#a96a809c17262b7e7ebc6f0fb790de593">byte</a> <a class="code" href="_web_player_8ino.html#aea3f7775fecafb66a619eb2dcb0357bd">mac</a>[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };</div>
@@ -158,11 +158,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  Ethernet.begin(<a class="code" href="_web_player_8ino.html#aea3f7775fecafb66a619eb2dcb0357bd">mac</a>, <a class="code" href="_web_player_8ino.html#a0504bcde7a6b146902fa8b48b097bfe0">ip</a>);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <a class="code" href="_web_player_8ino.html#aa26bd0f0bdc5e4c3948e403b7ba4c084">server</a>.begin();</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9">begin</a>();</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#a3216f2746910835a1e46e7f4233889f9">begin</a>();</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="comment">//check result, see readme for error codes.</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keywordflow">if</span>(<a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> != 0) {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keywordflow">if</span>(<a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> != 0) {</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    Serial.println(F(<span class="stringliteral">&quot;Error code: &quot;</span>));</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    Serial.print(<a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    Serial.print(<a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>);</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    Serial.println(F(<span class="stringliteral">&quot; when trying to start MP3 player&quot;</span>));</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    }</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#a8f1059a570e7bef1c132f2857dd0fd8a">setVolume</a>(80,80); <span class="comment">// commit new volume  Serial.println(FreeRam());</span></div>
@@ -315,10 +315,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            <span class="comment">//PLAY</span></div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            <span class="keywordflow">if</span> (strstr(get_arg, <span class="stringliteral">&quot;PLAY&quot;</span>) != 0) {</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;              <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#aa0f78c569478259a1d8a7ed96a4c4167">playMP3</a>(filename);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;              <span class="keywordflow">if</span>(<a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> != 0) {</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;              <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = MP3player.<a class="code" href="class_s_f_e_m_p3_shield.html#aa0f78c569478259a1d8a7ed96a4c4167">playMP3</a>(filename);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;              <span class="keywordflow">if</span>(<a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> != 0) {</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                Serial.print(F(<span class="stringliteral">&quot;Error code: &quot;</span>));</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                Serial.print(<a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                Serial.print(<a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>);</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                Serial.println(F(<span class="stringliteral">&quot; when trying to play track&quot;</span>));</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;              }</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
@@ -494,10 +494,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="_file_player_8ino_html_ab3c96aa4b0f9d056464804cf754a889e"><div class="ttname"><a href="_file_player_8ino.html#ab3c96aa4b0f9d056464804cf754a889e">MP3player</a></div><div class="ttdeci">SFEMP3Shield MP3player</div><div class="ttdoc">Object instancing the SFEMP3Shield library. </div><div class="ttdef"><b>Definition:</b> <a href="_file_player_8ino_source.html#l00054">FilePlayer.ino:54</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a8f1059a570e7bef1c132f2857dd0fd8a"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a8f1059a570e7bef1c132f2857dd0fd8a">SFEMP3Shield::setVolume</a></div><div class="ttdeci">void setVolume(uint8_t, uint8_t)</div><div class="ttdoc">Store and Push member volume to VS10xx chip. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00598">SFEMP3Shield.cpp:598</a></div></div>
 <div class="ttc" id="_s_f_e_m_p3_shield_8h_html_a1e43f52ed18e725e71477e654c74de73aac284efbc915d347ece9cc53daa57c8f"><div class="ttname"><a href="_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73aac284efbc915d347ece9cc53daa57c8f">playback</a></div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8h_source.html#l00039">SFEMP3Shield.h:39</a></div></div>
+<div class="ttc" id="_web_player_8ino_html_acaba4351488944e2db9bfa4d231e354a"><div class="ttname"><a href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a></div><div class="ttdeci">byte result</div><div class="ttdef"><b>Definition:</b> <a href="_web_player_8ino_source.html#l00036">WebPlayer.ino:36</a></div></div>
 <div class="ttc" id="_web_player_8ino_html_a566b41b9547da0ab6d287b3e5eea8273"><div class="ttname"><a href="_web_player_8ino.html#a566b41b9547da0ab6d287b3e5eea8273">ListFiles</a></div><div class="ttdeci">void ListFiles(EthernetClient client, uint8_t flags)</div><div class="ttdoc">dump list of files to the web </div><div class="ttdef"><b>Definition:</b> <a href="_web_player_8ino_source.html#l00110">WebPlayer.ino:110</a></div></div>
 <div class="ttc" id="_s_f_e_m_p3_shield_8h_html_a1e43f52ed18e725e71477e654c74de73ad6fb9fe07b40336b61440664404f2c37"><div class="ttname"><a href="_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73ad6fb9fe07b40336b61440664404f2c37">paused_playback</a></div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8h_source.html#l00041">SFEMP3Shield.h:41</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_aa0f78c569478259a1d8a7ed96a4c4167"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#aa0f78c569478259a1d8a7ed96a4c4167">SFEMP3Shield::playMP3</a></div><div class="ttdeci">uint8_t playMP3(char *, uint32_t timecode=0)</div><div class="ttdoc">Begin playing a mp3 file by its filename. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00889">SFEMP3Shield.cpp:889</a></div></div>
-<div class="ttc" id="_m_p3_button_player_8ino_html_acaba4351488944e2db9bfa4d231e354a"><div class="ttname"><a href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a></div><div class="ttdeci">byte result</div><div class="ttdef"><b>Definition:</b> <a href="_m_p3_button_player_8ino_source.html#l00021">MP3ButtonPlayer.ino:21</a></div></div>
 <div class="ttc" id="_web_player_8ino_html_a31c2191bba86f51dee529f998dd5e764"><div class="ttname"><a href="_web_player_8ino.html#a31c2191bba86f51dee529f998dd5e764">file</a></div><div class="ttdeci">SdFile file</div><div class="ttdef"><b>Definition:</b> <a href="_web_player_8ino_source.html#l00046">WebPlayer.ino:46</a></div></div>
 <div class="ttc" id="_file_player_8ino_html_a4fc01d736fe50cf5b977f755b675f11d"><div class="ttname"><a href="_file_player_8ino.html#a4fc01d736fe50cf5b977f755b675f11d">setup</a></div><div class="ttdeci">void setup()</div><div class="ttdef"><b>Definition:</b> <a href="_file_player_8ino_source.html#l00074">FilePlayer.ino:74</a></div></div>
 <div class="ttc" id="_web_player_8ino_html_aea3f7775fecafb66a619eb2dcb0357bd"><div class="ttname"><a href="_web_player_8ino.html#aea3f7775fecafb66a619eb2dcb0357bd">mac</a></div><div class="ttdeci">byte mac[]</div><div class="ttdef"><b>Definition:</b> <a href="_web_player_8ino_source.html#l00039">WebPlayer.ino:39</a></div></div>
@@ -511,7 +511,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 4 2014 11:53:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 6 2014 23:39:15 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

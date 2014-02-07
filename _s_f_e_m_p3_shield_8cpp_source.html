@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.08</span>
+   &#160;<span id="projectnumber">1.02.09</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -193,9 +193,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  <a class="code" href="class_s_f_e_m_p3_shield.html#a90bd9c746e5707d3f73197ec12d9721f">playing_state</a> = <a class="code" href="_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73a93eb25c13efc03a01d4d136099217a33">initialized</a>;</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  uint8_t <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = <a class="code" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a">vs_init</a>();</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  uint8_t <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = <a class="code" href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a">vs_init</a>();</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keywordflow">if</span>(result) {</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  }</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">#if defined(USE_MP3_REFILL_MEANS) &amp;&amp; USE_MP3_REFILL_MEANS == USE_MP3_Timer1</span></div>
@@ -532,7 +532,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;</div>
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00687"></a><span class="lineno"><a class="line" href="class_s_f_e_m_p3_shield.html#a9f24638f19da7d1cd393b2fb958bdc70">  687</a></span>&#160;<span class="comment"></span>uint8_t <a class="code" href="class_s_f_e_m_p3_shield.html#a9f24638f19da7d1cd393b2fb958bdc70">SFEMP3Shield::getEarSpeaker</a>() {</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;  uint8_t <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = 0;</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;  uint8_t <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = 0;</div>
 <div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;  uint16_t MP3SCI_MODE = <a class="code" href="class_s_f_e_m_p3_shield.html#a63496f15a18d3f39a49c58699111078c">Mp3ReadRegister</a>(<a class="code" href="_s_f_e_m_p3_shield_8h.html#af7dc54392e24e95e8be62cea7896b926">SCI_MODE</a>);</div>
 <div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;</div>
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;  <span class="comment">// SM_EARSPEAKER bits are not adjacent hence need to add them together</span></div>
@@ -542,7 +542,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;  <span class="keywordflow">if</span>(MP3SCI_MODE &amp; <a class="code" href="_s_f_e_m_p3_shield_8h.html#a697c80f0c5ca60f4d6c0618c8e0aa06f">SM_EARSPEAKER_HI</a>) {</div>
 <div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;    result += 0b10;</div>
 <div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;  }</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;}</div>
 <div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;</div>
 <div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
@@ -572,13 +572,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;</div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00751"></a><span class="lineno"><a class="line" href="class_s_f_e_m_p3_shield.html#af6e6d6bae7e379644b0ab8fdeb9b4a34">  751</a></span>&#160;<span class="comment"></span>uint8_t <a class="code" href="class_s_f_e_m_p3_shield.html#af6e6d6bae7e379644b0ab8fdeb9b4a34">SFEMP3Shield::getDifferentialOutput</a>() {</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;  uint8_t <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = 0;</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;  uint8_t <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = 0;</div>
 <div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;  uint16_t MP3SCI_MODE = <a class="code" href="class_s_f_e_m_p3_shield.html#a63496f15a18d3f39a49c58699111078c">Mp3ReadRegister</a>(<a class="code" href="_s_f_e_m_p3_shield_8h.html#af7dc54392e24e95e8be62cea7896b926">SCI_MODE</a>);</div>
 <div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;</div>
 <div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;  <span class="keywordflow">if</span>(MP3SCI_MODE &amp; <a class="code" href="_s_f_e_m_p3_shield_8h.html#aee25c5b07eac003d707251803fb7e32b">SM_DIFF</a>) {</div>
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    result = 1;</div>
 <div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;  }</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;}</div>
 <div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;</div>
 <div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
@@ -601,8 +601,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;</div>
 <div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00805"></a><span class="lineno"><a class="line" href="class_s_f_e_m_p3_shield.html#aa76395229f67f4560e561d5ba20d9d30">  805</a></span>&#160;<span class="comment"></span>uint16_t <a class="code" href="class_s_f_e_m_p3_shield.html#aa76395229f67f4560e561d5ba20d9d30">SFEMP3Shield::getMonoMode</a>() {</div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;  uint16_t <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = (<a class="code" href="class_s_f_e_m_p3_shield.html#ae21524d33ede24fd0cea7f0cbe108d59">Mp3ReadWRAM</a>(<a class="code" href="_s_f_e_m_p3_shield_8h.html#a15c797e896130938d3d7f33545128f4f">para_MonoOutput</a>) &amp; 0x0001);</div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;  uint16_t <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a> = (<a class="code" href="class_s_f_e_m_p3_shield.html#ae21524d33ede24fd0cea7f0cbe108d59">Mp3ReadWRAM</a>(<a class="code" href="_s_f_e_m_p3_shield_8h.html#a15c797e896130938d3d7f33545128f4f">para_MonoOutput</a>) &amp; 0x0001);</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;}</div>
 <div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;</div>
 <div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
@@ -688,7 +688,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;</div>
 <div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;<span class="comment">//------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00961"></a><span class="lineno"><a class="line" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980">  961</a></span>&#160;<span class="comment"></span>uint8_t <a class="code" href="class_s_f_e_m_p3_shield.html#ad7ba07dcece82437cc6d6b4c68c05980">SFEMP3Shield::isPlaying</a>(){</div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;  uint8_t <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;  uint8_t <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;</div>
 <div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;  <span class="keywordflow">if</span>(!digitalRead(<a class="code" href="_s_f_e_m_p3_shield_config_8h.html#a702bf9d1ef734b404340d69ab24cb1e6">MP3_RESET</a>))</div>
 <div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;    result = 3;</div>
@@ -699,7 +699,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;  <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;    result = 0;</div>
 <div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;</div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;}</div>
 <div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;</div>
 <div class="line"><a name="l00984"></a><span class="lineno"><a class="line" href="class_s_f_e_m_p3_shield.html#a28e9dbe66184c97ba8345aabaa8cc057">  984</a></span>&#160;<a class="code" href="_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73">state_m</a> <a class="code" href="class_s_f_e_m_p3_shield.html#a28e9dbe66184c97ba8345aabaa8cc057">SFEMP3Shield::getState</a>(){</div>
@@ -1446,7 +1446,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l02105"></a><span class="lineno"> 2105</span>&#160;</div>
 <div class="line"><a name="l02114"></a><span class="lineno"><a class="line" href="_s_f_e_m_p3_shield_8h.html#aad4b5cd60700c37983748a6aa387f7f1"> 2114</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_s_f_e_m_p3_shield_8cpp.html#a71871e135b8b08ea601a3302fa4bbe91">isFnMusic</a>(<span class="keywordtype">char</span>* filename) {</div>
 <div class="line"><a name="l02115"></a><span class="lineno"> 2115</span>&#160;  int8_t len = strlen(filename);</div>
-<div class="line"><a name="l02116"></a><span class="lineno"> 2116</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l02116"></a><span class="lineno"> 2116</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l02117"></a><span class="lineno"> 2117</span>&#160;  <span class="keywordflow">if</span> (  strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.mp3&quot;</span>)</div>
 <div class="line"><a name="l02118"></a><span class="lineno"> 2118</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.aac&quot;</span>)</div>
 <div class="line"><a name="l02119"></a><span class="lineno"> 2119</span>&#160;     || strstr(strlwr(filename + (len - 4)), <span class="stringliteral">&quot;.wma&quot;</span>)</div>
@@ -1458,7 +1458,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l02125"></a><span class="lineno"> 2125</span>&#160;  } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l02126"></a><span class="lineno"> 2126</span>&#160;    result = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l02127"></a><span class="lineno"> 2127</span>&#160;  }</div>
-<div class="line"><a name="l02128"></a><span class="lineno"> 2128</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
+<div class="line"><a name="l02128"></a><span class="lineno"> 2128</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a>;</div>
 <div class="line"><a name="l02129"></a><span class="lineno"> 2129</span>&#160;}</div>
 <div class="ttc" id="_s_f_e_m_p3_shield_config_8h_html_aa37859adf05cbfc9aa03bbd4fdbc4f20"><div class="ttname"><a href="_s_f_e_m_p3_shield_config_8h.html#aa37859adf05cbfc9aa03bbd4fdbc4f20">MP3_XCS</a></div><div class="ttdeci">#define MP3_XCS</div><div class="ttdoc">A macro to configure the XCS pin. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_config_8h_source.html#l00245">SFEMP3ShieldConfig.h:245</a></div></div>
 <div class="ttc" id="_s_f_e_m_p3_shield_config_8h_html_aafbb2c3ede0f64728c04d7e835d25423"><div class="ttname"><a href="_s_f_e_m_p3_shield_config_8h.html#aafbb2c3ede0f64728c04d7e835d25423">MP3_XDCS</a></div><div class="ttdeci">#define MP3_XDCS</div><div class="ttdoc">A macro to configure the XDCS pin. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_config_8h_source.html#l00246">SFEMP3ShieldConfig.h:246</a></div></div>
@@ -1526,6 +1526,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a16250d6bed9c59271dc83b0ee8a3cc34"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a16250d6bed9c59271dc83b0ee8a3cc34">SFEMP3Shield::getPlaySpeed</a></div><div class="ttdeci">uint16_t getPlaySpeed()</div><div class="ttdoc">Get the current playSpeed from the VS10xx chip. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00647">SFEMP3Shield.cpp:647</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a8f1059a570e7bef1c132f2857dd0fd8a"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a8f1059a570e7bef1c132f2857dd0fd8a">SFEMP3Shield::setVolume</a></div><div class="ttdeci">void setVolume(uint8_t, uint8_t)</div><div class="ttdoc">Store and Push member volume to VS10xx chip. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00598">SFEMP3Shield.cpp:598</a></div></div>
 <div class="ttc" id="_s_f_e_m_p3_shield_8h_html_a1e43f52ed18e725e71477e654c74de73aac284efbc915d347ece9cc53daa57c8f"><div class="ttname"><a href="_s_f_e_m_p3_shield_8h.html#a1e43f52ed18e725e71477e654c74de73aac284efbc915d347ece9cc53daa57c8f">playback</a></div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8h_source.html#l00039">SFEMP3Shield.h:39</a></div></div>
+<div class="ttc" id="_web_player_8ino_html_acaba4351488944e2db9bfa4d231e354a"><div class="ttname"><a href="_web_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a></div><div class="ttdeci">byte result</div><div class="ttdef"><b>Definition:</b> <a href="_web_player_8ino_source.html#l00036">WebPlayer.ino:36</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a3c0b0565a0568d6bbe85617f8d398905"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a3c0b0565a0568d6bbe85617f8d398905">SFEMP3Shield::spi_Read_Rate</a></div><div class="ttdeci">static uint16_t spi_Read_Rate</div><div class="ttdoc">Rate of the SPI to be used with communicating to the VSdsp. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8h_source.html#l00738">SFEMP3Shield.h:738</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a83a0f167c64c1763d911008420109de6"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a83a0f167c64c1763d911008420109de6">SFEMP3Shield::enableTestSineWave</a></div><div class="ttdeci">uint8_t enableTestSineWave(uint8_t)</div><div class="ttdoc">Generate Test Sine wave. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00389">SFEMP3Shield.cpp:389</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_ae6eec4ec619b219d4b30b8b8cdc266c0"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#ae6eec4ec619b219d4b30b8b8cdc266c0">SFEMP3Shield::cs_high</a></div><div class="ttdeci">static void cs_high()</div><div class="ttdoc">Deselect Control Channel. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l01579">SFEMP3Shield.cpp:1579</a></div></div>
@@ -1544,7 +1545,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="_s_f_e_m_p3_shield_8cpp_html_af4135ebabd15b8873add64121817d547"><div class="ttname"><a href="_s_f_e_m_p3_shield_8cpp.html#af4135ebabd15b8873add64121817d547">MIDI_FORMAT</a></div><div class="ttdeci">#define MIDI_FORMAT</div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00054">SFEMP3Shield.cpp:54</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a87878850e07e76515a9a1cd2b6dad52a"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a87878850e07e76515a9a1cd2b6dad52a">SFEMP3Shield::vs_init</a></div><div class="ttdeci">uint8_t vs_init()</div><div class="ttdoc">Initialize the VS10xx Audio Decoder Chip. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00220">SFEMP3Shield.cpp:220</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_af4d7c16ff5dc0d9dc9ab6267d6483d02"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#af4d7c16ff5dc0d9dc9ab6267d6483d02">SFEMP3Shield::setEarSpeaker</a></div><div class="ttdeci">void setEarSpeaker(uint16_t)</div><div class="ttdoc">Set the current Spatial EarSpeaker setting of the VS10xx chip. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00711">SFEMP3Shield.cpp:711</a></div></div>
-<div class="ttc" id="_m_p3_button_player_8ino_html_acaba4351488944e2db9bfa4d231e354a"><div class="ttname"><a href="_m_p3_button_player_8ino.html#acaba4351488944e2db9bfa4d231e354a">result</a></div><div class="ttdeci">byte result</div><div class="ttdef"><b>Definition:</b> <a href="_m_p3_button_player_8ino_source.html#l00021">MP3ButtonPlayer.ino:21</a></div></div>
 <div class="ttc" id="class_s_f_e_m_p3_shield_html_a77d4e1a741cfd404097bb666222e1108"><div class="ttname"><a href="class_s_f_e_m_p3_shield.html#a77d4e1a741cfd404097bb666222e1108">SFEMP3Shield::trackArtist</a></div><div class="ttdeci">void trackArtist(char *)</div><div class="ttdoc">Get Track&amp;#39;s Artist. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l01237">SFEMP3Shield.cpp:1237</a></div></div>
 <div class="ttc" id="_s_f_e_m_p3_shield_8cpp_html_ab93b90ca6b075690c0576ad8566e593d"><div class="ttname"><a href="_s_f_e_m_p3_shield_8cpp.html#ab93b90ca6b075690c0576ad8566e593d">MIDI_HDR_CHUNK_ID</a></div><div class="ttdeci">#define MIDI_HDR_CHUNK_ID</div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_8cpp_source.html#l00052">SFEMP3Shield.cpp:52</a></div></div>
 <div class="ttc" id="_s_f_e_m_p3_shield_config_8h_html_a1831fd1c252d7a04297f27fc9bdbbdc4"><div class="ttname"><a href="_s_f_e_m_p3_shield_config_8h.html#a1831fd1c252d7a04297f27fc9bdbbdc4">MP3_DREQ</a></div><div class="ttdeci">#define MP3_DREQ</div><div class="ttdoc">A macro to configure the DREQ pin. </div><div class="ttdef"><b>Definition:</b> <a href="_s_f_e_m_p3_shield_config_8h_source.html#l00247">SFEMP3ShieldConfig.h:247</a></div></div>
@@ -1599,7 +1599,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 4 2014 11:53:02 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 6 2014 23:39:15 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

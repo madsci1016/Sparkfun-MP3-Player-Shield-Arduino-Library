@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.08</span>
+   &#160;<span id="projectnumber">1.02.09</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -95,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Example sketch of using the MP3Shield Arduino driver.  
+<p>Example sketch of using the MP3Shield Arduino driver, with flexible list of files and formats.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;SPI.h&gt;</code><br/>
 <code>#include &lt;SdFat.h&gt;</code><br/>
@@ -106,7 +106,7 @@ Include dependency graph for FilePlayer.ino:</div>
 <div class="dyncontent">
 <div class="center"><img src="_file_player_8ino__incl.png" border="0" usemap="#_s_f_e_m_p3_shield_2_examples_2_file_player_2_file_player_8ino" alt=""/></div>
 <map name="_s_f_e_m_p3_shield_2_examples_2_file_player_2_file_player_8ino" id="_s_f_e_m_p3_shield_2_examples_2_file_player_2_file_player_8ino">
-<area shape="rect" id="node5" href="_s_f_e_m_p3_shield_8h.html" title="Header file for the SFEMP3Shield library." alt="" coords="229,96,352,123"/><area shape="rect" id="node6" href="_s_f_e_m_p3_shield_config_8h.html" title="Hardware dependent configuration definitions." alt="" coords="202,171,360,197"/></map>
+<area shape="rect" id="node5" href="_s_f_e_m_p3_shield_8h.html" title="Header file for the SFEMP3Shield library. " alt="" coords="159,96,281,123"/><area shape="rect" id="node6" href="_s_f_e_m_p3_shield_config_8h.html" title="Hardware dependent configuration definitions. " alt="" coords="294,171,452,197"/></map>
 </div>
 </div>
 <p><a href="_file_player_8ino_source.html">Go to the source code of this file.</a></p>
@@ -144,14 +144,14 @@ Variables</h2></td></tr>
 <tr class="separator:a4b92294b4e82a7d875de15a7c2f804b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Example sketch of using the MP3Shield Arduino driver. </p>
+<div class="textblock"><p>Example sketch of using the MP3Shield Arduino driver, with flexible list of files and formats. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>comments are implemented with Doxygen Markdown format</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Bill Porter </dd>
 <dd>
 Michael P. Flaga</dd></dl>
 <p>This sketch listens for commands from a serial terminal (such as the Serial Monitor in the Arduino IDE). Listening for either a single character menu commands or an numeric strings of an index. Pointing to a music file, found in the root of the SdCard, to be played. A list of index's and corresponding files in the root can be listed out using the 'l' (little L) command.</p>
 <p>This sketch allows the various file formats to be played: mp3, aac, wma, wav, fla &amp; mid.</p>
-<p>This sketch behaves nearly identical to <a class="el" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver. ">MP3Shield_Library_Demo.ino</a>, but has extra complicated <a class="el" href="_file_player_8ino.html#afe461d27b9c48d5921c00d521181f12f" title="Main Loop the Arduino Chip. ">loop()</a> as to recieve string of characters to create the file index. As the Serial Monitor is typically default with no CR or LF, this sketch uses intercharacter time out as to determine when a full string has has been entered to be processed. </p>
+<p>This sketch behaves nearly identical to <a class="el" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver, demonstrating all methods and functions...">MP3Shield_Library_Demo.ino</a>, but has extra complicated <a class="el" href="_file_player_8ino.html#afe461d27b9c48d5921c00d521181f12f" title="Main Loop the Arduino Chip. ">loop()</a> as to recieve string of characters to create the file index. As the Serial Monitor is typically default with no CR or LF, this sketch uses intercharacter time out as to determine when a full string has has been entered to be processed. </p>
 
 <p>Definition in file <a class="el" href="_file_player_8ino_source.html">FilePlayer.ino</a>.</p>
 </div><h2 class="groupheader">Function Documentation</h2>
@@ -349,7 +349,7 @@ Michael P. Flaga</dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Feb 4 2014 11:53:03 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 6 2014 23:39:15 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

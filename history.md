@@ -1,6 +1,10 @@
 Revision History
 ---------------
 
+## 1.02.09
+* added demo of button using button2.h library for debounce
+  (see gisthub for improved button.h library)
+
 ## 1.02.08
 * added support for BareTouch pinout in config
 

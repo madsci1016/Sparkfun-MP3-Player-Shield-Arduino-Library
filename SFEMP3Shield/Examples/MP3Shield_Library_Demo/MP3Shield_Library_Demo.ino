@@ -1,7 +1,7 @@
 /**
  * \file MP3Shield_Library_Demo.ino
  *
- * \brief Example sketch of using the MP3Shield Arduino driver
+ * \brief Example sketch of using the MP3Shield Arduino driver, demonstrating all methods and functions.
  * \remarks comments are implemented with Doxygen Markdown format
  *
  * \author Bill Porter

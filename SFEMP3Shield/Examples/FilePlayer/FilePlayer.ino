@@ -1,7 +1,7 @@
 /**
  * \file FilePlayer.ino
  *
- * \brief Example sketch of using the MP3Shield Arduino driver
+ * \brief Example sketch of using the MP3Shield Arduino driver, with flexible list of files and formats
  * \remarks comments are implemented with Doxygen Markdown format
  *
  * \author Bill Porter

@@ -1,6 +1,11 @@
 Revision History
 ---------------
 
+## 1.02.10
+* implemented sdfatlib20130313 into repo
+* updated VLSI Patches and Plugins.
+* fixed MP3ButtonPlayer2.ino example
+
 ## 1.02.09
 * added demo of button using button2.h library for debounce
   (see gisthub for improved button.h library)

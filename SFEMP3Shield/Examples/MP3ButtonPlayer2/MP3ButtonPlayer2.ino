@@ -87,6 +87,8 @@ int8_t current_track = 0;
  * application, such as Serial port and MP3player objects with .begin.
  */
 void setup() {
+  Serial.begin(115200);
+
   pinMode(B_NEXT, INPUT_PULLUP);
   pinMode(B_STOP, INPUT_PULLUP);
   pinMode(B_PLAY, INPUT_PULLUP);
@@ -98,8 +100,13 @@ void setup() {
   b_Play.attach(B_PLAY);
   b_Play.interval(BUTTON_DEBOUNCE_PERIOD);
 
+  if(!sd.begin(9, SPI_HALF_SPEED)) sd.initErrorHalt();
+  if (!sd.chdir("/")) sd.errorHalt("sd.chdir");
+
   MP3player.begin();
   MP3player.setVolume(10,10);
+  
+  Serial.println(F("Looking for Buttons to be depressed..."));
 }
 
 

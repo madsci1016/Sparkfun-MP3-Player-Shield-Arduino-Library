@@ -11,17 +11,13 @@
 # license (see the LICENSE file) and this notice, disclaimer and    #
 # comment box remain intact and unchanged.                          #
 #                                                                   #
-# Package:     Doxygen                                              #
-# Class:       Filter                                               #
-# Description: Methods for prefiltering code for Doxygen            #
+# Purpose: to convert plugin for VLSI's Vdsp's to binary images     #
+# as provided by VLSI's and or VIDE.                                #
 #                                                                   #
-# Written by:  Bret Jordan (jordan at open1x littledot org)         #
-# Created:     2011-10-13                                           #
+# example usage: vs_plg_to_bin.pl .\vs1053pcm.plg .\pcm.053         #
+#                                                                   #
 ##################################################################### 
 # @endverbatim
-#
-# @copy 2011, Bret Jordan (jordan2175@gmail.com, jordan@open1x.org)
-# $Id: Filter.pm 88 2012-07-07 04:27:35Z jordan2175 $
 #*
 use strict;
 use warnings;

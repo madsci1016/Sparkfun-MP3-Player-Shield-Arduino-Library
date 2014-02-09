@@ -343,6 +343,58 @@ void parse_menu(byte key_command) {
     Serial.print(F("earspeaker to "));
     Serial.println(earspeaker, DEC);
 
+  } else if(key_command == 'T') {
+    uint16_t TrebleFrequency = MP3player.getTrebleFrequency();
+    Serial.print(F("Former TrebleFrequency = "));
+    Serial.println(TrebleFrequency, DEC);
+    if (TrebleFrequency >= 15000) { // Range is from 0 - 1500Hz
+      TrebleFrequency = 0;
+    } else {
+      TrebleFrequency += 1000;
+    }
+    MP3player.setTrebleFrequency(TrebleFrequency);
+    Serial.print(F("New TrebleFrequency = "));
+    Serial.println(MP3player.getTrebleFrequency(), DEC);
+
+  } else if(key_command == 'E') {
+    int8_t TrebleAmplitude = MP3player.getTrebleAmplitude();
+    Serial.print(F("Former TrebleAmplitude = "));
+    Serial.println(TrebleAmplitude, DEC);
+    if (TrebleAmplitude >= 7) { // Range is from -8 - 7dB
+      TrebleAmplitude = -8;
+    } else {
+      TrebleAmplitude++;
+    }
+    MP3player.setTrebleAmplitude(TrebleAmplitude);
+    Serial.print(F("New TrebleAmplitude = "));
+    Serial.println(MP3player.getTrebleAmplitude(), DEC);
+
+  } else if(key_command == 'B') {
+    uint16_t BassFrequency = MP3player.getBassFrequency();
+    Serial.print(F("Former BassFrequency = "));
+    Serial.println(BassFrequency, DEC);
+    if (BassFrequency >= 150) { // Range is from 20hz - 150hz
+      BassFrequency = 0;
+    } else {
+      BassFrequency += 10;
+    }
+    MP3player.setBassFrequency(BassFrequency);
+    Serial.print(F("New BassFrequency = "));
+    Serial.println(MP3player.getBassFrequency(), DEC);
+
+  } else if(key_command == 'C') {
+    uint16_t BassAmplitude = MP3player.getBassAmplitude();
+    Serial.print(F("Former BassAmplitude = "));
+    Serial.println(BassAmplitude, DEC);
+    if (BassAmplitude >= 15) { // Range is from 0 - 15dB
+      BassAmplitude = 0;
+    } else {
+      BassAmplitude++;
+    }
+    MP3player.setBassAmplitude(BassAmplitude);
+    Serial.print(F("New BassAmplitude = "));
+    Serial.println(MP3player.getBassAmplitude(), DEC);
+
   } else if(key_command == 'M') {
     uint16_t monostate = MP3player.getMonoMode();
     Serial.print(F("Mono Mode "));
@@ -436,6 +488,7 @@ void parse_menu(byte key_command) {
 
   } else if(key_command == 'V') {
     MP3player.setVUmeter(1);
+    Serial.println(F("Use \"No line ending\""));
     Serial.print(F("VU meter = "));
     Serial.println(MP3player.getVUmeter());
     Serial.println(F("Hit Any key to stop."));
@@ -470,7 +523,7 @@ void parse_menu(byte key_command) {
   Serial.print(F("Time since last command: "));  
   Serial.println((float) (millis() -  millis_prv)/1000, 2);  
   millis_prv = millis();
-  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V,b :"));
+  Serial.println(F("Enter 1-9,f,F,s,d,+,-,i,>,<,p,r,R,t,m,M,g,k,h,O,o,D,S,V,b,B,C,T,E :"));
 }
 
 //------------------------------------------------------------------------------
@@ -506,6 +559,10 @@ void help() {
   Serial.println(F(" [S] Show State of Device."));
   Serial.println(F(" [V] Enable VU meter Test."));
   Serial.println(F(" [b] Play a MIDI File Beep"));
+  Serial.println(F(" [B] Increament bass frequency by 10Hz"));
+  Serial.println(F(" [C] Increament bass amplitude by 1dB"));
+  Serial.println(F(" [T] Increament treble frequency by 1000Hz"));
+  Serial.println(F(" [E] Increament treble amplitude by 1dB"));
   Serial.println(F(" [h] this help"));
 }
 

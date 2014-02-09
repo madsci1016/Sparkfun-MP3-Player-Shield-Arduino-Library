@@ -626,6 +626,183 @@ uint16_t SFEMP3Shield::getVolume() {
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // @{
+// Base_Treble_Group
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Get the current Treble Frequency limit from the VS10xx chip
+ *
+ * \return int16_t of frequency limit in Hertz.
+ *
+ */
+uint16_t SFEMP3Shield::getTrebleFrequency()
+{
+  union sci_bass_m sci_base_value;
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  return (sci_base_value.nibble.Treble_Freqlimt * 1000);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Get the current Treble Amplitude from the VS10xx chip
+ *
+ * \return int16_t of amplitude (from -8 to 7).
+ *
+ */
+int8_t SFEMP3Shield::getTrebleAmplitude()
+{
+  union sci_bass_m sci_base_value;
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  return (sci_base_value.nibble.Treble_Amplitude);
+}
+//------------------------------------------------------------------------------
+/**
+ * \brief Get the current Bass Frequency limit from the VS10xx chip
+ *
+ * \return int16_t of bass frequency limit in Hertz.
+ *
+ */
+uint16_t SFEMP3Shield::getBassFrequency()
+{
+  union sci_bass_m sci_base_value;
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  return (sci_base_value.nibble.Bass_Freqlimt * 10);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Get the current Bass boost amplitude from the VS10xx chip
+ *
+ * \return int16_t of bass bost amplitude in dB.
+ *
+ * \note Any value greater then zero enables the Bass Enhancer VSBE is a 
+ * powerful bass boosting DSP algorithm, which tries to take the most out 
+ * of the users earphones without causing clipping.
+ *
+ */
+int8_t SFEMP3Shield::getBassAmplitude()
+{
+  union sci_bass_m sci_base_value;
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  return (sci_base_value.nibble.Bass_Amplitude);
+}
+//------------------------------------------------------------------------------
+/**
+ * \brief Set the current treble frequency limit in VS10xx chip
+ *
+ * \param[in] Treble cutoff frequency limit in Hertz.
+ *
+ * \note The upper and lower limits of this parameter is checked.
+ */
+void SFEMP3Shield::setTrebleFrequency(uint16_t frequency)
+{
+  union sci_bass_m sci_base_value;
+
+  frequency /= 1000;
+
+  if(frequency < 1)
+  {
+      frequency = 1;
+  }
+  else if(frequency > 15)
+  {
+      frequency = 15;
+  }
+  
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  sci_base_value.nibble.Treble_Freqlimt = frequency;
+  Mp3WriteRegister(SCI_BASS, sci_base_value.word); 
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Set the current Treble Amplitude in VS10xx chip
+ *
+ * \param[in] Treble amplitude in dB from -8 to 7.
+ *
+ * \note The upper and lower limits of this parameter is checked. 
+ */
+void SFEMP3Shield::setTrebleAmplitude(int8_t amplitude)
+{
+  union sci_bass_m sci_base_value;
+
+
+  if(amplitude < -8)
+  {
+      amplitude = -8;
+  }
+  else if(amplitude > 7)
+  {
+      amplitude = 7;
+  }
+
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  sci_base_value.nibble.Treble_Amplitude = amplitude;
+  Mp3WriteRegister(SCI_BASS, sci_base_value.word); 
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Set the current Bass Boost Frequency limit cutoff in VS10xx chip
+ *
+ * \param[in] Bass Boost frequency cutoff limit in Hertz (20Hz to 150Hz).
+ *
+ * \note The upper and lower limits of this parameter is checked. 
+ */
+void SFEMP3Shield::setBassFrequency(uint16_t frequency)
+{
+  union sci_bass_m sci_base_value;
+
+  frequency /= 10;
+
+  if(frequency < 2)
+  {
+      frequency = 2;
+  }
+  else if(frequency > 15)
+  {
+      frequency = 15;
+  }
+
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  sci_base_value.nibble.Bass_Freqlimt = frequency;
+  Mp3WriteRegister(SCI_BASS, sci_base_value.word); 
+}
+
+//------------------------------------------------------------------------------
+/**
+ * \brief Set the current Bass Boost amplitude in VS10xx chip
+ *
+ * \param[in] Bass Boost amplitude in dB (0dB to 15dB).
+ *
+ * \note Any value greater then zero enables the Bass Enhancer VSBE is a 
+ * powerful bass boosting DSP algorithm, which tries to take the most out 
+ * of the users earphones without causing clipping.
+ *
+ * \note The upper and lower limits of this parameter is checked. 
+ */
+void SFEMP3Shield::setBassAmplitude(uint8_t amplitude)
+{
+  union sci_bass_m sci_base_value;
+
+  if(amplitude < 0)
+  {
+      amplitude = 0;
+  }
+  else if(amplitude > 15)
+  {
+      amplitude = 15;
+  }
+
+  sci_base_value.word = Mp3ReadRegister(SCI_BASS);
+  sci_base_value.nibble.Bass_Amplitude = amplitude;
+  Mp3WriteRegister(SCI_BASS, sci_base_value.word); 
+}
+// @}
+// Base_Treble_Group
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// @{
 // PlaySpeed_Group
 
 //------------------------------------------------------------------------------

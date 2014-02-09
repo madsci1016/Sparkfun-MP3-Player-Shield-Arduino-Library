@@ -20,11 +20,15 @@ currentPosition          KEYWORD2
 disableTestSineWave      KEYWORD2
 enableTestSineWave       KEYWORD2
 getAudioInfo             KEYWORD2
+getBassAmplitude         KEYWORD2
+getBassFrequency         KEYWORD2
 getEarSpeaker            KEYWORD2
 getMonoMode              KEYWORD2
 getDifferentialOutput    KEYWORD2
 getPlaySpeed             KEYWORD2
 getState                 KEYWORD2
+getTrebleAmplitude       KEYWORD2
+getTrebleFrequency       KEYWORD2
 getVolume                KEYWORD2
 getVUlevel               KEYWORD2
 getVUmeter               KEYWORD2
@@ -37,11 +41,16 @@ playMP3                  KEYWORD2
 playTrack                KEYWORD2
 resumeDataStream         KEYWORD2
 resumeMusic              KEYWORD2
+SendSingleMIDInote       KEYWORD2
+setBassAmplitude         KEYWORD2
+setBassFrequency         KEYWORD2
 setBitRate               KEYWORD2
 setEarSpeaker            KEYWORD2
 setMonoMode              KEYWORD2
 setDifferentialOutput    KEYWORD2
 setPlaySpeed             KEYWORD2
+setTrebleAmplitude       KEYWORD2
+setTrebleFrequency       KEYWORD2
 setVolume                KEYWORD2
 setVUmeter               KEYWORD2
 skip                     KEYWORD2
@@ -51,7 +60,6 @@ trackAlbum               KEYWORD2
 trackArtist              KEYWORD2
 trackTitle               KEYWORD2
 vs_init                  KEYWORD2
-SendSingleMIDInote       KEYWORD2
 
 
 #######################################

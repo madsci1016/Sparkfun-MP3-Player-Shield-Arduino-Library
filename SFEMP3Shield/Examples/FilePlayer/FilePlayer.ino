@@ -684,17 +684,3 @@ void SerialPrintPaddedNumber(int16_t value, int8_t digits ) {
   }
   Serial.print(value);
 }
-
-void getSCI_BASE() {
-    Serial.print(F("TrebleFrequency = "));
-    Serial.println(MP3player.getTrebleFrequency(), DEC);
-
-    Serial.print(F("TrebleAmplitude = "));
-    Serial.println(MP3player.getTrebleAmplitude(), DEC);
-
-    Serial.print(F("BassFrequency = "));
-    Serial.println(MP3player.getBassFrequency(), DEC);
-
-    Serial.print(F("BassAmplitude = "));
-    Serial.println(MP3player.getBassAmplitude(), DEC);
-}

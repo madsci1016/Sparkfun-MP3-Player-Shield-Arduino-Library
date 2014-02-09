@@ -1,7 +1,7 @@
 Revision History
 ---------------
 
-## 1.02.10
+## 1.02.11
 * Added support for Bass Enhancer VSBE
 
 ## 1.02.10

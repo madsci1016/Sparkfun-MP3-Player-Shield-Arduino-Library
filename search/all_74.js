@@ -11,6 +11,8 @@ var searchData=
   ['trackalbum',['trackAlbum',['../class_s_f_e_m_p3_shield.html#a1af262e06f8ac01c19bb69a5e6ca599a',1,'SFEMP3Shield']]],
   ['trackartist',['trackArtist',['../class_s_f_e_m_p3_shield.html#a77d4e1a741cfd404097bb666222e1108',1,'SFEMP3Shield']]],
   ['tracktitle',['trackTitle',['../class_s_f_e_m_p3_shield.html#a30002ff09fd45a5dfdf0b0df6b4fffb9',1,'SFEMP3Shield']]],
+  ['treble_5famplitude',['Treble_Amplitude',['../union_s_f_e_m_p3_shield_1_1sci__bass__m.html#aacf280dd300c46fa975f63e90c4cbb89',1,'SFEMP3Shield::sci_bass_m']]],
+  ['treble_5ffreqlimt',['Treble_Freqlimt',['../union_s_f_e_m_p3_shield_1_1sci__bass__m.html#a4f95425777283df7d93dcaf9d0577c6b',1,'SFEMP3Shield::sci_bass_m']]],
   ['true',['TRUE',['../_s_f_e_m_p3_shield_8h.html#aa8cecfc5c5c054d2875c03e77b7be15d',1,'SFEMP3Shield.h']]],
   ['twobyte',['twobyte',['../uniontwobyte.html',1,'']]]
 ];

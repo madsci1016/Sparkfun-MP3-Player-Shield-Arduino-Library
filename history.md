@@ -2,6 +2,9 @@ Revision History
 ---------------
 
 ## 1.02.10
+* Added support for Bass Enhancer VSBE
+
+## 1.02.10
 * implemented sdfatlib20130313 into repo
 * updated VLSI Patches and Plugins.
 * fixed MP3ButtonPlayer2.ino example

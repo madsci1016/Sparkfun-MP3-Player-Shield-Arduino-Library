@@ -1,5 +1,8 @@
 Revision History
 ---------------
+## 1.02.12
+* implemented sdfatlib20130629 into repo
+* removed unused code in FilePlayer.ino
 
 ## 1.02.11
 * Added support for Bass Enhancer VSBE

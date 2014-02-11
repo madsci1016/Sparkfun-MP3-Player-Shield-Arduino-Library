@@ -26,7 +26,6 @@
 #include <SdFatConfig.h>
 #include <Sd2Card.h>
 #include <SdFatStructs.h>
-
 //==============================================================================
 // SdVolume class
 /**
@@ -58,15 +57,15 @@ union cache_t {
 class SdVolume {
  public:
   /** Create an instance of SdVolume */
-  SdVolume() : fatType_(0) {}
+  SdVolume() : m_fatType(0) {}
   /** Clear the cache and returns a pointer to the cache.  Used by the WaveRP
    * recorder to do raw write to the SD card.  Not for normal apps.
    * \return A pointer to the cache buffer or zero if an error occurs.
    */
   cache_t* cacheClear() {
     if (!cacheSync()) return 0;
-    cacheBlockNumber_ = 0XFFFFFFFF;
-    return &cacheBuffer_;
+    m_cacheBlockNumber = 0XFFFFFFFF;
+    return &m_cacheBuffer;
   }
   /** Initialize a FAT volume.  Try partition one first then try super
    * floppy format.
@@ -83,31 +82,32 @@ class SdVolume {
 
   // inline functions that return volume info
   /** \return The volume's cluster size in blocks. */
-  uint8_t blocksPerCluster() const {return blocksPerCluster_;}
+  uint8_t blocksPerCluster() const {return m_blocksPerCluster;}
   /** \return The number of blocks in one FAT. */
-  uint32_t blocksPerFat()  const {return blocksPerFat_;}
+  uint32_t blocksPerFat()  const {return m_blocksPerFat;}
   /** \return The total number of clusters in the volume. */
-  uint32_t clusterCount() const {return clusterCount_;}
+  uint32_t clusterCount() const {return m_clusterCount;}
   /** \return The shift count required to multiply by blocksPerCluster. */
-  uint8_t clusterSizeShift() const {return clusterSizeShift_;}
+  uint8_t clusterSizeShift() const {return m_clusterSizeShift;}
   /** \return The logical block number for the start of file data. */
-  uint32_t dataStartBlock() const {return dataStartBlock_;}
+  uint32_t dataStartBlock() const {return m_dataStartBlock;}
   /** \return The number of FAT structures on the volume. */
-  uint8_t fatCount() const {return fatCount_;}
+  uint8_t fatCount() const {return m_fatCount;}
   /** \return The logical block number for the start of the first FAT. */
-  uint32_t fatStartBlock() const {return fatStartBlock_;}
+  uint32_t fatStartBlock() const {return m_fatStartBlock;}
   /** \return The FAT type of the volume. Values are 12, 16 or 32. */
-  uint8_t fatType() const {return fatType_;}
+  uint8_t fatType() const {return m_fatType;}
   int32_t freeClusterCount();
   /** \return The number of entries in the root directory for FAT16 volumes. */
-  uint32_t rootDirEntryCount() const {return rootDirEntryCount_;}
+  uint32_t rootDirEntryCount() const {return m_rootDirEntryCount;}
   /** \return The logical block number for the start of the root directory
        on FAT16 volumes or the first cluster number on FAT32 volumes. */
-  uint32_t rootDirStart() const {return rootDirStart_;}
+  uint32_t rootDirStart() const {return m_rootDirStart;}
   /** Sd2Card object for this volume
    * \return pointer to Sd2Card object.
    */
-  Sd2Card* sdCard() {return sdCard_;}
+  Sd2Card* sdCard() {return m_sdCard;}
+
   /** Debug access to FAT table
    *
    * \param[in] n cluster number.
@@ -120,17 +120,15 @@ class SdVolume {
   // Allow SdBaseFile access to SdVolume private data.
   friend class SdBaseFile;
 //------------------------------------------------------------------------------
-  uint32_t allocSearchStart_;   // start cluster for alloc search
-  uint8_t blocksPerCluster_;    // cluster size in blocks
-  uint32_t blocksPerFat_;       // FAT size in blocks
-  uint32_t clusterCount_;       // clusters in one FAT
-  uint8_t clusterSizeShift_;    // shift to convert cluster count to block count
-  uint32_t dataStartBlock_;     // first data block number
-  uint8_t fatCount_;            // number of FATs on volume
-  uint32_t fatStartBlock_;      // start block for first FAT
-  uint8_t fatType_;             // volume type (12, 16, OR 32)
-  uint16_t rootDirEntryCount_;  // number of entries in FAT16 root dir
-  uint32_t rootDirStart_;       // root start block for FAT16, cluster for FAT32
+  uint32_t m_allocSearchStart;   // Start cluster for alloc search.
+  uint8_t m_blocksPerCluster;    // Cluster size in blocks.
+  uint32_t m_clusterCount;       // Clusters in one FAT.
+  uint8_t m_clusterSizeShift;    // Cluster count to block count shift.
+  uint32_t m_dataStartBlock;     // First data block number.
+  uint32_t m_fatStartBlock;      // Start block for first FAT.
+  uint8_t m_fatType;             // Volume type (12, 16, OR 32).
+  uint16_t m_rootDirEntryCount;  // Number of entries in FAT16 root dir.
+  uint32_t m_rootDirStart;       // Start block for FAT16, cluster for FAT32.
 //------------------------------------------------------------------------------
 // block caches
 // use of static functions save a bit of flash - maybe not worth complexity
@@ -148,31 +146,33 @@ class SdVolume {
   static uint8_t const CACHE_RESERVE_FOR_WRITE
      = CACHE_STATUS_DIRTY | CACHE_OPTION_NO_READ;
 #if USE_MULTIPLE_CARDS
-  cache_t cacheBuffer_;        // 512 byte cache for device blocks
-  uint32_t cacheBlockNumber_;  // Logical number of block in the cache
-  uint32_t cacheFatOffset_;    // offset for mirrored FAT
-  Sd2Card* sdCard_;            // Sd2Card object for cache
-  uint8_t cacheStatus_;        // status of cache block
+  uint8_t m_fatCount;           // number of FATs on volume
+  uint32_t m_blocksPerFat;      // FAT size in blocks
+  cache_t m_cacheBuffer;        // 512 byte cache for device blocks
+  uint32_t m_cacheBlockNumber;  // Logical number of block in the cache
+  Sd2Card* m_sdCard;            // Sd2Card object for cache
+  uint8_t m_cacheStatus;        // status of cache block
 #if USE_SEPARATE_FAT_CACHE
-  cache_t cacheFatBuffer_;       // 512 byte cache for FAT
-  uint32_t cacheFatBlockNumber_;  // current Fat block number
-  uint8_t  cacheFatStatus_;       // status of cache Fatblock
+  cache_t m_cacheFatBuffer;       // 512 byte cache for FAT
+  uint32_t m_cacheFatBlockNumber;  // current Fat block number
+  uint8_t  m_cacheFatStatus;       // status of cache Fatblock
 #endif  // USE_SEPARATE_FAT_CACHE
 #else  // USE_MULTIPLE_CARDS
-  static cache_t cacheBuffer_;        // 512 byte cache for device blocks
-  static uint32_t cacheBlockNumber_;  // Logical number of block in the cache
-  static uint32_t cacheFatOffset_;    // offset for mirrored FAT
-  static uint8_t cacheStatus_;        // status of cache block
+  static uint8_t m_fatCount;            // number of FATs on volume
+  static uint32_t m_blocksPerFat;       // FAT size in blocks
+  static cache_t m_cacheBuffer;        // 512 byte cache for device blocks
+  static uint32_t m_cacheBlockNumber;  // Logical number of block in the cache
+  static uint8_t m_cacheStatus;        // status of cache block
 #if USE_SEPARATE_FAT_CACHE
-  static cache_t cacheFatBuffer_;       // 512 byte cache for FAT
-  static uint32_t cacheFatBlockNumber_;  // current Fat block number
-  static uint8_t  cacheFatStatus_;       // status of cache Fatblock
+  static cache_t m_cacheFatBuffer;       // 512 byte cache for FAT
+  static uint32_t m_cacheFatBlockNumber;  // current Fat block number
+  static uint8_t  m_cacheFatStatus;       // status of cache Fatblock
 #endif  // USE_SEPARATE_FAT_CACHE
-  static Sd2Card* sdCard_;            // Sd2Card object for cache
+  static Sd2Card* m_sdCard;            // Sd2Card object for cache
 #endif  // USE_MULTIPLE_CARDS
 
-  cache_t *cacheAddress() {return &cacheBuffer_;}
-  uint32_t cacheBlockNumber() {return cacheBlockNumber_;}
+  cache_t *cacheAddress() {return &m_cacheBuffer;}
+  uint32_t cacheBlockNumber() {return m_cacheBlockNumber;}
 #if USE_MULTIPLE_CARDS
   cache_t* cacheFetch(uint32_t blockNumber, uint8_t options);
   cache_t* cacheFetchData(uint32_t blockNumber, uint8_t options);
@@ -193,7 +193,7 @@ class SdVolume {
 //------------------------------------------------------------------------------
   bool allocContiguous(uint32_t count, uint32_t* curCluster);
   uint8_t blockOfCluster(uint32_t position) const {
-          return (position >> 9) & (blocksPerCluster_ - 1);}
+          return (position >> 9) & (m_blocksPerCluster - 1);}
   uint32_t clusterStartBlock(uint32_t cluster) const;
   bool fatGet(uint32_t cluster, uint32_t* value);
   bool fatPut(uint32_t cluster, uint32_t value);
@@ -202,33 +202,14 @@ class SdVolume {
   }
   bool freeChain(uint32_t cluster);
   bool isEOC(uint32_t cluster) const {
-    if (FAT12_SUPPORT && fatType_ == 12) return  cluster >= FAT12EOC_MIN;
-    if (fatType_ == 16) return cluster >= FAT16EOC_MIN;
+    if (FAT12_SUPPORT && m_fatType == 12) return  cluster >= FAT12EOC_MIN;
+    if (m_fatType == 16) return cluster >= FAT16EOC_MIN;
     return  cluster >= FAT32EOC_MIN;
   }
   bool readBlock(uint32_t block, uint8_t* dst) {
-    return sdCard_->readBlock(block, dst);}
+    return m_sdCard->readBlock(block, dst);}
   bool writeBlock(uint32_t block, const uint8_t* dst) {
-    return sdCard_->writeBlock(block, dst);
+    return m_sdCard->writeBlock(block, dst);
   }
-//------------------------------------------------------------------------------
-  // Deprecated functions  - suppress cpplint warnings with NOLINT comment
-#if ALLOW_DEPRECATED_FUNCTIONS && !defined(DOXYGEN)
-
- public:
-  /** \deprecated Use: bool SdVolume::init(Sd2Card* dev);
-   * \param[in] dev The SD card where the volume is located.
-   * \return true for success or false for failure.
-   */
-  bool init(Sd2Card& dev) {return init(&dev);}  // NOLINT
-  /** \deprecated Use: bool SdVolume::init(Sd2Card* dev, uint8_t vol);
-   * \param[in] dev The SD card where the volume is located.
-   * \param[in] part The partition to be used.
-   * \return true for success or false for failure.
-   */
-  bool init(Sd2Card& dev, uint8_t part) {  // NOLINT
-    return init(&dev, part);
-  }
-#endif  // ALLOW_DEPRECATED_FUNCTIONS
 };
 #endif  // SdVolume

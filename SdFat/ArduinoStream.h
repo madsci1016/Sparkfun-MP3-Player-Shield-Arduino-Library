@@ -38,31 +38,31 @@ class ArduinoInStream : public ibufstream {
    * \param[in] size size of input buffer
    */
   ArduinoInStream(Stream &hws, char* buf, size_t size) {
-    hw_ = &hws;
-    line_ = buf;
-    size_ = size;
+    m_hw = &hws;
+    m_line = buf;
+    m_size = size;
   }
   /** read a line. */
   void readline() {
     size_t i = 0;
     uint32_t t;
-    line_[0] = '\0';
-    while (!hw_->available());
+    m_line[0] = '\0';
+    while (!m_hw->available());
 
     while (1) {
       t = millis();
-      while (!hw_->available()) {
+      while (!m_hw->available()) {
         if ((millis() - t) > 10) goto done;
       }
-      if (i >= (size_ - 1)) {
+      if (i >= (m_size - 1)) {
         setstate(failbit);
         return;
       }
-      line_[i++] = hw_->read();
-      line_[i] = '\0';
+      m_line[i++] = m_hw->read();
+      m_line[i] = '\0';
     }
   done:
-    init(line_);
+    init(m_line);
   }
 
  protected:
@@ -79,9 +79,9 @@ class ArduinoInStream : public ibufstream {
   bool seekpos(pos_type pos) {return false;}
 
  private:
-  char *line_;
-  size_t size_;
-  Stream* hw_;
+  char *m_line;
+  size_t m_size;
+  Stream* m_hw;
 };
 //==============================================================================
 /**
@@ -94,7 +94,7 @@ class ArduinoOutStream : public ostream {
    *
    * \param[in] pr Print object for this ArduinoOutStream.
    */
-  explicit ArduinoOutStream(Print& pr) : pr_(&pr) {}
+  explicit ArduinoOutStream(Print& pr) : m_pr(&pr) {}
 
  protected:
   /// @cond SHOW_PROTECTED
@@ -103,10 +103,10 @@ class ArduinoOutStream : public ostream {
    * \param[in] c
    */
   void putch(char c) {
-    if (c == '\n') pr_->write('\r');
-    pr_->write(c);
+    if (c == '\n') m_pr->write('\r');
+    m_pr->write(c);
   }
-  void putstr(const char* str) {pr_->write(str);}
+  void putstr(const char* str) {m_pr->write(str);}
   bool seekoff(off_type off, seekdir way) {return false;}
   bool seekpos(pos_type pos) {return false;}
   bool sync() {return true;}
@@ -114,6 +114,6 @@ class ArduinoOutStream : public ostream {
   /// @endcond
  private:
   ArduinoOutStream() {}
-  Print* pr_;
+  Print* m_pr;
 };
 #endif  // ArduinoStream_h

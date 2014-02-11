@@ -14,7 +14,7 @@
 \section Intro Introduction
 The Arduino SFEMP3Shield Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino, along with mixing input signals. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's
 
-Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Seeduino MP3 Player Shield. \ref Hardware and documentation is provided as to how to implement this and an Arduino Mega. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.
+Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Arduino base systems and Shields. \ref Hardware and documentation is provided as to how to implement these. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.
 
 \section  Contributors Contributors
 \author  Nathan Seidle, www.sparkfun.com
@@ -38,7 +38,7 @@ Initial development was implemented on an Arduino 328 UNO/Duemilanove with a Spa
   - SdCard FAT formatted with valid <A HREF = "http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Dev/Arduino/Shields/MP3_Player_Files.zip"> Audio files</A> and filenames
   - See \ref Hardware for alternative solutions.
 
-\note This library was originally developed on IDE 0.2x and later ported to 1.x. Compatibility was lost with use of the Serial.print(F("...")) and can be restored by replacing it with SdFat's PgmPrint function
+\note This library was originally developed on IDE 0.2x, later ported to 1.x and best support on IDE 1.5.0+ going forward. Compatibility was lost with use of the Serial.print(F("...")) and can be restored by replacing it with SdFat's PgmPrint function
 
 \section  Installation Installation
  To install 1, 2, 3 !
@@ -59,11 +59,15 @@ As mentioned the initial and principal support of this library is with Arduino 3
 \subsection ArduinoBareTouch Arduino Bare Touch
 Support for Bare Conductive's Touch Board is provided and documented in \ref SFEMP3ShieldConfig.h.
 
+\note Reference \ref Arduino_Leonardo's note about example files.
+
 \subsection ArduinoMega Arduino Mega Board
 Support for Arduino and Seeeduino Mega's are documented in \ref SFEMP3ShieldConfig.h, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove.
 
 \subsection Arduino_Leonardo Arduino Leonardo Board
 Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO/Duemilanove . This is similar to the Arduino Mega. Which simply REQUIRES additional jumpers, as documented in \ref SFEMP3ShieldConfig.h to correct the SPI. The swapping of INT0/INT1 is automatically corrected based on the Leonardo's processor type of __AVR_ATmega32U4__ being detected.
+
+\note While the Leonardo has the same amount of physical program space as the UNO, it actually has less space available for use. As it uses approximately 4K, for core library USB features. Where there is adaquate space available for typical applications, the provided example files MP3Shield_Library_Demo.ino and FilePlayer.ino will compile a reduced set of examples based on the processor type of __AVR_ATmega32U4__ being detected. This is only for the demonstration, and other sketchs may call any of these functions, given its environment.
 
 \subsection Arduino_Pro Arduino Pro 5V vs 3V
 SFE Arduino Pro's while similar to UNO/Duemilanove's pin outs, they are available in either 5V or 3.3V. Where the SFE MP3 Player Shield requires 5V and locally generating the needed 3.3V and 1.8V for the VS10xx chip. Noting that 3.3V Pro's do not supply 5V, this causes a problem. It is possible to modify the shield as to use base Arduino supplied 3V's.

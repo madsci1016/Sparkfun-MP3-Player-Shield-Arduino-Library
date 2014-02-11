@@ -28,7 +28,7 @@ ArduinoOutStream cout(Serial);
 void setup() {
   Serial.begin(9600);
   while (!Serial){}  // wait for Leonardo
-  Serial.println();
+  cout << pstr("\nUse a freshly formatted SD for best performance.\n");
 }
 //------------------------------------------------------------------------------
 void loop() {

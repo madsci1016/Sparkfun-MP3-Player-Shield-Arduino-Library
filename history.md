@@ -1,5 +1,9 @@
 Revision History
 ---------------
+
+## 1.02.14
+* implemented sdfatlib20131225 into repo
+
 ## 1.02.13
 * ifdef'ed out space for Leonardo's less program space.
 * made FilePlayer.ino more equal to that of MP3Shield_Library_Demo.ino

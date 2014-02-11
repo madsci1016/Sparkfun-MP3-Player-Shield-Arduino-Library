@@ -28,12 +28,12 @@
  */
 int istream::get() {
   int c;
-  gcount_ = 0;
+  m_gcount = 0;
   c = getch();
   if (c < 0) {
     setstate(failbit);
   } else {
-    gcount_ = 1;
+    m_gcount = 1;
   }
   return c;
 }
@@ -68,8 +68,8 @@ istream& istream::get(char& c) {
 istream& istream::get(char *str, streamsize n, char delim) {
   int c;
   FatPos_t pos;
-  gcount_ = 0;
-  while ((gcount_ + 1)  < n) {
+  m_gcount = 0;
+  while ((m_gcount + 1)  < n) {
     c = getch(&pos);
     if (c < 0) {
       break;
@@ -78,10 +78,10 @@ istream& istream::get(char *str, streamsize n, char delim) {
       setpos(&pos);
       break;
     }
-    str[gcount_++] = c;
+    str[m_gcount++] = c;
   }
-  if (n > 0) str[gcount_] = '\0';
-  if (gcount_ == 0) setstate(failbit);
+  if (n > 0) str[m_gcount] = '\0';
+  if (m_gcount == 0) setstate(failbit);
   return *this;
 }
 //------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ bool istream::getDouble(double* value) {
 istream& istream::getline(char *str, streamsize n, char delim) {
   FatPos_t pos;
   int c;
-  gcount_ = 0;
+  m_gcount = 0;
   if (n > 0) str[0] = '\0';
   while (1) {
     c = getch(&pos);
@@ -237,18 +237,18 @@ istream& istream::getline(char *str, streamsize n, char delim) {
       break;
     }
     if (c == delim) {
-      gcount_++;
+      m_gcount++;
       break;
     }
-    if ((gcount_ + 1)  >=  n) {
+    if ((m_gcount + 1)  >=  n) {
       setpos(&pos);
       setstate(failbit);
       break;
     }
-    str[gcount_++] = c;
-    str[gcount_] = '\0';
+    str[m_gcount++] = c;
+    str[m_gcount] = '\0';
   }
-  if (gcount_ == 0) setstate(failbit);
+  if (m_gcount == 0) setstate(failbit);
   return *this;
 }
 //------------------------------------------------------------------------------
@@ -360,13 +360,13 @@ void istream::getStr(char *str) {
  */
 istream& istream::ignore(streamsize n, int delim) {
   int c;
-  gcount_ = 0;
-  while (gcount_ < n) {
+  m_gcount = 0;
+  while (m_gcount < n) {
     c = getch();
     if (c < 0) {
       break;
     }
-    gcount_++;
+    m_gcount++;
     if (c == delim) break;
   }
   return *this;
@@ -381,7 +381,7 @@ istream& istream::ignore(streamsize n, int delim) {
 int istream::peek() {
   int16_t c;
   FatPos_t pos;
-  gcount_ = 0;
+  m_gcount = 0;
   getpos(&pos);
   c = getch();
   if (c < 0) {

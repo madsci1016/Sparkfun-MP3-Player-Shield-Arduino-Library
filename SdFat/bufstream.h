@@ -32,7 +32,7 @@
 class ibufstream : public istream {
  public:
   /** Constructor */
-  ibufstream() : buf_(0), len_(0) {}
+  ibufstream() : m_buf(0), m_len(0) {}
   /** Constructor
    * \param[in] str pointer to string to be parsed
    * Warning: The string will not be copied so must stay in scope.
@@ -45,41 +45,41 @@ class ibufstream : public istream {
    * Warning: The string will not be copied so must stay in scope.
    */
   void init(const char* str) {
-    buf_ = str;
-    len_ = strlen(buf_);
-    pos_ = 0;
+    m_buf = str;
+    m_len = strlen(m_buf);
+    m_pos = 0;
     clear();
   }
 
  protected:
   /// @cond SHOW_PROTECTED
   int16_t getch() {
-    if (pos_ < len_) return buf_[pos_++];
+    if (m_pos < m_len) return m_buf[m_pos++];
     setstate(eofbit);
     return -1;
   }
   void getpos(FatPos_t *pos) {
-    pos->position = pos_;
+    pos->position = m_pos;
   }
   bool seekoff(off_type off, seekdir way) {return false;}
   bool seekpos(pos_type pos) {
-    if (pos < len_) {
-      pos_ = pos;
+    if (pos < m_len) {
+      m_pos = pos;
       return true;
     }
     return false;
   }
   void setpos(FatPos_t *pos) {
-    pos_ = pos->position;
+    m_pos = pos->position;
   }
   pos_type tellpos() {
-    return pos_;
+    return m_pos;
   }
   /// @endcond
  private:
-  const char* buf_;
-  size_t len_;
-  size_t pos_;
+  const char* m_buf;
+  size_t m_len;
+  size_t m_pos;
 };
 //==============================================================================
 /**
@@ -89,7 +89,7 @@ class ibufstream : public istream {
 class obufstream : public ostream {
  public:
   /** constructor */
-  obufstream() : in_(0) {}
+  obufstream() : m_in(0) {}
   /** Constructor
    * \param[in] buf buffer for formatted string
    * \param[in] size buffer size
@@ -102,45 +102,45 @@ class obufstream : public ostream {
    * \param[in] size buffer size
    */
   void init(char *buf, size_t size) {
-    buf_ = buf;
+    m_buf = buf;
     buf[0] = '\0';
-    size_ = size;
-    in_ = 0;
+    m_size = size;
+    m_in = 0;
   }
   /** \return a pointer to the buffer */
-  char* buf() {return buf_;}
+  char* buf() {return m_buf;}
   /** \return the length of the formatted string */
-  size_t length() {return in_;}
+  size_t length() {return m_in;}
 
  protected:
   /// @cond SHOW_PROTECTED
   void putch(char c) {
-    if (in_ >= (size_ - 1)) {
+    if (m_in >= (m_size - 1)) {
       setstate(badbit);
       return;
     }
-    buf_[in_++] = c;
-    buf_[in_]= '\0';
+    m_buf[m_in++] = c;
+    m_buf[m_in]= '\0';
   }
   void putstr(const char *str) {
     while (*str) putch(*str++);
   }
   bool seekoff(off_type off, seekdir way) {return false;}
   bool seekpos(pos_type pos) {
-    if (pos > in_) return false;
-    in_ = pos;
-    buf_[in_] = '\0';
+    if (pos > m_in) return false;
+    m_in = pos;
+    m_buf[m_in] = '\0';
     return true;
   }
   bool sync() {return true;}
 
   pos_type tellpos() {
-    return in_;
+    return m_in;
   }
   /// @endcond
  private:
-  char *buf_;
-  size_t size_;
-  size_t in_;
+  char *m_buf;
+  size_t m_size;
+  size_t m_in;
 };
 #endif  // bufstream_h

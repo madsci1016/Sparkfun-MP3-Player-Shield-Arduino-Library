@@ -113,39 +113,39 @@ class ios_base {
   /** truncate an existing stream when opening */
   static const openmode trunc  = 0X80;
   //----------------------------------------------------------------------------
-  ios_base() : fill_(' '), fmtflags_(dec | right | skipws)
-    , precision_(2), width_(0) {}
+  ios_base() : m_fill(' '), m_fmtflags(dec | right | skipws)
+    , m_precision(2), m_width(0) {}
   /** \return fill character */
-  char fill() {return fill_;}
+  char fill() {return m_fill;}
   /** Set fill character
    * \param[in] c new fill character
    * \return old fill character
    */
   char fill(char c) {
-    char r = fill_;
-    fill_ = c;
+    char r = m_fill;
+    m_fill = c;
     return r;
   }
   /** \return format flags */
-  fmtflags flags() const {return fmtflags_;}
+  fmtflags flags() const {return m_fmtflags;}
   /** set format flags
    * \param[in] fl new flag
    * \return old flags
    */
   fmtflags flags(fmtflags fl) {
-    fmtflags tmp = fmtflags_;
-    fmtflags_ = fl;
+    fmtflags tmp = m_fmtflags;
+    m_fmtflags = fl;
     return tmp;
   }
   /** \return precision */
-  int precision() const {return precision_;}
+  int precision() const {return m_precision;}
   /** set precision
    * \param[in] n new precision
    * \return old precision
    */
   int precision(unsigned int n) {
-    int r = precision_;
-    precision_ = n;
+    int r = m_precision;
+    m_precision = n;
     return r;
   }
   /** set format flags
@@ -153,8 +153,8 @@ class ios_base {
    * \return old flags
    */
   fmtflags setf(fmtflags fl) {
-    fmtflags r = fmtflags_;
-    fmtflags_ |= fl;
+    fmtflags r = m_fmtflags;
+    m_fmtflags |= fl;
     return r;
   }
   /** modify format flags
@@ -163,9 +163,9 @@ class ios_base {
    * \return old flags
    */
   fmtflags setf(fmtflags fl, fmtflags mask) {
-    fmtflags r = fmtflags_;
-    fmtflags_ &= ~mask;
-    fmtflags_ |= fl;
+    fmtflags r = m_fmtflags;
+    m_fmtflags &= ~mask;
+    m_fmtflags |= fl;
     return r;
   }
   /** clear format flags
@@ -173,17 +173,17 @@ class ios_base {
    * \return old flags
    */
   void unsetf(fmtflags fl) {
-    fmtflags_ &= ~fl;
+    m_fmtflags &= ~fl;
   }
   /** \return width */
-  unsigned width() {return width_;}
+  unsigned width() {return m_width;}
   /** set width
    * \param[in] n new width
    * \return old width
    */
   unsigned width(unsigned n) {
-    unsigned r = width_;
-    width_ = n;
+    unsigned r = m_width;
+    m_width = n;
     return r;
   }
 
@@ -195,10 +195,10 @@ class ios_base {
   }
 
  private:
-  char fill_;
-  fmtflags fmtflags_;
-  unsigned char precision_;
-  unsigned int width_;
+  char m_fill;
+  fmtflags m_fmtflags;
+  unsigned char m_precision;
+  unsigned int m_width;
 };
 //------------------------------------------------------------------------------
 /** function for boolalpha manipulator
@@ -353,7 +353,7 @@ inline ios_base& uppercase(ios_base& str) {
 class ios : public ios_base {
  public:
   /** Create ios with no error flags set */
-  ios() : iostate_(0) {}
+  ios() : m_iostate(0) {}
 
   /** \return null pointer if fail() is true. */
   operator const void*() const {
@@ -362,9 +362,9 @@ class ios : public ios_base {
   /** \return true if fail() else false.  */
   bool operator!() const {return fail();}
   /** \return The iostate flags for this file. */
-  iostate rdstate() const {return iostate_;}
+  iostate rdstate() const {return m_iostate;}
   /** \return True if no iostate flags are set else false. */
-  bool good() const {return iostate_ == goodbit;}
+  bool good() const {return m_iostate == goodbit;}
   /** \return true if end of file has been reached else false.
    *
    * Warning: An empty file returns false before the first read.
@@ -372,23 +372,23 @@ class ios : public ios_base {
    * Moral: eof() is only useful in combination with fail(), to find out
    * whether EOF was the cause for failure
    */
-  bool eof() const {return iostate_ & eofbit;}
+  bool eof() const {return m_iostate & eofbit;}
   /** \return true if any iostate bit other than eof are set else false. */
-  bool fail() const {return iostate_ & (failbit | badbit);}
+  bool fail() const {return m_iostate & (failbit | badbit);}
   /** \return true if bad bit is set else false. */
-  bool bad() const {return iostate_ & badbit;}
+  bool bad() const {return m_iostate & badbit;}
   /** Clear iostate bits.
    *
    * \param[in] state The flags you want to set after clearing all flags.
    **/
-  void clear(iostate state = goodbit) {iostate_ = state;}
+  void clear(iostate state = goodbit) {m_iostate = state;}
   /** Set iostate bits.
    *
    * \param[in] state Bitts to set.
    **/
-  void setstate(iostate state) {iostate_ |= state;}
+  void setstate(iostate state) {m_iostate |= state;}
 
  private:
-  iostate iostate_;
+  iostate m_iostate;
 };
 #endif  // ios_h

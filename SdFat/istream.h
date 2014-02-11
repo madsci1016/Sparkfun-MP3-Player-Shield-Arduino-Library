@@ -207,7 +207,7 @@ class istream : public virtual ios {
    * \return The number of characters extracted by the last unformatted
    * input function.
    */
-  streamsize gcount() const {return gcount_;}
+  streamsize gcount() const {return m_gcount;}
   int get();
   istream& get(char& ch);
   istream& get(char *str, streamsize n, char delim = '\n');
@@ -275,7 +275,6 @@ class istream : public virtual ios {
 
   /// @endcond
  private:
-  size_t gcount_;
   void getBool(bool *b);
   void getChar(char* ch);
   bool getDouble(double* value);
@@ -283,6 +282,8 @@ class istream : public virtual ios {
   bool getNumber(uint32_t posMax, uint32_t negMax, uint32_t* num);
   void getStr(char *str);
   int16_t readSkip();
+
+  size_t m_gcount;
 };
 //------------------------------------------------------------------------------
 template <typename T>

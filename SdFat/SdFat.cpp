@@ -18,26 +18,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <SdFat.h>
-#ifndef PSTR
-#define PSTR(x) x
-#define PGM_P const char*
-#endif
 //------------------------------------------------------------------------------
 #if USE_SERIAL_FOR_STD_OUT || !defined(UDR0)
-Print* SdFat::stdOut_ = &Serial;
+Print* SdFat::m_stdOut = &Serial;
 #else  // USE_SERIAL_FOR_STD_OUT
 #include <MinimumSerial.h>
-Print* SdFat::stdOut_ = &MiniSerial;
+Print* SdFat::m_stdOut = &MiniSerial;
 #endif  // USE_SERIAL_FOR_STD_OUT
-//------------------------------------------------------------------------------
-static void pstrPrint(PGM_P str) {
-  for (uint8_t c; (c = pgm_read_byte(str)); str++) SdFat::stdOut()->write(c);
-}
-//------------------------------------------------------------------------------
-static void pstrPrintln(PGM_P str) {
-  pstrPrint(str);
-  SdFat::stdOut()->println();
-}
 //------------------------------------------------------------------------------
 /**
  * Initialize an SdFat object.
@@ -45,13 +32,14 @@ static void pstrPrintln(PGM_P str) {
  * Initializes the SD card, SD volume, and root directory.
  *
  * \param[in] chipSelectPin SD chip select pin. See Sd2Card::init().
- * \param[in] sckRateID value for SPI SCK rate. See Sd2Card::init().
+ * \param[in] sckDivisor value for SPI SCK divisor. See Sd2Card::init().
  *
  * \return The value one, true, is returned for success and
  * the value zero, false, is returned for failure.
  */
-bool SdFat::begin(uint8_t chipSelectPin, uint8_t sckRateID) {
-  return card_.init(sckRateID, chipSelectPin) && vol_.init(&card_) && chdir(1);
+bool SdFat::begin(uint8_t chipSelectPin, uint8_t sckDivisor) {
+  return m_card.begin(chipSelectPin, sckDivisor)
+         && m_vol.init(&m_card) && chdir(1);
 }
 //------------------------------------------------------------------------------
 /** Change a volume's working directory to root
@@ -67,9 +55,9 @@ bool SdFat::begin(uint8_t chipSelectPin, uint8_t sckRateID) {
  * the value zero, false, is returned for failure.
  */
 bool SdFat::chdir(bool set_cwd) {
-  if (set_cwd) SdBaseFile::cwd_ = &vwd_;
-  if (vwd_.isOpen()) vwd_.close();
-  return vwd_.openRoot(&vol_);
+  if (set_cwd) SdBaseFile::setCwd(&m_vwd);
+  if (m_vwd.isOpen()) m_vwd.close();
+  return m_vwd.openRoot(&m_vol);
 }
 //------------------------------------------------------------------------------
 /** Change a volume's working directory
@@ -95,10 +83,10 @@ bool SdFat::chdir(bool set_cwd) {
 bool SdFat::chdir(const char *path, bool set_cwd) {
   SdBaseFile dir;
   if (path[0] == '/' && path[1] == '\0') return chdir(set_cwd);
-  if (!dir.open(&vwd_, path, O_READ)) goto fail;
+  if (!dir.open(&m_vwd, path, O_READ)) goto fail;
   if (!dir.isDir()) goto fail;
-  vwd_ = dir;
-  if (set_cwd) SdBaseFile::cwd_ = &vwd_;
+  m_vwd = dir;
+  if (set_cwd) SdBaseFile::setCwd(&m_vwd);
   return true;
 
  fail:
@@ -114,60 +102,7 @@ bool SdFat::chdir(const char *path, bool set_cwd) {
  * This is like the Windows/DOS \<drive letter>: command.
  */
 void SdFat::chvol() {
-  SdBaseFile::cwd_ = &vwd_;
-}
-//------------------------------------------------------------------------------
-/** %Print any SD error code and halt. */
-void SdFat::errorHalt() {
-  errorPrint();
-  while (1);
-}
-//------------------------------------------------------------------------------
-/** %Print msg, any SD error code, and halt.
- *
- * \param[in] msg Message to print.
- */
-void SdFat::errorHalt(char const* msg) {
-  errorPrint(msg);
-  while (1);
-}
-//------------------------------------------------------------------------------
-/** %Print msg, any SD error code, and halt.
- *
- * \param[in] msg Message in program space (flash memory) to print.
- */
-void SdFat::errorHalt_P(PGM_P msg) {
-  errorPrint_P(msg);
-  while (1);
-}
-//------------------------------------------------------------------------------
-/** %Print any SD error code. */
-void SdFat::errorPrint() {
-  if (!card_.errorCode()) return;
-  pstrPrint(PSTR("SD errorCode: 0X"));
-  stdOut_->print(card_.errorCode(), HEX);
-  pstrPrint(PSTR(",0X"));
-  stdOut_->println(card_.errorData(), HEX);
-}
-//------------------------------------------------------------------------------
-/** %Print msg, any SD error code.
- *
- * \param[in] msg Message to print.
- */
-void SdFat::errorPrint(char const* msg) {
-  pstrPrint(PSTR("error: "));
-  stdOut_->println(msg);
-  errorPrint();
-}
-//------------------------------------------------------------------------------
-/** %Print msg, any SD error code.
- *
- * \param[in] msg Message in program space (flash memory) to print.
- */
-void SdFat::errorPrint_P(PGM_P msg) {
-  pstrPrint(PSTR("error: "));
-  pstrPrintln(msg);
-  errorPrint();
+  SdBaseFile::setCwd(&m_vwd);
 }
 //------------------------------------------------------------------------------
 /**
@@ -178,66 +113,7 @@ void SdFat::errorPrint_P(PGM_P msg) {
  * \return true if the file exists else false.
  */
 bool SdFat::exists(const char* name) {
-  return vwd_.exists(name);
-}
-//------------------------------------------------------------------------------
-/** %Print error details and halt after SdFat::init() fails. */
-void SdFat::initErrorHalt() {
-  initErrorPrint();
-  while (1);
-}
-//------------------------------------------------------------------------------
-/**Print message, error details, and halt after SdFat::init() fails.
- *
- * \param[in] msg Message to print.
- */
-void SdFat::initErrorHalt(char const *msg) {
-  stdOut_->println(msg);
-  initErrorHalt();
-}
-//------------------------------------------------------------------------------
-/**Print message, error details, and halt after SdFat::init() fails.
- *
- * \param[in] msg Message in program space (flash memory) to print.
- */
-void SdFat::initErrorHalt_P(PGM_P msg) {
-  pstrPrintln(msg);
-  initErrorHalt();
-}
-//------------------------------------------------------------------------------
-/** Print error details after SdFat::init() fails. */
-void SdFat::initErrorPrint() {
-  if (card_.errorCode()) {
-    pstrPrintln(PSTR("Can't access SD card. Do not reformat."));
-    if (card_.errorCode() == SD_CARD_ERROR_CMD0) {
-      pstrPrintln(PSTR("No card, wrong chip select pin, or SPI problem?"));
-    }
-    errorPrint();
-  } else if (vol_.fatType() == 0) {
-    pstrPrintln(PSTR("Invalid format, reformat SD."));
-  } else if (!vwd_.isOpen()) {
-    pstrPrintln(PSTR("Can't open root directory."));
-  } else {
-    pstrPrintln(PSTR("No error found."));
-  }
-}
-//------------------------------------------------------------------------------
-/**Print message and error details and halt after SdFat::init() fails.
- *
- * \param[in] msg Message to print.
- */
-void SdFat::initErrorPrint(char const *msg) {
-  stdOut_->println(msg);
-  initErrorPrint();
-}
-//------------------------------------------------------------------------------
-/**Print message and error details after SdFat::init() fails.
- *
- * \param[in] msg Message in program space (flash memory) to print.
- */
-void SdFat::initErrorPrint_P(PGM_P msg) {
-  pstrPrintln(msg);
-  initErrorHalt();
+  return m_vwd.exists(name);
 }
 //------------------------------------------------------------------------------
 /** List the directory contents of the volume working directory to stdOut.
@@ -251,7 +127,7 @@ void SdFat::initErrorPrint_P(PGM_P msg) {
  * LS_R - Recursive list of subdirectories.
  */
 void SdFat::ls(uint8_t flags) {
-  vwd_.ls(stdOut_, flags);
+  m_vwd.ls(m_stdOut, flags);
 }
 //------------------------------------------------------------------------------
 /** List the directory contents of the volume working directory.
@@ -267,7 +143,7 @@ void SdFat::ls(uint8_t flags) {
  * LS_R - Recursive list of subdirectories.
  */
 void SdFat::ls(Print* pr, uint8_t flags) {
-  vwd_.ls(pr, flags);
+  m_vwd.ls(pr, flags);
 }
 //------------------------------------------------------------------------------
 /** Make a subdirectory in the volume working directory.
@@ -281,7 +157,7 @@ void SdFat::ls(Print* pr, uint8_t flags) {
  */
 bool SdFat::mkdir(const char* path, bool pFlag) {
   SdBaseFile sub;
-  return sub.mkdir(&vwd_, path, pFlag);
+  return sub.mkdir(&m_vwd, path, pFlag);
 }
 //------------------------------------------------------------------------------
 /** Remove a file from the volume working directory.
@@ -292,7 +168,7 @@ bool SdFat::mkdir(const char* path, bool pFlag) {
 * the value zero, false, is returned for failure.
 */
 bool SdFat::remove(const char* path) {
-  return SdBaseFile::remove(&vwd_, path);
+  return SdBaseFile::remove(&m_vwd, path);
 }
 //------------------------------------------------------------------------------
 /** Rename a file or subdirectory.
@@ -313,7 +189,7 @@ bool SdFat::remove(const char* path) {
 bool SdFat::rename(const char *oldPath, const char *newPath) {
   SdBaseFile file;
   if (!file.open(oldPath, O_READ)) return false;
-  return file.rename(&vwd_, newPath);
+  return file.rename(&m_vwd, newPath);
 }
 //------------------------------------------------------------------------------
 /** Remove a subdirectory from the volume's working directory.

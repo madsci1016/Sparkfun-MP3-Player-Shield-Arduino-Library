@@ -40,18 +40,18 @@ class SdStreamBase : protected SdBaseFile, virtual public ios {
   /** Internal do not use
    * \return mode
    */
-  ios::openmode getmode() {return mode_;}
+  ios::openmode getmode() {return m_mode;}
   /** Internal do not use
    * \param[in] mode
    */
-  void setmode(ios::openmode mode) {mode_ = mode;}
+  void setmode(ios::openmode mode) {m_mode = mode;}
   bool seekoff(off_type off, seekdir way);
   bool seekpos(pos_type pos);
   int write(const void* buf, size_t n);
   void write(char c);
   /// @endcond
  private:
-  ios::openmode mode_;
+  ios::openmode m_mode;
 };
 //==============================================================================
 /**

@@ -24,7 +24,7 @@
   <td id="projectlogo"><img alt="Logo" src="MusicIcon.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">SFEMP3Shield
-   &#160;<span id="projectnumber">1.02.13</span>
+   &#160;<span id="projectnumber">1.02.14</span>
    </div>
    <div id="projectbrief">Arduino Library for VS10xx shield</div>
   </td>
@@ -111,7 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><center>Copyright &copy; 2012 </center><h1><a class="anchor" id="Intro"></a>
 Introduction</h1>
 <p>The Arduino <a class="el" href="class_s_f_e_m_p3_shield.html" title="Interface Driver to the VS10xx chip on the SPI. ">SFEMP3Shield</a> Library is a driver for VSLI's VS10xx, implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino, along with mixing input signals. Principally this library is developed for the VS1053, where it may be compatible with other VS10xx's</p>
-<p>Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Seeduino MP3 Player Shield. <a class="el" href="index.html#Hardware">Hardware</a> and documentation is provided as to how to implement this and an Arduino Mega. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.</p>
+<p>Initial development was implemented on an Arduino 328 UNO/Duemilanove with a SparkFun MP3 Player Shield. Where additional support has been provided for Arduino base systems and Shields. <a class="el" href="index.html#Hardware">Hardware</a> and documentation is provided as to how to implement these. Where this driver is modular in concept to allow ready porting to other Arduino or Wiring platforms.</p>
 <h1><a class="anchor" id="Contributors"></a>
 Contributors</h1>
 <dl class="section author"><dt>Author</dt><dd>Nathan Seidle, www.sparkfun.com </dd>
@@ -146,7 +146,7 @@ Requirements</h1>
 </ul>
 </li>
 </ul>
-<dl class="section note"><dt>Note</dt><dd>This library was originally developed on IDE 0.2x and later ported to 1.x. Compatibility was lost with use of the Serial.print(F("...")) and can be restored by replacing it with SdFat's PgmPrint function</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This library was originally developed on IDE 0.2x, later ported to 1.x and best support on IDE 1.5.0+ going forward. Compatibility was lost with use of the Serial.print(F("...")) and can be restored by replacing it with SdFat's PgmPrint function</dd></dl>
 <h1><a class="anchor" id="Installation"></a>
 Installation</h1>
 <p>To install 1, 2, 3 !</p>
@@ -171,12 +171,14 @@ Hardware</h1>
 <h2><a class="anchor" id="ArduinoBareTouch"></a>
 Arduino Bare Touch</h2>
 <p>Support for Bare Conductive's Touch Board is provided and documented in <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>Reference <a class="el" href="index.html#Arduino_Leonardo">Arduino Leonardo Board</a>'s note about example files.</dd></dl>
 <h2><a class="anchor" id="ArduinoMega"></a>
 Arduino Mega Board</h2>
 <p>Support for Arduino and Seeeduino Mega's are documented in <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a>, which simply REQUIRES additional jumpers. As the SPI are not on the same pins as the UNO/Duemilanove.</p>
 <h2><a class="anchor" id="Arduino_Leonardo"></a>
 Arduino Leonardo Board</h2>
 <p>Support for Arduino Leonardo's are afflicted by having the SPI and INT0 pins not routed to the same pins as the UNO/Duemilanove . This is similar to the Arduino Mega. Which simply REQUIRES additional jumpers, as documented in <a class="el" href="_s_f_e_m_p3_shield_config_8h.html">SFEMP3ShieldConfig.h</a> to correct the SPI. The swapping of INT0/INT1 is automatically corrected based on the Leonardo's processor type of <b>AVR_ATmega32U4</b> being detected.</p>
+<dl class="section note"><dt>Note</dt><dd>While the Leonardo has the same amount of physical program space as the UNO, it actually has less space available for use. As it uses approximately 4K, for core library USB features. Where there is adaquate space available for typical applications, the provided example files <a class="el" href="_m_p3_shield___library___demo_8ino.html" title="Example sketch of using the MP3Shield Arduino driver, demonstrating all methods and functions...">MP3Shield_Library_Demo.ino</a> and <a class="el" href="_file_player_8ino.html" title="Example sketch of using the MP3Shield Arduino driver, with flexible list of files and formats...">FilePlayer.ino</a> will compile a reduced set of examples based on the processor type of <b>AVR_ATmega32U4</b> being detected. This is only for the demonstration, and other sketchs may call any of these functions, given its environment.</dd></dl>
 <h2><a class="anchor" id="Arduino_Pro"></a>
 Arduino Pro 5V vs 3V</h2>
 <p>SFE Arduino Pro's while similar to UNO/Duemilanove's pin outs, they are available in either 5V or 3.3V. Where the SFE MP3 Player Shield requires 5V and locally generating the needed 3.3V and 1.8V for the VS10xx chip. Noting that 3.3V Pro's do not supply 5V, this causes a problem. It is possible to modify the shield as to use base Arduino supplied 3V's.</p>
@@ -366,7 +368,7 @@ References</h1>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 10 2014 21:44:51 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 10 2014 22:30:37 for SFEMP3Shield by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

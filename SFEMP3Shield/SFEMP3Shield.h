@@ -689,7 +689,7 @@ class SFEMP3Shield {
     void setMonoMode(uint16_t );
     void setDifferentialOutput(uint16_t);
     uint8_t getDifferentialOutput();
-    uint8_t playTrack(uint8_t);
+    uint8_t playTrack(uint8_t, uint32_t timecode = 0);
     uint8_t playMP3(char*, uint32_t timecode = 0);
     void trackTitle(char*);
     void trackArtist(char*);

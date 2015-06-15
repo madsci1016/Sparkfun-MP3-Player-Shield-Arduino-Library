@@ -1022,7 +1022,7 @@ void SFEMP3Shield::setMonoMode(uint16_t StereoMode) {
  * \see
  * \ref Error_Codes
  */
-uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
+uint8_t SFEMP3Shield::playTrack(uint8_t trackNo, uint32_t timecode){
 
   //a storage place for track names
   char trackName[] = "track001.mp3";
@@ -1032,7 +1032,7 @@ uint8_t SFEMP3Shield::playTrack(uint8_t trackNo){
   sprintf(trackName, "track%03d.mp3", trackNo);
 
   //play the file
-  return playMP3(trackName);
+  return playMP3(trackName, timecode);
 }
 
 //------------------------------------------------------------------------------

@@ -289,7 +289,7 @@ uint8_t SFEMP3Shield::vs_init() {
   // But the SCI_VOL register space is not in the VSdsp's WRAM space.
   // Note to keep an eye on it for future patches.
 
-  if(VSLoadUserCode("patches.053")) return 6;
+  if(VSLoadUserCode((char*)"patches.053")) return 6;
 
   delay(100); // just a good idea to let settle.
 

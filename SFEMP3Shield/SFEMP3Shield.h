@@ -22,7 +22,6 @@
 
 //Add the SdFat Libraries
 #include <SdFat.h>
-#include <SdFatUtil.h>
 
 
 /** \brief State of the SFEMP3Shield device

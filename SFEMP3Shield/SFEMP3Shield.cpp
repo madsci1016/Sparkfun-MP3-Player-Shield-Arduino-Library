@@ -22,7 +22,7 @@
  * \note PROGMEM macro forces to Flash space.
  * \warning This consums 190 bytes of flash
  */
-PROGMEM const uint16_t bitrate_table[15][6] = {
+static const uint16_t bitrate_table[15][6] PROGMEM = {
                  { 0,   0,  0,  0,  0,  0}, //0000
                  { 32, 32, 32, 32,  8,  8}, //0001
                  { 64, 48, 40, 48, 16, 16}, //0010
@@ -690,7 +690,7 @@ int8_t SFEMP3Shield::getBassAmplitude()
 /**
  * \brief Set the current treble frequency limit in VS10xx chip
  *
- * \param[in] Treble cutoff frequency limit in Hertz.
+ * \param[in] frequency Treble cutoff limit in Hertz.
  *
  * \note The upper and lower limits of this parameter is checked.
  */
@@ -718,7 +718,7 @@ void SFEMP3Shield::setTrebleFrequency(uint16_t frequency)
 /**
  * \brief Set the current Treble Amplitude in VS10xx chip
  *
- * \param[in] Treble amplitude in dB from -8 to 7.
+ * \param[in] amplitude Treble in dB from -8 to 7.
  *
  * \note The upper and lower limits of this parameter is checked. 
  */
@@ -745,7 +745,7 @@ void SFEMP3Shield::setTrebleAmplitude(int8_t amplitude)
 /**
  * \brief Set the current Bass Boost Frequency limit cutoff in VS10xx chip
  *
- * \param[in] Bass Boost frequency cutoff limit in Hertz (20Hz to 150Hz).
+ * \param[in] frequency of Bass Boost frequency cutoff limit in Hertz (20Hz to 150Hz).
  *
  * \note The upper and lower limits of this parameter is checked. 
  */
@@ -773,7 +773,7 @@ void SFEMP3Shield::setBassFrequency(uint16_t frequency)
 /**
  * \brief Set the current Bass Boost amplitude in VS10xx chip
  *
- * \param[in] Bass Boost amplitude in dB (0dB to 15dB).
+ * \param[in] amplitude to Bass Boost amplitude in dB (0dB to 15dB).
  *
  * \note Any value greater then zero enables the Bass Enhancer VSBE is a 
  * powerful bass boosting DSP algorithm, which tries to take the most out 

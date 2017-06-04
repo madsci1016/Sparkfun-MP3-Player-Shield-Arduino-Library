@@ -27,7 +27,7 @@
 
 //Add the SdFat Libraries
 #include <SdFat.h>
-#include <SdFatUtil.h>
+#include <FreeStack.h>
 
 //and the MP3 Shield Library
 #include <SFEMP3Shield.h>
@@ -80,7 +80,7 @@ void setup() {
   Serial.print(F("F_CPU = "));
   Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
-  Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
+  Serial.print(FreeStack(), DEC);  // FreeRam() is provided by SdFatUtil.h
   Serial.println(F(" Should be a base line of 1017, on ATmega328 when using INTx"));
 
 
@@ -176,7 +176,7 @@ void loop() {
       uint16_t count = 1;
       while (file.openNext(sd.vwd(),O_READ))
       {
-        file.getFilename(filename);
+        file.getName(filename, sizeof(filename));
         if ( isFnMusic(filename) ) {
 
           if (count == fn_index) {
@@ -616,7 +616,7 @@ void parse_menu(byte key_command) {
       uint16_t count = 1;
       while (file.openNext(sd.vwd(),O_READ))
       {
-        file.getFilename(filename);
+        file.getName(filename, sizeof(filename));
         if ( isFnMusic(filename) ) {
           SerialPrintPaddedNumber(count, 5 );
           Serial.print(F(": "));

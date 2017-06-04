@@ -22,7 +22,7 @@
 
 //Add the SdFat Libraries
 #include <SdFat.h>
-#include <SdFatUtil.h>
+#include <FreeStack.h>
 
 //and the MP3 Shield Library
 #include <SFEMP3Shield.h>
@@ -71,7 +71,7 @@ void setup() {
   Serial.print(F("F_CPU = "));
   Serial.println(F_CPU);
   Serial.print(F("Free RAM = ")); // available in Version 1.0 F() bases the string to into Flash, to use less SRAM.
-  Serial.print(FreeRam(), DEC);  // FreeRam() is provided by SdFatUtil.h
+  Serial.print(FreeStack(), DEC);  // FreeStack() is provided by SdFat
   Serial.println(F(" Should be a base line of 1028, on ATmega328 when using INTx"));
 
 

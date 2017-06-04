@@ -18,7 +18,7 @@
  */
 
 #include <SdFat.h>
-#include <SdFatUtil.h>
+#include <FreeStack.h>
 #include <Ethernet.h>
 #include <SPI.h>
 
@@ -56,7 +56,7 @@ void setup() {
   Serial.begin(115200);
 
   Serial.print(F("Free RAM: "));
-  Serial.println(FreeRam());
+  Serial.println(FreeStack());
 
   // initialize the SD card at SPI_HALF_SPEED to avoid bus errors with
   // breadboards.  use SPI_FULL_SPEED for better performance.

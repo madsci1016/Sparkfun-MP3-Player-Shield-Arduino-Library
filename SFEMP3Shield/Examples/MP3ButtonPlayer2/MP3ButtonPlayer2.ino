@@ -18,7 +18,6 @@
 // libraries
 #include <SPI.h>
 #include <SdFat.h>
-#include <SdFatUtil.h>
 #include <SFEMP3Shield.h>
 #include <Bounce2.h> 
 

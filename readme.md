@@ -1,3 +1,9 @@
+# Available via Arduino IDE Library Manager
+
+This project and support has been migrated to [Arduino_Library-vs1053_for_SdFat](https://github.com/mpflaga/Arduino_Library-vs1053_for_SdFat), where "VS1053 for use wiht SdFat" is availabe directly from the Arduino IDE Library manager for download.
+
+This instance of the project is effectively closed, please submit all issues and pull requests to [Arduino_Library-vs1053_for_SdFat](https://github.com/mpflaga/Arduino_Library-vs1053_for_SdFat)
+
 # Arduino VS1053 Library
 
 The Arduino SFEMP3Shield Library is a real time non-blocking interrupt driven library for VSLI's VS10xx. (e.i. VS1053), implemented as a Slave co-processor to audio decode streams of Ogg Vorbis/MP3/AAC/WMA/FLAC/WAVMIDI formats, across the SPI bus of the Arduino. Principally this library is developed for the VS1053\. where it may be compatible with other VS10xx's

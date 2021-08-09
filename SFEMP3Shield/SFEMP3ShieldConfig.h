@@ -19,7 +19,7 @@ an UNO/Duemilanove, when left un-altered.
 \note
 Support forArduino Mega's REQUIRES additional jumpers. As the SPI are not on the same
 pins as the UNO/Duemilanove.
-When using a mega with SFE compatible shields jump the following pings :
+When using a mega with SFE compatible shields jump the following pins :
 <tt>
 \n Mega's 51 to the MP3's D11 for MOSI
 \n Mega's 50 to the MP3's D12 for MISO
